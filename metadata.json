@@ -1,0 +1,8 @@
+{
+  "name": "Bridgehead",
+  "description": "A web platform to connect local community needs with entrepreneurs. Users post 'demands' for businesses, and entrepreneurs can find opportunities and commercial properties.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ]
+}
