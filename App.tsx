@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, DemandPost, RentalPost, CommunityPost, MediaItem, Location, Conversation, Message, User } from './types';
+import CustomCursor from './components/CustomCursor';
 import { GoogleGenAI, Chat } from "@google/genai";
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -14,6 +15,7 @@ import AIMatches from './components/AIMatches';
 import ImageViewer from './components/ImageViewer';
 import Chatbot from './components/Chatbot';
 import CommunityFeed from './components/CommunityFeed';
+import CommunityHub from './components/CommunityHub';
 import DemandDetail from './components/DemandDetail';
 import RentalDetail from './components/RentalDetail';
 import SavedPosts from './components/SavedPosts';
@@ -24,132 +26,129 @@ import Profile from './components/Profile';
 import { ArrowLeftIcon, ArrowRightIcon } from './components/icons';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import Footer from './components/Footer';
+import { config } from './src/config';
+import Toast from './components/common/Toast';
+import QuickPostButton from './components/QuickPostButton';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = config.api.baseUrl;
 
 const MOCK_COMMUNITY_POSTS: CommunityPost[] = [
-    {
-        id: 'comm-1',
-        author: 'Jane Doe',
-        username: '@jane_doe',
-        avatar: 'user1',
-        content: 'That Neapolitan pizza demand is exactly what we need. I\'d be there every week!',
-        likes: 42,
-        reposts: 5,
-        replies: 3,
-        isLiked: false,
-        isReposted: false,
-        createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-    },
-    {
-        id: 'comm-2',
-        author: 'John Smith',
-        username: '@johnsmith',
-        avatar: 'user2',
-        content: 'An indoor dog park would be a game-changer for this weather. Someone please make this happen.',
-        media: [
-            { type: 'image', url: 'https://picsum.photos/seed/communitydog/600/400' }
-        ],
-        likes: 101,
-        reposts: 12,
-        replies: 8,
-        isLiked: true,
-        isReposted: false,
-        createdAt: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
-    },
+  {
+    id: 'comm-1',
+    author: 'Jane Doe',
+    username: '@jane_doe',
+    avatar: 'user1',
+    content: 'That Neapolitan pizza demand is exactly what we need. I\'d be there every week!',
+    likes: 42,
+    reposts: 5,
+    replies: 3,
+    isLiked: false,
+    isReposted: false,
+    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
+  },
+  {
+    id: 'comm-2',
+    author: 'John Smith',
+    username: '@johnsmith',
+    avatar: 'user2',
+    content: 'An indoor dog park would be a game-changer for this weather. Someone please make this happen.',
+    media: [
+      { type: 'image', url: 'https://picsum.photos/seed/communitydog/600/400' }
+    ],
+    likes: 101,
+    reposts: 12,
+    replies: 8,
+    isLiked: true,
+    isReposted: false,
+    createdAt: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
+  },
 ];
 
 const ARU_CONVERSATION_ID = 'aru-ai-bot';
 
 // Mock User for demo purposes
-const MOCK_USER: User = { 
-    id: 'user-1', 
-    name: 'Alex Johnson', 
-    email: 'alex@example.com',
-    bio: 'Entrepreneur and community enthusiast looking for the next big idea. Passionate about local coffee shops and sustainable retail.',
-    phone: '555-123-4567',
-    isEmailVerified: true,
-    isPhoneVerified: false,
+const MOCK_USER: User = {
+  id: 'user-1',
+  name: 'Alex Johnson',
+  email: 'alex@example.com',
+  bio: 'Entrepreneur and community enthusiast looking for the next big idea. Passionate about local coffee shops and sustainable retail.',
+  phone: '555-123-4567',
+  isEmailVerified: true,
+  isPhoneVerified: false,
 };
-const MOCK_ADMIN_USER: User = { 
-    id: 'admin-1', 
-    name: 'Shanks (Admin)', 
-    email: 'shanks@gmail.com',
-    bio: 'Administrator for the Bridgehead platform.',
-    isEmailVerified: true,
-    isPhoneVerified: true,
+const MOCK_ADMIN_USER: User = {
+  id: 'admin-1',
+  name: 'Shanks (Admin)',
+  email: 'shanks@gmail.com',
+  bio: 'Administrator for the Bridgehead platform.',
+  isEmailVerified: true,
+  isPhoneVerified: true,
 };
+// Global Scroll Progress Component
+const GlobalScrollProgress = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-// Custom hook for the cursor follower effect
-const useCustomCursor = () => {
   useEffect(() => {
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorFollower = document.querySelector('.cursor-follower');
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!(cursorDot instanceof HTMLElement) || !(cursorFollower instanceof HTMLElement)) return;
-      
-      const { clientX, clientY } = e;
-      const target = e.target as HTMLElement;
-      
-      cursorDot.style.left = `${clientX}px`;
-      cursorDot.style.top = `${clientY}px`;
-      cursorFollower.style.left = `${clientX}px`;
-      cursorFollower.style.top = `${clientY}px`;
-
-      if (cursorDot.style.opacity === '0') {
-          cursorDot.style.opacity = '1';
-          cursorFollower.style.opacity = '1';
-      }
-      
-      const cursorFollowerSelector = 'a, button, input, textarea, select, label, p, h1, h2, h3, h4, h5, h6, span, [role="button"], [class*="cursor-pointer"]';
-      const closestFollowerHover = target.closest(cursorFollowerSelector);
-
-      // Handle cursor follower scaling effect
-      if (closestFollowerHover) {
-        document.body.classList.add('text-hover');
-      } else {
-        document.body.classList.remove('text-hover');
+    const handleScroll = () => {
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (windowHeight > 0) {
+        const progress = (window.scrollY / windowHeight) * 100;
+        setScrollProgress(progress);
       }
     };
-    
-    const handleMouseLeave = () => {
-      if (!(cursorDot instanceof HTMLElement) || !(cursorFollower instanceof HTMLElement)) return;
-      cursorDot.style.opacity = '0';
-      cursorFollower.style.opacity = '0';
-    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.body.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.body.removeEventListener('mouseleave', handleMouseLeave);
-      document.body.classList.remove('text-hover');
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-};
 
+  return (
+    <div
+      className="fixed top-0 right-0 z-[100] w-[2px] md:w-[4px] bg-[#FF0000] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+      style={{ height: `${scrollProgress}%` }}
+    />
+  );
+};
 
 const App: React.FC = () => {
-  useCustomCursor(); // Activate the custom cursor effect
+  // Use Global Scroll Progress
+  const scrollProgress = <GlobalScrollProgress />;
 
-  const [view, setView] = useState<View>(View.HOME);
+  // Initialize view from localStorage or default to HOME
+  const [view, setView] = useState<View>(() => {
+    const savedView = localStorage.getItem('bridgehead_current_view');
+    // Convert string to number for numeric enum
+    if (savedView !== null) {
+      const viewNumber = parseInt(savedView, 10);
+      if (!isNaN(viewNumber) && viewNumber in View) {
+        return viewNumber as View;
+      }
+    }
+    return View.HOME;
+  });
+
+  const [previousView, setPreviousView] = useState<View | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);
   const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);
   const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>(MOCK_COMMUNITY_POSTS);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; startIndex: number } | null>(null);
-  const [selectedPost, setSelectedPost] = useState<DemandPost | RentalPost | null>(null);
+  const [selectedPost, setSelectedPost] = useState<DemandPost | RentalPost | null>(() => {
+    const savedPost = localStorage.getItem('bridgehead_selected_post');
+    return savedPost ? JSON.parse(savedPost) : null;
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(() => {
+    return localStorage.getItem('bridgehead_selected_conversation') || null;
+  });
   const [aruChat, setAruChat] = useState<Chat | null>(null);
-  
+
   const [savedDemandIds, setSavedDemandIds] = useState<string[]>([]);
   const [savedRentalIds, setSavedRentalIds] = useState<string[]>([]);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-  const handleSetView = (newView: View) => {
+  const handleSetView = (newView: View, skipSave: boolean = false) => {
     // Views that are entirely protected and require a user to be logged in.
     const protectedViews = [
       View.POST_DEMAND,
@@ -160,64 +159,142 @@ const App: React.FC = () => {
 
     if (protectedViews.includes(newView) && !currentUser) {
       setView(View.SIGN_IN);
+      // Don't save SIGN_IN to localStorage if it's a redirect
+      if (!skipSave) {
+        localStorage.setItem('bridgehead_redirect_after_login', newView.toString());
+      }
     } else {
       setView(newView);
+      if (!skipSave) {
+        localStorage.removeItem('bridgehead_redirect_after_login');
+      }
     }
     window.scrollTo(0, 0);
   };
 
+  // Auto-dismiss toast after 5 seconds
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   // --- Authentication Handlers ---
-  const handleSignIn = (email: string, password: string):boolean => {
-    // Mock login logic
-    if (email === MOCK_USER.email && password === 'password123') {
-        setCurrentUser(MOCK_USER);
+  const handleSignIn = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setToast({ message: data.error || 'Login failed', type: 'error' });
+        return false;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setCurrentUser(data.user);
+
+      // Check if there was a redirect intention
+      const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
+      if (redirectView) {
+        handleSetView(redirectView as unknown as View);
+        localStorage.removeItem('bridgehead_redirect_after_login');
+      } else {
         handleSetView(View.FEED);
-        return true;
-    }
-    // Admin user
-    if (email === MOCK_ADMIN_USER.email && password === 'shanks@123') {
-      setCurrentUser(MOCK_ADMIN_USER);
-      handleSetView(View.FEED);
+      }
       return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      setToast({ message: 'An error occurred during login', type: 'error' });
+      return false;
     }
-    return false;
   };
 
-  const handleSignUp = (name: string, email: string, password: string):boolean => {
-    // Mock sign up logic
-    const newUser: User = { 
-        id: crypto.randomUUID(), 
-        name, 
-        email,
-        isEmailVerified: false,
-        isPhoneVerified: false,
-    };
-    setCurrentUser(newUser);
-    handleSetView(View.FEED);
-    return true;
+  const handleSignUp = async (name: string, email: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: name,
+          email,
+          password,
+          userType: 'community' // Default type, can be expanded
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setToast({ message: data.error || 'Registration failed', type: 'error' });
+        return false;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setCurrentUser(data.user);
+
+      // Check if there was a redirect intention
+      const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
+      if (redirectView) {
+        handleSetView(redirectView as unknown as View);
+        localStorage.removeItem('bridgehead_redirect_after_login');
+      } else {
+        handleSetView(View.FEED);
+      }
+      return true;
+    } catch (error) {
+      console.error('Registration error:', error);
+      setToast({ message: 'An error occurred during registration', type: 'error' });
+      return false;
+    }
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setCurrentUser(null);
     handleSetView(View.HOME);
   };
 
   const handleUpdateUser = (updatedUser: User) => {
     setCurrentUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
+
+  // Check for existing session on mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    if (token && savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+        // Optionally verify token validity with backend here
+      } catch (e) {
+        console.error('Error parsing saved user', e);
+        handleSignOut();
+      }
+    }
+  }, []);
 
   // Initialize ARU chat instance
   useEffect(() => {
     if (!process.env.API_KEY) {
-        console.error("API_KEY not found for ARU chatbot.");
-        return;
+      console.error("API_KEY not found for ARU chatbot.");
+      return;
     };
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const systemInstruction = "You are ARU, a helpful AI assistant for the Bridgehead app. Bridgehead connects community needs (demands) with entrepreneurs. Users can post demands for businesses they want, and entrepreneurs can find rental properties and get business ideas. Keep your answers concise and helpful. Be friendly and engaging. When providing instructions or steps, always use a numbered or bulleted list. Do not write steps in a single paragraph.";
 
     const chatInstance = ai.chats.create({
-        model: 'gemini-flash-lite-latest',
-        config: { systemInstruction },
+      model: 'gemini-flash-lite-latest',
+      config: { systemInstruction },
     });
     setAruChat(chatInstance);
   }, []);
@@ -225,31 +302,51 @@ const App: React.FC = () => {
   // Load saved IDs from localStorage on mount
   useEffect(() => {
     try {
-        const savedDemands = localStorage.getItem('bridgehead_saved_demands');
-        if (savedDemands) setSavedDemandIds(JSON.parse(savedDemands));
-        const savedRentals = localStorage.getItem('bridgehead_saved_rentals');
-        if (savedRentals) setSavedRentalIds(JSON.parse(savedRentals));
+      const savedDemands = localStorage.getItem('bridgehead_saved_demands');
+      if (savedDemands) setSavedDemandIds(JSON.parse(savedDemands));
+      const savedRentals = localStorage.getItem('bridgehead_saved_rentals');
+      if (savedRentals) setSavedRentalIds(JSON.parse(savedRentals));
     } catch (error) {
-        console.error("Failed to parse saved items from localStorage", error);
+      console.error("Failed to parse saved items from localStorage", error);
     }
   }, []);
-  
+
   useEffect(() => {
     // Open sidebar by default on desktop
     if (window.innerWidth > 768) {
-        setIsSidebarOpen(true);
+      setIsSidebarOpen(true);
     }
   }, []);
+
+  // Save current view to localStorage when it changes (but not on initial mount)
+  const isInitialMount = React.useRef(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      localStorage.setItem('bridgehead_current_view', view.toString());
+    }
+  }, [view]);
+
 
   // Save demand IDs to localStorage when they change
   useEffect(() => {
     localStorage.setItem('bridgehead_saved_demands', JSON.stringify(savedDemandIds));
   }, [savedDemandIds]);
-  
+
   // Save rental IDs to localStorage when they change
   useEffect(() => {
     localStorage.setItem('bridgehead_saved_rentals', JSON.stringify(savedRentalIds));
   }, [savedRentalIds]);
+
+  // Save selected conversation ID to localStorage when it changes
+  useEffect(() => {
+    if (selectedConversationId) {
+      localStorage.setItem('bridgehead_selected_conversation', selectedConversationId);
+    } else {
+      localStorage.removeItem('bridgehead_selected_conversation');
+    }
+  }, [selectedConversationId]);
 
   const handleDemandSaveToggle = (id: string) => {
     setSavedDemandIds(prev => prev.includes(id) ? prev.filter(pId => pId !== id) : [...prev, id]);
@@ -260,319 +357,394 @@ const App: React.FC = () => {
   };
 
   // --- DATA FETCHING AND MUTATIONS ---
-  useEffect(() => {
-    const fetchPosts = async () => {
-        try {
-            const [demandsRes, rentalsRes] = await Promise.all([
-                fetch(`${API_BASE_URL}/posts/demands`),
-                fetch(`${API_BASE_URL}/posts/rentals`)
-            ]);
-            if (!demandsRes.ok || !rentalsRes.ok) {
-                throw new Error('Failed to fetch posts');
-            }
-            const demandsData = await demandsRes.json();
-            const rentalsData = await rentalsRes.json();
-            
-            setDemandPosts(demandsData);
-            setRentalPosts(rentalsData);
+  const fetchPosts = async () => {
+    try {
+      const [demandsRes, rentalsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/posts/demands`),
+        fetch(`${API_BASE_URL}/posts/rentals`)
+      ]);
+      if (!demandsRes.ok || !rentalsRes.ok) {
+        throw new Error('Failed to fetch posts');
+      }
+      const demandsData = await demandsRes.json();
+      const rentalsData = await rentalsRes.json();
 
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    
+      setDemandPosts(demandsData);
+      setRentalPosts(rentalsData);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Fetch posts when app mounts
+  useEffect(() => {
     fetchPosts();
 
     // MOCK DATA for Conversations (can be migrated later)
     const MOCK_CONVERSATIONS: Conversation[] = [
-        {
-            id: ARU_CONVERSATION_ID,
-            postId: 'ai-assistant',
-            participant: {
-                id: 'aru-bot',
-                name: 'ARU',
-                avatar: 'aru-avatar',
-                postTitle: 'AI Assistant',
-            },
-            messages: [{
-                id: 'aru-msg-1',
-                senderId: 'aru-bot',
-                text: "Hello! I'm ARU, your personal AI assistant for Bridgehead. How can I help you today?",
-                timestamp: new Date().toISOString(),
-            }],
-            lastMessageTimestamp: new Date().toISOString(),
-            unreadCount: 0,
+      {
+        id: ARU_CONVERSATION_ID,
+        postId: 'ai-assistant',
+        participant: {
+          id: 'aru-bot',
+          name: 'ARU',
+          avatar: 'aru-avatar',
+          postTitle: 'AI Assistant',
         },
-        {
-            id: 'convo-1',
-            postId: 'demand-1',
-            participant: { id: 'user-pizza', name: 'Pizza Lover', avatar: 'user_pizza', postTitle: 'Authentic Neapolitan Pizza Joint' },
-            messages: [
-                { id: 'msg-1', senderId: 'user-pizza', text: 'Hey, I saw your demand for a pizza place. I\'m an entrepreneur and I\'m interested.', timestamp: new Date(Date.now() - 3600000 * 24).toISOString() },
-                { id: 'msg-2', senderId: 'currentUser', text: 'That\'s great to hear! What are your thoughts?', timestamp: new Date(Date.now() - 3600000 * 23).toISOString() },
-            ],
-            lastMessageTimestamp: new Date(Date.now() - 3600000 * 23).toISOString(),
-            unreadCount: 0,
-        }
+        messages: [{
+          id: 'aru-msg-1',
+          senderId: 'aru-bot',
+          text: "Hello! I'm ARU, your personal AI assistant for Bridgehead. How can I help you today?",
+          timestamp: new Date().toISOString(),
+        }],
+        lastMessageTimestamp: new Date().toISOString(),
+        unreadCount: 0,
+      },
+      {
+        id: 'convo-1',
+        postId: 'demand-1',
+        participant: { id: 'user-pizza', name: 'Pizza Lover', avatar: 'user_pizza', postTitle: 'Authentic Neapolitan Pizza Joint' },
+        messages: [
+          { id: 'msg-1', senderId: 'user-pizza', text: 'Hey, I saw your demand for a pizza place. I\'m an entrepreneur and I\'m interested.', timestamp: new Date(Date.now() - 3600000 * 24).toISOString() },
+          { id: 'msg-2', senderId: 'currentUser', text: 'That\'s great to hear! What are your thoughts?', timestamp: new Date(Date.now() - 3600000 * 23).toISOString() },
+        ],
+        lastMessageTimestamp: new Date(Date.now() - 3600000 * 23).toISOString(),
+        unreadCount: 0,
+      }
     ];
     setConversations(MOCK_CONVERSATIONS);
   }, []);
 
   const addDemandPost = async (post: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'>) => {
     try {
-        const res = await fetch(`${API_BASE_URL}/posts/demands`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(post)
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+
+      // Convert base64 images to File objects and append to FormData
+      if (post.images && post.images.length > 0) {
+        // Import the utility function
+        const { dataUrlsToFiles } = await import('./utils/fileUtils');
+        const files = await dataUrlsToFiles(post.images);
+        files.forEach(file => {
+          formData.append('images', file);
         });
-        if (!res.ok) throw new Error('Failed to create demand post');
-        const newPost = await res.json();
-        setDemandPosts(prev => [newPost, ...prev]);
+      }
+
+      // Append other fields to FormData
+      formData.append('title', post.title);
+      formData.append('category', post.category);
+      formData.append('description', post.description);
+
+      // Handle location - convert to JSON string
+      if (post.location) {
+        formData.append('location', JSON.stringify(post.location));
+      }
+
+      // Append optional fields
+      if (post.phone) formData.append('contactPhone', post.phone);
+      if (post.email) formData.append('contactEmail', post.email);
+      formData.append('openToCollaboration', String(post.openToCollaboration));
+
+      const res = await fetch(`${API_BASE_URL}/posts/demands`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // Don't set Content-Type - let browser set it with boundary
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Show detailed validation errors if available
+        let errorMessage = data.message || 'Failed to create demand post';
+
+        if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+          // Format validation errors in a user-friendly way
+          errorMessage = data.errors.map((err: any) => err.msg).join(', ');
+        }
+
+        setToast({
+          message: errorMessage,
+          type: 'error'
+        });
+        return;
+      }
+
+      setDemandPosts(prev => [data.data, ...prev]);
+      setToast({
+        message: 'Demand post created successfully!',
+        type: 'success'
+      });
     } catch (error) {
-        console.error(error);
+      console.error('Error creating demand post:', error);
+      setToast({
+        message: 'An error occurred while creating the post',
+        type: 'error'
+      });
     }
   };
-  
+
   const addRentalPost = async (post: Omit<RentalPost, 'id' | 'createdAt'>) => {
     try {
-        const res = await fetch(`${API_BASE_URL}/posts/rentals`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(post)
-        });
-        if (!res.ok) throw new Error('Failed to create rental post');
-        const newPost = await res.json();
-        setRentalPosts(prev => [newPost, ...prev]);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(post)
+      });
+      if (!res.ok) throw new Error('Failed to create rental post');
+      const newPost = await res.json();
+      setRentalPosts(prev => [newPost, ...prev]);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   };
 
   const handleUpvote = async (id: string) => {
     try {
-        const res = await fetch(`${API_BASE_URL}/posts/demands/${id}/upvote`, { method: 'PUT' });
-        if (!res.ok) throw new Error('Failed to upvote post');
-        const updatedPost = await res.json();
-        setDemandPosts(posts => posts.map(p => p.id === id ? updatedPost : p));
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}/upvote`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) throw new Error('Failed to upvote post');
+      const updatedPost = await res.json();
+      setDemandPosts(posts => posts.map(p => p.id === id ? updatedPost : p));
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   };
 
   const addCommunityPost = (content: string, media: MediaItem[]) => {
     const newPost: CommunityPost = {
-        id: crypto.randomUUID(),
-        author: currentUser?.name || 'Current User',
-        username: currentUser ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
-        avatar: 'user_self',
-        content,
-        media: media.length > 0 ? media : undefined,
-        likes: 0,
-        reposts: 0,
-        replies: 0,
-        isLiked: false,
-        isReposted: false,
-        createdAt: new Date().toISOString(),
+      id: crypto.randomUUID(),
+      author: currentUser?.name || 'Current User',
+      username: currentUser ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
+      avatar: 'user_self',
+      content,
+      media: media.length > 0 ? media : undefined,
+      likes: 0,
+      reposts: 0,
+      replies: 0,
+      isLiked: false,
+      isReposted: false,
+      createdAt: new Date().toISOString(),
     };
     setCommunityPosts(prev => [newPost, ...prev]);
   };
-  
+
   const handleLikePost = (id: string) => {
     setCommunityPosts(posts => posts.map(p => {
-        if (p.id === id) {
-            return { ...p, isLiked: !p.isLiked, likes: p.isLiked ? p.likes - 1 : p.likes + 1 };
-        }
-        return p;
+      if (p.id === id) {
+        return { ...p, isLiked: !p.isLiked, likes: p.isLiked ? p.likes - 1 : p.likes + 1 };
+      }
+      return p;
     }));
   };
-  
+
   const handleRepostPost = (id: string) => {
     setCommunityPosts(posts => posts.map(p => {
-        if (p.id === id) {
-            return { ...p, isReposted: !p.isReposted, reposts: p.isReposted ? p.reposts - 1 : p.reposts + 1 };
-        }
-        return p;
+      if (p.id === id) {
+        return { ...p, isReposted: !p.isReposted, reposts: p.isReposted ? p.reposts - 1 : p.reposts + 1 };
+      }
+      return p;
     }));
   };
 
   const handleEditPost = (id: string, newContent: string, newMedia: MediaItem[]) => {
     setCommunityPosts(posts => posts.map(p => {
-        if (p.id === id) {
-            return { 
-                ...p, 
-                content: newContent, 
-                media: newMedia.length > 0 ? newMedia : undefined 
-            };
-        }
-        return p;
+      if (p.id === id) {
+        return {
+          ...p,
+          content: newContent,
+          media: newMedia.length > 0 ? newMedia : undefined
+        };
+      }
+      return p;
     }));
   };
-  
+
   const handleReplyPost = (postId: string, content: string, media: MediaItem[]) => {
     // 1. Create and add the new reply post
     addCommunityPost(content, media);
 
     // 2. Increment the reply count of the original post
     setCommunityPosts(posts => posts.map(p => {
-        if (p.id === postId) {
-            return { ...p, replies: p.replies + 1 };
-        }
-        return p;
+      if (p.id === postId) {
+        return { ...p, replies: p.replies + 1 };
+      }
+      return p;
     }));
   };
 
   const handleImageClick = useCallback((images: string[], startIndex: number) => {
     setImageViewerState({ images, startIndex });
   }, []);
-  
+
   const closeImageViewer = useCallback(() => {
     setImageViewerState(null);
   }, []);
-  
+
   const handlePostSelect = (post: DemandPost | RentalPost) => {
+    // Track where we're coming from
+    setPreviousView(view);
     setSelectedPost(post);
+    localStorage.setItem('bridgehead_selected_post', JSON.stringify(post));
     if ('upvotes' in post) { // Type guard for DemandPost
-        handleSetView(View.DEMAND_DETAIL);
+      handleSetView(View.DEMAND_DETAIL);
     } else {
-        handleSetView(View.RENTAL_DETAIL);
+      handleSetView(View.RENTAL_DETAIL);
     }
   };
 
   const handleBackToFeed = () => {
-    if (selectedPost && 'upvotes' in selectedPost) {
-        handleSetView(View.DEMAND_FEED);
+    // Go back to previous view if available, otherwise fallback to feed type
+    if (previousView !== null) {
+      handleSetView(previousView);
+    } else if (selectedPost && 'upvotes' in selectedPost) {
+      handleSetView(View.DEMAND_FEED);
     } else {
-        handleSetView(View.RENTAL_LISTINGS);
+      handleSetView(View.RENTAL_LISTINGS);
     }
     setSelectedPost(null);
+    setPreviousView(null);
+    localStorage.removeItem('bridgehead_selected_post');
   };
-  
+
   const handleSendMessage = async (conversationId: string, text: string) => {
     const newMessage: Message = {
-        id: crypto.randomUUID(),
-        senderId: 'currentUser',
-        text,
-        timestamp: new Date().toISOString(),
+      id: crypto.randomUUID(),
+      senderId: 'currentUser',
+      text,
+      timestamp: new Date().toISOString(),
     };
 
     setConversations(prev => {
-        const updatedConversations = prev.map(convo => {
-            if (convo.id === conversationId) {
-                return {
-                    ...convo,
-                    messages: [...convo.messages, newMessage],
-                    lastMessageTimestamp: newMessage.timestamp,
-                };
-            }
-            return convo;
-        });
-        return updatedConversations.sort((a,b) => new Date(b.lastMessageTimestamp).getTime() - new Date(a.lastMessageTimestamp).getTime());
+      const updatedConversations = prev.map(convo => {
+        if (convo.id === conversationId) {
+          return {
+            ...convo,
+            messages: [...convo.messages, newMessage],
+            lastMessageTimestamp: newMessage.timestamp,
+          };
+        }
+        return convo;
+      });
+      return updatedConversations.sort((a, b) => new Date(b.lastMessageTimestamp).getTime() - new Date(a.lastMessageTimestamp).getTime());
     });
 
     if (conversationId === ARU_CONVERSATION_ID) {
-        if (!aruChat) {
-            console.error("ARU chat not initialized");
-            return;
-        }
+      if (!aruChat) {
+        console.error("ARU chat not initialized");
+        return;
+      }
 
-        try {
-            const result = await aruChat.sendMessageStream({ message: text });
-            
-            let modelResponse = '';
-            const responseMessageId = crypto.randomUUID();
-            
-            setConversations(prev => prev.map(convo => {
-                if (convo.id === ARU_CONVERSATION_ID) {
-                    return {
-                        ...convo,
-                        messages: [
-                            ...convo.messages,
-                            { id: responseMessageId, senderId: 'aru-bot', text: '...', timestamp: new Date().toISOString() }
-                        ],
-                    };
-                }
-                return convo;
-            }));
+      try {
+        const result = await aruChat.sendMessageStream({ message: text });
 
-            for await (const chunk of result) {
-                modelResponse += chunk.text;
-                setConversations(prev => prev.map(convo => {
-                    if (convo.id === ARU_CONVERSATION_ID) {
-                        const updatedMessages = convo.messages.map(msg => 
-                            msg.id === responseMessageId ? { ...msg, text: modelResponse } : msg
-                        );
-                        return { 
-                            ...convo, 
-                            messages: updatedMessages,
-                            lastMessageTimestamp: new Date().toISOString() 
-                        };
-                    }
-                    return convo;
-                }));
-            }
-        } catch (error) {
-            console.error("ARU chat error:", error);
-            const errorMessage: Message = {
-                id: crypto.randomUUID(),
-                senderId: 'aru-bot',
-                text: "Sorry, I'm having trouble connecting right now. Please try again later.",
-                timestamp: new Date().toISOString(),
+        let modelResponse = '';
+        const responseMessageId = crypto.randomUUID();
+
+        setConversations(prev => prev.map(convo => {
+          if (convo.id === ARU_CONVERSATION_ID) {
+            return {
+              ...convo,
+              messages: [
+                ...convo.messages,
+                { id: responseMessageId, senderId: 'aru-bot', text: '...', timestamp: new Date().toISOString() }
+              ],
             };
-            setConversations(prev => prev.map(convo =>
-                convo.id === ARU_CONVERSATION_ID
-                ? { ...convo, messages: [...convo.messages, errorMessage], lastMessageTimestamp: errorMessage.timestamp }
-                : convo
-            ));
+          }
+          return convo;
+        }));
+
+        for await (const chunk of result) {
+          modelResponse += chunk.text;
+          setConversations(prev => prev.map(convo => {
+            if (convo.id === ARU_CONVERSATION_ID) {
+              const updatedMessages = convo.messages.map(msg =>
+                msg.id === responseMessageId ? { ...msg, text: modelResponse } : msg
+              );
+              return {
+                ...convo,
+                messages: updatedMessages,
+                lastMessageTimestamp: new Date().toISOString()
+              };
+            }
+            return convo;
+          }));
         }
+      } catch (error) {
+        console.error("ARU chat error:", error);
+        const errorMessage: Message = {
+          id: crypto.randomUUID(),
+          senderId: 'aru-bot',
+          text: "Sorry, I'm having trouble connecting right now. Please try again later.",
+          timestamp: new Date().toISOString(),
+        };
+        setConversations(prev => prev.map(convo =>
+          convo.id === ARU_CONVERSATION_ID
+            ? { ...convo, messages: [...convo.messages, errorMessage], lastMessageTimestamp: errorMessage.timestamp }
+            : convo
+        ));
+      }
 
     } else {
-        // Existing mock peer-to-peer reply logic
-        setTimeout(() => {
-            const conversation = conversations.find(c => c.id === conversationId);
-            if (!conversation) return;
+      // Existing mock peer-to-peer reply logic
+      setTimeout(() => {
+        const conversation = conversations.find(c => c.id === conversationId);
+        if (!conversation) return;
 
-            const replyMessage: Message = {
-                id: crypto.randomUUID(),
-                senderId: conversation.participant.id,
-                text: "Thanks for your message! I'll get back to you shortly.",
-                timestamp: new Date().toISOString(),
+        const replyMessage: Message = {
+          id: crypto.randomUUID(),
+          senderId: conversation.participant.id,
+          text: "Thanks for your message! I'll get back to you shortly.",
+          timestamp: new Date().toISOString(),
+        };
+        setConversations(prev => prev.map(convo => {
+          if (convo.id === conversationId) {
+            return {
+              ...convo,
+              messages: [...convo.messages, replyMessage],
+              lastMessageTimestamp: replyMessage.timestamp,
             };
-            setConversations(prev => prev.map(convo => {
-                 if (convo.id === conversationId) {
-                    return {
-                        ...convo,
-                        messages: [...convo.messages, replyMessage],
-                        lastMessageTimestamp: replyMessage.timestamp,
-                    };
-                }
-                return convo;
-            }));
-        }, 1500);
+          }
+          return convo;
+        }));
+      }, 1500);
     }
   };
 
   const handleStartCollaboration = (post: DemandPost | RentalPost) => {
-      const existingConvo = conversations.find(c => c.postId === post.id);
-      if (existingConvo) {
-          setSelectedConversationId(existingConvo.id);
-      } else {
-          const newConvo: Conversation = {
-              id: crypto.randomUUID(),
-              postId: post.id,
-              participant: {
-                  id: `user-${post.id}`,
-                  name: `Owner of "${post.title.substring(0, 15)}..."`, // Mock name
-                  avatar: `user-avatar-${post.id}`,
-                  postTitle: post.title,
-              },
-              messages: [],
-              lastMessageTimestamp: new Date().toISOString(),
-              unreadCount: 0,
-          };
-          setConversations(prev => [newConvo, ...prev]);
-          setSelectedConversationId(newConvo.id);
-      }
-      handleSetView(View.COLLABORATION);
+    const existingConvo = conversations.find(c => c.postId === post.id);
+    if (existingConvo) {
+      setSelectedConversationId(existingConvo.id);
+    } else {
+      const newConvo: Conversation = {
+        id: crypto.randomUUID(),
+        postId: post.id,
+        participant: {
+          id: `user-${post.id}`,
+          name: `Owner of "${post.title.substring(0, 15)}..."`, // Mock name
+          avatar: `user-avatar-${post.id}`,
+          postTitle: post.title,
+        },
+        messages: [],
+        lastMessageTimestamp: new Date().toISOString(),
+        unreadCount: 0,
+      };
+      setConversations(prev => [newConvo, ...prev]);
+      setSelectedConversationId(newConvo.id);
+    }
+    handleSetView(View.COLLABORATION);
   };
 
   const handleNavigateToAIAssistant = () => {
@@ -584,21 +756,21 @@ const App: React.FC = () => {
     switch (view) {
       case View.FEED:
         return <Feed
-            demandPosts={demandPosts}
-            rentalPosts={rentalPosts}
-            communityPosts={communityPosts}
-            savedDemandIds={savedDemandIds}
-            savedRentalIds={savedRentalIds}
-            onPostSelect={handlePostSelect}
-            onDemandUpvote={handleUpvote}
-            onDemandSaveToggle={handleDemandSaveToggle}
-            onRentalSaveToggle={handleRentalSaveToggle}
-            onCommunityLike={handleLikePost}
-            onCommunityRepost={handleRepostPost}
-            onCommunityEdit={handleEditPost}
-            onCommunityReply={handleReplyPost}
-            currentUser={currentUser}
-            setView={handleSetView}
+          demandPosts={demandPosts}
+          rentalPosts={rentalPosts}
+          communityPosts={communityPosts}
+          savedDemandIds={savedDemandIds}
+          savedRentalIds={savedRentalIds}
+          onPostSelect={handlePostSelect}
+          onDemandUpvote={handleUpvote}
+          onDemandSaveToggle={handleDemandSaveToggle}
+          onRentalSaveToggle={handleRentalSaveToggle}
+          onCommunityLike={handleLikePost}
+          onCommunityRepost={handleRepostPost}
+          onCommunityEdit={handleEditPost}
+          onCommunityReply={handleReplyPost}
+          currentUser={currentUser}
+          setView={handleSetView}
         />;
       case View.DEMAND_FEED:
         return <DemandFeed posts={demandPosts} onPostSelect={handlePostSelect} onUpvote={handleUpvote} savedPostIds={savedDemandIds} onSaveToggle={handleDemandSaveToggle} />;
@@ -611,41 +783,57 @@ const App: React.FC = () => {
       case View.AI_SUGGESTIONS:
         return <AISuggestions demands={demandPosts} />;
       case View.AI_MATCHES:
-        return <AIMatches 
-            demands={demandPosts} 
-            rentals={rentalPosts}
-            onPostSelect={handlePostSelect}
-            onDemandUpvote={handleUpvote}
-            onDemandSaveToggle={handleDemandSaveToggle}
-            onRentalSaveToggle={handleRentalSaveToggle}
-            savedDemandIds={savedDemandIds}
-            savedRentalIds={savedRentalIds}
+        return <AIMatches
+          demands={demandPosts}
+          rentals={rentalPosts}
+          onPostSelect={handlePostSelect}
+          onDemandUpvote={handleUpvote}
+          onDemandSaveToggle={handleDemandSaveToggle}
+          onRentalSaveToggle={handleRentalSaveToggle}
+          savedDemandIds={savedDemandIds}
+          savedRentalIds={savedRentalIds}
         />;
       case View.COMMUNITY_FEED:
-        return <CommunityFeed 
-          posts={communityPosts} 
-          addPost={addCommunityPost} 
-          onLike={handleLikePost} 
-          onRepost={handleRepostPost} 
-          onEditPost={handleEditPost} 
+        return <CommunityHub
+          posts={communityPosts}
+          addPost={addCommunityPost}
+          onLike={handleLikePost}
+          onRepost={handleRepostPost}
+          onEditPost={handleEditPost}
           onReply={handleReplyPost}
           currentUser={currentUser}
           setView={handleSetView}
         />;
       case View.DEMAND_DETAIL:
-        return selectedPost ? <DemandDetail post={selectedPost as DemandPost} onBack={handleBackToFeed} onImageClick={handleImageClick} onStartCollaboration={handleStartCollaboration} /> : <Home setView={handleSetView} />;
+        return selectedPost ? (
+          <DemandDetail
+            post={selectedPost as DemandPost}
+            onBack={handleBackToFeed}
+            onViewDemand={() => handleSetView(View.DEMAND_FEED)}
+            onImageClick={handleImageClick}
+            onStartCollaboration={handleStartCollaboration}
+          />
+        ) : <Home setView={handleSetView} />;
       case View.RENTAL_DETAIL:
-        return selectedPost ? <RentalDetail post={selectedPost as RentalPost} onBack={handleBackToFeed} onImageClick={handleImageClick} onStartCollaboration={handleStartCollaboration} /> : <Home setView={handleSetView} />;
+        return selectedPost ? (
+          <RentalDetail
+            post={selectedPost as RentalPost}
+            onBack={handleBackToFeed}
+            onViewRental={() => handleSetView(View.RENTAL_LISTINGS)}
+            onImageClick={handleImageClick}
+            onStartCollaboration={handleStartCollaboration}
+          />
+        ) : <Home setView={handleSetView} />;
       case View.SAVED_POSTS:
         return <SavedPosts
-            demandPosts={demandPosts}
-            rentalPosts={rentalPosts}
-            savedDemandIds={savedDemandIds}
-            savedRentalIds={savedRentalIds}
-            onDemandSaveToggle={handleDemandSaveToggle}
-            onRentalSaveToggle={handleRentalSaveToggle}
-            onDemandUpvote={handleUpvote}
-            onPostSelect={handlePostSelect}
+          demandPosts={demandPosts}
+          rentalPosts={rentalPosts}
+          savedDemandIds={savedDemandIds}
+          savedRentalIds={savedRentalIds}
+          onDemandSaveToggle={handleDemandSaveToggle}
+          onRentalSaveToggle={handleRentalSaveToggle}
+          onDemandUpvote={handleUpvote}
+          onPostSelect={handlePostSelect}
         />;
       case View.COLLABORATION:
         return <Collaboration conversations={conversations} onSendMessage={handleSendMessage} selectedConversationId={selectedConversationId} setSelectedConversationId={setSelectedConversationId} />;
@@ -663,49 +851,138 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Header 
-        setIsSidebarOpen={setIsSidebarOpen} 
+      <CustomCursor />
+      <GlobalScrollProgress />
+      <Header
+        setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         currentView={view}
         currentUser={currentUser}
         onSignOut={handleSignOut}
         setView={handleSetView}
       />
-      <Sidebar 
+      <Sidebar
         onNavigate={handleSetView}
-        currentView={view} 
-        isSidebarOpen={isSidebarOpen} 
+        currentView={view}
+        isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         currentUser={currentUser}
         onSignOut={handleSignOut}
       />
-       {/* Sidebar Toggle for Desktop */}
-       <button
+      {/* Futuristic Sidebar Toggle for Desktop */}
+      <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         onMouseEnter={() => {
-            if (!isSidebarOpen && window.innerWidth > 768) setIsSidebarOpen(true);
+          if (!isSidebarOpen && window.innerWidth > 768) setIsSidebarOpen(true);
         }}
-        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] w-6 h-16 bg-[--card-color] border-y border-r border-[--border-color] rounded-r-lg text-white hover:bg-[--primary-color] transition-all duration-300 ease-in-out ${isSidebarOpen ? 'left-64' : 'left-0'}`}
+        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : '-left-2'
+          }`}
+        style={{
+          width: '48px',
+          height: '120px',
+          background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1))',
+          borderTopRightRadius: '24px',
+          borderBottomRightRadius: '24px',
+          borderTop: '2px solid rgba(239, 68, 68, 0.5)',
+          borderRight: '2px solid rgba(239, 68, 68, 0.5)',
+          borderBottom: '2px solid rgba(239, 68, 68, 0.5)',
+          boxShadow: '0 0 20px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.1)',
+          transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          willChange: isSidebarOpen ? 'transform' : 'auto',
+        }}
         aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
       >
-        {isSidebarOpen ? <ArrowLeftIcon className="w-4 h-4" /> : <ArrowRightIcon className="w-4 h-4" />}
+        {/* Animated accent lines */}
+        <div className="absolute inset-0 overflow-hidden rounded-r-3xl">
+          <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
+          <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+
+        {/* Icon */}
+        <div className="relative z-10 text-red-500 group-hover:text-red-400 transition-colors duration-300">
+          {isSidebarOpen ? (
+            <ArrowLeftIcon className="w-6 h-6 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+          ) : (
+            <ArrowRightIcon className="w-6 h-6 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+          )}
+        </div>
+
+        {/* Hover glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-r-3xl"></div>
       </button>
 
-      <main className={`pt-16 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
+      <main
+        style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
+        className={`pt-16 transition-all duration-300 ${isSidebarOpen ? 'md:ml-72' : 'ml-0'}`}
+      >
         {renderView()}
       </main>
       <Footer setView={handleSetView} onNavigateToAIAssistant={handleNavigateToAIAssistant} />
       {imageViewerState && (
-        <ImageViewer 
-          images={imageViewerState.images} 
-          startIndex={imageViewerState.startIndex} 
-          onClose={closeImageViewer} 
+        <ImageViewer
+          images={imageViewerState.images}
+          startIndex={imageViewerState.startIndex}
+          onClose={closeImageViewer}
         />
       )}
-      <Chatbot />
+      <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />
+      <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />
       <ScrollToTopButton />
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </>
   );
 };
 
 export default App;
+
+// Add gradient animation CSS
+const styleTag = document.createElement('style');
+styleTag.innerHTML = `
+          @keyframes gradient-shift {
+            0 %, 100 % {
+              background- position: 0% 50%;
+    }
+          50% {
+            background - position: 100% 50%;
+    }
+  }
+
+          .animate-gradient-shift {
+            background - size: 200% 200%;
+          animation: gradient-shift 15s ease infinite;
+  }
+
+          @keyframes dropdownOpen {
+            0 % {
+              opacity: 0;
+              transform: translateY(-10px) scale(0.95);
+            }
+    100% {
+            opacity: 1;
+          transform: translateY(0) scale(1);
+    }
+  }
+
+          @keyframes dropdownClose {
+            0 % {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+    100% {
+            opacity: 0;
+          transform: translateY(-10px) scale(0.95);
+    }
+  }
+          `;
+if (!document.querySelector('style[data-gradient-anim]')) {
+  styleTag.setAttribute('data-gradient-anim', 'true');
+  document.head.appendChild(styleTag);
+}
+
+

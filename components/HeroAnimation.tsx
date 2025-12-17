@@ -15,13 +15,9 @@ const HeroAnimation: React.FC = () => {
         let mouse = { x: -1000, y: -1000 };
 
         const resizeCanvas = () => {
-            if (canvas.parentElement) {
-                canvas.width = canvas.parentElement.clientWidth;
-                canvas.height = canvas.parentElement.clientHeight;
-            } else {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
+            // Always use full window dimensions for particles to cover entire viewport
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             initParticles();
         };
 
@@ -121,16 +117,11 @@ const HeroAnimation: React.FC = () => {
         };
 
         const handleMouseMove = (e: MouseEvent) => {
-            if (canvasRef.current) {
-                const rect = canvasRef.current.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-            }
+            // Since canvas is fixed and covers full viewport, use direct client coordinates
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         };
 
-        // Attach to window to track mouse even if not hovering directly over canvas (if covered)
-        // But we need relative coordinates to the canvas.
-        // So we keep the rect calculation.
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('resize', resizeCanvas);
 
@@ -147,8 +138,8 @@ const HeroAnimation: React.FC = () => {
     return (
         <canvas
             ref={canvasRef}
-            className="absolute inset-0 z-20 pointer-events-none"
-            style={{ background: 'transparent' }}
+            className="fixed inset-0 w-full h-full pointer-events-none"
+            style={{ background: 'transparent', zIndex: -10 }}
         />
     );
 };

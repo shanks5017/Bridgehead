@@ -1,10 +1,13 @@
 
+
 import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { DemandPost } from '../types';
 import DemandCard from './DemandCard';
 import { EmptyState } from './LandingPages';
 import { SearchIcon, ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, LoadingSpinner, BookmarkIcon } from './icons';
 import HeroAnimation from './HeroAnimation';
+import { getImageUrl } from '../utils/imageUrlUtils';
 
 interface DemandFeedProps {
     posts: DemandPost[];
@@ -128,11 +131,14 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-    const [sortByDistance, setSortByDistance] = useState(false);
+    const [feedMode, setFeedMode] = useState<'nearMe' | 'trending'>('trending');
     const [isLocating, setIsLocating] = useState(false);
     const [locationError, setLocationError] = useState('');
     const [radius, setRadius] = useState<number>(25);
     const [showSavedOnly, setShowSavedOnly] = useState(false);
+
+    // Ref for virtualization
+    const parentRef = useRef<HTMLDivElement>(null);
 
     const featuredPosts = useMemo(() => {
         return [...posts]
@@ -148,28 +154,29 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
         return () => clearTimeout(timer);
     }, [currentSlide, featuredPosts.length]);
 
-    const handleSortByDistance = () => {
-        if (sortByDistance) {
-            setSortByDistance(false);
-            setUserLocation(null);
-            setLocationError('');
-            setRadius(25); // Reset to default for next time
-            return;
-        }
-
-        setIsLocating(true);
-        setLocationError('');
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-                setSortByDistance(true);
-                setIsLocating(false);
-            },
-            error => {
-                setLocationError('Could not get location. Please enable location services.');
-                setIsLocating(false);
+    const handleFeedModeToggle = (mode: 'nearMe' | 'trending') => {
+        if (mode === 'nearMe') {
+            if (!userLocation) {
+                // Request location permission
+                setIsLocating(true);
+                setLocationError('');
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
+                        setFeedMode('nearMe');
+                        setIsLocating(false);
+                    },
+                    error => {
+                        setLocationError('Could not get location. Please enable location services.');
+                        setIsLocating(false);
+                    }
+                );
+            } else {
+                setFeedMode('nearMe');
             }
-        );
+        } else {
+            setFeedMode('trending');
+        }
     };
 
     const handleCategoryToggle = (category: string) => {
@@ -187,16 +194,17 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
     const currentFeaturedPost = featuredPosts[currentSlide];
 
     const filteredPosts = useMemo(() => {
-        let processedPosts: (DemandPost & { distance?: number })[] = posts.filter(post => {
+        let processedPosts: (DemandPost & { distance?: number; trendingScore?: number })[] = posts.filter(post => {
             const matchesSearch =
                 post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                post.description.toLowerCase().includes(searchTerm.toLowerCase());
+                post.description?.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesCategory = selectedCategories.length === 0 ? true : selectedCategories.includes(post.category);
             const matchesSaved = !showSavedOnly || savedPostIds.includes(post.id);
             return matchesSearch && matchesCategory && matchesSaved;
         });
 
-        if (sortByDistance && userLocation) {
+        if (feedMode === 'nearMe' && userLocation) {
+            // Near Me: Sort by distance
             return processedPosts
                 .map(post => ({
                     ...post,
@@ -204,9 +212,19 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                 }))
                 .filter(post => post.distance <= radius)
                 .sort((a, b) => a.distance - b.distance);
+        } else if (feedMode === 'trending') {
+            // Trending: Sort by upvotes + recency
+            return processedPosts
+                .map(post => {
+                    const ageInDays = (Date.now() - new Date(post.createdAt).getTime()) / (1000 * 60 * 60 * 24);
+                    const recencyScore = Math.max(0, 10 - ageInDays); // Newer = higher score
+                    const trendingScore = post.upvotes * 2 + recencyScore;
+                    return { ...post, trendingScore };
+                })
+                .sort((a, b) => b.trendingScore! - a.trendingScore!);
         }
         return processedPosts;
-    }, [posts, searchTerm, selectedCategories, sortByDistance, userLocation, radius, savedPostIds, showSavedOnly]);
+    }, [posts, searchTerm, selectedCategories, feedMode, userLocation, radius, savedPostIds, showSavedOnly]);
 
     const categories = useMemo(() => {
         const cats = [...new Set(posts.map(p => p.category))];
@@ -226,11 +244,12 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                     {featuredPosts.map((post, index) => (
                         <div
                             key={post.id}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                            className={`absolute inset-0 cursor-pointer transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                            onClick={() => onPostSelect(currentFeaturedPost)}
                         >
                             <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to top, rgba(13, 13, 13, 1) 5%, rgba(13, 13, 13, 0.7) 40%, transparent 100%)' }}></div>
                             {post.images.length > 0 && (
-                                <img src={post.images[0]} alt={post.title} className="w-full h-full object-cover" />
+                                <img src={getImageUrl(post.images[0])} alt={post.title} className="w-full h-full object-cover" />
                             )}
                         </div>
                     ))}
@@ -240,30 +259,44 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
 
                     {/* Content */}
                     {currentFeaturedPost && (
-                        <div className="relative z-20 max-w-3xl">
+                        <div
+                            className="relative z-20 max-w-3xl cursor-pointer"
+                            onClick={() => onPostSelect(currentFeaturedPost)}
+                        >
                             <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{currentFeaturedPost.category}</span>
                             <h1 className="text-4xl md:text-6xl font-extrabold my-2">{currentFeaturedPost.title}</h1>
                             <p className="text-lg text-white/80 max-w-2xl line-clamp-2">{currentFeaturedPost.description}</p>
+                            <button className="mt-4 px-6 py-3 bg-[--primary-color] text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                                View Details
+                            </button>
                         </div>
                     )}
 
                     {/* Slideshow Controls */}
                     {featuredPosts.length > 1 && (
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-x-12">
-                            <button onClick={prevSlide} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Previous slide">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); prevSlide(); }}
+                                className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors"
+                                aria-label="Previous slide"
+                            >
                                 <ArrowLeftIcon className="w-6 h-6" />
                             </button>
                             <div className="flex gap-2">
                                 {featuredPosts.map((_, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => goToSlide(index)}
+                                        onClick={(e) => { e.stopPropagation(); goToSlide(index); }}
                                         className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50 hover:bg-white/75'}`}
                                         aria-label={`Go to slide ${index + 1}`}
                                     />
                                 ))}
                             </div>
-                            <button onClick={nextSlide} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Next slide">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+                                className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors"
+                                aria-label="Next slide"
+                            >
                                 <ArrowRightIcon className="w-6 h-6" />
                             </button>
                         </div>
@@ -284,17 +317,32 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                             className="w-full bg-[--card-color] border-2 border-[--border-color] rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
                         />
                     </div>
-                    <button
-                        onClick={handleSortByDistance}
-                        disabled={isLocating}
-                        className={`flex-shrink-0 w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-colors disabled:opacity-50 ${sortByDistance
-                            ? 'bg-[--primary-color] border-[--primary-color] text-white'
-                            : 'bg-[--card-color] border-[--border-color] hover:border-[--text-secondary]'
-                            }`}
-                    >
-                        {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
-                        <span>Nearby</span>
-                    </button>
+                    {/* Feed Mode Toggle: Near Me vs Trending */}
+                    <div className="flex items-center gap-0 bg-[--card-color] rounded-lg border-2 border-[--border-color] p-1">
+                        <button
+                            onClick={() => handleFeedModeToggle('nearMe')}
+                            disabled={isLocating}
+                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-all duration-300 font-semibold ${feedMode === 'nearMe'
+                                    ? 'bg-[--primary-color] text-white shadow-lg'
+                                    : 'text-[--text-secondary] hover:text-white'
+                                }`}
+                        >
+                            {isLocating && feedMode !== 'nearMe' ? <LoadingSpinner className="w-4 h-4" /> : <LocationPinIcon className="w-4 h-4" />}
+                            <span>Near Me</span>
+                        </button>
+                        <button
+                            onClick={() => handleFeedModeToggle('trending')}
+                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-all duration-300 font-semibold ${feedMode === 'trending'
+                                    ? 'bg-[--primary-color] text-white shadow-lg'
+                                    : 'text-[--text-secondary] hover:text-white'
+                                }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                            <span>Trending</span>
+                        </button>
+                    </div>
                     <button
                         onClick={() => setShowSavedOnly(!showSavedOnly)}
                         className={`flex-shrink-0 w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-colors ${showSavedOnly
@@ -329,7 +377,7 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                         </button>
                     ))}
                 </div>
-                {sortByDistance && (
+                {feedMode === 'nearMe' && (
                     <div className="pt-2 flex items-center gap-2 flex-wrap">
                         <span className="text-[--text-secondary] text-sm font-medium mr-2">Radius:</span>
                         {[5, 10, 25, 50].map(r => (
@@ -337,8 +385,8 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                                 key={r}
                                 onClick={() => setRadius(r)}
                                 className={`px-3 py-1 text-sm rounded-full transition-colors ${radius === r
-                                    ? 'bg-[--primary-color] text-white font-semibold'
-                                    : 'bg-white/5 hover:bg-white/10'
+                                        ? 'bg-[--primary-color] text-white font-semibold'
+                                        : 'bg-white/5 hover:bg-white/10'
                                     }`}
                             >
                                 {r} km
@@ -354,12 +402,14 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                     title={showSavedOnly ? "No Saved Demands" : "No Demands Found"}
                     message={showSavedOnly ? "You haven't saved any demands yet. Click the bookmark icon on a post to save it." : "Try adjusting your search or filters. Or, be the first to post a demand!"}
                 />
-            ) : sortByDistance || searchTerm || selectedCategories.length > 0 || showSavedOnly ? (
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {filteredPosts.map(post => <DemandCard key={post.id} post={post} onPostSelect={onPostSelect} onUpvote={onUpvote} isSaved={savedPostIds.includes(post.id)} onSaveToggle={onSaveToggle} />)}
-                    </div>
-                </div>
+            ) : feedMode === 'nearMe' || searchTerm || selectedCategories.length > 0 || showSavedOnly ? (
+                <VirtualizedGrid
+                    posts={filteredPosts}
+                    onPostSelect={onPostSelect}
+                    onUpvote={onUpvote}
+                    savedPostIds={savedPostIds}
+                    onSaveToggle={onSaveToggle}
+                />
             ) : (
                 posts.reduce((acc, post) => {
                     if (!acc.find(cat => cat.title === post.category)) {
@@ -381,6 +431,85 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                     />
                 ))
             )}
+        </div>
+    );
+};
+
+// Virtualized Grid Component for performance with 1000+ posts
+interface VirtualizedGridProps {
+    posts: (DemandPost & { distance?: number; trendingScore?: number })[];
+    onPostSelect: (post: DemandPost) => void;
+    onUpvote: (id: string) => void;
+    savedPostIds: string[];
+    onSaveToggle: (id: string) => void;
+}
+
+const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, onUpvote, savedPostIds, onSaveToggle }) => {
+    const parentRef = useRef<HTMLDivElement>(null);
+    const [columnCount, setColumnCount] = useState(4);
+
+    // Update column count based on window size
+    useEffect(() => {
+        const updateColumns = () => {
+            const width = window.innerWidth;
+            if (width < 640) setColumnCount(1);
+            else if (width < 768) setColumnCount(2);
+            else if (width < 1024) setColumnCount(3);
+            else setColumnCount(4);
+        };
+        updateColumns();
+        window.addEventListener('resize', updateColumns);
+        return () => window.removeEventListener('resize', updateColumns);
+    }, []);
+
+    const rowVirtualizer = useVirtualizer({
+        count: Math.ceil(posts.length / columnCount),
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 450, // Estimated card height
+        overscan: 2,
+    });
+
+    return (
+        <div ref={parentRef} className="container mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-20rem)] overflow-auto">
+            <div
+                style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                }}
+            >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const startIdx = virtualRow.index * columnCount;
+                    const rowPosts = posts.slice(startIdx, startIdx + columnCount);
+
+                    return (
+                        <div
+                            key={virtualRow.key}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: `${virtualRow.size}px`,
+                                transform: `translateY(${virtualRow.start}px)`,
+                            }}
+                        >
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {rowPosts.map(post => (
+                                    <DemandCard
+                                        key={post.id}
+                                        post={post}
+                                        onPostSelect={onPostSelect}
+                                        onUpvote={onUpvote}
+                                        isSaved={savedPostIds.includes(post.id)}
+                                        onSaveToggle={onSaveToggle}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };

@@ -1,11 +1,13 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { DemandPost, RentalPost, MatchResult } from '../types';
+import { config } from '../src/config';
 
 const getGeminiService = () => {
-  if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+  const apiKey = config.gemini.apiKey;
+  if (!apiKey) {
+    throw new Error("Gemini API Key is missing. Please check your configuration.");
   }
-  return new GoogleGenAI({ apiKey: process.env.API_KEY });
+  return new GoogleGenAI({ apiKey });
 };
 
 export const geocode = async (address: string): Promise<{ latitude: number; longitude: number }> => {
@@ -100,16 +102,16 @@ export const generateBusinessIdeas = async (
     `;
 
   const model = isDeepDive ? "gemini-2.5-pro" : "gemini-2.5-flash";
-  const config = isDeepDive ? 
-    { thinkingConfig: { thinkingBudget: 32768 } } : 
+  const config = isDeepDive ?
+    { thinkingConfig: { thinkingBudget: 32768 } } :
     {};
-    
+
   try {
     const response = await ai.models.generateContent({
       model: model,
       contents: prompt,
       config: {
-        tools: [{googleSearch: {}}, {googleMaps: {}}],
+        tools: [{ googleSearch: {} }, { googleMaps: {} }],
         toolConfig: {
           retrievalConfig: {
             latLng: {

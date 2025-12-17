@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View } from '../types';
 import { ArrowRightIcon, PlusIcon, SparklesIcon, LocationPinIcon, SearchIcon, RocketIcon, LightBulbIcon, BuildingOfficeIcon, QuoteIcon } from './icons';
+import HeroAnimation from './HeroAnimation';
 
 interface HomeProps {
-  setView: (view: View) => void;
+    setView: (view: View) => void;
 }
 
 const FeatureCard: React.FC<{
@@ -23,7 +24,7 @@ const FeatureCard: React.FC<{
             onClick={onClick}
             className="w-full mt-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-base font-medium bg-[--primary-color] text-white hover:opacity-90 transition-opacity"
         >
-            {buttonText} <ArrowRightIcon className="w-5 h-5"/>
+            {buttonText} <ArrowRightIcon className="w-5 h-5" />
         </button>
     </div>
 );
@@ -101,7 +102,7 @@ const useAnimatedCounter = (targetValue: number, duration: number = 2000) => {
                         }
                     };
                     window.requestAnimationFrame(step);
-                    if(element) observer.unobserve(element);
+                    if (element) observer.unobserve(element);
                 }
             },
             { threshold: 0.5 }
@@ -207,12 +208,12 @@ const JoinTheMovementCTA: React.FC<{ onLearnMoreClick: () => void }> = ({ onLear
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4">Be Part of the Change</h2>
             <p className="text-lg text-[--text-secondary] max-w-2xl mx-auto mb-8">Join thousands of people shaping better neighborhoods through ideas and innovation.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                 <button className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
+                <button className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
                     Join Bridgehead
-                 </button>
-                 <button onClick={onLearnMoreClick} className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">
+                </button>
+                <button onClick={onLearnMoreClick} className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">
                     Learn More
-                 </button>
+                </button>
             </div>
         </div>
     </div>
@@ -288,9 +289,11 @@ const Home: React.FC<HomeProps> = ({ setView }) => {
                 const { clientX, clientY } = e;
                 const x = (clientX - window.innerWidth / 2) / -50;
                 const y = (clientY - window.innerHeight / 2) / -50;
-                
+
                 requestAnimationFrame(() => {
-                    parallaxRef.current!.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                    if (parallaxRef.current) {
+                        parallaxRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                    }
                 });
             }
         };
@@ -310,7 +313,7 @@ const Home: React.FC<HomeProps> = ({ setView }) => {
             const rect = heroElement.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             requestAnimationFrame(() => {
                 heroElement.style.setProperty('--glow-x', `${x}px`);
                 heroElement.style.setProperty('--glow-y', `${y}px`);
@@ -320,7 +323,7 @@ const Home: React.FC<HomeProps> = ({ setView }) => {
         const handleMouseEnter = () => {
             heroElement.style.setProperty('--glow-opacity', '1');
         };
-        
+
         const handleMouseLeave = () => {
             heroElement.style.setProperty('--glow-opacity', '0');
         };
@@ -335,109 +338,111 @@ const Home: React.FC<HomeProps> = ({ setView }) => {
             heroElement.removeEventListener('mouseleave', handleMouseLeave);
         };
     }, []);
-    
+
     const featuresData = [
         {
-          icon: <PlusIcon className="w-6 h-6 text-[--primary-color]" />,
-          title: "Post a Demand",
-          description: "Is your neighborhood missing a late-night cafe, a dog park, or a unique retail shop? Post it here and let entrepreneurs know what the community wants.",
-          buttonText: "Voice a Need",
-          onClick: () => setView(View.POST_DEMAND),
+            icon: <PlusIcon className="w-6 h-6 text-[--primary-color]" />,
+            title: "Post a Demand",
+            description: "Is your neighborhood missing a late-night cafe, a dog park, or a unique retail shop? Post it here and let entrepreneurs know what the community wants.",
+            buttonText: "Voice a Need",
+            onClick: () => setView(View.POST_DEMAND),
         },
         {
-          icon: <SparklesIcon className="w-6 h-6 text-[--primary-color]" />,
-          title: "Discover Opportunities",
-          description: "Browse demands from communities and find available commercial properties. Our AI can even help you generate business ideas tailored to the location.",
-          buttonText: "Explore Demands",
-          onClick: () => setView(View.DEMAND_FEED),
+            icon: <SparklesIcon className="w-6 h-6 text-[--primary-color]" />,
+            title: "Discover Opportunities",
+            description: "Browse demands from communities and find available commercial properties. Our AI can even help you generate business ideas tailored to the location.",
+            buttonText: "Explore Demands",
+            onClick: () => setView(View.DEMAND_FEED),
         },
         {
-          icon: <LocationPinIcon className="w-6 h-6 text-[--primary-color]" />,
-          title: "List Your Property",
-          description: "Have a commercial space for rent? List it on Bridgehead to connect directly with entrepreneurs actively looking for a place to launch their next business.",
-          buttonText: "List a Rental",
-          onClick: () => setView(View.POST_RENTAL),
+            icon: <LocationPinIcon className="w-6 h-6 text-[--primary-color]" />,
+            title: "List Your Property",
+            description: "Have a commercial space for rent? List it on Bridgehead to connect directly with entrepreneurs actively looking for a place to launch their next business.",
+            buttonText: "List a Rental",
+            onClick: () => setView(View.POST_RENTAL),
         },
     ];
 
-  return (
-    <div className="w-full">
-      {/* Hero Section */}
-      <div ref={heroRef} className="min-h-[calc(100vh-4rem)] hero-section relative flex flex-col items-center justify-center text-center px-4 overflow-hidden">
-        
-        {/* Dark Vignette Effect */}
-        <div id="hero-vignette-overlay"></div>
+    return (
+        <div className="w-full">
+            {/* Hero Section */}
+            <div ref={heroRef} className="min-h-[calc(100vh-4rem)] hero-section relative flex flex-col items-center justify-center text-center px-4 overflow-hidden">
 
-        {/* 3D Background Animation */}
-        <div className="absolute inset-0 z-0 grid place-items-center opacity-40">
-            <div ref={parallaxRef} className="w-full max-w-3xl h-[28rem] transition-transform duration-75 ease-out">
-                <div className="w-full h-full scene">
-                    <div className="hero-3d-object-container">
-                        {/* Cube 1 - positioned down and left */}
-                        <div className="absolute inset-0 transform -translate-x-1/4 translate-y-1/4">
-                            <CubeSvg />
-                        </div>
-                        {/* Cube 2 - positioned up and right */}
-                        <div className="absolute inset-0 transform translate-x-1/4 -translate-y-1/4">
-                            <CubeSvg />
-                        </div>
-                         {/* Cube 3 - new, layered in */}
-                        <div className="absolute inset-0 transform -translate-x-1/3 -translate-y-1/3 scale-90 opacity-80">
-                            <CubeSvg />
+                {/* Dark Vignette Effect */}
+                <div id="hero-vignette-overlay"></div>
+
+                {/* 3D Background Animation */}
+                <div className="absolute inset-0 z-0 grid place-items-center opacity-40">
+                    <div ref={parallaxRef} className="w-full max-w-3xl h-[28rem] transition-transform duration-75 ease-out">
+                        <div className="w-full h-full scene">
+                            <div className="hero-3d-object-container">
+                                {/* Cube 1 - positioned down and left */}
+                                <div className="absolute inset-0 transform -translate-x-1/4 translate-y-1/4">
+                                    <CubeSvg />
+                                </div>
+                                {/* Cube 2 - positioned up and right */}
+                                <div className="absolute inset-0 transform translate-x-1/4 -translate-y-1/4">
+                                    <CubeSvg />
+                                </div>
+                                {/* Cube 3 - new, layered in */}
+                                <div className="absolute inset-0 transform -translate-x-1/3 -translate-y-1/3 scale-90 opacity-80">
+                                    <CubeSvg />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6">
-                <span className="bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Find the Next Big Thing.</span>
-                <br />
-                <span className="text-[--primary-color]">Right Here.</span>
-            </h1>
-            <p className="text-lg md:text-xl text-[--text-secondary] max-w-3xl mx-auto">
-                Bridgehead connects community needs with entrepreneurs. Voice what your neighborhood is missing, or find the perfect opportunity to launch your next venture.
-            </p>
-        </div>
+                {/* Particle Network Animation */}
+                <HeroAnimation />
 
-      </div>
-      
-      {/* Feature Cards Section */}
-      <div className="py-24 px-4 overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full">
-            {featuresData.map((feature, index) => (
-                <div
-                    key={feature.title}
-                    className={`transition-all duration-1000 ease-out ${
-                        featuresVisible
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-10'
-                    }`}
-                    style={{ transitionDelay: `${index * 250}ms` }}
-                >
-                    <FeatureCard
-                        icon={feature.icon}
-                        title={feature.title}
-                        description={feature.description}
-                        buttonText={feature.buttonText}
-                        onClick={feature.onClick}
-                    />
+                <div className="max-w-4xl mx-auto relative z-10 text-center">
+                    <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6">
+                        <span className="bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">Find the Next Big Thing.</span>
+                        <br />
+                        <span className="text-[--primary-color]">Right Here.</span>
+                    </h1>
+                    <p className="text-lg md:text-xl text-[--text-secondary] max-w-3xl mx-auto">
+                        Bridgehead connects community needs with entrepreneurs. Voice what your neighborhood is missing, or find the perfect opportunity to launch your next venture.
+                    </p>
                 </div>
-            ))}
-        </div>
-      </div>
 
-      {/* NEW SECTIONS START HERE */}
-      <HowItWorks ref={howItWorksRef} />
-      <SuccessStories />
-      <CommunityInsights />
-      <AIGeneratorCTA setView={setView} />
-      <Testimonials />
-      <JoinTheMovementCTA onLearnMoreClick={() => howItWorksRef.current?.scrollIntoView({ behavior: 'smooth' })} />
-      <Newsletter />
-    </div>
-  );
+            </div>
+
+            {/* Feature Cards Section */}
+            <div className="py-24 px-4 overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto w-full">
+                    {featuresData.map((feature, index) => (
+                        <div
+                            key={feature.title}
+                            className={`transition-all duration-1000 ease-out ${featuresVisible
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-10'
+                                }`}
+                            style={{ transitionDelay: `${index * 250}ms` }}
+                        >
+                            <FeatureCard
+                                icon={feature.icon}
+                                title={feature.title}
+                                description={feature.description}
+                                buttonText={feature.buttonText}
+                                onClick={feature.onClick}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* NEW SECTIONS START HERE */}
+            <HowItWorks ref={howItWorksRef} />
+            <SuccessStories />
+            <CommunityInsights />
+            <AIGeneratorCTA setView={setView} />
+            <Testimonials />
+            <JoinTheMovementCTA onLearnMoreClick={() => howItWorksRef.current?.scrollIntoView({ behavior: 'smooth' })} />
+            <Newsletter />
+        </div>
+    );
 };
 
 export default Home;

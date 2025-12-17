@@ -61,9 +61,10 @@ interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   onFilesSelected: (files: File[]) => void;
   imagePreviews: string[];
+  onRemoveImage?: (index: number) => void; // New prop for removing images
 }
 
-export const FileInput: React.FC<FileInputProps> = ({ label, onFilesSelected, imagePreviews, ...props }) => {
+export const FileInput: React.FC<FileInputProps> = ({ label, onFilesSelected, imagePreviews, onRemoveImage, ...props }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       onFilesSelected(Array.from(e.target.files));
@@ -78,9 +79,28 @@ export const FileInput: React.FC<FileInputProps> = ({ label, onFilesSelected, im
         <span>Click or drag files to upload</span>
       </div>
       {imagePreviews.length > 0 && (
-        <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {imagePreviews.map((src, index) => (
-            <img key={index} src={src} alt={`Preview ${index}`} className="w-full h-24 object-cover rounded-lg" />
+            <div key={index} className="relative group">
+              <img
+                src={src}
+                alt={`Preview ${index + 1}`}
+                className="w-full h-32 object-cover rounded-lg border-2 border-[--border-color]"
+              />
+              {onRemoveImage && (
+                <button
+                  type="button"
+                  onClick={() => onRemoveImage(index)}
+                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg"
+                  aria-label={`Remove image ${index + 1}`}
+                >
+                  ✕
+                </button>
+              )}
+              <div className="absolute bottom-1 left-1 bg-black/70 text-white text-xs px-2 py-0.5 rounded">
+                {index + 1}
+              </div>
+            </div>
           ))}
         </div>
       )}

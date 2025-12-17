@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { CommunityPost, MediaItem, User, View } from '../types';
 import { UserCircleIcon, ReplyIcon, RepostIcon, HeartIcon, VideoCameraIcon, PencilIcon, PlusIcon, ImageIcon, XIcon } from './icons';
+import ImageContainer from './common/ImageContainer';
 
 interface CommunityPostCardProps {
-  post: CommunityPost;
-  onLike: (id: string) => void;
-  onRepost: (id: string) => void;
-  onEdit: (id: string) => void;
-  onVideoReply: (postId: string, media: MediaItem) => void;
-  onReply: (postId: string, content: string, media: MediaItem[]) => void;
-  currentUser: User | null;
-  setView: (view: View) => void;
+    post: CommunityPost;
+    onLike: (id: string) => void;
+    onRepost: (id: string) => void;
+    onEdit: (id: string) => void;
+    onVideoReply: (postId: string, media: MediaItem) => void;
+    onReply: (postId: string, content: string, media: MediaItem[]) => void;
+    currentUser: User | null;
+    setView: (view: View) => void;
 }
 
 const CHARACTER_LIMIT = 280;
@@ -61,7 +62,7 @@ const MediaGrid: React.FC<{ media: CommunityPost['media'] }> = ({ media }) => {
         3: 'grid-cols-2', // Will handle with spans
         4: 'grid-cols-2',
     }[media.length] || 'grid-cols-2';
-    
+
     return (
         <div className={`mt-3 grid ${gridClasses} gap-1.5 rounded-xl overflow-hidden border border-[--border-color]`}>
             {media.map((item, index) => {
@@ -71,12 +72,19 @@ const MediaGrid: React.FC<{ media: CommunityPost['media'] }> = ({ media }) => {
                 return (
                     <div
                         key={index}
-                        className={`relative aspect-video ${isLastItemWithOddCount ? 'col-span-2' : ''}`}
+                        className={`relative ${isLastItemWithOddCount ? 'col-span-2' : ''}`}
                     >
                         {isImage ? (
-                            <img src={item.url} alt={`Post media ${index + 1}`} className="w-full h-full object-cover" />
+                            <ImageContainer
+                                src={item.url}
+                                alt={`Post media ${index + 1}`}
+                                aspectRatio="video"
+                                className="w-full"
+                            />
                         ) : (
-                            <video controls src={item.url} className="w-full h-full object-cover bg-black" />
+                            <div className="relative aspect-video">
+                                <video controls src={item.url} className="w-full h-full object-cover bg-black" />
+                            </div>
                         )}
                     </div>
                 );
@@ -89,7 +97,7 @@ const MediaGrid: React.FC<{ media: CommunityPost['media'] }> = ({ media }) => {
 const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onRepost, onEdit, onVideoReply, onReply, currentUser, setView }) => {
     const isCurrentUserPost = currentUser?.name === post.author;
     const videoReplyInputRef = useRef<HTMLInputElement>(null);
-    
+
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const [replyMedia, setReplyMedia] = useState<MediaItem[]>([]);
@@ -99,11 +107,11 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
 
     const withAuthCheck = (action: () => void) => {
         return () => {
-          if (!currentUser) {
-            setView(View.SIGN_IN);
-          } else {
-            action();
-          }
+            if (!currentUser) {
+                setView(View.SIGN_IN);
+            } else {
+                action();
+            }
         };
     };
 
@@ -131,12 +139,12 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
             onVideoReply(post.id, videoMedia);
         };
         reader.readAsDataURL(file);
-        
+
         if (videoReplyInputRef.current) {
             videoReplyInputRef.current.value = "";
         }
     };
-    
+
     const handleReplyFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (!files) return;
@@ -159,7 +167,7 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
     const removeReplyMedia = (index: number) => {
         setReplyMedia(prev => prev.filter((_, i) => i !== index));
     };
-    
+
     const handleReplySubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if ((replyContent.trim() || replyMedia.length > 0) && replyContent.length <= CHARACTER_LIMIT) {
@@ -169,7 +177,7 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
             setReplyMedia([]);
         }
     };
-    
+
     const remainingChars = CHARACTER_LIMIT - replyContent.length;
 
 

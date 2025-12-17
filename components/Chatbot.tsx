@@ -50,7 +50,7 @@ const renderModelMessage = (text: string) => {
         } else {
             closeList();
             if (line.trim()) {
-                 elements.push(<p key={index}>{parseInline(line)}</p>);
+                elements.push(<p key={index}>{parseInline(line)}</p>);
             }
         }
     });
@@ -61,8 +61,15 @@ const renderModelMessage = (text: string) => {
 };
 
 
-const Chatbot: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
+interface ChatbotProps {
+    isChatbotOpen?: boolean;
+    onChatbotToggle?: (isOpen: boolean) => void;
+}
+
+const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChatbotToggle }) => {
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
+    const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+
     const [chat, setChat] = useState<Chat | null>(null);
     const [history, setHistory] = useState<{ role: 'user' | 'model', text: string }[]>([]);
     const [input, setInput] = useState('');
@@ -77,7 +84,7 @@ const Chatbot: React.FC = () => {
             return;
         }
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        
+
         const initialMessage = 'Hello! How can I help you with Bridgehead today?';
         const systemInstruction = "You are a helpful AI assistant for the Bridgehead app. Bridgehead connects community needs (demands) with entrepreneurs. Users can post demands for businesses they want, and entrepreneurs can find rental properties and get business ideas. Keep your answers concise and helpful. When providing instructions or steps, always use a numbered or bulleted list. Do not write steps in a single paragraph.";
 
@@ -94,18 +101,18 @@ const Chatbot: React.FC = () => {
         setChat(chatInstance);
         setHistory([{ role: 'model', text: initialMessage }]);
     }, []);
-    
+
     useEffect(() => {
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
             console.warn("Speech recognition not supported in this browser.");
             return;
         }
-    
+
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-    
+
         recognition.onstart = () => setIsListening(true);
         recognition.onend = () => setIsListening(false);
         recognition.onerror = (event: any) => {
@@ -116,14 +123,14 @@ const Chatbot: React.FC = () => {
             const transcript = event.results[0][0].transcript;
             setInput(transcript);
         };
-        
+
         recognitionRef.current = recognition;
     }, []);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [history, isLoading]);
-    
+
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || !chat || isLoading) return;
@@ -135,7 +142,7 @@ const Chatbot: React.FC = () => {
 
         try {
             const result = await chat.sendMessageStream({ message: userMessage });
-            
+
             let modelResponse = '';
             setHistory(prev => [...prev, { role: 'model', text: '' }]); // Add empty model message for streaming
 
@@ -154,10 +161,10 @@ const Chatbot: React.FC = () => {
             setIsLoading(false);
         }
     };
-    
+
     const handleVoiceInputClick = () => {
         if (!recognitionRef.current) return;
-    
+
         if (isListening) {
             recognitionRef.current.stop();
         } else {
@@ -167,10 +174,19 @@ const Chatbot: React.FC = () => {
         }
     };
 
+    const toggleChat = () => {
+        const newState = !isOpen;
+        if (onChatbotToggle) {
+            onChatbotToggle(newState);
+        } else {
+            setInternalIsOpen(newState);
+        }
+    };
+
     return (
         <>
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={toggleChat}
                 className="fixed bottom-6 right-6 w-16 h-16 bg-[--primary-color] rounded-full text-white shadow-lg flex items-center justify-center z-50 transition-transform hover:scale-110"
                 aria-label={isOpen ? 'Close Chat' : 'Open Chat'}
             >
@@ -181,7 +197,7 @@ const Chatbot: React.FC = () => {
                 <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] max-h-[calc(100vh-11rem)] bg-[--card-color] border border-[--border-color] rounded-xl shadow-2xl flex flex-col z-50 overflow-hidden">
                     <header className="p-4 border-b border-[--border-color] flex items-center justify-between">
                         <h3 className="text-lg font-bold">AI Assistant</h3>
-                        <button onClick={() => setIsOpen(false)}><XIcon className="w-5 h-5 text-[--text-secondary] hover:text-white" /></button>
+                        <button onClick={toggleChat}><XIcon className="w-5 h-5 text-[--text-secondary] hover:text-white" /></button>
                     </header>
 
                     <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -192,7 +208,7 @@ const Chatbot: React.FC = () => {
                                 </div>
                             </div>
                         ))}
-                         {isLoading && (
+                        {isLoading && (
                             <div className="flex justify-start">
                                 <div className="max-w-[80%] px-4 py-2 rounded-xl bg-white/10 flex items-center gap-2">
                                     <LoadingSpinner className="w-4 h-4" /> Thinking...
@@ -212,7 +228,7 @@ const Chatbot: React.FC = () => {
                                 className="w-full bg-transparent border-2 border-[--border-color] rounded-lg pl-4 pr-20 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-1 focus:ring-[--primary-color]"
                                 disabled={isLoading}
                             />
-                             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-2">
                                 {recognitionRef.current && (
                                     <button type="button" onClick={handleVoiceInputClick} className="text-[--text-secondary] hover:text-white disabled:opacity-50" disabled={isLoading} aria-label={isListening ? 'Stop listening' : 'Start listening'}>
                                         <MicrophoneIcon className={`w-6 h-6 transition-colors ${isListening ? 'text-[--primary-color]' : ''}`} />

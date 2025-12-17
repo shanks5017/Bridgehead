@@ -1,5 +1,6 @@
-import DemandPost from '../models/DemandPost.js';
-import RentalPost from '../models/RentalPost.js';
+// @ts-nocheck
+import DemandPost from '../models/DemandPost';
+import RentalPost from '../models/RentalPost';
 
 // Helper to parse lat/lng from query params
 const parseLocationQuery = (req) => {
@@ -66,20 +67,81 @@ export const createDemandPost = async (req, res) => {
   try {
     const postData = { ...req.body };
 
+    // Validate required fields
+    if (!postData.title || !postData.category || !postData.description) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: title, category, and description are required'
+      });
+    }
+
+    // Add createdBy field from authenticated user
+    postData.createdBy = req.userId;
+
+    // Process uploaded images (Custom Native GridFS storage in MongoDB)
+    if (req.gridfsFiles && Array.isArray(req.gridfsFiles) && req.gridfsFiles.length > 0) {
+      // Store GridFS file IDs as API endpoints
+      postData.images = req.gridfsFiles.map((file: any) => {
+        // GridFS files have an 'id' property containing the MongoDB ObjectId
+        return `/api/images/${file.id}`;
+      });
+    } else {
+      postData.images = [];
+    }
+
     // Transform frontend location to GeoJSON
-    if (postData.location && postData.location.latitude && postData.location.longitude) {
-      postData.location = {
-        type: 'Point',
-        coordinates: [postData.location.longitude, postData.location.latitude],
-        address: postData.location.address
-      };
+    if (postData.location) {
+      // Support both string address and object with lat/lng
+      if (typeof postData.location === 'string') {
+        postData.location = {
+          type: 'Point',
+          coordinates: [0, 0], // Default coordinates if not provided
+          address: postData.location
+        };
+      } else if (postData.location.latitude && postData.location.longitude) {
+        postData.location = {
+          type: 'Point',
+          coordinates: [postData.location.longitude, postData.location.latitude],
+          address: postData.location.address || ''
+        };
+      } else if (postData.location.address) {
+        postData.location = {
+          type: 'Point',
+          coordinates: [0, 0],
+          address: postData.location.address
+        };
+      }
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Location is required'
+      });
+    }
+
+    // Rename fields to match schema
+    if (postData.contactEmail) {
+      postData.email = postData.contactEmail;
+      delete postData.contactEmail;
+    }
+    if (postData.contactPhone) {
+      postData.phone = postData.contactPhone;
+      delete postData.contactPhone;
     }
 
     const post = new DemandPost(postData);
     const createdPost = await post.save();
-    res.status(201).json(formatPostResponse(createdPost));
+
+    res.status(201).json({
+      success: true,
+      message: 'Demand post created successfully',
+      data: formatPostResponse(createdPost)
+    });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error creating demand post:', error);
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to create demand post'
+    });
   }
 };
 
@@ -134,6 +196,9 @@ export const getRentalPosts = async (req, res) => {
 export const createRentalPost = async (req, res) => {
   try {
     const postData = { ...req.body };
+
+    // Add createdBy field from authenticated user
+    postData.createdBy = req.userId;
 
     // Transform frontend location to GeoJSON
     if (postData.location && postData.location.latitude && postData.location.longitude) {
