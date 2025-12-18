@@ -236,211 +236,220 @@ const Feed: React.FC<FeedProps> = ({
     };
 
     return (
-        <div className="h-screen bg-[#000000] overflow-hidden flex flex-col pt-16 relative">
+        <div className="h-screen bg-[#000000] overflow-hidden flex flex-col relative">
             {/* Reading Progress Bar (Slidebar) */}
             <div
                 className="fixed top-0 right-0 z-50 w-[2px] md:w-[4px] bg-[#FF0000] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)]"
                 style={{ height: `${scrollProgress}%` }}
             />
 
+            {/* Page Header - Fixed at Top */}
+            <div className="shrink-0 bg-[#000000]/95 backdrop-blur-sm z-10 border-b border-[#333333]">
+                <div className="max-w-7xl mx-auto w-full px-4 py-2">
+                    <h1 className="text-3xl font-bold text-white">Activity Feed</h1>
+                    <p className="text-[#A0A0A0]">What's happening in your network</p>
+                </div>
+            </div>
+
             {/* 3-Column Holy Grail Layout: Mobile (1-col) | Desktop (3-col grid) */}
-            <div className="max-w-7xl mx-auto w-full lg:grid lg:grid-cols-4 lg:gap-6 lg:px-4 h-full">
+            <div className="flex-1 overflow-hidden w-full">
+                <div className="max-w-7xl mx-auto w-full lg:grid lg:grid-cols-4 lg:gap-6 lg:px-4 h-full">
 
-                {/* LEFT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
-                <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6">
-                    {/* Mini Profile Card */}
-                    <div className="bg-[#121212] rounded-xl p-6 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                        <div className="flex flex-col items-center text-center">
-                            {currentUser?.profilePicture ? (
-                                <img
-                                    src={currentUser.profilePicture}
-                                    alt={currentUser.name}
-                                    className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-[#FF0000]/30"
-                                />
-                            ) : (
-                                <UserCircleIcon className="w-16 h-16 text-white/70 mb-3" />
-                            )}
-                            <h3 className="font-bold text-white text-base mb-1">
-                                {currentUser?.name || 'Guest User'}
-                            </h3>
-                            <p className="text-xs text-white/50 mb-4">
-                                @{currentUser?.name?.toLowerCase().replace(' ', '_') || 'guest'}
-                            </p>
+                    {/* LEFT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
+                    <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6">
+                        {/* Mini Profile Card */}
+                        <div className="bg-[#121212] rounded-xl p-6 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                            <div className="flex flex-col items-center text-center">
+                                {currentUser?.profilePicture ? (
+                                    <img
+                                        src={currentUser.profilePicture}
+                                        alt={currentUser.name}
+                                        className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-[#FF0000]/30"
+                                    />
+                                ) : (
+                                    <UserCircleIcon className="w-16 h-16 text-white/70 mb-3" />
+                                )}
+                                <h3 className="font-bold text-white text-base mb-1">
+                                    {currentUser?.name || 'Guest User'}
+                                </h3>
+                                <p className="text-xs text-white/50 mb-4">
+                                    @{currentUser?.name?.toLowerCase().replace(' ', '_') || 'guest'}
+                                </p>
 
-                            {/* User Stats Display */}
-                            {currentUser && (
-                                <div className="grid grid-cols-3 gap-2 w-full mb-4 text-center">
-                                    <div className="bg-white/5 rounded-lg p-2">
-                                        <p className="text-xs text-white/50">Score</p>
-                                        <p className="font-bold text-[#FF0000] text-sm">{userStats.reputationScore}</p>
+                                {/* User Stats Display */}
+                                {currentUser && (
+                                    <div className="grid grid-cols-3 gap-2 w-full mb-4 text-center">
+                                        <div className="bg-white/5 rounded-lg p-2">
+                                            <p className="text-xs text-white/50">Score</p>
+                                            <p className="font-bold text-[#FF0000] text-sm">{userStats.reputationScore}</p>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-2">
+                                            <p className="text-xs text-white/50">Needs</p>
+                                            <p className="font-bold text-white text-sm">{userStats.demandPosts}</p>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-2">
+                                            <p className="text-xs text-white/50">Rentals</p>
+                                            <p className="font-bold text-white text-sm">{userStats.rentalListings}</p>
+                                        </div>
                                     </div>
-                                    <div className="bg-white/5 rounded-lg p-2">
-                                        <p className="text-xs text-white/50">Needs</p>
-                                        <p className="font-bold text-white text-sm">{userStats.demandPosts}</p>
-                                    </div>
-                                    <div className="bg-white/5 rounded-lg p-2">
-                                        <p className="text-xs text-white/50">Rentals</p>
-                                        <p className="font-bold text-white text-sm">{userStats.rentalListings}</p>
-                                    </div>
-                                </div>
-                            )}
-                            <button
-                                onClick={() => setView(View.POST_DEMAND)}
-                                className="w-full py-2 px-4 bg-[#FF0000] text-white rounded-full font-semibold hover:bg-[#FF0000]/90 transition-all"
-                            >
-                                Post
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Navigation Links */}
-                    <div className="bg-[#121212] rounded-xl p-4 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                        <nav className="space-y-1">
-                            <button
-                                onClick={() => { setActiveNav('home'); setView(View.FEED); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'home' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <HomeIcon className="w-5 h-5" />
-                                <span className="font-semibold">Home</span>
-                            </button>
-                            <button
-                                onClick={() => { setActiveNav('demands'); setView(View.DEMAND_FEED); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'demands' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <LightBulbIcon className="w-5 h-5" />
-                                <span className="font-semibold">Explore</span>
-                            </button>
-                            <button
-                                onClick={() => { setActiveNav('notifications'); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'notifications' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <BuildingOfficeIcon className="w-5 h-5" />
-                                <span className="font-semibold">Notifications</span>
-                            </button>
-                            <button
-                                onClick={() => { setActiveNav('saved'); setView(View.SAVED_POSTS); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'saved' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                    }`}
-                            >
-                                <BookmarkIcon className="w-5 h-5" />
-                                <span className="font-semibold">Saved</span>
-                            </button>
-                        </nav>
-                    </div>
-                </aside>
-
-                {/* CENTER COLUMN - 50% (col-span-2) - Full Width on Mobile */}
-                <main
-                    className="col-span-1 lg:col-span-2 h-full overflow-y-auto hide-scrollbar px-4 lg:px-0 py-6"
-                    onScroll={handleScroll}
-                >
-                    <div className="space-y-6 pb-20 lg:pb-0">
-                        <h1 className="text-3xl font-bold text-white text-center lg:text-left">Latest Activity</h1>
-                        {combinedFeed.map(item => {
-                            switch (item.type) {
-                                case 'demand':
-                                    return (
-                                        <DemandCard
-                                            key={`demand-${item.post.id}`}
-                                            post={item.post as DemandPost}
-                                            onPostSelect={onPostSelect}
-                                            onUpvote={onDemandUpvote}
-                                            isSaved={savedDemandIds.includes(item.post.id)}
-                                            onSaveToggle={onDemandSaveToggle}
-                                            layout="feed"
-                                        />
-                                    );
-                                case 'rental':
-                                    return (
-                                        <RentalCard
-                                            key={`rental-${item.post.id}`}
-                                            post={item.post as RentalPost}
-                                            onPostSelect={onPostSelect}
-                                            isSaved={savedRentalIds.includes(item.post.id)}
-                                            onSaveToggle={onRentalSaveToggle}
-                                            layout="feed"
-                                        />
-                                    );
-                                case 'community':
-                                    const post = item.post as CommunityPost;
-                                    return editingPostId === post.id ? (
-                                        <EditPostForm
-                                            key={`edit-${post.id}`}
-                                            post={post}
-                                            onSave={handleSaveEdit}
-                                            onCancel={() => setEditingPostId(null)}
-                                        />
-                                    ) : (
-                                        <CommunityPostCard
-                                            key={`community-${post.id}`}
-                                            post={post}
-                                            onLike={onCommunityLike}
-                                            onRepost={onCommunityRepost}
-                                            onEdit={setEditingPostId}
-                                            onReply={onCommunityReply}
-                                            onVideoReply={handleVideoReply}
-                                            currentUser={currentUser}
-                                            setView={setView}
-                                        />
-                                    );
-                            }
-                            return null;
-                        })}
-                    </div>
-                </main>
-
-                {/* RIGHT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
-                <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6 pr-2">
-                    {/* Trending Section */}
-                    <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                        <h4 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#FF0000]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                            </svg>
-                            Trending Now
-                        </h4>
-                        <div className="space-y-3">
-                            {trending.map((item, index) => (
+                                )}
                                 <button
-                                    key={index}
-                                    className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 transition-all group"
+                                    onClick={() => setView(View.POST_DEMAND)}
+                                    className="w-full py-2 px-4 bg-[#FF0000] text-white rounded-full font-semibold hover:bg-[#FF0000]/90 transition-all"
                                 >
-                                    <p className="font-semibold text-white text-sm group-hover:text-[#FF0000] transition-colors">
-                                        {item.tag}
-                                    </p>
-                                    <p className="text-xs text-white/50 mt-0.5">{item.posts.toLocaleString()} posts</p>
+                                    Post
                                 </button>
-                            ))}
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Suggested Shops */}
-                    <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                        <h4 className="font-bold text-white text-sm mb-4">Suggested Shops</h4>
-                        <div className="space-y-3">
-                            {suggestedShops.map((shop, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-start justify-between px-2 py-2 rounded-lg hover:bg-white/5 transition-all"
+                        {/* Navigation Links */}
+                        <div className="bg-[#121212] rounded-xl p-4 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                            <nav className="space-y-1">
+                                <button
+                                    onClick={() => { setActiveNav('home'); setView(View.FEED); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'home' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                                        }`}
                                 >
-                                    <div className="flex-1">
-                                        <p className="font-semibold text-white text-sm mb-0.5">{shop.name}</p>
-                                        <p className="text-xs text-white/50">{shop.category}</p>
-                                    </div>
-                                    <button className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-[#FF0000]/10 text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all">
-                                        Follow
-                                    </button>
-                                </div>
-                            ))}
+                                    <HomeIcon className="w-5 h-5" />
+                                    <span className="font-semibold">Home</span>
+                                </button>
+                                <button
+                                    onClick={() => { setActiveNav('demands'); setView(View.DEMAND_FEED); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'demands' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                                        }`}
+                                >
+                                    <LightBulbIcon className="w-5 h-5" />
+                                    <span className="font-semibold">Explore</span>
+                                </button>
+                                <button
+                                    onClick={() => { setActiveNav('notifications'); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'notifications' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                                        }`}
+                                >
+                                    <BuildingOfficeIcon className="w-5 h-5" />
+                                    <span className="font-semibold">Notifications</span>
+                                </button>
+                                <button
+                                    onClick={() => { setActiveNav('saved'); setView(View.SAVED_POSTS); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'saved' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
+                                        }`}
+                                >
+                                    <BookmarkIcon className="w-5 h-5" />
+                                    <span className="font-semibold">Saved</span>
+                                </button>
+                            </nav>
                         </div>
-                        <button className="w-full mt-4 text-sm text-[#FF0000] hover:text-white font-semibold transition-colors">
-                            Show more →
-                        </button>
-                    </div>
-                </aside>
+                    </aside>
+
+                    {/* CENTER COLUMN - 50% (col-span-2) - Full Width on Mobile */}
+                    <main
+                        className="col-span-1 lg:col-span-2 h-full overflow-y-auto hide-scrollbar px-4 lg:px-0 py-6"
+                        onScroll={handleScroll}
+                    >
+                        <div className="space-y-6 pb-20 lg:pb-0">
+                            {combinedFeed.map(item => {
+                                switch (item.type) {
+                                    case 'demand':
+                                        return (
+                                            <DemandCard
+                                                key={`demand-${item.post.id}`}
+                                                post={item.post as DemandPost}
+                                                onPostSelect={onPostSelect}
+                                                onUpvote={onDemandUpvote}
+                                                isSaved={savedDemandIds.includes(item.post.id)}
+                                                onSaveToggle={onDemandSaveToggle}
+                                                layout="feed"
+                                            />
+                                        );
+                                    case 'rental':
+                                        return (
+                                            <RentalCard
+                                                key={`rental-${item.post.id}`}
+                                                post={item.post as RentalPost}
+                                                onPostSelect={onPostSelect}
+                                                isSaved={savedRentalIds.includes(item.post.id)}
+                                                onSaveToggle={onRentalSaveToggle}
+                                                layout="feed"
+                                            />
+                                        );
+                                    case 'community':
+                                        const post = item.post as CommunityPost;
+                                        return editingPostId === post.id ? (
+                                            <EditPostForm
+                                                key={`edit-${post.id}`}
+                                                post={post}
+                                                onSave={handleSaveEdit}
+                                                onCancel={() => setEditingPostId(null)}
+                                            />
+                                        ) : (
+                                            <CommunityPostCard
+                                                key={`community-${post.id}`}
+                                                post={post}
+                                                onLike={onCommunityLike}
+                                                onRepost={onCommunityRepost}
+                                                onEdit={setEditingPostId}
+                                                onReply={onCommunityReply}
+                                                onVideoReply={handleVideoReply}
+                                                currentUser={currentUser}
+                                                setView={setView}
+                                            />
+                                        );
+                                }
+                                return null;
+                            })}
+                        </div>
+                    </main>
+
+                    {/* RIGHT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
+                    <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6 pr-2">
+                        {/* Trending Section */}
+                        <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                            <h4 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#FF0000]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                                Trending Now
+                            </h4>
+                            <div className="space-y-3">
+                                {trending.map((item, index) => (
+                                    <button
+                                        key={index}
+                                        className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 transition-all group"
+                                    >
+                                        <p className="font-semibold text-white text-sm group-hover:text-[#FF0000] transition-colors">
+                                            {item.tag}
+                                        </p>
+                                        <p className="text-xs text-white/50 mt-0.5">{item.posts.toLocaleString()} posts</p>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Suggested Shops */}
+                        <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                            <h4 className="font-bold text-white text-sm mb-4">Suggested Shops</h4>
+                            <div className="space-y-3">
+                                {suggestedShops.map((shop, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-start justify-between px-2 py-2 rounded-lg hover:bg-white/5 transition-all"
+                                    >
+                                        <div className="flex-1">
+                                            <p className="font-semibold text-white text-sm mb-0.5">{shop.name}</p>
+                                            <p className="text-xs text-white/50">{shop.category}</p>
+                                        </div>
+                                        <button className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-[#FF0000]/10 text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all">
+                                            Follow
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                            <button className="w-full mt-4 text-sm text-[#FF0000] hover:text-white font-semibold transition-colors">
+                                Show more →
+                            </button>
+                        </div>
+                    </aside>
+                </div>
             </div>
         </div>
     );

@@ -71,7 +71,7 @@ const TopicSidebar: React.FC<{
     onTopicSelect: (topicId: string) => void;
 }> = ({ topics, activeTopic, onTopicSelect }) => {
     return (
-        <div className="sticky top-24 h-fit max-h-[calc(100vh-7rem)] overflow-y-auto">
+        <div className="h-fit">
             <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-xl p-4">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <span className="text-2xl">🏛️</span>
@@ -132,7 +132,7 @@ const Leaderboard: React.FC<{
     };
 
     return (
-        <div className="sticky top-24 h-fit max-h-[calc(100vh-7rem)] overflow-y-auto space-y-6">
+        <div className="h-fit space-y-6">
             {/* Top Contributors */}
             <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-xl p-4">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
@@ -503,20 +503,22 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
     ];
 
     return (
-        <div className="min-h-screen bg-[#050505]">
-            <div className="container mx-auto max-w-7xl px-4 py-8">
-                {/* Page Header */}
-                <div className="mb-8">
+
+        <div className="h-screen bg-[#050505] flex flex-col overflow-hidden">
+            {/* Page Header - Fixed at Top */}
+            <div className="shrink-0 bg-[#050505]/95 backdrop-blur-sm z-10 border-b border-[#333333]">
+                <div className="container mx-auto max-w-7xl px-4 py-2">
                     <h1 className="text-4xl font-bold text-white mb-2">Community Hub</h1>
                     <p className="text-[#A0A0A0]">Connect, discuss, and collaborate with fellow entrepreneurs</p>
                 </div>
+            </div>
 
-                {/* 3-Column Grid Layout with Sticky Sidebars */}
-                {/* CRITICAL: items-start prevents sidebars from stretching to center column height */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-                    {/* LEFT SIDEBAR: Topics (Sticky on desktop, hidden on mobile) */}
-                    <div className="hidden lg:block lg:col-span-1">
-                        {/* STICKY SIDEBAR: Will stick at top-24 when scrolling */}
+            {/* Main Content Area - Fixed Height with Internal Scroll */}
+            <div className="flex-1 overflow-hidden container mx-auto max-w-7xl w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+
+                    {/* LEFT SIDEBAR - Fixed Container */}
+                    <div className="hidden lg:block lg:col-span-1 h-full py-6 pr-2 overflow-y-auto hide-scrollbar">
                         <TopicSidebar
                             topics={MOCK_TOPICS}
                             activeTopic={activeTopic}
@@ -524,8 +526,9 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                         />
                     </div>
 
-                    {/* CENTER: Discussions (Scrollable) - This defines the grid height */}
-                    <div className="lg:col-span-2">
+                    {/* CENTER - Scrollable Container */}
+                    {/* id="scrollable-center" allows capturing scroll events specifically here if needed */}
+                    <div className="lg:col-span-2 h-full overflow-y-auto hide-scrollbar py-6 px-1">
                         {/* Create Post */}
                         {currentUser ? (
                             <CreatePostBox currentUser={currentUser} onSubmit={addPost} />
@@ -534,7 +537,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                         )}
 
                         {/* Discussion List */}
-                        <div className="space-y-4">
+                        <div className="space-y-4 pb-20">
                             {filteredPosts.length === 0 ? (
                                 <div className="bg-[#121212] border border-[#333333] rounded-xl p-12 text-center">
                                     <p className="text-[#666666] text-lg">No discussions yet. Start the conversation!</p>
@@ -550,8 +553,8 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                 ))
                             )}
 
-                            {/* DEMO CONTENT: Extra cards to demonstrate sticky scroll behavior */}
-                            {Array.from({ length: 12 }).map((_, index) => (
+                            {/* DEMO CONTENT: Extra cards to demonstrate scroll behavior */}
+                            {Array.from({ length: 8 }).map((_, index) => (
                                 <DiscussionCard
                                     key={`demo-${index}`}
                                     post={{
@@ -566,12 +569,8 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                             'Anyone interested in partnering for a co-working space?',
                                             'What are the most in-demand services in your neighborhood?',
                                             'Tips for first-time business owners? Share your experiences!',
-                                            'Looking for investors for tech startup - AI-powered solutions',
-                                            'Best marketing strategies for local businesses?',
-                                            'How to build a strong community presence for your brand?',
-                                            'Seeking mentorship from successful entrepreneurs',
-                                            'What are the biggest challenges you faced starting your business?'
-                                        ][index % 12],
+                                            'Looking for investors for tech startup - AI-powered solutions'
+                                        ][index % 8],
                                         createdAt: new Date(Date.now() - index * 3600000).toISOString(),
                                         likes: Math.floor(Math.random() * 50) + 5,
                                         replies: Math.floor(Math.random() * 30) + 2,
@@ -585,32 +584,15 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                 />
                             ))}
                         </div>
-
-                        {/* Extra content to demonstrate scroll behavior */}
-                        <div className="min-h-[800px] mt-8 bg-[#121212]/30 border border-[#333333] rounded-xl p-8 text-center">
-                            <p className="text-[#666666] text-sm">
-                                Scroll down to see the sticky sidebar behavior in action!
-                                <br />
-                                The sidebars will stick below the header, then unstick when you reach the bottom.
-                            </p>
-                        </div>
                     </div>
 
-                    {/* RIGHT SIDEBAR: Leaderboard (Sticky on desktop, hidden on mobile) */}
-                    <div className="hidden lg:block lg:col-span-1">
-                        {/* STICKY SIDEBAR: Will stick at top-24 when scrolling */}
+                    {/* RIGHT SIDEBAR - Fixed Container */}
+                    <div className="hidden lg:block lg:col-span-1 h-full py-6 pl-2 overflow-y-auto hide-scrollbar">
                         <Leaderboard
                             leaders={MOCK_LEADERBOARD}
                             trendingPosts={trendingPosts}
                         />
                     </div>
-                </div>
-
-                {/* Footer to demonstrate unstick behavior */}
-                <div className="mt-12 pt-8 border-t border-[#333333] text-center">
-                    <p className="text-[#666666] text-sm">
-                        © 2025 BridgeHead Community • This footer should be fully visible when scrolled to the bottom
-                    </p>
                 </div>
             </div>
         </div>
