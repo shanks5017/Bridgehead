@@ -527,7 +527,7 @@ const App: React.FC = () => {
     const newPost: CommunityPost = {
       id: crypto.randomUUID(),
       author: currentUser?.name || 'Current User',
-      username: currentUser ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
+      username: (currentUser && currentUser.name) ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
       avatar: 'user_self',
       content,
       media: media.length > 0 ? media : undefined,

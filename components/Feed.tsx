@@ -264,7 +264,7 @@ const Feed: React.FC<FeedProps> = ({
                                 {currentUser?.name || 'Guest User'}
                             </h3>
                             <p className="text-xs text-white/50 mb-4">
-                                @{currentUser?.name.toLowerCase().replace(' ', '_') || 'guest'}
+                                @{currentUser?.name?.toLowerCase().replace(' ', '_') || 'guest'}
                             </p>
 
                             {/* User Stats Display */}

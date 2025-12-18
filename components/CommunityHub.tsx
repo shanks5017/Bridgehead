@@ -151,7 +151,7 @@ const Leaderboard: React.FC<{
                         >
                             <span className="text-2xl">{getRankEmoji(leader.rank)}</span>
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF0000] to-[#8B0000] flex items-center justify-center text-white font-bold">
-                                {leader.name.charAt(0)}
+                                {(leader.name || 'U').charAt(0)}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-white font-semibold text-sm truncate">{leader.name}</p>
@@ -221,7 +221,7 @@ const DiscussionCard: React.FC<{
             <div className="flex items-start gap-4">
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF0000] to-[#8B0000] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                    {post.author.charAt(0)}
+                    {(post.author || 'A').charAt(0)}
                 </div>
 
                 {/* Content */}
@@ -362,7 +362,7 @@ const CreatePostBox: React.FC<{
             <form onSubmit={handleSubmit}>
                 <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF0000] to-[#8B0000] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                        {currentUser.name.charAt(0)}
+                        {(currentUser.name || 'G').charAt(0)}
                     </div>
                     <div className="flex-1">
                         <textarea
