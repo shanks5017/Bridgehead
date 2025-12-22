@@ -7,7 +7,9 @@ import {
   forgotPassword,
   resetPassword
 } from '../controllers/authController';
+import { checkUsernameAvailability, checkEmailAvailability } from '../controllers/validationController';
 import { auth } from '../middleware/auth';
+import { validationRateLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
 
@@ -60,6 +62,24 @@ router.post(
     body('newPassword', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
   ],
   resetPassword
+);
+
+// @route   POST /api/auth/check-username
+// @desc    Check if username is available
+// @access  Public (rate limited)
+router.post(
+  '/check-username',
+  validationRateLimiter(5, 1), // Max 5 attempts per minute
+  checkUsernameAvailability
+);
+
+// @route   POST /api/auth/check-email
+// @desc    Check if email is available
+// @access  Public (rate limited)
+router.post(
+  '/check-email',
+  validationRateLimiter(5, 1), // Max 5 attempts per minute
+  checkEmailAvailability
 );
 
 export default router;

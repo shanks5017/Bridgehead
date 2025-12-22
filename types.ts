@@ -96,6 +96,7 @@ export interface Message {
   id: string;
   senderId: 'currentUser' | string;
   text: string;
+  media?: MediaItem[];
   timestamp: string;
 }
 
@@ -111,4 +112,5 @@ export interface Conversation {
   messages: Message[];
   lastMessageTimestamp: string;
   unreadCount: number;
+  role: 'owner' | 'seeker'; // 'owner' = My Demand, 'seeker' = Opportunity
 }

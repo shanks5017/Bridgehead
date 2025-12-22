@@ -10,6 +10,7 @@ import { ObjectId } from 'mongodb';
 interface SignUpRequest {
   fullName: string;
   email: string;
+  username: string;
   password: string;
   userType: 'entrepreneur' | 'community';
 }
@@ -21,18 +22,28 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { fullName, email, password, userType } = req.body;
+    const { fullName, email, username, password, userType } = req.body;
 
-    // Check if user already exists
+    const normalizedUsername = username.toLowerCase();
+
+    // Check if user already exists (Email)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
+    }
+
+    // Check if user already exists (Username)
+    // Note: The unique index will also catch this, but this provides a clearer error
+    const existingUsername = await User.findOne({ username: normalizedUsername });
+    if (existingUsername) {
+      return res.status(400).json({ error: 'Username is already taken' });
     }
 
     // Create new user
     const user = new User({
       fullName,
       email,
+      username: normalizedUsername,
       password,
       userType,
       verified: false,
@@ -53,6 +64,7 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
     const userResponse = {
       fullName: user.fullName,
       email: user.email,
+      username: user.username,
       userType: user.userType,
       _id: user._id
     };
@@ -107,6 +119,7 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
     const userResponse = {
       fullName: user.fullName,
       email: user.email,
+      username: user.username || user.email.split('@')[0], // Fallback for legacy users
       userType: user.userType,
       _id: user._id
     };

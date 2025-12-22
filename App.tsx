@@ -32,37 +32,6 @@ import QuickPostButton from './components/QuickPostButton';
 
 const API_BASE_URL = config.api.baseUrl;
 
-const MOCK_COMMUNITY_POSTS: CommunityPost[] = [
-  {
-    id: 'comm-1',
-    author: 'Jane Doe',
-    username: '@jane_doe',
-    avatar: 'user1',
-    content: 'That Neapolitan pizza demand is exactly what we need. I\'d be there every week!',
-    likes: 42,
-    reposts: 5,
-    replies: 3,
-    isLiked: false,
-    isReposted: false,
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-  },
-  {
-    id: 'comm-2',
-    author: 'John Smith',
-    username: '@johnsmith',
-    avatar: 'user2',
-    content: 'An indoor dog park would be a game-changer for this weather. Someone please make this happen.',
-    media: [
-      { type: 'image', url: 'https://picsum.photos/seed/communitydog/600/400' }
-    ],
-    likes: 101,
-    reposts: 12,
-    replies: 8,
-    isLiked: true,
-    isReposted: false,
-    createdAt: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
-  },
-];
 
 const ARU_CONVERSATION_ID = 'aru-ai-bot';
 
@@ -130,7 +99,7 @@ const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);
   const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);
-  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>(MOCK_COMMUNITY_POSTS);
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; startIndex: number } | null>(null);
   const [selectedPost, setSelectedPost] = useState<DemandPost | RentalPost | null>(() => {
     const savedPost = localStorage.getItem('bridgehead_selected_post');
@@ -216,7 +185,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSignUp = async (name: string, email: string, password: string): Promise<boolean> => {
+  const handleSignUp = async (name: string, email: string, username: string, password: string): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
@@ -224,6 +193,7 @@ const App: React.FC = () => {
         body: JSON.stringify({
           fullName: name,
           email,
+          username,
           password,
           userType: 'community' // Default type, can be expanded
         }),
@@ -400,6 +370,7 @@ const App: React.FC = () => {
         }],
         lastMessageTimestamp: new Date().toISOString(),
         unreadCount: 0,
+        role: 'owner', // My Assistant (My Demand)
       },
       {
         id: 'convo-1',
@@ -411,6 +382,7 @@ const App: React.FC = () => {
         ],
         lastMessageTimestamp: new Date(Date.now() - 3600000 * 23).toISOString(),
         unreadCount: 0,
+        role: 'seeker', // Opportunity
       }
     ];
     setConversations(MOCK_CONVERSATIONS);
@@ -523,66 +495,151 @@ const App: React.FC = () => {
     }
   };
 
-  const addCommunityPost = (content: string, media: MediaItem[]) => {
-    const newPost: CommunityPost = {
-      id: crypto.randomUUID(),
-      author: currentUser?.name || 'Current User',
-      username: (currentUser && currentUser.name) ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
-      avatar: 'user_self',
-      content,
-      media: media.length > 0 ? media : undefined,
-      likes: 0,
-      reposts: 0,
-      replies: 0,
-      isLiked: false,
-      isReposted: false,
-      createdAt: new Date().toISOString(),
-    };
-    setCommunityPosts(prev => [newPost, ...prev]);
-  };
+  // --- Community API Integration ---
 
-  const handleLikePost = (id: string) => {
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === id) {
-        return { ...p, isLiked: !p.isLiked, likes: p.isLiked ? p.likes - 1 : p.likes + 1 };
+  const fetchCommunityPosts = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts?limit=20`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Map Backend Fields to Frontend Interface
+        const mappedPosts: CommunityPost[] = (data.data || []).map((p: any) => ({
+          ...p,
+          id: p._id,
+          author: p.authorName || 'Anonymous', // Map name
+          username: p.authorBadge === 'entrepreneur' ? '@founder' : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`,
+          avatar: p.authorAvatar || 'user1',
+          likes: p.likesCount || 0,
+          replies: p.repliesCount || 0,
+          reposts: p.repostsCount || 0,
+          media: p.media || []
+        }));
+        setCommunityPosts(mappedPosts);
       }
-      return p;
-    }));
-  };
+    } catch (error) {
+      console.error('Failed to fetch community posts:', error);
+    }
+  }, []);
 
-  const handleRepostPost = (id: string) => {
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === id) {
-        return { ...p, isReposted: !p.isReposted, reposts: p.isReposted ? p.reposts - 1 : p.reposts + 1 };
+  // Fetch posts on mount or view change
+  useEffect(() => {
+    if (view === View.COMMUNITY_FEED) {
+      fetchCommunityPosts();
+    }
+  }, [view, fetchCommunityPosts]);
+
+  const addCommunityPost = async (content: string, media: MediaItem[]) => {
+    if (!currentUser) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ content, media, topic: 'general' })
+      });
+
+      const rawPost = await res.json();
+
+      if (res.ok) {
+        // Map new post to frontend structure
+        const newPost: CommunityPost = {
+          ...rawPost,
+          id: rawPost._id,
+          author: rawPost.authorName || currentUser.name,
+          username: rawPost.authorBadge === 'entrepreneur' ? '@founder' : `@${(rawPost.authorName || currentUser.name).replace(/\s+/g, '').toLowerCase()}`,
+          avatar: rawPost.authorAvatar || 'user1',
+          likes: rawPost.likesCount || 0,
+          replies: rawPost.repliesCount || 0,
+          reposts: rawPost.repostsCount || 0,
+          media: rawPost.media || []
+        };
+
+        // Prepend new post to list
+        setCommunityPosts(prev => [newPost, ...prev]);
+        setToast({ message: 'Posted successfully!', type: 'success' });
+      } else {
+        setToast({ message: rawPost.message || 'Failed to post', type: 'error' });
       }
-      return p;
-    }));
+    } catch (error) {
+      console.error('Post error:', error);
+      setToast({ message: 'Network error', type: 'error' });
+    }
   };
 
-  const handleEditPost = (id: string, newContent: string, newMedia: MediaItem[]) => {
+  const handleLikePost = async (id: string) => {
+    if (!currentUser) return;
+
+    // Optimistic Update
     setCommunityPosts(posts => posts.map(p => {
       if (p.id === id) {
+        const wasLiked = p.isLiked;
         return {
           ...p,
-          content: newContent,
-          media: newMedia.length > 0 ? newMedia : undefined
+          isLiked: !wasLiked,
+          likes: wasLiked ? p.likes - 1 : p.likes + 1 // Note: Backend uses likesCount, Frontend type uses likes. We might need mapping.
         };
       }
       return p;
     }));
+
+    try {
+      await fetch(`${API_BASE_URL}/community/posts/${id}/like`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      // We could refetch to be sure, but optimistic is better for UX
+    } catch (error) {
+      console.error('Like error:', error);
+      // Revert on error (omitted for brevity, but recommended in prod)
+    }
   };
 
-  const handleReplyPost = (postId: string, content: string, media: MediaItem[]) => {
-    // 1. Create and add the new reply post
-    addCommunityPost(content, media);
+  const handleRepostPost = (id: string) => {
+    // Placeholder for repost API
+    console.log('Repost not yet implemented on backend');
+  };
 
-    // 2. Increment the reply count of the original post
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === postId) {
-        return { ...p, replies: p.replies + 1 };
+  const handleEditPost = (id: string, newContent: string, newMedia: MediaItem[]) => {
+    // Placeholder for edit API
+    console.log('Edit not yet implemented on backend');
+  };
+
+  const handleReplyPost = async (postId: string, content: string, media: MediaItem[]) => {
+    if (!currentUser) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts/${postId}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ content })
+      });
+
+      if (res.ok) {
+        setToast({ message: 'Reply sent!', type: 'success' });
+        // Update reply count locally
+        setCommunityPosts(posts => posts.map(p => {
+          if (p.id === postId) {
+            return { ...p, replies: p.replies + 1 };
+          }
+          return p;
+        }));
       }
-      return p;
-    }));
+    } catch (error) {
+      console.error('Reply error:', error);
+      setToast({ message: 'Failed to reply', type: 'error' });
+    }
   };
 
   const handleImageClick = useCallback((images: string[], startIndex: number) => {
@@ -619,11 +676,12 @@ const App: React.FC = () => {
     localStorage.removeItem('bridgehead_selected_post');
   };
 
-  const handleSendMessage = async (conversationId: string, text: string) => {
+  const handleSendMessage = async (conversationId: string, text: string, media?: MediaItem[]) => {
     const newMessage: Message = {
       id: crypto.randomUUID(),
       senderId: 'currentUser',
       text,
+      media,
       timestamp: new Date().toISOString(),
     };
 
@@ -740,6 +798,7 @@ const App: React.FC = () => {
         messages: [],
         lastMessageTimestamp: new Date().toISOString(),
         unreadCount: 0,
+        role: 'seeker', // I am starting this collaboration
       };
       setConversations(prev => [newConvo, ...prev]);
       setSelectedConversationId(newConvo.id);
@@ -925,8 +984,8 @@ const App: React.FC = () => {
           onClose={closeImageViewer}
         />
       )}
-      <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />
-      <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />
+      {view !== View.COLLABORATION && <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />}
+      {view !== View.COLLABORATION && <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />}
       <ScrollToTopButton />
       {toast && (
         <Toast

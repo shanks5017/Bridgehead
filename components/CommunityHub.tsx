@@ -198,8 +198,12 @@ const Leaderboard: React.FC<{
 const DiscussionCard: React.FC<{
     post: CommunityPost;
     onLike: (id: string) => void;
-    onReply: () => void;
+    onReply: (postId: string, content: string) => void;
 }> = ({ post, onLike, onReply }) => {
+    const [isReplying, setIsReplying] = useState(false);
+    const [replyContent, setReplyContent] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Generate avatar pile (show up to 3 recent repliers)
     const recentRepliers = ['user2', 'user3', 'user4'].slice(0, Math.min(3, post.replies));
 
@@ -214,6 +218,18 @@ const DiscussionCard: React.FC<{
         if (diffMins < 60) return `${diffMins}m ago`;
         if (diffHours < 24) return `${diffHours}h ago`;
         return `${diffDays}d ago`;
+    };
+
+    const handleSubmitReply = async () => {
+        if (!replyContent.trim()) return;
+        setIsSubmitting(true);
+        try {
+            await onReply(post.id, replyContent);
+            setReplyContent('');
+            setIsReplying(false);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -254,8 +270,8 @@ const DiscussionCard: React.FC<{
                     <div className="flex items-center gap-6 mt-4">
                         {/* Reply Count */}
                         <button
-                            onClick={(e) => { e.stopPropagation(); onReply(); }}
-                            className="flex items-center gap-2 text-[#A0A0A0] hover:text-[#FF0000] transition-colors group/btn"
+                            onClick={(e) => { e.stopPropagation(); setIsReplying(!isReplying); }}
+                            className={`flex items-center gap-2 transition-colors group/btn ${isReplying ? 'text-[#FF0000]' : 'text-[#A0A0A0] hover:text-[#FF0000]'}`}
                         >
                             <ChatBubbleLeftIcon className="w-5 h-5" />
                             <span className="text-sm font-medium">{post.replies}</span>
@@ -292,6 +308,29 @@ const DiscussionCard: React.FC<{
                             </div>
                         )}
                     </div>
+
+                    {/* Inline Reply Input */}
+                    {isReplying && (
+                        <div className="mt-4" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={replyContent}
+                                    onChange={(e) => setReplyContent(e.target.value)}
+                                    placeholder="Write a reply..."
+                                    className="flex-1 bg-[#1A1A1A] text-white border border-[#333333] rounded-lg px-4 py-2 focus:outline-none focus:border-[#FF0000]"
+                                    onKeyDown={(e) => { if (e.key === 'Enter') handleSubmitReply(); }}
+                                />
+                                <button
+                                    onClick={handleSubmitReply}
+                                    disabled={!replyContent.trim() || isSubmitting}
+                                    className="px-4 py-2 bg-[#FF0000] text-white rounded-lg font-medium hover:bg-[#CC0000] disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isSubmitting ? '...' : 'Reply'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -548,7 +587,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                         key={post.id}
                                         post={post}
                                         onLike={onLike}
-                                        onReply={() => onReply(post.id, '', [])}
+                                        onReply={(postId, content) => onReply(postId, content, [])}
                                     />
                                 ))
                             )}
@@ -561,6 +600,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                         id: `demo-${index}`,
                                         author: ['Alex Johnson', 'Sarah Chen', 'Mike Ross', 'Emma Davis'][index % 4],
                                         username: `@user${index + 1}`,
+                                        avatar: `user${(index % 5) + 1}`,
                                         content: [
                                             'Looking for co-founder for coffee shop startup in downtown area',
                                             'Best locations for retail space? Need advice on lease negotiations',
@@ -580,7 +620,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                         media: []
                                     }}
                                     onLike={onLike}
-                                    onReply={() => { }}
+                                    onReply={(postId, content) => onReply(postId, content, [])}
                                 />
                             ))}
                         </div>
