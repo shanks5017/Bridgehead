@@ -117,10 +117,15 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
 
     // Prepare user response without password
     const userResponse = {
+      id: user._id,
+      name: user.fullName,
       fullName: user.fullName,
       email: user.email,
       username: user.username || user.email.split('@')[0], // Fallback for legacy users
       userType: user.userType,
+      profilePicture: user.profilePicture || null,
+      bio: user.bio || '',
+      verified: user.verified || false,
       _id: user._id
     };
 
@@ -239,5 +244,101 @@ export const resetPassword = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Reset password error:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const { fullName, bio } = req.body;
+    const userId = (req as any).userId;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    console.log('=== UPDATE PROFILE DEBUG ===');
+    console.log('User ID:', userId);
+    console.log('Full Name:', fullName);
+    console.log('Bio:', bio);
+    console.log('Files received:', files ? Object.keys(files) : 'NO FILES');
+    if (files) {
+      if (files.profilePicture) {
+        console.log('ProfilePicture file:', files.profilePicture[0].originalname, files.profilePicture[0].size, 'bytes');
+      }
+      if (files.originalProfilePicture) {
+        console.log('OriginalProfilePicture file:', files.originalProfilePicture[0].originalname, files.originalProfilePicture[0].size, 'bytes');
+      }
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update basic fields
+    if (fullName) user.fullName = fullName;
+    if (bio !== undefined) user.bio = bio; // Allow empty string
+
+    // Handle profile picture upload
+    if (files && files.profilePicture) {
+      console.log('Processing profile picture...');
+      const { processAndSaveImage, deleteOldImages } = await import('../services/imageService');
+
+      // Delete old profile picture files
+      if (user.profilePicture) {
+        console.log('Deleting old profile picture:', user.profilePicture);
+        await deleteOldImages(user.profilePicture);
+      }
+
+      // Process and save new image
+      console.log('Saving new profile picture...');
+      const imageUrls = await processAndSaveImage(files.profilePicture[0], userId, 'profile');
+      console.log('Profile picture URLs:', imageUrls);
+      user.profilePicture = imageUrls.thumbnail; // Use thumbnail for display
+    }
+
+    // Handle original profile picture upload (for re-editing)
+    if (files && files.originalProfilePicture) {
+      const { processAndSaveImage, deleteOldImages } = await import('../services/imageService');
+
+      // Delete old original image files
+      if (user.originalProfilePicture) {
+        await deleteOldImages(user.originalProfilePicture);
+      }
+
+      // Process and save new original image
+      const imageUrls = await processAndSaveImage(files.originalProfilePicture[0], userId, 'original');
+      user.originalProfilePicture = imageUrls.original; // Keep full resolution for editing
+    }
+
+    // Build update object with only the fields being changed
+    const updateFields: any = {};
+    if (fullName) updateFields.fullName = fullName;
+    if (bio !== undefined) updateFields.bio = bio;
+    if (user.profilePicture) updateFields.profilePicture = user.profilePicture;
+    if (user.originalProfilePicture) updateFields.originalProfilePicture = user.originalProfilePicture;
+
+    console.log('Update fields:', Object.keys(updateFields));
+
+    // Use findByIdAndUpdate to avoid triggering full schema validation
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true, runValidators: false }
+    ).select('-password');
+
+    console.log('User updated. Profile picture:', updatedUser?.profilePicture);
+    console.log('User updated. Original profile picture:', updatedUser?.originalProfilePicture);
+    console.log('=== END UPDATE PROFILE ===\n');
+
+    res.json({
+      success: true,
+      data: updatedUser,
+      message: 'Profile updated successfully'
+    });
+  } catch (error: any) {
+    console.error('Update profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update profile'
+    });
   }
 };

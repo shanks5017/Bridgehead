@@ -6,7 +6,10 @@ export interface User {
   avatar?: string; // URL or placeholder
   bio?: string;
   phone?: string;
-  profilePicture?: string; // base64 string
+  profilePicture?: string; // URL to image file (or legacy base64)
+  originalProfilePicture?: string; // URL to original image for re-editing
+  profilePictureFile?: File; // File object for new upload (frontend only)
+  originalProfilePictureFile?: File; // Original file for re-editing (frontend only)
   isEmailVerified?: boolean;
   isPhoneVerified?: boolean;
 }
@@ -55,6 +58,7 @@ export interface DemandPost {
   phone?: string;
   email?: string;
   openToCollaboration: boolean;
+  status?: 'active' | 'solved';
 }
 
 export interface RentalPost {
@@ -70,6 +74,7 @@ export interface RentalPost {
   phone?: string;
   email?: string;
   openToCollaboration: boolean;
+  status?: 'active' | 'rented';
 }
 
 export interface MediaItem {

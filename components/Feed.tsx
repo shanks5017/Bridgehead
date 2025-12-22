@@ -213,17 +213,7 @@ const Feed: React.FC<FeedProps> = ({
         }
     };
 
-    if (combinedFeed.length === 0) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <EmptyState
-                    title="The Feed is Quiet"
-                    message="No new demands, rentals, or community posts yet. Be the first to start something!"
-                />
-            </div>
-        );
-    }
-
+    // MUST be before any early returns to follow Rules of Hooks
     const [scrollProgress, setScrollProgress] = useState(0);
 
     const handleScroll = (e: React.UIEvent<HTMLElement>) => {
@@ -234,6 +224,17 @@ const Feed: React.FC<FeedProps> = ({
             setScrollProgress(progress);
         }
     };
+
+    if (combinedFeed.length === 0) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <EmptyState
+                    title="The Feed is Quiet"
+                    message="No new demands, rentals, or community posts yet. Be the first to start something!"
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="h-screen bg-[#000000] overflow-hidden flex flex-col relative">

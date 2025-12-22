@@ -86,6 +86,8 @@ const userSchema = new Schema<IUser>({
   companyName: { type: String, default: '' },
   role: { type: String, default: '' },
   bio: { type: String, default: '' },
+  profilePicture: { type: String, default: '' }, // Display version (cropped)
+  originalProfilePicture: { type: String, default: '' }, // Original full version for re-editing
   reputationScore: { type: Number, default: 100 },
   dealsCompleted: { type: Number, default: 0 },
   isVerifiedEntrepreneur: { type: Boolean, default: false },

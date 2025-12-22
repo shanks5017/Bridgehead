@@ -233,9 +233,73 @@ const App: React.FC = () => {
     handleSetView(View.HOME);
   };
 
-  const handleUpdateUser = (updatedUser: User) => {
-    setCurrentUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+  const handleUpdateUser = async (updatedUser: User) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      console.log('=== FRONTEND UPDATE USER ===');
+      console.log('Updated user object:', updatedUser);
+
+      // Use FormData for file uploads
+      const formData = new FormData();
+
+      // Add basic fields
+      formData.append('fullName', updatedUser.name || '');
+      if (updatedUser.bio !== undefined) {
+        formData.append('bio', updatedUser.bio);
+      }
+
+      // Add files only if they've been updated
+      if (updatedUser.profilePictureFile) {
+        console.log('Adding profilePictureFile:', updatedUser.profilePictureFile.name, updatedUser.profilePictureFile.size, 'bytes');
+        formData.append('profilePicture', updatedUser.profilePictureFile);
+      } else {
+        console.log('No profilePictureFile to upload');
+      }
+
+      if (updatedUser.originalProfilePictureFile) {
+        console.log('Adding originalProfilePictureFile:', updatedUser.originalProfilePictureFile.name, updatedUser.originalProfilePictureFile.size, 'bytes');
+        formData.append('originalProfilePicture', updatedUser.originalProfilePictureFile);
+      } else {
+        console.log('No originalProfilePictureFile to upload');
+      }
+
+      console.log('Sending FormData to backend...');
+      const res = await fetch(`${API_BASE_URL}/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // Don't set Content-Type - browser will set it with boundary for multipart
+        },
+        body: formData // Send FormData instead of JSON
+      });
+
+      const data = await res.json();
+      console.log('Backend response:', data);
+
+      if (!res.ok) {
+        setToast({ message: data.message || 'Failed to update profile', type: 'error' });
+        return;
+      }
+
+      // Backend returns updated user with image URLs
+      const backendUser = data.data;
+      const frontendUser: User = {
+        ...currentUser,
+        name: backendUser.fullName || updatedUser.name,
+        bio: backendUser.bio,
+        profilePicture: backendUser.profilePicture, // Now a URL, not base64
+        originalProfilePicture: backendUser.originalProfilePicture
+      };
+
+      setCurrentUser(frontendUser);
+      localStorage.setItem('user', JSON.stringify(frontendUser));
+      setToast({ message: 'Profile updated successfully!', type: 'success' });
+
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      setToast({ message: 'Network error updating profile', type: 'error' });
+    }
   };
 
   // Check for existing session on mount
@@ -457,6 +521,72 @@ const App: React.FC = () => {
         type: 'error'
       });
     }
+  };
+
+  const updateDemandPost = (id: string, updatedPost: Partial<DemandPost>) => {
+    setDemandPosts(prev =>
+      prev.map(post =>
+        post.id === id ? { ...post, ...updatedPost } : post
+      )
+    );
+    setToast({
+      message: 'Demand updated successfully!',
+      type: 'success'
+    });
+  };
+
+  const updateRentalPost = (id: string, updatedPost: Partial<RentalPost>) => {
+    setRentalPosts(prev =>
+      prev.map(post =>
+        post.id === id ? { ...post, ...updatedPost } : post
+      )
+    );
+    setToast({
+      message: 'Rental listing updated successfully!',
+      type: 'success'
+    });
+  };
+
+  // Delete handlers
+  const deleteDemandPost = (id: string) => {
+    setDemandPosts(prev => prev.filter(post => post.id !== id));
+    setToast({
+      message: 'Demand post deleted successfully',
+      type: 'success'
+    });
+  };
+
+  const deleteRentalPost = (id: string) => {
+    setRentalPosts(prev => prev.filter(post => post.id !== id));
+    setToast({
+      message: 'Rental listing deleted successfully',
+      type: 'success'
+    });
+  };
+
+  // Mark as solved/rented handlers
+  const markDemandSolved = (id: string) => {
+    setDemandPosts(prev =>
+      prev.map(post =>
+        post.id === id ? { ...post, status: 'solved' as const } : post
+      )
+    );
+    setToast({
+      message: '🎉 Congratulations! Demand marked as solved!',
+      type: 'success'
+    });
+  };
+
+  const markRentalRented = (id: string) => {
+    setRentalPosts(prev =>
+      prev.map(post =>
+        post.id === id ? { ...post, status: 'rented' as const } : post
+      )
+    );
+    setToast({
+      message: '🎉 Property marked as rented!',
+      type: 'success'
+    });
   };
 
   const addRentalPost = async (post: Omit<RentalPost, 'id' | 'createdAt'>) => {
@@ -901,7 +1031,7 @@ const App: React.FC = () => {
       case View.SIGN_UP:
         return <SignUp onSignUp={handleSignUp} setView={handleSetView} />;
       case View.PROFILE:
-        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
+        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} setView={handleSetView} demandPosts={demandPosts} rentalPosts={rentalPosts} communityPosts={communityPosts} conversations={conversations} updateDemandPost={updateDemandPost} updateRentalPost={updateRentalPost} deleteDemandPost={deleteDemandPost} deleteRentalPost={deleteRentalPost} markDemandSolved={markDemandSolved} markRentalRented={markRentalRented} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
       case View.HOME:
       default:
         return <Home setView={handleSetView} />;
@@ -934,7 +1064,7 @@ const App: React.FC = () => {
         onMouseEnter={() => {
           if (!isSidebarOpen && window.innerWidth > 768) setIsSidebarOpen(true);
         }}
-        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : '-left-2'
+        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : 'left-0'
           }`}
         style={{
           width: '48px',

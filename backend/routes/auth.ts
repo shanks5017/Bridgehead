@@ -5,11 +5,13 @@ import {
   login,
   getCurrentUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  updateProfile // Added
 } from '../controllers/authController';
 import { checkUsernameAvailability, checkEmailAvailability } from '../controllers/validationController';
 import { auth } from '../middleware/auth';
 import { validationRateLimiter } from '../middleware/rateLimiter';
+import { upload, uploadRateLimiter } from '../middleware/uploadMiddleware';
 
 const router = Router();
 
@@ -42,6 +44,20 @@ router.post(
 // @desc    Get current user
 // @access  Private
 router.get('/me', auth, getCurrentUser);
+
+// @route   PUT /api/auth/profile
+// @desc    Update user profile (with optional image upload)
+// @access  Private
+router.put(
+  '/profile',
+  auth,
+  uploadRateLimiter,
+  upload.fields([
+    { name: 'profilePicture', maxCount: 1 },
+    { name: 'originalProfilePicture', maxCount: 1 }
+  ]),
+  updateProfile
+);
 
 // @route   POST /api/auth/forgot-password
 // @desc    Forgot password
