@@ -59,6 +59,7 @@ export interface DemandPost {
   email?: string;
   openToCollaboration: boolean;
   status?: 'active' | 'solved';
+  createdBy?: string; // User ID who created this post
 }
 
 export interface RentalPost {
@@ -75,6 +76,7 @@ export interface RentalPost {
   email?: string;
   openToCollaboration: boolean;
   status?: 'active' | 'rented';
+  createdBy?: string; // User ID who created this post
 }
 
 export interface MediaItem {

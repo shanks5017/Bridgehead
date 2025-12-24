@@ -169,6 +169,9 @@ const App: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(data.user));
       setCurrentUser(data.user);
 
+      // Fetch user's own posts after login
+      await fetchMyPosts();
+
       // Check if there was a redirect intention
       const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
       if (redirectView) {
@@ -182,6 +185,34 @@ const App: React.FC = () => {
       console.error('Login error:', error);
       setToast({ message: 'An error occurred during login', type: 'error' });
       return false;
+    }
+  };
+
+  // Fetch user's own posts from backend
+  const fetchMyPosts = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const [demandsRes, rentalsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/posts/demands/mine`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${API_BASE_URL}/posts/rentals/mine`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      if (demandsRes.ok) {
+        const demands = await demandsRes.json();
+        setDemandPosts(demands);
+      }
+      if (rentalsRes.ok) {
+        const rentals = await rentalsRes.json();
+        setRentalPosts(rentals);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user posts:', error);
     }
   };
 
@@ -309,7 +340,8 @@ const App: React.FC = () => {
     if (token && savedUser) {
       try {
         setCurrentUser(JSON.parse(savedUser));
-        // Optionally verify token validity with backend here
+        // Fetch user's posts from backend
+        fetchMyPosts();
       } catch (e) {
         console.error('Error parsing saved user', e);
         handleSignOut();
@@ -523,70 +555,162 @@ const App: React.FC = () => {
     }
   };
 
-  const updateDemandPost = (id: string, updatedPost: Partial<DemandPost>) => {
-    setDemandPosts(prev =>
-      prev.map(post =>
-        post.id === id ? { ...post, ...updatedPost } : post
-      )
-    );
-    setToast({
-      message: 'Demand updated successfully!',
-      type: 'success'
-    });
+  const updateDemandPost = async (id: string, updatedPost: Partial<DemandPost>) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedPost)
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setDemandPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setToast({ message: 'Demand updated successfully!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
   };
 
-  const updateRentalPost = (id: string, updatedPost: Partial<RentalPost>) => {
-    setRentalPosts(prev =>
-      prev.map(post =>
-        post.id === id ? { ...post, ...updatedPost } : post
-      )
-    );
-    setToast({
-      message: 'Rental listing updated successfully!',
-      type: 'success'
-    });
+  const updateRentalPost = async (id: string, updatedPost: Partial<RentalPost>) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedPost)
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setRentalPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setToast({ message: 'Rental listing updated successfully!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
   };
 
   // Delete handlers
-  const deleteDemandPost = (id: string) => {
-    setDemandPosts(prev => prev.filter(post => post.id !== id));
-    setToast({
-      message: 'Demand post deleted successfully',
-      type: 'success'
-    });
+  const deleteDemandPost = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        setDemandPosts(prev => prev.filter(post => post.id !== id));
+        setToast({ message: 'Demand post deleted successfully', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to delete', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setToast({ message: 'Network error deleting post', type: 'error' });
+    }
   };
 
-  const deleteRentalPost = (id: string) => {
-    setRentalPosts(prev => prev.filter(post => post.id !== id));
-    setToast({
-      message: 'Rental listing deleted successfully',
-      type: 'success'
-    });
+  const deleteRentalPost = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        setRentalPosts(prev => prev.filter(post => post.id !== id));
+        setToast({ message: 'Rental listing deleted successfully', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to delete', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setToast({ message: 'Network error deleting post', type: 'error' });
+    }
   };
 
   // Mark as solved/rented handlers
-  const markDemandSolved = (id: string) => {
-    setDemandPosts(prev =>
-      prev.map(post =>
-        post.id === id ? { ...post, status: 'solved' as const } : post
-      )
-    );
-    setToast({
-      message: '🎉 Congratulations! Demand marked as solved!',
-      type: 'success'
-    });
+  const markDemandSolved = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'fulfilled' })
+      });
+
+      if (res.ok) {
+        setDemandPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'solved' as const } : post
+          )
+        );
+        setToast({ message: '🎉 Congratulations! Demand marked as solved!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Mark solved error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
   };
 
-  const markRentalRented = (id: string) => {
-    setRentalPosts(prev =>
-      prev.map(post =>
-        post.id === id ? { ...post, status: 'rented' as const } : post
-      )
-    );
-    setToast({
-      message: '🎉 Property marked as rented!',
-      type: 'success'
-    });
+  const markRentalRented = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'rented' })
+      });
+
+      if (res.ok) {
+        setRentalPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'rented' as const } : post
+          )
+        );
+        setToast({ message: '🎉 Property marked as rented!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Mark rented error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
   };
 
   const addRentalPost = async (post: Omit<RentalPost, 'id' | 'createdAt'>) => {
