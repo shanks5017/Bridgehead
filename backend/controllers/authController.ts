@@ -280,33 +280,32 @@ export const updateProfile = async (req: Request, res: Response) => {
     // Handle profile picture upload
     if (files && files.profilePicture) {
       console.log('Processing profile picture...');
-      const { processAndSaveImage, deleteOldImages } = await import('../services/imageService');
+      const { uploadProfileImage, deleteProfileImageByUrl } = await import('../services/profileImageService');
 
-      // Delete old profile picture files
-      if (user.profilePicture) {
-        console.log('Deleting old profile picture:', user.profilePicture);
-        await deleteOldImages(user.profilePicture);
-      }
-
-      // Process and save new image
-      console.log('Saving new profile picture...');
-      const imageUrls = await processAndSaveImage(files.profilePicture[0], userId, 'profile');
+      // Upload new image (service handles deleting old image automatically)
+      console.log('Uploading new profile picture to GridFS...');
+      const imageUrls = await uploadProfileImage(
+        files.profilePicture[0],
+        userId,
+        'profile',
+        user.profilePicture // Pass existing URL for cleanup
+      );
       console.log('Profile picture URLs:', imageUrls);
-      user.profilePicture = imageUrls.thumbnail; // Use thumbnail for display
+      user.profilePicture = imageUrls.display; // Use display version
     }
 
     // Handle original profile picture upload (for re-editing)
     if (files && files.originalProfilePicture) {
-      const { processAndSaveImage, deleteOldImages } = await import('../services/imageService');
+      const { uploadProfileImage } = await import('../services/profileImageService');
 
-      // Delete old original image files
-      if (user.originalProfilePicture) {
-        await deleteOldImages(user.originalProfilePicture);
-      }
-
-      // Process and save new original image
-      const imageUrls = await processAndSaveImage(files.originalProfilePicture[0], userId, 'original');
-      user.originalProfilePicture = imageUrls.original; // Keep full resolution for editing
+      // Upload new original image (service handles deleting old image automatically)
+      const imageUrls = await uploadProfileImage(
+        files.originalProfilePicture[0],
+        userId,
+        'original',
+        user.originalProfilePicture // Pass existing URL for cleanup
+      );
+      user.originalProfilePicture = imageUrls.display; // Keep for editing
     }
 
     // Build update object with only the fields being changed

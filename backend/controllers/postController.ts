@@ -277,12 +277,21 @@ export const deleteDemandPost = async (req, res) => {
       return res.status(404).json({ message: 'Post not found' });
     }
 
+    // Debug logging
+    console.log('=== DELETE POST DEBUG ===');
+    console.log('Post ID:', req.params.id);
+    console.log('Post createdBy:', post.createdBy.toString());
+    console.log('Request userId:', req.userId);
+    console.log('Match:', post.createdBy.toString() === req.userId);
+
     // Ownership check
     if (post.createdBy.toString() !== req.userId) {
+      console.log('Authorization FAILED - user IDs do not match');
       return res.status(403).json({ message: 'Not authorized to delete this post' });
     }
 
     await post.deleteOne();
+    console.log('Post deleted successfully');
     res.json({ message: 'Post deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
