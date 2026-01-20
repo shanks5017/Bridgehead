@@ -97,8 +97,10 @@ const App: React.FC = () => {
 
   const [previousView, setPreviousView] = useState<View | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);
-  const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);
+  const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);  // All posts for Feed
+  const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);  // All posts for Feed
+  const [myDemandPosts, setMyDemandPosts] = useState<DemandPost[]>([]);  // User's own posts for Profile
+  const [myRentalPosts, setMyRentalPosts] = useState<RentalPost[]>([]);  // User's own posts for Profile
   const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; startIndex: number } | null>(null);
   const [selectedPost, setSelectedPost] = useState<DemandPost | RentalPost | null>(() => {
@@ -150,12 +152,12 @@ const App: React.FC = () => {
   }, [toast]);
 
   // --- Authentication Handlers ---
-  const handleSignIn = async (email: string, password: string): Promise<boolean> => {
+  const handleSignIn = async (identifier: string, password: string): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
 
       const data = await res.json();
@@ -188,7 +190,7 @@ const App: React.FC = () => {
     }
   };
 
-  // Fetch user's own posts from backend
+  // Fetch user's own posts from backend (for Profile)
   const fetchMyPosts = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -205,11 +207,11 @@ const App: React.FC = () => {
 
       if (demandsRes.ok) {
         const demands = await demandsRes.json();
-        setDemandPosts(demands);
+        setMyDemandPosts(demands);  // User's own posts for Profile
       }
       if (rentalsRes.ok) {
         const rentals = await rentalsRes.json();
-        setRentalPosts(rentals);
+        setMyRentalPosts(rentals);  // User's own posts for Profile
       }
     } catch (error) {
       console.error('Failed to fetch user posts:', error);
@@ -541,7 +543,9 @@ const App: React.FC = () => {
         return;
       }
 
+      // Update both public feed and user's own posts
       setDemandPosts(prev => [data.data, ...prev]);
+      setMyDemandPosts(prev => [data.data, ...prev]);
       setToast({
         message: 'Demand post created successfully!',
         type: 'success'
@@ -569,7 +573,11 @@ const App: React.FC = () => {
 
       if (res.ok) {
         const updated = await res.json();
+        // Update both public feed and user's own posts
         setDemandPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setMyDemandPosts(prev =>
           prev.map(post => post.id === id ? { ...post, ...updated } : post)
         );
         setToast({ message: 'Demand updated successfully!', type: 'success' });
@@ -597,7 +605,11 @@ const App: React.FC = () => {
 
       if (res.ok) {
         const updated = await res.json();
+        // Update both public feed and user's own posts
         setRentalPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setMyRentalPosts(prev =>
           prev.map(post => post.id === id ? { ...post, ...updated } : post)
         );
         setToast({ message: 'Rental listing updated successfully!', type: 'success' });
@@ -621,7 +633,9 @@ const App: React.FC = () => {
       });
 
       if (res.ok) {
+        // Remove from both public feed and user's own posts
         setDemandPosts(prev => prev.filter(post => post.id !== id));
+        setMyDemandPosts(prev => prev.filter(post => post.id !== id));
         setToast({ message: 'Demand post deleted successfully', type: 'success' });
       } else {
         const error = await res.json();
@@ -642,7 +656,9 @@ const App: React.FC = () => {
       });
 
       if (res.ok) {
+        // Remove from both public feed and user's own posts
         setRentalPosts(prev => prev.filter(post => post.id !== id));
+        setMyRentalPosts(prev => prev.filter(post => post.id !== id));
         setToast({ message: 'Rental listing deleted successfully', type: 'success' });
       } else {
         const error = await res.json();
@@ -668,7 +684,13 @@ const App: React.FC = () => {
       });
 
       if (res.ok) {
+        // Update both public feed and user's own posts
         setDemandPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'solved' as const } : post
+          )
+        );
+        setMyDemandPosts(prev =>
           prev.map(post =>
             post.id === id ? { ...post, status: 'solved' as const } : post
           )
@@ -697,7 +719,13 @@ const App: React.FC = () => {
       });
 
       if (res.ok) {
+        // Update both public feed and user's own posts
         setRentalPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'rented' as const } : post
+          )
+        );
+        setMyRentalPosts(prev =>
           prev.map(post =>
             post.id === id ? { ...post, status: 'rented' as const } : post
           )
@@ -726,7 +754,9 @@ const App: React.FC = () => {
       });
       if (!res.ok) throw new Error('Failed to create rental post');
       const newPost = await res.json();
+      // Update both public feed and user's own posts
       setRentalPosts(prev => [newPost, ...prev]);
+      setMyRentalPosts(prev => [newPost, ...prev]);
     } catch (error) {
       console.error(error);
     }
@@ -1155,7 +1185,7 @@ const App: React.FC = () => {
       case View.SIGN_UP:
         return <SignUp onSignUp={handleSignUp} setView={handleSetView} />;
       case View.PROFILE:
-        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} setView={handleSetView} demandPosts={demandPosts} rentalPosts={rentalPosts} communityPosts={communityPosts} conversations={conversations} updateDemandPost={updateDemandPost} updateRentalPost={updateRentalPost} deleteDemandPost={deleteDemandPost} deleteRentalPost={deleteRentalPost} markDemandSolved={markDemandSolved} markRentalRented={markRentalRented} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
+        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} setView={handleSetView} demandPosts={myDemandPosts} rentalPosts={myRentalPosts} communityPosts={communityPosts} conversations={conversations} updateDemandPost={updateDemandPost} updateRentalPost={updateRentalPost} deleteDemandPost={deleteDemandPost} deleteRentalPost={deleteRentalPost} markDemandSolved={markDemandSolved} markRentalRented={markRentalRented} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
       case View.HOME:
       default:
         return <Home setView={handleSetView} />;

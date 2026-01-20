@@ -5,12 +5,12 @@ import { Input } from './common/FormComponents';
 import { GoogleIcon, MicrosoftIcon } from './icons';
 
 interface SignInProps {
-  onSignIn: (email: string, password: string) => Promise<boolean>;
+  onSignIn: (identifier: string, password: string) => Promise<boolean>;
   setView: (view: View) => void;
 }
 
 const SignIn: React.FC<SignInProps> = ({ onSignIn, setView }) => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -18,13 +18,13 @@ const SignIn: React.FC<SignInProps> = ({ onSignIn, setView }) => {
     e.preventDefault();
     setError('');
     try {
-      const success = await onSignIn(email, password);
+      const success = await onSignIn(identifier, password);
       // If success is false, App.tsx handles the toast, but we might want to set local error too if needed.
       // However, App.tsx implementation returns false on failure and sets a toast.
       // We can also set a generic error here if we want, or just rely on the toast.
       // The original code set a specific hint message. Let's preserve that if it fails.
       if (!success) {
-        setError('Invalid email or password. (Hint: alex@example.com / password123 or admin: shanks@gmail.com / shanks@123)');
+        setError('Invalid credentials. Please check your email/username and password.');
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -73,7 +73,7 @@ const SignIn: React.FC<SignInProps> = ({ onSignIn, setView }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && <p className="text-red-500 text-sm text-center bg-red-500/10 p-3 rounded-md">{error}</p>}
 
-          <Input label="Email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+          <Input label="Email or Username" type="text" placeholder="you@example.com or username" value={identifier} onChange={e => setIdentifier(e.target.value)} required />
           <Input label="Password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
 
           <button type="submit" className="w-full mt-4 px-6 py-3 rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">

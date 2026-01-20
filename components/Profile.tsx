@@ -359,12 +359,12 @@ const Profile: React.FC<ProfileProps> = ({
     const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
     const [solvedSuccess, setSolvedSuccess] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
 
-    // --- REAL DATA FILTERING ---
+    // --- USER'S OWN POSTS (already filtered from App.tsx) ---
     const myCommunityPosts = communityPosts.filter(post =>
         post.author === user.name || post.username === user.name ||
         post.username === `@${user.name.replace(/\s+/g, '').toLowerCase()} `
     );
-    const myDemands = demandPosts;
+    const myDemands = demandPosts; // Already contains only user's posts from App.tsx
 
     // Aggregating Metrics
     const metrics = {

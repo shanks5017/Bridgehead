@@ -29,12 +29,12 @@ router.post(
 );
 
 // @route   POST /api/auth/login
-// @desc    Authenticate user & get token
+// @desc    Authenticate user & get token (supports email OR username)
 // @access  Public
 router.post(
   '/login',
   [
-    body('email', 'Please include a valid email').isEmail(),
+    body('identifier', 'Please enter your email or username').notEmpty().trim().escape(),
     body('password', 'Password is required').exists()
   ],
   login

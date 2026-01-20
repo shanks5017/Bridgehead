@@ -26,7 +26,7 @@
 
 | Feature | Current Status | Priority | Estimated Time |
 |---------|----------------|----------|----------------|
-| Username Login | ❌ Email only | 🔴 HIGH | 2-3 hours |
+| Username Login | ✅ Implemented | 🔴 HIGH | 2-3 hours |
 | Google OAuth | ⚠️ UI exists, backend missing | 🔴 HIGH | 4-6 hours |
 | Notification System | ⚠️ Basic Socket.io only | 🔴 HIGH | 6-8 hours |
 | Success Stories | ❌ Not implemented | 🟡 MEDIUM | 4-6 hours |

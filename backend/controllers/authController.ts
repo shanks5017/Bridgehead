@@ -81,7 +81,7 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
 };
 
 interface LoginRequest {
-  email: string;
+  identifier: string;  // Can be email OR username
   password: string;
 }
 
@@ -92,20 +92,29 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
 
-    // Check if user exists
-    const user = await User.findOne({ email }).select('+password');
+    // Normalize and sanitize input
+    const normalizedIdentifier = identifier.toLowerCase().trim();
+
+    // Smart lookup: find by email OR username (uses existing indexes)
+    const user = await User.findOne({
+      $or: [
+        { email: normalizedIdentifier },
+        { username: normalizedIdentifier }
+      ]
+    }).select('+password');
+
     if (!user) {
-      console.log('Login failed: User not found for email:', email);
-      return res.status(400).json({ error: 'Invalid email or password' });
+      console.log('Login failed: User not found for identifier:', normalizedIdentifier);
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      console.log('Login failed: Password mismatch for user:', email);
-      return res.status(400).json({ error: 'Invalid email or password' });
+      console.log('Login failed: Password mismatch for identifier:', normalizedIdentifier);
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
 
     // Generate JWT

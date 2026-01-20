@@ -638,4 +638,26 @@ Focused on **Tailwind CSS Production Setup Investigation** and **Secure Username
 
 **Status**: ✅ Implementation complete and ready for testing
 
-*Logged at 22:25*
+
+***
+
+**Date:** 20/01/2026
+**Time:** 04:30pm
+**Last Edited:** 20/01/2026 04:30pm
+
+## 🚀 Summary of Changes (Session 6)
+Focused on implementing **Smart Username/Email Login Support**.
+
+### 1. Username Login Implementation
+- **Feature**: Users can now log in using either their **Email** OR **Username** in the same input field.
+- **Backend Updates**:
+  - Updated `authController.ts` to accept a generic `identifier`.
+  - Implemented smart lookup using `$or` query to check both `email` and `username` fields.
+  - Leveraged existing database indexes for performance.
+  - Updated validation in `routes/auth.ts` to allow non-email formats.
+- **Frontend Updates**:
+  - Updated `SignIn.tsx` label to "Email or Username".
+  - Updated `App.tsx` API call to send `identifier` instead of `email`.
+- **Security**:
+  - Maintained generic "Invalid credentials" error message to prevent user enumeration.
+  - Added proper input sanitization and normalization.
