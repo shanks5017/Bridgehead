@@ -10,6 +10,7 @@ import { ObjectId } from 'mongodb';
 interface SignUpRequest {
   fullName: string;
   email: string;
+  username: string;
   password: string;
   userType: 'entrepreneur' | 'community';
 }
@@ -21,18 +22,28 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { fullName, email, password, userType } = req.body;
+    const { fullName, email, username, password, userType } = req.body;
 
-    // Check if user already exists
+    const normalizedUsername = username.toLowerCase();
+
+    // Check if user already exists (Email)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
+    }
+
+    // Check if user already exists (Username)
+    // Note: The unique index will also catch this, but this provides a clearer error
+    const existingUsername = await User.findOne({ username: normalizedUsername });
+    if (existingUsername) {
+      return res.status(400).json({ error: 'Username is already taken' });
     }
 
     // Create new user
     const user = new User({
       fullName,
       email,
+      username: normalizedUsername,
       password,
       userType,
       verified: false,
@@ -53,6 +64,7 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
     const userResponse = {
       fullName: user.fullName,
       email: user.email,
+      username: user.username,
       userType: user.userType,
       _id: user._id
     };
@@ -69,7 +81,7 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
 };
 
 interface LoginRequest {
-  email: string;
+  identifier: string;  // Can be email OR username
   password: string;
 }
 
@@ -80,20 +92,29 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
 
-    // Check if user exists
-    const user = await User.findOne({ email }).select('+password');
+    // Normalize and sanitize input
+    const normalizedIdentifier = identifier.toLowerCase().trim();
+
+    // Smart lookup: find by email OR username (uses existing indexes)
+    const user = await User.findOne({
+      $or: [
+        { email: normalizedIdentifier },
+        { username: normalizedIdentifier }
+      ]
+    }).select('+password');
+
     if (!user) {
-      console.log('Login failed: User not found for email:', email);
-      return res.status(400).json({ error: 'Invalid email or password' });
+      console.log('Login failed: User not found for identifier:', normalizedIdentifier);
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      console.log('Login failed: Password mismatch for user:', email);
-      return res.status(400).json({ error: 'Invalid email or password' });
+      console.log('Login failed: Password mismatch for identifier:', normalizedIdentifier);
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
 
     // Generate JWT
@@ -105,9 +126,15 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
 
     // Prepare user response without password
     const userResponse = {
+      id: user._id,
+      name: user.fullName,
       fullName: user.fullName,
       email: user.email,
+      username: user.username || user.email.split('@')[0], // Fallback for legacy users
       userType: user.userType,
+      profilePicture: user.profilePicture || null,
+      bio: user.bio || '',
+      verified: user.verified || false,
       _id: user._id
     };
 
@@ -226,5 +253,100 @@ export const resetPassword = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Reset password error:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const { fullName, bio } = req.body;
+    const userId = (req as any).userId;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    console.log('=== UPDATE PROFILE DEBUG ===');
+    console.log('User ID:', userId);
+    console.log('Full Name:', fullName);
+    console.log('Bio:', bio);
+    console.log('Files received:', files ? Object.keys(files) : 'NO FILES');
+    if (files) {
+      if (files.profilePicture) {
+        console.log('ProfilePicture file:', files.profilePicture[0].originalname, files.profilePicture[0].size, 'bytes');
+      }
+      if (files.originalProfilePicture) {
+        console.log('OriginalProfilePicture file:', files.originalProfilePicture[0].originalname, files.originalProfilePicture[0].size, 'bytes');
+      }
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update basic fields
+    if (fullName) user.fullName = fullName;
+    if (bio !== undefined) user.bio = bio; // Allow empty string
+
+    // Handle profile picture upload
+    if (files && files.profilePicture) {
+      console.log('Processing profile picture...');
+      const { uploadProfileImage, deleteProfileImageByUrl } = await import('../services/profileImageService');
+
+      // Upload new image (service handles deleting old image automatically)
+      console.log('Uploading new profile picture to GridFS...');
+      const imageUrls = await uploadProfileImage(
+        files.profilePicture[0],
+        userId,
+        'profile',
+        user.profilePicture // Pass existing URL for cleanup
+      );
+      console.log('Profile picture URLs:', imageUrls);
+      user.profilePicture = imageUrls.display; // Use display version
+    }
+
+    // Handle original profile picture upload (for re-editing)
+    if (files && files.originalProfilePicture) {
+      const { uploadProfileImage } = await import('../services/profileImageService');
+
+      // Upload new original image (service handles deleting old image automatically)
+      const imageUrls = await uploadProfileImage(
+        files.originalProfilePicture[0],
+        userId,
+        'original',
+        user.originalProfilePicture // Pass existing URL for cleanup
+      );
+      user.originalProfilePicture = imageUrls.display; // Keep for editing
+    }
+
+    // Build update object with only the fields being changed
+    const updateFields: any = {};
+    if (fullName) updateFields.fullName = fullName;
+    if (bio !== undefined) updateFields.bio = bio;
+    if (user.profilePicture) updateFields.profilePicture = user.profilePicture;
+    if (user.originalProfilePicture) updateFields.originalProfilePicture = user.originalProfilePicture;
+
+    console.log('Update fields:', Object.keys(updateFields));
+
+    // Use findByIdAndUpdate to avoid triggering full schema validation
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true, runValidators: false }
+    ).select('-password');
+
+    console.log('User updated. Profile picture:', updatedUser?.profilePicture);
+    console.log('User updated. Original profile picture:', updatedUser?.originalProfilePicture);
+    console.log('=== END UPDATE PROFILE ===\n');
+
+    res.json({
+      success: true,
+      data: updatedUser,
+      message: 'Profile updated successfully'
+    });
+  } catch (error: any) {
+    console.error('Update profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to update profile'
+    });
   }
 };

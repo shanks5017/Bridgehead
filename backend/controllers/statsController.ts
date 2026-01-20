@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { DemandPost } from '../models/DemandPost';
-import { RentalPost } from '../models/RentalPost';
+import DemandPost from '../models/DemandPost';
+import RentalPost from '../models/RentalPost';
 
 export const getUserStats = async (req: Request, res: Response) => {
     try {

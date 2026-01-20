@@ -10,22 +10,34 @@ import { DEMAND_CATEGORIES } from '../constants/categories';
 interface PostDemandFormProps {
   addDemandPost: (post: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'>) => void;
   setView: (view: View) => void;
+  // Edit mode props
+  editingPost?: DemandPost;
+  updateDemandPost?: (id: string, post: Partial<DemandPost>) => void;
+  onCancelEdit?: () => void;
 }
 
 type LocationStatus = 'idle' | 'getting_coords' | 'geocoding' | 'success' | 'error';
 
-const PostDemandForm: React.FC<PostDemandFormProps> = ({ addDemandPost, setView }) => {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState<Location | null>(null);
-  const [images, setImages] = useState<string[]>([]);
-  const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
+const PostDemandForm: React.FC<PostDemandFormProps> = ({
+  addDemandPost,
+  setView,
+  editingPost,
+  updateDemandPost,
+  onCancelEdit
+}) => {
+  const isEditMode = !!editingPost;
+
+  const [title, setTitle] = useState(editingPost?.title || '');
+  const [category, setCategory] = useState(editingPost?.category || '');
+  const [description, setDescription] = useState(editingPost?.description || '');
+  const [location, setLocation] = useState<Location | null>(editingPost?.location || null);
+  const [images, setImages] = useState<string[]>(editingPost?.images || []);
+  const [locationStatus, setLocationStatus] = useState<LocationStatus>(editingPost?.location ? 'success' : 'idle');
   const [locationError, setLocationError] = useState('');
-  const [addressInput, setAddressInput] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [openToCollaboration, setOpenToCollaboration] = useState(true);
+  const [addressInput, setAddressInput] = useState(editingPost?.location?.address || '');
+  const [phone, setPhone] = useState(editingPost?.phone || '');
+  const [email, setEmail] = useState(editingPost?.email || '');
+  const [openToCollaboration, setOpenToCollaboration] = useState(editingPost?.openToCollaboration ?? true);
   const [showPreview, setShowPreview] = useState(false);
 
 
@@ -113,7 +125,7 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({ addDemandPost, setView 
       return;
     }
 
-    const newPost: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'> = {
+    const postData: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'> = {
       title,
       category,
       description,
@@ -123,8 +135,16 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({ addDemandPost, setView 
       email: email || undefined,
       openToCollaboration,
     };
-    addDemandPost(newPost);
-    setView(View.DEMAND_FEED);
+
+    if (isEditMode && editingPost && updateDemandPost) {
+      // Update existing post
+      updateDemandPost(editingPost.id, postData);
+      if (onCancelEdit) onCancelEdit();
+    } else {
+      // Create new post
+      addDemandPost(postData);
+      setView(View.DEMAND_FEED);
+    }
   };
 
   const isLocating = locationStatus === 'getting_coords' || locationStatus === 'geocoding';
@@ -142,8 +162,15 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({ addDemandPost, setView 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
 
       <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto bg-[--card-color] border border-[--border-color] rounded-xl p-8 space-y-6 backdrop-blur-sm shadow-2xl">
-        <h2 className="text-3xl font-bold text-center">Post a New Demand</h2>
-        <p className="text-center text-[--text-secondary]">What's missing in your community? Let entrepreneurs know.</p>
+        <h2 className="text-3xl font-bold text-center">
+          {isEditMode ? 'Edit Your Demand' : 'Post a New Demand'}
+        </h2>
+        <p className="text-center text-[--text-secondary]">
+          {isEditMode
+            ? 'Update your demand details below.'
+            : "What's missing in your community? Let entrepreneurs know."
+          }
+        </p>
 
         <Input label="Demand Title" placeholder="e.g., A 24/7 Soda Shop" value={title} onChange={e => setTitle(e.target.value)} required />
         <CategoryAutocomplete
@@ -312,18 +339,27 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({ addDemandPost, setView 
 
 
         <div className="flex gap-3">
+          {isEditMode && onCancelEdit && (
+            <button
+              type="button"
+              onClick={onCancelEdit}
+              className="flex-1 mt-4 px-6 py-4 rounded-lg text-lg font-semibold border-2 border-gray-600 text-gray-400 hover:bg-gray-600/20 transition-all"
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setShowPreview(true)}
             className="flex-1 mt-4 px-6 py-4 rounded-lg text-lg font-semibold border-2 border-[--primary-color] text-[--primary-color] hover:bg-[--primary-color]/10 transition-all"
           >
-            👁️ Preview Ad
+            👁️ Preview
           </button>
           <button
             type="submit"
             className="flex-1 mt-4 px-6 py-4 rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity"
           >
-            Post Demand
+            {isEditMode ? '✓ Update Demand' : 'Post Demand'}
           </button>
         </div>
 

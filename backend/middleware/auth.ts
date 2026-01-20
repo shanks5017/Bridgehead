@@ -23,10 +23,10 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
-    
+
     // Get user from the token
     const user = await User.findById(decoded.userId).select('-password');
-    
+
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
@@ -34,7 +34,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     // Add user to request object
     req.user = user;
     req.userId = user._id.toString();
-    
+
     next();
   } catch (error) {
     console.error('Authentication error:', error);
@@ -48,15 +48,35 @@ export const authorize = (...roles: string[]) => {
     if (!req.user) {
       return res.status(401).json({ message: 'Not authorized' });
     }
-    
+
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ 
-        message: `User role ${req.user.role} is not authorized to access this route` 
+      return res.status(403).json({
+        message: `User role ${req.user.role} is not authorized to access this route`
       });
     }
-    
+
     next();
   };
 };
 
-export default { auth, authorize };
+// Optional Auth - attaches user IF token exists, otherwise proceeds as guest
+export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+      const user = await User.findById(decoded.userId).select('-password');
+      if (user) {
+        req.user = user;
+        req.userId = user._id.toString();
+      }
+    }
+    next();
+  } catch (error) {
+    // If token is invalid (expired/malformed), just treat as guest
+    next();
+  }
+};
+
+export default { auth, authorize, optionalAuth };

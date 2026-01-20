@@ -14,3 +14,30 @@ node_modules/
 
 # logs
 *.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+
+# Testing
+coverage/
+*.test.js.snap
+
+# Misc
+.cache/
+*.tgz

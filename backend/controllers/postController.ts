@@ -216,3 +216,125 @@ export const createRentalPost = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// @desc    Get current user's demand posts
+// @route   GET /api/posts/demands/mine
+export const getMyDemandPosts = async (req, res) => {
+  try {
+    const posts = await DemandPost.find({ createdBy: req.userId }).sort({ createdAt: -1 });
+    res.json(posts.map(formatPostResponse));
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Get current user's rental posts
+// @route   GET /api/posts/rentals/mine
+export const getMyRentalPosts = async (req, res) => {
+  try {
+    const posts = await RentalPost.find({ createdBy: req.userId }).sort({ createdAt: -1 });
+    res.json(posts.map(formatPostResponse));
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Update a demand post (owner only)
+// @route   PUT /api/posts/demands/:id
+export const updateDemandPost = async (req, res) => {
+  try {
+    const post = await DemandPost.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Ownership check
+    if (post.createdBy.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Not authorized to update this post' });
+    }
+
+    // Update allowed fields
+    const allowedUpdates = ['title', 'category', 'description', 'phone', 'email', 'openToCollaboration', 'status'];
+    allowedUpdates.forEach(field => {
+      if (req.body[field] !== undefined) {
+        post[field] = req.body[field];
+      }
+    });
+
+    const updatedPost = await post.save();
+    res.json(formatPostResponse(updatedPost));
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Delete a demand post (owner only)
+// @route   DELETE /api/posts/demands/:id
+export const deleteDemandPost = async (req, res) => {
+  try {
+    const post = await DemandPost.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Ownership check
+    if (post.createdBy.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Not authorized to delete this post' });
+    }
+
+    await post.deleteOne();
+    res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Update a rental post (owner only)
+// @route   PUT /api/posts/rentals/:id
+export const updateRentalPost = async (req, res) => {
+  try {
+    const post = await RentalPost.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Ownership check
+    if (post.createdBy.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Not authorized to update this post' });
+    }
+
+    // Update allowed fields
+    const allowedUpdates = ['title', 'category', 'description', 'price', 'squareFeet', 'phone', 'email', 'openToCollaboration', 'status'];
+    allowedUpdates.forEach(field => {
+      if (req.body[field] !== undefined) {
+        post[field] = req.body[field];
+      }
+    });
+
+    const updatedPost = await post.save();
+    res.json(formatPostResponse(updatedPost));
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Delete a rental post (owner only)
+// @route   DELETE /api/posts/rentals/:id
+export const deleteRentalPost = async (req, res) => {
+  try {
+    const post = await RentalPost.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Ownership check
+    if (post.createdBy.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Not authorized to delete this post' });
+    }
+
+    await post.deleteOne();
+    res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};

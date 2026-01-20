@@ -98,6 +98,57 @@ router.get('/:fileId', async (req: Request, res: Response) => {
 });
 
 /**
+ * @route   GET /api/images/profile/:fileId
+ * @desc    Retrieve profile picture from GridFS by file ID
+ * @access  Public (images are public once uploaded)
+ */
+router.get('/profile/:fileId', async (req: Request, res: Response) => {
+    try {
+        const { getProfileImageStream } = await import('../services/profileImageService');
+
+        const { stream, contentType, length, filename, fileId } = await getProfileImageStream(req.params.fileId);
+
+        // Set response headers
+        res.set('Content-Type', contentType);
+        res.set('Content-Length', length.toString());
+        res.set('Content-Disposition', `inline; filename="${filename}"`);
+
+        // Cache headers for better performance (1 year - images don't change, they get replaced)
+        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        res.set('ETag', fileId);
+
+        // Stream the image
+        stream.on('error', (err: Error) => {
+            console.error('Error streaming profile image:', err);
+            if (!res.headersSent) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Error retrieving profile image'
+                });
+            }
+        });
+
+        stream.pipe(res);
+
+    } catch (error: any) {
+        console.error('Error fetching profile image:', error);
+        if (!res.headersSent) {
+            if (error.message === 'Image not found' || error.message === 'Invalid file ID') {
+                res.status(404).json({
+                    success: false,
+                    message: 'Profile image not found'
+                });
+            } else {
+                res.status(500).json({
+                    success: false,
+                    message: 'Server error while retrieving profile image'
+                });
+            }
+        }
+    }
+});
+
+/**
  * @route   DELETE /api/images/:fileId
  * @desc    Delete image from GridFS
  * @access  Private (should add authentication)

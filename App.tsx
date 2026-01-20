@@ -32,37 +32,6 @@ import QuickPostButton from './components/QuickPostButton';
 
 const API_BASE_URL = config.api.baseUrl;
 
-const MOCK_COMMUNITY_POSTS: CommunityPost[] = [
-  {
-    id: 'comm-1',
-    author: 'Jane Doe',
-    username: '@jane_doe',
-    avatar: 'user1',
-    content: 'That Neapolitan pizza demand is exactly what we need. I\'d be there every week!',
-    likes: 42,
-    reposts: 5,
-    replies: 3,
-    isLiked: false,
-    isReposted: false,
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-  },
-  {
-    id: 'comm-2',
-    author: 'John Smith',
-    username: '@johnsmith',
-    avatar: 'user2',
-    content: 'An indoor dog park would be a game-changer for this weather. Someone please make this happen.',
-    media: [
-      { type: 'image', url: 'https://picsum.photos/seed/communitydog/600/400' }
-    ],
-    likes: 101,
-    reposts: 12,
-    replies: 8,
-    isLiked: true,
-    isReposted: false,
-    createdAt: new Date(Date.now() - 3600000 * 8).toISOString(), // 8 hours ago
-  },
-];
 
 const ARU_CONVERSATION_ID = 'aru-ai-bot';
 
@@ -128,9 +97,11 @@ const App: React.FC = () => {
 
   const [previousView, setPreviousView] = useState<View | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);
-  const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);
-  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>(MOCK_COMMUNITY_POSTS);
+  const [demandPosts, setDemandPosts] = useState<DemandPost[]>([]);  // All posts for Feed
+  const [rentalPosts, setRentalPosts] = useState<RentalPost[]>([]);  // All posts for Feed
+  const [myDemandPosts, setMyDemandPosts] = useState<DemandPost[]>([]);  // User's own posts for Profile
+  const [myRentalPosts, setMyRentalPosts] = useState<RentalPost[]>([]);  // User's own posts for Profile
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [imageViewerState, setImageViewerState] = useState<{ images: string[]; startIndex: number } | null>(null);
   const [selectedPost, setSelectedPost] = useState<DemandPost | RentalPost | null>(() => {
     const savedPost = localStorage.getItem('bridgehead_selected_post');
@@ -181,12 +152,12 @@ const App: React.FC = () => {
   }, [toast]);
 
   // --- Authentication Handlers ---
-  const handleSignIn = async (email: string, password: string): Promise<boolean> => {
+  const handleSignIn = async (identifier: string, password: string): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
 
       const data = await res.json();
@@ -199,6 +170,9 @@ const App: React.FC = () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setCurrentUser(data.user);
+
+      // Fetch user's own posts after login
+      await fetchMyPosts();
 
       // Check if there was a redirect intention
       const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
@@ -216,7 +190,35 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSignUp = async (name: string, email: string, password: string): Promise<boolean> => {
+  // Fetch user's own posts from backend (for Profile)
+  const fetchMyPosts = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const [demandsRes, rentalsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/posts/demands/mine`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${API_BASE_URL}/posts/rentals/mine`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      if (demandsRes.ok) {
+        const demands = await demandsRes.json();
+        setMyDemandPosts(demands);  // User's own posts for Profile
+      }
+      if (rentalsRes.ok) {
+        const rentals = await rentalsRes.json();
+        setMyRentalPosts(rentals);  // User's own posts for Profile
+      }
+    } catch (error) {
+      console.error('Failed to fetch user posts:', error);
+    }
+  };
+
+  const handleSignUp = async (name: string, email: string, username: string, password: string): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
@@ -224,6 +226,7 @@ const App: React.FC = () => {
         body: JSON.stringify({
           fullName: name,
           email,
+          username,
           password,
           userType: 'community' // Default type, can be expanded
         }),
@@ -263,9 +266,73 @@ const App: React.FC = () => {
     handleSetView(View.HOME);
   };
 
-  const handleUpdateUser = (updatedUser: User) => {
-    setCurrentUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+  const handleUpdateUser = async (updatedUser: User) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      console.log('=== FRONTEND UPDATE USER ===');
+      console.log('Updated user object:', updatedUser);
+
+      // Use FormData for file uploads
+      const formData = new FormData();
+
+      // Add basic fields
+      formData.append('fullName', updatedUser.name || '');
+      if (updatedUser.bio !== undefined) {
+        formData.append('bio', updatedUser.bio);
+      }
+
+      // Add files only if they've been updated
+      if (updatedUser.profilePictureFile) {
+        console.log('Adding profilePictureFile:', updatedUser.profilePictureFile.name, updatedUser.profilePictureFile.size, 'bytes');
+        formData.append('profilePicture', updatedUser.profilePictureFile);
+      } else {
+        console.log('No profilePictureFile to upload');
+      }
+
+      if (updatedUser.originalProfilePictureFile) {
+        console.log('Adding originalProfilePictureFile:', updatedUser.originalProfilePictureFile.name, updatedUser.originalProfilePictureFile.size, 'bytes');
+        formData.append('originalProfilePicture', updatedUser.originalProfilePictureFile);
+      } else {
+        console.log('No originalProfilePictureFile to upload');
+      }
+
+      console.log('Sending FormData to backend...');
+      const res = await fetch(`${API_BASE_URL}/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+          // Don't set Content-Type - browser will set it with boundary for multipart
+        },
+        body: formData // Send FormData instead of JSON
+      });
+
+      const data = await res.json();
+      console.log('Backend response:', data);
+
+      if (!res.ok) {
+        setToast({ message: data.message || 'Failed to update profile', type: 'error' });
+        return;
+      }
+
+      // Backend returns updated user with image URLs
+      const backendUser = data.data;
+      const frontendUser: User = {
+        ...currentUser,
+        name: backendUser.fullName || updatedUser.name,
+        bio: backendUser.bio,
+        profilePicture: backendUser.profilePicture, // Now a URL, not base64
+        originalProfilePicture: backendUser.originalProfilePicture
+      };
+
+      setCurrentUser(frontendUser);
+      localStorage.setItem('user', JSON.stringify(frontendUser));
+      setToast({ message: 'Profile updated successfully!', type: 'success' });
+
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      setToast({ message: 'Network error updating profile', type: 'error' });
+    }
   };
 
   // Check for existing session on mount
@@ -275,7 +342,8 @@ const App: React.FC = () => {
     if (token && savedUser) {
       try {
         setCurrentUser(JSON.parse(savedUser));
-        // Optionally verify token validity with backend here
+        // Fetch user's posts from backend
+        fetchMyPosts();
       } catch (e) {
         console.error('Error parsing saved user', e);
         handleSignOut();
@@ -400,6 +468,7 @@ const App: React.FC = () => {
         }],
         lastMessageTimestamp: new Date().toISOString(),
         unreadCount: 0,
+        role: 'owner', // My Assistant (My Demand)
       },
       {
         id: 'convo-1',
@@ -411,6 +480,7 @@ const App: React.FC = () => {
         ],
         lastMessageTimestamp: new Date(Date.now() - 3600000 * 23).toISOString(),
         unreadCount: 0,
+        role: 'seeker', // Opportunity
       }
     ];
     setConversations(MOCK_CONVERSATIONS);
@@ -473,7 +543,9 @@ const App: React.FC = () => {
         return;
       }
 
+      // Update both public feed and user's own posts
       setDemandPosts(prev => [data.data, ...prev]);
+      setMyDemandPosts(prev => [data.data, ...prev]);
       setToast({
         message: 'Demand post created successfully!',
         type: 'success'
@@ -484,6 +556,188 @@ const App: React.FC = () => {
         message: 'An error occurred while creating the post',
         type: 'error'
       });
+    }
+  };
+
+  const updateDemandPost = async (id: string, updatedPost: Partial<DemandPost>) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedPost)
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        // Update both public feed and user's own posts
+        setDemandPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setMyDemandPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setToast({ message: 'Demand updated successfully!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
+  };
+
+  const updateRentalPost = async (id: string, updatedPost: Partial<RentalPost>) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedPost)
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        // Update both public feed and user's own posts
+        setRentalPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setMyRentalPosts(prev =>
+          prev.map(post => post.id === id ? { ...post, ...updated } : post)
+        );
+        setToast({ message: 'Rental listing updated successfully!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
+  };
+
+  // Delete handlers
+  const deleteDemandPost = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        // Remove from both public feed and user's own posts
+        setDemandPosts(prev => prev.filter(post => post.id !== id));
+        setMyDemandPosts(prev => prev.filter(post => post.id !== id));
+        setToast({ message: 'Demand post deleted successfully', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to delete', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setToast({ message: 'Network error deleting post', type: 'error' });
+    }
+  };
+
+  const deleteRentalPost = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        // Remove from both public feed and user's own posts
+        setRentalPosts(prev => prev.filter(post => post.id !== id));
+        setMyRentalPosts(prev => prev.filter(post => post.id !== id));
+        setToast({ message: 'Rental listing deleted successfully', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to delete', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setToast({ message: 'Network error deleting post', type: 'error' });
+    }
+  };
+
+  // Mark as solved/rented handlers
+  const markDemandSolved = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/demands/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'fulfilled' })
+      });
+
+      if (res.ok) {
+        // Update both public feed and user's own posts
+        setDemandPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'solved' as const } : post
+          )
+        );
+        setMyDemandPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'solved' as const } : post
+          )
+        );
+        setToast({ message: '🎉 Congratulations! Demand marked as solved!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Mark solved error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
+    }
+  };
+
+  const markRentalRented = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'rented' })
+      });
+
+      if (res.ok) {
+        // Update both public feed and user's own posts
+        setRentalPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'rented' as const } : post
+          )
+        );
+        setMyRentalPosts(prev =>
+          prev.map(post =>
+            post.id === id ? { ...post, status: 'rented' as const } : post
+          )
+        );
+        setToast({ message: '🎉 Property marked as rented!', type: 'success' });
+      } else {
+        const error = await res.json();
+        setToast({ message: error.message || 'Failed to update', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Mark rented error:', error);
+      setToast({ message: 'Network error updating post', type: 'error' });
     }
   };
 
@@ -500,7 +754,9 @@ const App: React.FC = () => {
       });
       if (!res.ok) throw new Error('Failed to create rental post');
       const newPost = await res.json();
+      // Update both public feed and user's own posts
       setRentalPosts(prev => [newPost, ...prev]);
+      setMyRentalPosts(prev => [newPost, ...prev]);
     } catch (error) {
       console.error(error);
     }
@@ -523,66 +779,151 @@ const App: React.FC = () => {
     }
   };
 
-  const addCommunityPost = (content: string, media: MediaItem[]) => {
-    const newPost: CommunityPost = {
-      id: crypto.randomUUID(),
-      author: currentUser?.name || 'Current User',
-      username: currentUser ? `@${currentUser.name.toLowerCase().replace(' ', '_')}` : '@current_user',
-      avatar: 'user_self',
-      content,
-      media: media.length > 0 ? media : undefined,
-      likes: 0,
-      reposts: 0,
-      replies: 0,
-      isLiked: false,
-      isReposted: false,
-      createdAt: new Date().toISOString(),
-    };
-    setCommunityPosts(prev => [newPost, ...prev]);
-  };
+  // --- Community API Integration ---
 
-  const handleLikePost = (id: string) => {
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === id) {
-        return { ...p, isLiked: !p.isLiked, likes: p.isLiked ? p.likes - 1 : p.likes + 1 };
+  const fetchCommunityPosts = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts?limit=20`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Map Backend Fields to Frontend Interface
+        const mappedPosts: CommunityPost[] = (data.data || []).map((p: any) => ({
+          ...p,
+          id: p._id,
+          author: p.authorName || 'Anonymous', // Map name
+          username: p.authorBadge === 'entrepreneur' ? '@founder' : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`,
+          avatar: p.authorAvatar || 'user1',
+          likes: p.likesCount || 0,
+          replies: p.repliesCount || 0,
+          reposts: p.repostsCount || 0,
+          media: p.media || []
+        }));
+        setCommunityPosts(mappedPosts);
       }
-      return p;
-    }));
-  };
+    } catch (error) {
+      console.error('Failed to fetch community posts:', error);
+    }
+  }, []);
 
-  const handleRepostPost = (id: string) => {
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === id) {
-        return { ...p, isReposted: !p.isReposted, reposts: p.isReposted ? p.reposts - 1 : p.reposts + 1 };
+  // Fetch posts on mount or view change
+  useEffect(() => {
+    if (view === View.COMMUNITY_FEED) {
+      fetchCommunityPosts();
+    }
+  }, [view, fetchCommunityPosts]);
+
+  const addCommunityPost = async (content: string, media: MediaItem[]) => {
+    if (!currentUser) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ content, media, topic: 'general' })
+      });
+
+      const rawPost = await res.json();
+
+      if (res.ok) {
+        // Map new post to frontend structure
+        const newPost: CommunityPost = {
+          ...rawPost,
+          id: rawPost._id,
+          author: rawPost.authorName || currentUser.name,
+          username: rawPost.authorBadge === 'entrepreneur' ? '@founder' : `@${(rawPost.authorName || currentUser.name).replace(/\s+/g, '').toLowerCase()}`,
+          avatar: rawPost.authorAvatar || 'user1',
+          likes: rawPost.likesCount || 0,
+          replies: rawPost.repliesCount || 0,
+          reposts: rawPost.repostsCount || 0,
+          media: rawPost.media || []
+        };
+
+        // Prepend new post to list
+        setCommunityPosts(prev => [newPost, ...prev]);
+        setToast({ message: 'Posted successfully!', type: 'success' });
+      } else {
+        setToast({ message: rawPost.message || 'Failed to post', type: 'error' });
       }
-      return p;
-    }));
+    } catch (error) {
+      console.error('Post error:', error);
+      setToast({ message: 'Network error', type: 'error' });
+    }
   };
 
-  const handleEditPost = (id: string, newContent: string, newMedia: MediaItem[]) => {
+  const handleLikePost = async (id: string) => {
+    if (!currentUser) return;
+
+    // Optimistic Update
     setCommunityPosts(posts => posts.map(p => {
       if (p.id === id) {
+        const wasLiked = p.isLiked;
         return {
           ...p,
-          content: newContent,
-          media: newMedia.length > 0 ? newMedia : undefined
+          isLiked: !wasLiked,
+          likes: wasLiked ? p.likes - 1 : p.likes + 1 // Note: Backend uses likesCount, Frontend type uses likes. We might need mapping.
         };
       }
       return p;
     }));
+
+    try {
+      await fetch(`${API_BASE_URL}/community/posts/${id}/like`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      // We could refetch to be sure, but optimistic is better for UX
+    } catch (error) {
+      console.error('Like error:', error);
+      // Revert on error (omitted for brevity, but recommended in prod)
+    }
   };
 
-  const handleReplyPost = (postId: string, content: string, media: MediaItem[]) => {
-    // 1. Create and add the new reply post
-    addCommunityPost(content, media);
+  const handleRepostPost = (id: string) => {
+    // Placeholder for repost API
+    console.log('Repost not yet implemented on backend');
+  };
 
-    // 2. Increment the reply count of the original post
-    setCommunityPosts(posts => posts.map(p => {
-      if (p.id === postId) {
-        return { ...p, replies: p.replies + 1 };
+  const handleEditPost = (id: string, newContent: string, newMedia: MediaItem[]) => {
+    // Placeholder for edit API
+    console.log('Edit not yet implemented on backend');
+  };
+
+  const handleReplyPost = async (postId: string, content: string, media: MediaItem[]) => {
+    if (!currentUser) return;
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/posts/${postId}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ content })
+      });
+
+      if (res.ok) {
+        setToast({ message: 'Reply sent!', type: 'success' });
+        // Update reply count locally
+        setCommunityPosts(posts => posts.map(p => {
+          if (p.id === postId) {
+            return { ...p, replies: p.replies + 1 };
+          }
+          return p;
+        }));
       }
-      return p;
-    }));
+    } catch (error) {
+      console.error('Reply error:', error);
+      setToast({ message: 'Failed to reply', type: 'error' });
+    }
   };
 
   const handleImageClick = useCallback((images: string[], startIndex: number) => {
@@ -619,11 +960,12 @@ const App: React.FC = () => {
     localStorage.removeItem('bridgehead_selected_post');
   };
 
-  const handleSendMessage = async (conversationId: string, text: string) => {
+  const handleSendMessage = async (conversationId: string, text: string, media?: MediaItem[]) => {
     const newMessage: Message = {
       id: crypto.randomUUID(),
       senderId: 'currentUser',
       text,
+      media,
       timestamp: new Date().toISOString(),
     };
 
@@ -740,6 +1082,7 @@ const App: React.FC = () => {
         messages: [],
         lastMessageTimestamp: new Date().toISOString(),
         unreadCount: 0,
+        role: 'seeker', // I am starting this collaboration
       };
       setConversations(prev => [newConvo, ...prev]);
       setSelectedConversationId(newConvo.id);
@@ -842,7 +1185,7 @@ const App: React.FC = () => {
       case View.SIGN_UP:
         return <SignUp onSignUp={handleSignUp} setView={handleSetView} />;
       case View.PROFILE:
-        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
+        return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} setView={handleSetView} demandPosts={myDemandPosts} rentalPosts={myRentalPosts} communityPosts={communityPosts} conversations={conversations} updateDemandPost={updateDemandPost} updateRentalPost={updateRentalPost} deleteDemandPost={deleteDemandPost} deleteRentalPost={deleteRentalPost} markDemandSolved={markDemandSolved} markRentalRented={markRentalRented} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
       case View.HOME:
       default:
         return <Home setView={handleSetView} />;
@@ -875,7 +1218,7 @@ const App: React.FC = () => {
         onMouseEnter={() => {
           if (!isSidebarOpen && window.innerWidth > 768) setIsSidebarOpen(true);
         }}
-        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : '-left-2'
+        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : 'left-0'
           }`}
         style={{
           width: '48px',
@@ -925,8 +1268,8 @@ const App: React.FC = () => {
           onClose={closeImageViewer}
         />
       )}
-      <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />
-      <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />
+      {view !== View.COLLABORATION && <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />}
+      {view !== View.COLLABORATION && <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />}
       <ScrollToTopButton />
       {toast && (
         <Toast

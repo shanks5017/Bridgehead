@@ -6,7 +6,10 @@ export interface User {
   avatar?: string; // URL or placeholder
   bio?: string;
   phone?: string;
-  profilePicture?: string; // base64 string
+  profilePicture?: string; // URL to image file (or legacy base64)
+  originalProfilePicture?: string; // URL to original image for re-editing
+  profilePictureFile?: File; // File object for new upload (frontend only)
+  originalProfilePictureFile?: File; // Original file for re-editing (frontend only)
   isEmailVerified?: boolean;
   isPhoneVerified?: boolean;
 }
@@ -55,6 +58,8 @@ export interface DemandPost {
   phone?: string;
   email?: string;
   openToCollaboration: boolean;
+  status?: 'active' | 'solved';
+  createdBy?: string; // User ID who created this post
 }
 
 export interface RentalPost {
@@ -70,6 +75,8 @@ export interface RentalPost {
   phone?: string;
   email?: string;
   openToCollaboration: boolean;
+  status?: 'active' | 'rented';
+  createdBy?: string; // User ID who created this post
 }
 
 export interface MediaItem {
@@ -96,6 +103,7 @@ export interface Message {
   id: string;
   senderId: 'currentUser' | string;
   text: string;
+  media?: MediaItem[];
   timestamp: string;
 }
 
@@ -111,4 +119,5 @@ export interface Conversation {
   messages: Message[];
   lastMessageTimestamp: string;
   unreadCount: number;
+  role: 'owner' | 'seeker'; // 'owner' = My Demand, 'seeker' = Opportunity
 }
