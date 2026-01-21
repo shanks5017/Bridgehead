@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleGenAI, Chat } from "@google/genai";
+import { createChatSession } from '../services/groqService';
 import { ChatIcon, XIcon, LoadingSpinner, MicrophoneIcon } from './icons';
 
 // Parses inline markdown elements like **bold**.
@@ -64,13 +64,15 @@ const renderModelMessage = (text: string) => {
 interface ChatbotProps {
     isChatbotOpen?: boolean;
     onChatbotToggle?: (isOpen: boolean) => void;
+    userName?: string;
+    userId?: string;
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChatbotToggle }) => {
+const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChatbotToggle, userName = 'Friend', userId = 'anonymous' }) => {
     const [internalIsOpen, setInternalIsOpen] = useState(false);
     const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
-    const [chat, setChat] = useState<Chat | null>(null);
+    const chatRef = useRef<ReturnType<typeof createChatSession> | null>(null);
     const [history, setHistory] = useState<{ role: 'user' | 'model', text: string }[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -78,29 +80,12 @@ const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChat
     const recognitionRef = useRef<any>(null); // Using any for browser compatibility (webkitSpeechRecognition)
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    // Initialize or re-initialize chat when user changes
     useEffect(() => {
-        if (!process.env.API_KEY) {
-            console.error("API_KEY not found for chatbot.");
-            return;
-        }
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-        const initialMessage = 'Hello! How can I help you with Bridgehead today?';
-        const systemInstruction = "You are a helpful AI assistant for the Bridgehead app. Bridgehead connects community needs (demands) with entrepreneurs. Users can post demands for businesses they want, and entrepreneurs can find rental properties and get business ideas. Keep your answers concise and helpful. When providing instructions or steps, always use a numbered or bulleted list. Do not write steps in a single paragraph.";
-
-        const chatInstance = ai.chats.create({
-            model: 'gemini-flash-lite-latest',
-            history: [{
-                role: 'model',
-                parts: [{ text: initialMessage }],
-            }],
-            config: {
-                systemInstruction: systemInstruction,
-            },
-        });
-        setChat(chatInstance);
+        const initialMessage = `Hey ${userName}! 🚀 I'm ARU, your entrepreneur friend here at Bridgehead. What big ideas are we working on today?`;
+        chatRef.current = createChatSession('default', userId, userName);
         setHistory([{ role: 'model', text: initialMessage }]);
-    }, []);
+    }, [userName, userId]);
 
     useEffect(() => {
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -133,7 +118,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChat
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || !chat || isLoading) return;
+        if (!input.trim() || !chatRef.current || isLoading) return;
 
         const userMessage = input;
         setInput('');
@@ -141,19 +126,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ isChatbotOpen: externalIsOpen, onChat
         setIsLoading(true);
 
         try {
-            const result = await chat.sendMessageStream({ message: userMessage });
-
-            let modelResponse = '';
-            setHistory(prev => [...prev, { role: 'model', text: '' }]); // Add empty model message for streaming
-
-            for await (const chunk of result) {
-                modelResponse += chunk.text;
-                setHistory(prev => {
-                    const newHistory = [...prev];
-                    newHistory[newHistory.length - 1].text = modelResponse;
-                    return newHistory;
-                });
-            }
+            const response = await chatRef.current.sendMessage(userMessage);
+            setHistory(prev => [...prev, { role: 'model', text: response }]);
         } catch (error) {
             console.error("Chatbot error:", error);
             setHistory(prev => [...prev, { role: 'model', text: "Sorry, I encountered an error. Please try again." }]);

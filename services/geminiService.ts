@@ -1,3 +1,16 @@
+/**
+ * Gemini Service - TEMPORARY: Using Groq API for testing
+ * Original Gemini implementation is preserved below for rollback
+ * 
+ * To switch back to Gemini:
+ * 1. Uncomment the original code below
+ * 2. Comment out or delete the groqService re-exports
+ */
+
+// TEMPORARY: Re-export from Groq service for testing
+export { geocode, reverseGeocode, generateBusinessIdeas, findMatches } from './groqService';
+
+/* ORIGINAL GEMINI IMPLEMENTATION - UNCOMMENT TO RESTORE
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { DemandPost, RentalPost, MatchResult } from '../types';
 import { config } from '../src/config';
@@ -128,7 +141,7 @@ export const generateBusinessIdeas = async (
     console.error("Error generating business ideas:", error);
     // Construct a fake response object on error to avoid breaking the UI
     return {
-      text: "## An Error Occurred\n\nSorry, I was unable to generate business ideas at this time. Please check your API key and try again later.",
+      text: "## An Error Occurred\\n\\nSorry, I was unable to generate business ideas at this time. Please check your API key and try again later.",
       candidates: [],
     } as GenerateContentResponse;
   }
@@ -207,3 +220,4 @@ export const findMatches = async (
     throw new Error("The AI matchmaker is currently unavailable. Please try again later.");
   }
 };
+*/

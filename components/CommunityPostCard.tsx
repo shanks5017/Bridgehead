@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { CommunityPost, MediaItem, User, View } from '../types';
 import { UserCircleIcon, ReplyIcon, RepostIcon, HeartIcon, VideoCameraIcon, PencilIcon, PlusIcon, ImageIcon, XIcon } from './icons';
 import ImageContainer from './common/ImageContainer';
+import PremiumCard from './common/PremiumCard';
 
 interface CommunityPostCardProps {
     post: CommunityPost;
@@ -182,7 +183,7 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
 
 
     return (
-        <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-4 flex items-start space-x-4">
+        <PremiumCard className="p-6 flex items-start space-x-4">
             <input
                 type="file"
                 ref={videoReplyInputRef}
@@ -321,7 +322,7 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
                     </div>
                 )}
             </div>
-        </div>
+        </PremiumCard>
     );
 };
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { DemandPost } from '../types';
 import { XIcon, LocationPinIcon, PhoneIcon, EnvelopeIcon, SparklesIcon, HeartIcon, PencilIcon, ArrowLeftIcon, ChevronUpIcon } from './icons';
+import PremiumCard from './common/PremiumCard';
+import PremiumButton from './common/PremiumButton';
 
 interface DemandDetailModalProps {
     post: DemandPost;
@@ -30,34 +32,36 @@ const DemandDetailModal: React.FC<DemandDetailModalProps> = ({ post, onClose, on
 
     return (
         <div className="fixed top-16 left-0 right-0 bottom-0 z-40 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fade-in p-4">
-            <div className="relative w-full max-w-4xl max-h-[calc(100vh-5rem)] bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-scale-up flex flex-col">
+            <PremiumCard className="relative w-full max-w-4xl max-h-[calc(100vh-5rem)] p-0 overflow-hidden flex flex-col">
 
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
-                    <button
+                    <PremiumButton
+                        variant="secondary"
                         onClick={onClose}
-                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                        className="flex items-center gap-2 text-gray-400 hover:text-white border-transparent bg-transparent pl-0"
                     >
                         <ArrowLeftIcon className="w-5 h-5" />
                         <span className="font-medium">Back to Profile</span>
-                    </button>
+                    </PremiumButton>
 
                     <div className="flex items-center gap-3">
                         {isOwner && (
-                            <button
+                            <PremiumButton
+                                variant="secondary"
                                 onClick={onEdit}
-                                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium h-auto"
                             >
-                                <PencilIcon className="w-4 h-4" />
-                                <span className="text-sm font-medium">Edit</span>
-                            </button>
+                                <PencilIcon className="w-4 h-4" /> Edit
+                            </PremiumButton>
                         )}
-                        <button
+                        <PremiumButton
+                            variant="secondary"
                             onClick={onClose}
-                            className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            className="p-2 rounded-full h-auto aspect-square flex items-center justify-center"
                         >
                             <XIcon className="w-5 h-5" />
-                        </button>
+                        </PremiumButton>
                     </div>
                 </div>
 
@@ -181,7 +185,7 @@ const DemandDetailModal: React.FC<DemandDetailModalProps> = ({ post, onClose, on
                         </div>
                     </div>
                 </div>
-            </div>
+            </PremiumCard>
         </div>
     );
 };

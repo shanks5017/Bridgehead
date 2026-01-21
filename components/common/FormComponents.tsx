@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '../icons';
 
-const baseInputStyle = "w-full bg-transparent border-2 border-[--border-color] rounded-lg px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300";
+const baseInputStyle = "w-full bg-transparent border-2 border-[--border-color] px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -14,7 +14,7 @@ export const Input: React.FC<InputProps> = ({ label, type, ...props }) => {
     return (
       <div className="w-full">
         <label className="block text-sm font-medium text-[--text-secondary] mb-2">{label}</label>
-        <input {...props} type={type} className={baseInputStyle} />
+        <input {...props} type={type} className={`${baseInputStyle} rounded-full`} />
       </div>
     );
   }
@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({ label, type, ...props }) => {
         <input
           {...props}
           type={showPassword ? 'text' : 'password'}
-          className={`${baseInputStyle} pr-12`}
+          className={`${baseInputStyle} rounded-full pr-12`}
         />
         <button
           type="button"
@@ -53,7 +53,7 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 export const TextArea: React.FC<TextAreaProps> = ({ label, ...props }) => (
   <div className="w-full">
     <label className="block text-sm font-medium text-[--text-secondary] mb-2">{label}</label>
-    <textarea {...props} className={`${baseInputStyle} h-32 resize-none`} />
+    <textarea {...props} className={`${baseInputStyle} rounded-[2rem] h-32 resize-none`} />
   </div>
 );
 

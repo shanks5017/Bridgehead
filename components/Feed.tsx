@@ -4,7 +4,7 @@ import DemandCard from './DemandCard';
 import RentalCard from './RentalCard';
 import CommunityPostCard from './CommunityPostCard';
 import { EmptyState } from './LandingPages';
-import { XIcon, PlusIcon, ImageIcon, VideoCameraIcon, HomeIcon, UserCircleIcon, BookmarkIcon, LightBulbIcon, BuildingOfficeIcon } from './icons';
+import { XIcon, PlusIcon, ImageIcon, VideoCameraIcon, HomeIcon, UserCircleIcon, BookmarkIcon, LightBulbIcon, BuildingOfficeIcon, ArrowRightIcon } from './icons';
 
 interface FeedProps {
     demandPosts: DemandPost[];
@@ -143,6 +143,54 @@ const EditPostForm: React.FC<{
     );
 };
 
+const FeedNavLink: React.FC<{
+    icon: React.ReactNode;
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+}> = ({ icon, label, isActive, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`group relative w-full flex items-center gap-3 px-4 py-3 rounded-full text-base font-medium transition-all duration-300 overflow-hidden ${isActive
+            ? 'text-white bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-xl shadow-red-500/50'
+            : 'text-[--text-secondary] hover:text-white'
+            }`}
+        style={{
+            background: isActive
+                ? 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+                : 'transparent',
+        }}
+    >
+        {/* Animated gradient background on hover */}
+        {!isActive && (
+            <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/20 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
+                style={{
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 2s infinite linear'
+                }}
+            />
+        )}
+
+        {/* Glow effect on hover */}
+        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/30" />
+
+        {/* Icon with premium animation */}
+        <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+            {icon}
+        </div>
+
+        {/* Text with smooth transition */}
+        <span className="relative z-10 transform transition-all duration-300 group-hover:translate-x-1">{label}</span>
+
+        {/* Shine effect on active */}
+        {isActive && (
+            <div className="absolute inset-0 opacity-30">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine" />
+            </div>
+        )}
+    </button>
+);
+
 const Feed: React.FC<FeedProps> = ({
     demandPosts, rentalPosts, communityPosts,
     onPostSelect, onDemandUpvote, savedDemandIds, onDemandSaveToggle,
@@ -259,7 +307,7 @@ const Feed: React.FC<FeedProps> = ({
                     {/* LEFT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
                     <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6">
                         {/* Mini Profile Card */}
-                        <div className="bg-[#121212] rounded-xl p-6 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                        <div className="bg-[#121212] rounded-[2.5rem] p-6 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
                             <div className="flex flex-col items-center text-center">
                                 {currentUser?.profilePicture ? (
                                     <img
@@ -296,48 +344,44 @@ const Feed: React.FC<FeedProps> = ({
                                 )}
                                 <button
                                     onClick={() => setView(View.POST_DEMAND)}
-                                    className="w-full py-2 px-4 bg-[#FF0000] text-white rounded-full font-semibold hover:bg-[#FF0000]/90 transition-all"
+                                    className="group relative w-full py-2.5 px-4 bg-gradient-to-r from-[#FF0000] to-red-600 text-white rounded-full font-bold shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden"
                                 >
-                                    Post
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
+                                        <PlusIcon className="w-5 h-5" />
+                                        Post
+                                    </span>
                                 </button>
                             </div>
                         </div>
 
                         {/* Navigation Links */}
-                        <div className="bg-[#121212] rounded-xl p-4 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                            <nav className="space-y-1">
-                                <button
+                        <div className="bg-[#121212] rounded-[2.5rem] p-4 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                            <nav className="space-y-2">
+                                <FeedNavLink
+                                    icon={<HomeIcon className="w-5 h-5" />}
+                                    label="Home"
+                                    isActive={activeNav === 'home'}
                                     onClick={() => { setActiveNav('home'); setView(View.FEED); }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'home' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                        }`}
-                                >
-                                    <HomeIcon className="w-5 h-5" />
-                                    <span className="font-semibold">Home</span>
-                                </button>
-                                <button
+                                />
+                                <FeedNavLink
+                                    icon={<LightBulbIcon className="w-5 h-5" />}
+                                    label="Explore"
+                                    isActive={activeNav === 'demands'}
                                     onClick={() => { setActiveNav('demands'); setView(View.DEMAND_FEED); }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'demands' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                        }`}
-                                >
-                                    <LightBulbIcon className="w-5 h-5" />
-                                    <span className="font-semibold">Explore</span>
-                                </button>
-                                <button
-                                    onClick={() => { setActiveNav('notifications'); }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'notifications' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                        }`}
-                                >
-                                    <BuildingOfficeIcon className="w-5 h-5" />
-                                    <span className="font-semibold">Notifications</span>
-                                </button>
-                                <button
+                                />
+                                <FeedNavLink
+                                    icon={<BuildingOfficeIcon className="w-5 h-5" />}
+                                    label="Notifications"
+                                    isActive={activeNav === 'notifications'}
+                                    onClick={() => setActiveNav('notifications')}
+                                />
+                                <FeedNavLink
+                                    icon={<BookmarkIcon className="w-5 h-5" />}
+                                    label="Saved"
+                                    isActive={activeNav === 'saved'}
                                     onClick={() => { setActiveNav('saved'); setView(View.SAVED_POSTS); }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all ${activeNav === 'saved' ? 'bg-[#FF0000]/20 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'
-                                        }`}
-                                >
-                                    <BookmarkIcon className="w-5 h-5" />
-                                    <span className="font-semibold">Saved</span>
-                                </button>
+                                />
                             </nav>
                         </div>
                     </aside>
@@ -404,7 +448,7 @@ const Feed: React.FC<FeedProps> = ({
                     {/* RIGHT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
                     <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6 pr-2">
                         {/* Trending Section */}
-                        <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                        <div className="bg-[#121212] rounded-[2.5rem] p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
                             <h4 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#FF0000]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -415,38 +459,55 @@ const Feed: React.FC<FeedProps> = ({
                                 {trending.map((item, index) => (
                                     <button
                                         key={index}
-                                        className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 transition-all group"
+                                        className="w-full text-left px-4 py-3 rounded-full hover:bg-white/5 transition-all group relative overflow-hidden"
                                     >
-                                        <p className="font-semibold text-white text-sm group-hover:text-[#FF0000] transition-colors">
-                                            {item.tag}
-                                        </p>
-                                        <p className="text-xs text-white/50 mt-0.5">{item.posts.toLocaleString()} posts</p>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                            style={{
+                                                backgroundSize: '200% 100%',
+                                                animation: 'shimmer 2s infinite linear'
+                                            }}
+                                        />
+                                        <div className="relative z-10">
+                                            <p className="font-semibold text-white text-sm group-hover:text-[#FF0000] transition-colors">
+                                                {item.tag}
+                                            </p>
+                                            <p className="text-xs text-white/50 mt-0.5">{item.posts.toLocaleString()} posts</p>
+                                        </div>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
                         {/* Suggested Shops */}
-                        <div className="bg-[#121212] rounded-xl p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
+                        <div className="bg-[#121212] rounded-[2.5rem] p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
                             <h4 className="font-bold text-white text-sm mb-4">Suggested Shops</h4>
                             <div className="space-y-3">
                                 {suggestedShops.map((shop, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-start justify-between px-2 py-2 rounded-lg hover:bg-white/5 transition-all"
+                                        className="flex items-center justify-between px-4 py-3 rounded-full hover:bg-white/5 transition-all group relative overflow-hidden"
                                     >
-                                        <div className="flex-1">
-                                            <p className="font-semibold text-white text-sm mb-0.5">{shop.name}</p>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                            style={{
+                                                backgroundSize: '200% 100%',
+                                                animation: 'shimmer 2s infinite linear'
+                                            }}
+                                        />
+                                        <div className="relative z-10 flex-1">
+                                            <p className="font-semibold text-white text-sm mb-0.5 group-hover:text-[#FF0000] transition-colors">{shop.name}</p>
                                             <p className="text-xs text-white/50">{shop.category}</p>
                                         </div>
-                                        <button className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-[#FF0000]/10 text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all">
+                                        <button className="relative z-10 ml-2 px-4 py-1.5 text-xs font-bold rounded-full bg-[#FF0000]/10 text-[#FF0000] border border-[#FF0000]/20 hover:bg-[#FF0000] hover:text-white hover:border-[#FF0000] transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.4)]">
                                             Follow
                                         </button>
                                     </div>
                                 ))}
                             </div>
-                            <button className="w-full mt-4 text-sm text-[#FF0000] hover:text-white font-semibold transition-colors">
-                                Show more →
+                            <button className="w-full mt-4 py-3 rounded-full text-sm font-semibold text-white/70 hover:text-white hover:bg-white/5 transition-all group relative overflow-hidden">
+                                <span className="relative z-10 flex items-center justify-center gap-2">
+                                    Show more
+                                    <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </span>
                             </button>
                         </div>
                     </aside>

@@ -30,6 +30,8 @@ import {
     RotateLeftIcon,
     CheckIcon
 } from './icons';
+import PremiumCard from './common/PremiumCard';
+import PremiumButton from './common/PremiumButton';
 
 interface ProfileProps {
     user: User;
@@ -278,18 +280,20 @@ const ImageEditorModal: React.FC<ImageEditorProps> = ({ imageSrc, onSave, onClos
 
                     {/* Actions */}
                     <div className="flex gap-3">
-                        <button
+                        <PremiumButton
+                            variant="secondary"
                             onClick={handleCloseAttempt}
-                            className="flex-1 py-3 px-4 rounded-xl font-bold text-sm text-gray-400 bg-white/5 hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/10"
+                            className="flex-1 py-3"
                         >
                             Discard
-                        </button>
-                        <button
+                        </PremiumButton>
+                        <PremiumButton
+                            variant="primary"
                             onClick={handleSave}
-                            className="flex-1 py-3 px-4 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 shadow-lg shadow-red-900/20 hover:shadow-red-900/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
+                            className="flex-1 py-3 flex items-center justify-center gap-2"
                         >
                             <CheckIcon className="w-5 h-5" /> Save
-                        </button>
+                        </PremiumButton>
                     </div>
                 </div>
 
@@ -479,12 +483,12 @@ const Profile: React.FC<ProfileProps> = ({
             </div>
             <h3 className="text-xl font-bold text-white mb-2">No {category} Yet</h3>
             <p className="text-[--text-secondary] mb-6 max-w-xs mx-auto">Share your needs or properties with the community.</p>
-            <button
+            <PremiumButton
                 onClick={action}
-                className="px-6 py-2.5 bg-[--primary-color] text-white font-medium rounded-full hover:bg-red-600 transition-all shadow-[0_4px_14px_rgba(239,68,68,0.4)] hover:scale-105"
+                className="px-6 py-2.5 shadow-[0_4px_14px_rgba(239,68,68,0.4)] hover:scale-105"
             >
                 Post Your First {category}
-            </button>
+            </PremiumButton>
         </div>
     );
 
@@ -549,21 +553,21 @@ const Profile: React.FC<ProfileProps> = ({
                                 <div className="flex items-center justify-center gap-3">
                                     {isEditing ? (
                                         <>
-                                            <button onClick={() => { setIsEditing(false); setFormData(user); }} className="px-5 py-1.5 text-sm font-semibold text-white/70 hover:text-white transition-colors">
+                                            <PremiumButton variant="secondary" onClick={() => { setIsEditing(false); setFormData(user); }} className="px-5 py-1.5 text-sm h-auto">
                                                 Cancel
-                                            </button>
-                                            <button onClick={handleSaveChanges} className="px-5 py-1.5 text-sm font-semibold bg-white text-black rounded-lg hover:bg-gray-200 transition-colors shadow-lg hover:shadow-white/20">
+                                            </PremiumButton>
+                                            <PremiumButton variant="primary" onClick={handleSaveChanges} className="px-5 py-1.5 text-sm h-auto shadow-none">
                                                 Save Profile
-                                            </button>
+                                            </PremiumButton>
                                         </>
                                     ) : (
                                         <>
-                                            <button onClick={() => setIsEditing(true)} className="px-5 py-1.5 text-sm font-semibold bg-[--card-color] border border-[--border-color] text-white rounded-lg hover:bg-white/10 transition-colors">
+                                            <PremiumButton variant="secondary" onClick={() => setIsEditing(true)} className="px-5 py-1.5 text-sm h-auto">
                                                 Edit Profile
-                                            </button>
-                                            <button onClick={handleCopyLink} className="p-2 bg-[--card-color] border border-[--border-color] text-white rounded-lg hover:bg-white/10 transition-colors">
+                                            </PremiumButton>
+                                            <PremiumButton variant="secondary" onClick={handleCopyLink} className="p-2 h-auto">
                                                 <LinkIcon className="w-4 h-4" />
-                                            </button>
+                                            </PremiumButton>
                                         </>
                                     )}
                                 </div>
@@ -667,7 +671,7 @@ const Profile: React.FC<ProfileProps> = ({
                     <div className="animate-fade-in-up space-y-4">
                         {myDemands.length > 0 ? (
                             myDemands.map((post) => (
-                                <div key={post.id} className="flex flex-col md:flex-row bg-[--card-color] border border-[--border-color] rounded-xl overflow-hidden hover:border-gray-500 transition-all cursor-pointer group">
+                                <PremiumCard key={post.id} className="flex flex-col md:flex-row p-0 hover:border-gray-500 transition-all cursor-pointer group">
                                     <div className="w-full md:w-48 h-48 md:h-auto bg-gray-800 shrink-0 relative overflow-hidden">
                                         {post.images && post.images.length > 0 ? (
                                             <img src={post.images[0]} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -719,38 +723,42 @@ const Profile: React.FC<ProfileProps> = ({
                                                 )}
                                             </div>
                                             <div className="flex gap-2">
-                                                <button
+                                                <PremiumButton
+                                                    variant="secondary"
                                                     onClick={() => setEditingDemand(post)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-gray-300 bg-white/5 rounded hover:bg-white/10"
+                                                    className="px-3 py-1.5 text-xs h-auto"
                                                 >
                                                     Edit
-                                                </button>
-                                                <button
+                                                </PremiumButton>
+                                                <PremiumButton
+                                                    variant="primary"
                                                     onClick={() => setViewingDemand(post)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-white bg-[--primary-color] rounded hover:opacity-90"
+                                                    className="px-3 py-1.5 text-xs h-auto shadow-none"
                                                 >
                                                     View
-                                                </button>
-                                                <button
+                                                </PremiumButton>
+                                                <PremiumButton
+                                                    variant="secondary"
                                                     onClick={() => setDeleteConfirm({ type: 'demand', id: post.id })}
-                                                    className="px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 rounded hover:bg-red-500/20 transition-colors"
+                                                    className="px-3 py-1.5 text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
                                                 >
                                                     Delete
-                                                </button>
+                                                </PremiumButton>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </PremiumCard>
                             ))
                         ) : (
                             <EmptyState category="Demand" action={() => setView(View.POST_DEMAND)} />
                         )}
-                        <button
+                        <PremiumButton
+                            variant="secondary"
                             onClick={() => setView(View.POST_DEMAND)}
-                            className="w-full py-4 border-2 border-dashed border-gray-800 rounded-xl text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] hover:bg-white/5 transition-all flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-sm"
+                            className="w-full py-4 border-dashed border-gray-800 text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
                         >
                             <PlusIcon className="w-5 h-5" /> Post New Demand
-                        </button>
+                        </PremiumButton>
                     </div>
                 )}
 
@@ -759,7 +767,7 @@ const Profile: React.FC<ProfileProps> = ({
                     <div className="animate-fade-in-up space-y-4">
                         {rentalPosts.length > 0 ? (
                             rentalPosts.map((post) => (
-                                <div key={post.id} className="flex flex-col md:flex-row bg-[--card-color] border border-[--border-color] rounded-xl overflow-hidden hover:border-gray-500 transition-all cursor-pointer group">
+                                <PremiumCard key={post.id} className="flex flex-col md:flex-row p-0 hover:border-gray-500 transition-all cursor-pointer group">
                                     <div className="w-full md:w-48 h-48 md:h-auto bg-gray-800 shrink-0 relative overflow-hidden">
                                         {post.images && post.images.length > 0 ? (
                                             <img src={post.images[0]} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -813,38 +821,42 @@ const Profile: React.FC<ProfileProps> = ({
                                                 )}
                                             </div>
                                             <div className="flex gap-2">
-                                                <button
+                                                <PremiumButton
+                                                    variant="secondary"
                                                     onClick={() => setEditingRental(post)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-gray-300 bg-white/5 rounded hover:bg-white/10"
+                                                    className="px-3 py-1.5 text-xs h-auto"
                                                 >
                                                     Edit
-                                                </button>
-                                                <button
+                                                </PremiumButton>
+                                                <PremiumButton
+                                                    variant="primary"
                                                     onClick={() => setViewingRental(post)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-white bg-[--primary-color] rounded hover:opacity-90"
+                                                    className="px-3 py-1.5 text-xs h-auto shadow-none"
                                                 >
                                                     View
-                                                </button>
-                                                <button
+                                                </PremiumButton>
+                                                <PremiumButton
+                                                    variant="secondary"
                                                     onClick={() => setDeleteConfirm({ type: 'rental', id: post.id })}
-                                                    className="px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 rounded hover:bg-red-500/20 transition-colors"
+                                                    className="px-3 py-1.5 text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
                                                 >
                                                     Delete
-                                                </button>
+                                                </PremiumButton>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </PremiumCard>
                             ))
                         ) : (
                             <EmptyState category="Rental" action={() => setView(View.POST_RENTAL)} />
                         )}
-                        <button
+                        <PremiumButton
+                            variant="secondary"
                             onClick={() => setView(View.POST_RENTAL)}
-                            className="w-full py-4 border-2 border-dashed border-gray-800 rounded-xl text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] hover:bg-white/5 transition-all flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-sm"
+                            className="w-full py-4 border-dashed border-gray-800 text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
                         >
                             <PlusIcon className="w-5 h-5" /> List New Property
-                        </button>
+                        </PremiumButton>
                     </div>
                 )}
 
@@ -853,7 +865,7 @@ const Profile: React.FC<ProfileProps> = ({
                     <div className="animate-fade-in-up space-y-4">
                         {myCommunityPosts.length > 0 ? (
                             myCommunityPosts.map(post => (
-                                <div key={post.id} className="bg-[--card-color] p-6 rounded-xl border border-[--border-color] hover:border-gray-500 transition-all cursor-pointer">
+                                <PremiumCard key={post.id} className="p-6 hover:border-gray-500 transition-all cursor-pointer">
                                     <div className="flex justify-between items-start mb-3">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-white overflow-hidden">
@@ -878,17 +890,18 @@ const Profile: React.FC<ProfileProps> = ({
                                             <span>{post.replies} Replies</span>
                                         </div>
                                     </div>
-                                </div>
+                                </PremiumCard>
                             ))
                         ) : (
                             <EmptyState category="Discussion" action={() => setView(View.COMMUNITY_FEED)} />
                         )}
-                        <button
+                        <PremiumButton
+                            variant="secondary"
                             onClick={() => setView(View.COMMUNITY_FEED)}
-                            className="w-full py-4 border-2 border-dashed border-gray-800 rounded-xl text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] hover:bg-white/5 transition-all flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-sm"
+                            className="w-full py-4 border-dashed border-gray-800 text-gray-500 hover:text-[--primary-color] hover:border-[--primary-color] flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
                         >
                             <ChatBubbleLeftRightIcon className="w-5 h-5" /> Start Discussion
-                        </button>
+                        </PremiumButton>
                     </div>
                 )}
 
@@ -897,7 +910,7 @@ const Profile: React.FC<ProfileProps> = ({
                     <div className="animate-fade-in-up space-y-4">
                         {conversations.length > 0 ? (
                             conversations.map(convo => (
-                                <div key={convo.id} className="flex bg-[--card-color] border border-[--border-color] rounded-xl p-4 hover:bg-white/5 cursor-pointer transition-colors" onClick={() => { /* Navigate to chat */ }}>
+                                <PremiumCard key={convo.id} className="flex p-4 hover:bg-white/5 cursor-pointer transition-colors" onClick={() => { /* Navigate to chat */ }}>
                                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 shrink-0 mr-4"></div>
                                     <div className="flex-1">
                                         <div className="flex justify-between mb-1">
@@ -914,19 +927,20 @@ const Profile: React.FC<ProfileProps> = ({
                                     <div className="self-center ml-4">
                                         <ArrowRightIcon className="w-5 h-5 text-gray-500" />
                                     </div>
-                                </div>
+                                </PremiumCard>
                             ))
                         ) : (
                             <div className="flex flex-col items-center justify-center py-16 text-center border bg-white/5 rounded-xl border-dashed border-gray-700">
                                 <SparklesIcon className="w-12 h-12 text-gray-600 mb-4" />
                                 <h3 className="text-lg font-bold text-white mb-2">No Collaborations Yet</h3>
                                 <p className="text-gray-500 text-sm mb-6">Connect with landlords or entrepreneurs to start deals.</p>
-                                <button
+                                <PremiumButton
+                                    variant="secondary"
                                     onClick={() => setView(View.AI_MATCHES)}
-                                    className="px-5 py-2 bg-white/10 text-white font-medium rounded-lg hover:bg-white/20 transition-all"
+                                    className="px-5 py-2 font-medium"
                                 >
                                     Find Matches
-                                </button>
+                                </PremiumButton>
                             </div>
                         )}
                     </div>

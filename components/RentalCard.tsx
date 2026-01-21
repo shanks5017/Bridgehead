@@ -3,6 +3,7 @@ import { RentalPost } from '../types';
 import { ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, BookmarkIcon } from './icons';
 import ImageContainer from './common/ImageContainer';
 import { getImageUrl } from '../utils/imageUrlUtils';
+import PremiumCard from './common/PremiumCard';
 
 interface RentalCardProps {
   post: RentalPost & { distance?: number };
@@ -50,72 +51,79 @@ const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, on
   const isGridLayout = layout === 'grid';
 
   return (
-    <div onClick={() => onPostSelect(post)} className={`w-full bg-[--card-color] rounded-xl overflow-hidden flex group relative transition-transform duration-300 hover:scale-[1.02] cursor-pointer ${isGridLayout ? 'aspect-[4/5] flex-col' : 'flex-col md:flex-row md:h-64 border border-[--border-color]'
+    <PremiumCard onClick={() => onPostSelect(post)} className={`group relative transition-transform duration-300 hover:scale-[1.02] cursor-pointer ${isGridLayout ? 'aspect-[4/5]' : 'md:h-64'
       }`}>
-      <div className={`relative ${isGridLayout ? 'w-full h-2/3' : 'w-full md:w-64 h-48 md:h-full flex-shrink-0'
-        }`}>
-        {post.images.length > 0 ? (
-          <ImageContainer
-            src={getImageUrl(post.images[currentImage])}
-            alt={post.title}
-            aspectRatio="16:9"
-            className="w-full"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-700 flex items-center justify-center text-[--text-secondary]">No Image</div>
-        )}
+      <div className={`flex h-full w-full ${isGridLayout ? 'flex-col' : 'flex-col md:flex-row'}`}>
+        <div className={`relative overflow-hidden ${isGridLayout ? 'w-full' : 'w-full md:w-64 h-48 md:h-full flex-shrink-0'
+          }`}>
+          {post.images.length > 0 ? (
+            <ImageContainer
+              src={getImageUrl(post.images[currentImage])}
+              alt={post.title}
+              aspectRatio="16:9"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-700 flex items-center justify-center text-[--text-secondary]">No Image</div>
+          )}
 
-        {post.images.length > 1 && (
-          <>
-            <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowLeftIcon className="w-5 h-5" />
+          {post.images.length > 1 && (
+            <>
+              <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-1 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowLeftIcon className="w-5 h-5" />
+              </button>
+              <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-1 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowRightIcon className="w-5 h-5" />
+              </button>
+            </>
+          )}
+          <div className="absolute top-2 right-2 z-20">
+            <button
+              onClick={handleSave}
+              className={`p-2 rounded-full transition-all duration-300 ${isSaved ? 'bg-yellow-400 text-black scale-110' : 'bg-black/40 text-white'
+                } hover:text-yellow-400 hover:bg-yellow-400/10 hover:scale-110`}
+              aria-label={isSaved ? 'Unsave post' : 'Save post'}
+            >
+              <BookmarkIcon className="w-5 h-5" isFilled={isSaved} />
             </button>
-            <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowRightIcon className="w-5 h-5" />
-            </button>
-          </>
-        )}
-        <div className="absolute top-2 right-2">
-          <button
-            onClick={handleSave}
-            className={`p-2 rounded-full transition-all duration-300 ${isSaved ? 'bg-yellow-400 text-black scale-110' : 'bg-black/40 text-white'
-              } hover:text-yellow-400 hover:bg-yellow-400/10 hover:scale-110`}
-            aria-label={isSaved ? 'Unsave post' : 'Save post'}
-          >
-            <BookmarkIcon className="w-5 h-5" isFilled={isSaved} />
-          </button>
-        </div>
-        <div className="absolute bottom-2 left-2 bg-[--primary-color] text-white text-xs font-semibold px-2 py-1 rounded-md">{post.category}</div>
-      </div>
-      <div className={`p-4 flex-1 flex flex-col justify-between ${!isGridLayout && 'md:p-6'}`}>
-        <div>
-          <h3 className="font-bold text-lg truncate">{post.title}</h3>
-          <a
-            href={`https://www.google.com/maps?q=${post.location.latitude},${post.location.longitude}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center text-sm text-[--text-secondary] mt-1 hover:text-[--primary-color] transition-colors w-fit"
-          >
-            <LocationPinIcon className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span className="truncate">{post.location.address}</span>
-          </a>
-        </div>
-        <div className="flex justify-between items-end mt-2">
-          <div>
-            <p className="text-lg font-bold text-white">${post.price.toLocaleString()}<span className="text-sm font-normal text-[--text-secondary]">/mo</span></p>
-            <p className="text-xs text-[--text-secondary]">{post.squareFeet.toLocaleString()} sqft</p>
           </div>
-          <span className="text-xs text-[--text-secondary]">
-            {post.distance !== undefined ? (
-              <span className="font-bold text-[--primary-color]">{post.distance.toFixed(1)} km away</span>
-            ) : (
-              timeAgo(post.createdAt)
+          <div className="absolute bottom-2 left-2 z-20 bg-[--primary-color] text-white text-xs font-semibold px-3 py-1 rounded-full">{post.category}</div>
+        </div>
+        <div className={`p-6 flex-1 flex flex-col justify-between relative z-10 ${!isGridLayout && 'md:p-8'}`}>
+          <div>
+            <h3 className="font-bold text-lg truncate">{post.title}</h3>
+            {post.description && (
+              <p className="text-sm text-white/70 mb-2 line-clamp-1">
+                {post.description.slice(0, 40)}{post.description.length > 40 ? '...' : ''}
+              </p>
             )}
-          </span>
+            <a
+              href={`https://www.google.com/maps?q=${post.location.latitude},${post.location.longitude}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center text-sm text-[--text-secondary] mt-1 hover:text-[--primary-color] transition-colors w-fit"
+            >
+              <LocationPinIcon className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className="truncate">{post.location.address}</span>
+            </a>
+          </div>
+          <div className="flex justify-between items-end mt-2">
+            <div>
+              <p className="text-lg font-bold text-white">${post.price.toLocaleString()}<span className="text-sm font-normal text-[--text-secondary]">/mo</span></p>
+              <p className="text-xs text-[--text-secondary]">{post.squareFeet.toLocaleString()} sqft</p>
+            </div>
+            <span className="text-xs text-[--text-secondary]">
+              {post.distance !== undefined ? (
+                <span className="font-bold text-[--primary-color]">{post.distance.toFixed(1)} km away</span>
+              ) : (
+                timeAgo(post.createdAt)
+              )}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </PremiumCard>
   );
 };
 
