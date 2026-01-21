@@ -4,6 +4,7 @@ import { RentalPost } from '../types';
 import RentalCard from './RentalCard';
 import { EmptyState } from './LandingPages';
 import { SearchIcon, ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, LoadingSpinner, BookmarkIcon } from './icons';
+import PremiumButton from './common/PremiumButton';
 
 interface RentalListingsProps {
     posts: RentalPost[];
@@ -231,7 +232,18 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
                         <div className="relative z-20 max-w-3xl">
                             <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{currentFeaturedPost.category}</span>
                             <h1 className="text-4xl md:text-6xl font-extrabold my-2">{currentFeaturedPost.title}</h1>
-                            <p className="text-lg text-white/80 max-w-2xl line-clamp-2">${currentFeaturedPost.price.toLocaleString()}/mo for {currentFeaturedPost.squareFeet.toLocaleString()} sqft</p>
+                            <p className="text-lg text-white/80 max-w-2xl line-clamp-2 mb-6">${currentFeaturedPost.price.toLocaleString()}/mo for {currentFeaturedPost.squareFeet.toLocaleString()} sqft</p>
+
+                            {/* Explicit CTA Button */}
+                            <PremiumButton
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent double-trigger if parent clicks
+                                    onPostSelect(currentFeaturedPost);
+                                }}
+                                className="px-6 py-3 shadow-lg hover:scale-105"
+                            >
+                                View Listing <ArrowRightIcon className="w-5 h-5" />
+                            </PremiumButton>
                         </div>
                     )}
 
@@ -273,27 +285,23 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
                         />
                     </div>
 
-                    <button
+                    <PremiumButton
                         onClick={handleSortByDistance}
                         disabled={isLocating}
-                        className={`flex-shrink-0 w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-colors disabled:opacity-50 ${sortByDistance
-                            ? 'bg-[--primary-color] border-[--primary-color] text-white'
-                            : 'bg-[--card-color] border-[--border-color] hover:border-[--text-secondary]'
-                            }`}
+                        variant={sortByDistance ? 'primary' : 'secondary'}
+                        className="px-6 py-3"
                     >
                         {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
-                        <span>Nearby</span>
-                    </button>
-                    <button
+                        Nearby
+                    </PremiumButton>
+                    <PremiumButton
                         onClick={() => setShowSavedOnly(!showSavedOnly)}
-                        className={`flex-shrink-0 w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-colors ${showSavedOnly
-                            ? 'bg-yellow-400 border-yellow-400 text-black font-semibold'
-                            : 'bg-[--card-color] border-[--border-color] hover:border-[--text-secondary]'
-                            }`}
+                        variant={showSavedOnly ? 'primary' : 'secondary'}
+                        className="px-6 py-3"
                     >
                         <BookmarkIcon className="w-5 h-5" isFilled={showSavedOnly} />
-                        <span>Saved</span>
-                    </button>
+                        Saved
+                    </PremiumButton>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                     <button

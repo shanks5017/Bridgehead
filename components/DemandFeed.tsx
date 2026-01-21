@@ -8,6 +8,7 @@ import { EmptyState } from './LandingPages';
 import { SearchIcon, ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, LoadingSpinner, BookmarkIcon } from './icons';
 import HeroAnimation from './HeroAnimation';
 import { getImageUrl } from '../utils/imageUrlUtils';
+import PremiumButton from './common/PremiumButton';
 
 interface DemandFeedProps {
     posts: DemandPost[];
@@ -266,9 +267,12 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                             <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{currentFeaturedPost.category}</span>
                             <h1 className="text-4xl md:text-6xl font-extrabold my-2">{currentFeaturedPost.title}</h1>
                             <p className="text-lg text-white/80 max-w-2xl line-clamp-2">{currentFeaturedPost.description}</p>
-                            <button className="mt-4 px-6 py-3 bg-[--primary-color] text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                            <PremiumButton
+                                onClick={() => onPostSelect(currentFeaturedPost)}
+                                className="mt-4 px-8 py-3"
+                            >
                                 View Details
-                            </button>
+                            </PremiumButton>
                         </div>
                     )}
 
@@ -318,41 +322,35 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                         />
                     </div>
                     {/* Feed Mode Toggle: Near Me vs Trending */}
-                    <div className="flex items-center gap-0 bg-[--card-color] rounded-lg border-2 border-[--border-color] p-1">
-                        <button
+                    <div className="flex items-center gap-2">
+                        <PremiumButton
                             onClick={() => handleFeedModeToggle('nearMe')}
                             disabled={isLocating}
-                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-all duration-300 font-semibold ${feedMode === 'nearMe'
-                                    ? 'bg-[--primary-color] text-white shadow-lg'
-                                    : 'text-[--text-secondary] hover:text-white'
-                                }`}
+                            variant={feedMode === 'nearMe' ? 'primary' : 'secondary'}
+                            className="px-6 py-3"
                         >
                             {isLocating && feedMode !== 'nearMe' ? <LoadingSpinner className="w-4 h-4" /> : <LocationPinIcon className="w-4 h-4" />}
-                            <span>Near Me</span>
-                        </button>
-                        <button
+                            Near Me
+                        </PremiumButton>
+                        <PremiumButton
                             onClick={() => handleFeedModeToggle('trending')}
-                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-all duration-300 font-semibold ${feedMode === 'trending'
-                                    ? 'bg-[--primary-color] text-white shadow-lg'
-                                    : 'text-[--text-secondary] hover:text-white'
-                                }`}
+                            variant={feedMode === 'trending' ? 'primary' : 'secondary'}
+                            className="px-6 py-3"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
-                            <span>Trending</span>
-                        </button>
+                            Trending
+                        </PremiumButton>
                     </div>
-                    <button
+                    <PremiumButton
                         onClick={() => setShowSavedOnly(!showSavedOnly)}
-                        className={`flex-shrink-0 w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-colors ${showSavedOnly
-                            ? 'bg-yellow-400 border-yellow-400 text-black font-semibold'
-                            : 'bg-[--card-color] border-[--border-color] hover:border-[--text-secondary]'
-                            }`}
+                        variant={showSavedOnly ? 'primary' : 'secondary'}
+                        className="px-6 py-3"
                     >
                         <BookmarkIcon className="w-5 h-5" isFilled={showSavedOnly} />
-                        <span>Saved</span>
-                    </button>
+                        Saved
+                    </PremiumButton>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                     <button
@@ -385,8 +383,8 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                                 key={r}
                                 onClick={() => setRadius(r)}
                                 className={`px-3 py-1 text-sm rounded-full transition-colors ${radius === r
-                                        ? 'bg-[--primary-color] text-white font-semibold'
-                                        : 'bg-white/5 hover:bg-white/10'
+                                    ? 'bg-[--primary-color] text-white font-semibold'
+                                    : 'bg-white/5 hover:bg-white/10'
                                     }`}
                             >
                                 {r} km

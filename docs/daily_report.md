@@ -660,4 +660,113 @@ Focused on implementing **Smart Username/Email Login Support**.
   - Updated `App.tsx` API call to send `identifier` instead of `email`.
 - **Security**:
   - Maintained generic "Invalid credentials" error message to prevent user enumeration.
-  - Added proper input sanitization and normalization.
+### 2. UI/UX Polish (Header & Rental Listings)
+- **Header "Post" Dropdown**:
+  - **Styled**: Updated dropdown menu items to match the **Sidebar Navigation** aesthetics.
+  - **Effects**: Applied the same "Red Gradient + Shimmer + Glow" hover effects for a consistent premium feel.
+  - **Icons**: Added scale and rotation animations on hover.
+- **Rental Listings Hero**:
+  - **Explict CTA**: Added a "View Listing" button to the main Hero banner.
+### 3. Image Aspect Ratio Standardization
+- **Uniformity**: Standardized all card images (Rental & Demand) to a **16:9 Cinematic Ratio**.
+- **Responsive Logic**: 
+  - Removed fixed percentage heights (`h-2/3`) that conflicted with aspect ratios.
+  - Allowed `ImageContainer` to strictly enforce the aspect ratio while the width adapts to the parent container.
+### 4. Home Feature Section Revamp
+- **Visual Upgrade**: Transformed standard feature cards into premium, interactive elements.
+- **Glassmorphism & Glow**: Added subtle red glow and glass/lift effects on hover.
+- **Button Consistency**: Replicated the **Sidebar Navigation** button style (Red Gradient + Shimmer + Icon Slide + Pill Shape) for all feature CTA buttons.
+- **Theme Integrity**: Maintained the dark/spider-web background and core color palette.
+### 5. Home Page & UI Polish
+- **Unified Aesthetic**: Implemented a "premium curve" theme with `rounded-[2.5rem]` (40px) containers for all major sections (Features, Success Stories, Insights, Testimonials, AI Generator).
+- **Button Standardization**: Upgraded all buttons (Features, AI Generator, Join, Subscribe) to the **Sidebar Style** (Red Gradient + Shimmer + Pill Shape) for consistent high-impact actions.
+- **Section-Specific Enhancements**:
+  - **Success Stories & Insights**: Applied bold borders (`border-2`) and deep red hover glows (`red-900/50`) without inner gradients for cleaner legibility.
+  - **AI Generator**: Created a highly curved, attention-grabbing prompt section.
+  - **Form Styling**: Updated all `PostDemand` and `PostRental` form inputs to `rounded-full` (pill shape) to match the global rounded theme.
+***
+
+**Date:** 21/01/2026
+**Time:** 11:55am
+**Last Edited:** 21/01/2026 11:55am
+
+## 🚀 Summary of Changes (Session 7)
+Focused on **Feed Layout Stabilization**, **Premium Card Styling**, and **Standardizing UI Components**.
+
+### 1. Feed Page Layout & Overflow Fixes
+- **Card Flexbox Architecture**:
+  - Resolved vertical stacking issues in `DemandCard` and `RentalCard` within the Feed view.
+  - **Root Cause**: The `PremiumCard` component's inner `relative z-10` wrapper was a block-level element, preventing parent flex properties (`flex-row`) from affecting the content layout.
+  - **Fix**: Pushed flex layout responsibilities down to the inner content wrapper (`h-full w-full flex flex-col md:flex-row`).
+  - **Result**: Cards now correctly display image and content side-by-side on desktop without overflowing or collapsing.
+- **Sidebar Curvature**:
+  - Updated Left and Right Sidebar containers in `Feed.tsx` to use `rounded-[2.5rem]` (40px) to match the deep curves of the premium cards, creating a seamless visual flow.
+
+### 2. Premium UI Component Standardization
+- **Component Refactor**:
+  - Integrated `PremiumCard` and `PremiumButton` into `DemandDetailModal` and `RentalDetailModal` for consistent design language.
+  - Fixed critical JSX syntax errors (unmatched closing tags) in modals that were causing 500 Server Errors.
+- **Global Styles**:
+  - Extracted inline styles and animations from `index.html` into a centralized `index.css`.
+  - Added reusable premium animations: `animate-fade-in` and `animate-scale-up`.
+
+### 3. Button & Interactive Element Polish
+- **Rounded-Full Aesthetic**:
+  - Converted all Sidebar Navigation buttons, Trending Tags, and Suggested Shops items in `Feed.tsx` to `rounded-full` (Pill shape).
+- **Premium Hover Effects**:
+  - **Shimmer**: Added a `linear-gradient` shimmer animation that traverses the button on hover.
+  - **Glow**: Implemented a subtle `shadow-lg` and `blur-xl` glow effect for depth.
+  - **Gradient Borders**: Applied red-to-transparent gradients for active states.
+  - **Icon Animations**: Icons now scale (`scale-110`) and rotate slightly (`rotate-3`) on hover for playful interaction.
+- **FeedNavLink Component**:
+  - Created a reusable `FeedNavLink` component to encapsulate this complex styling logic, ensuring consistency across all navigation items.
+
+### 4. Feature Enhancements
+- **Rental Card Description**:
+  - Added a truncated description preview (40 chars) to `RentalCard` in the main feed, allowing users to scan listing details without opening the full modal.
+- **Suggested Shops Revamp**:
+  - Upgraded the "Suggested Shops" right-sidebar section with `rounded-full` list items and **Glassmorphic Pill Buttons** for the "Follow" action.
+
+### 5. Technical Cleanup
+- **Fixed Imports**: Resolved missing `ArrowRightIcon` import in `Feed.tsx`.
+- **CSS Variable Usage**: Standardized references to global CSS variables (`--primary-color`, etc.) in new components.
+
+***
+
+**Date:** 21/01/2026
+**Time:** 04:25pm
+**Last Edited:** 21/01/2026 04:25pm
+
+## 🚀 Summary of Changes (Session 8)
+Focused on **AI Engine Migration (Groq)**, **Chatbot Persona Update**, and **Documentation Overhaul**.
+
+### 1. AI Engine Migration (Google Gemini → Groq)
+- **Objective**: Switched from Google Gemini to **Groq API** for faster inference and better model control.
+- **Implementation**:
+  - Created `services/groqService.ts` as the central AI handler.
+  - configured `llama-3.3-70b-versatile` for complex tasks (Business Ideas, Matching).
+  - Configured `llama-3.1-8b-instant` for low-latency tasks (Chatbot, Geocoding).
+  - Implemented strict `SECURITY_RULES` to prevent prompt leakage and unsafe responses.
+
+### 2. ARU Chatbot Persona ("Entrepreneur Friend")
+- **New Persona**: Updated "ARU" to act as a supportive, motivating entrepreneur friend rather than a generic assistant.
+- **Features**:
+  - **Dynamic Context**: ARU now knows the logged-in user's name (`currentUser.name`) and greets them personally.
+  - **Tone**: Energetic, supportive, and uses emojis (🚀, 💡). Avoids corporate jargon.
+  - **Safety**: Politely declines illegal/abusive topics while staying in character.
+- **Integration**:
+  - Applied this persona to both the **Floating Chatbot** and the **Collaboration/Messages Tab**.
+
+### 3. Collaboration & Messaging Fixes
+- **Bug Fix**: The **Messages Tab** was still attempting to use the legacy Google Gemini API, causing errors.
+- **Resolution**:
+  - Refactored `App.tsx` messaging logic to use the new `groqService`.
+  - Unified the state management for chat sessions (`createChatSession`).
+  - Added "Typing..." indicators for better UX.
+
+### 4. Project Documentation (README)
+- **Complete Overhaul**: Rewrote `README.md` to accurately reflect the current state (v2.0):
+  - Documented new Tech Stack (Groq, MongoDB, Socket.io).
+  - detailed Project Structure (Backend/Frontend separation).
+  - Added comprehensive "Getting Started" guide.
+  - Listed all API endpoints and AI features.

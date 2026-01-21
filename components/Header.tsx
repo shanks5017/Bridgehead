@@ -124,6 +124,41 @@ const PostDropdown: React.FC<{ setView: (view: View) => void }> = ({ setView }) 
         }
     };
 
+    // Reusing the Sidebar NavLink style logic for dropdown items
+    const DropdownItem = ({ icon, label, subLabel, onClick }: { icon: React.ReactNode, label: string, subLabel: string, onClick: () => void }) => (
+        <button
+            onClick={onClick}
+            className="group relative w-full flex items-center gap-3 px-4 py-3 rounded-full text-left transition-all duration-300 overflow-hidden text-[--text-secondary] hover:text-white"
+        >
+            {/* Animated gradient background on hover (From Sidebar) */}
+            <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
+                style={{
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 2s infinite linear'
+                }}
+            />
+
+            {/* Glow effect on hover (From Sidebar) */}
+            <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/20" />
+
+            {/* Icon with premium animation (From Sidebar) */}
+            <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                {icon}
+            </div>
+
+            {/* Text Content */}
+            <div className="relative z-10 transform transition-all duration-300 group-hover:translate-x-1">
+                <div className="font-semibold text-sm">{label}</div>
+                <div className="text-xs opacity-70">{subLabel}</div>
+            </div>
+
+            {/* Shine effect (From Sidebar - simplified for dropdown) */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 animate-shine" />
+            </div>
+        </button>
+    );
+
     return (
         <div ref={dropdownRef} className="relative">
             <button
@@ -150,37 +185,29 @@ const PostDropdown: React.FC<{ setView: (view: View) => void }> = ({ setView }) 
 
             {isOpen && (
                 <div
-                    className="absolute right-0 mt-2 w-64 bg-[--card-color] border border-[--border-color] rounded-2xl shadow-xl z-50 overflow-hidden"
+                    className="absolute right-0 mt-2 w-64 bg-[--card-color] border border-[--border-color] rounded-2xl shadow-2xl z-50 overflow-hidden p-2"
                     style={{
                         animation: isClosing ? 'dropdownClose 0.2s ease-in forwards' : 'dropdownOpen 0.2s ease-out forwards'
                     }}
                 >
-                    <button
+                    <DropdownItem
+                        icon={<LightBulbIcon className="w-6 h-6 text-red-500" />} // Using red to match theme as requested ("all colors matched")
+                        label="Post a Demand"
+                        subLabel="What's your community missing?"
                         onClick={() => {
                             setView(View.POST_DEMAND);
                             handleClose();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left text-[--text-secondary] hover:bg-gradient-to-r hover:from-red-600/20 hover:via-red-500/20 hover:to-red-600/20 hover:text-white transition-all duration-300 group"
-                    >
-                        <LightBulbIcon className="w-6 h-6 group-hover:scale-110 transition-transform duration-300 text-yellow-400" />
-                        <div>
-                            <div className="font-semibold">Post a Demand</div>
-                            <div className="text-xs opacity-70">What's your community missing?</div>
-                        </div>
-                    </button>
-                    <button
+                    />
+                    <DropdownItem
+                        icon={<BuildingOfficeIcon className="w-6 h-6 text-red-500" />} // Using red to match theme
+                        label="Post a Rental"
+                        subLabel="List your commercial space"
                         onClick={() => {
                             setView(View.POST_RENTAL);
                             handleClose();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left text-[--text-secondary] hover:bg-gradient-to-r hover:from-red-600/20 hover:via-red-500/20 hover:to-red-600/20 hover:text-white transition-all duration-300 group"
-                    >
-                        <BuildingOfficeIcon className="w-6 h-6 group-hover:scale-110 transition-transform duration-300 text-blue-400" />
-                        <div>
-                            <div className="font-semibold">Post a Rental</div>
-                            <div className="text-xs opacity-70">List your commercial space</div>
-                        </div>
-                    </button>
+                    />
                 </div>
             )}
         </div>

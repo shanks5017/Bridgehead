@@ -2,40 +2,42 @@ import React, { useState, useRef } from 'react';
 import { CommunityPost, MediaItem, User, View } from '../types';
 import CommunityPostCard from './CommunityPostCard';
 import { UserCircleIcon, XIcon, PlusIcon, ImageIcon, VideoCameraIcon } from './icons';
+import PremiumCard from './common/PremiumCard';
+import PremiumButton from './common/PremiumButton';
 
 interface CommunityFeedProps {
-  posts: CommunityPost[];
-  addPost: (content: string, media: MediaItem[]) => void;
-  onLike: (id: string) => void;
-  onRepost: (id: string) => void;
-  onEditPost: (id: string, content: string, media: MediaItem[]) => void;
-  onReply: (postId: string, content: string, media: MediaItem[]) => void;
-  currentUser: User | null;
-  setView: (view: View) => void;
+    posts: CommunityPost[];
+    addPost: (content: string, media: MediaItem[]) => void;
+    onLike: (id: string) => void;
+    onRepost: (id: string) => void;
+    onEditPost: (id: string, content: string, media: MediaItem[]) => void;
+    onReply: (postId: string, content: string, media: MediaItem[]) => void;
+    currentUser: User | null;
+    setView: (view: View) => void;
 }
 
 const CHARACTER_LIMIT = 280;
 
 const SignInToPost: React.FC<{ setView: (view: View) => void }> = ({ setView }) => (
-    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-4 mb-8 text-center">
-        <p className="text-lg font-semibold">Join the conversation!</p>
-        <p className="text-[--text-secondary] mb-4">Sign in or create an account to post in the community hub.</p>
+    <PremiumCard className="p-8 mb-8 text-center">
+        <p className="text-xl font-bold mb-2">Join the conversation!</p>
+        <p className="text-[--text-secondary] mb-6">Sign in or create an account to post in the community hub.</p>
         <div className="flex items-center justify-center gap-4">
-            <button onClick={() => setView(View.SIGN_IN)} className="px-4 py-2 rounded-md text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition-colors">
+            <PremiumButton variant="secondary" onClick={() => setView(View.SIGN_IN)} className="px-6 py-2">
                 Sign In
-            </button>
-            <button onClick={() => setView(View.SIGN_UP)} className="px-4 py-2 rounded-md text-sm font-medium bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
+            </PremiumButton>
+            <PremiumButton variant="primary" onClick={() => setView(View.SIGN_UP)} className="px-6 py-2">
                 Sign Up
-            </button>
+            </PremiumButton>
         </div>
-    </div>
+    </PremiumCard>
 );
 
 
 const EditPostForm: React.FC<{
-  post: CommunityPost;
-  onSave: (id: string, content: string, media: MediaItem[]) => void;
-  onCancel: () => void;
+    post: CommunityPost;
+    onSave: (id: string, content: string, media: MediaItem[]) => void;
+    onCancel: () => void;
 }> = ({ post, onSave, onCancel }) => {
     const [content, setContent] = useState(post.content);
     const [media, setMedia] = useState<MediaItem[]>(post.media || []);
@@ -58,10 +60,10 @@ const EditPostForm: React.FC<{
             };
             reader.readAsDataURL(file);
         });
-        if(imageInputRef.current) {
+        if (imageInputRef.current) {
             imageInputRef.current.value = "";
         }
-        if(videoInputRef.current) {
+        if (videoInputRef.current) {
             videoInputRef.current.value = "";
         }
         setMediaOptionsOpen(false);
@@ -91,7 +93,7 @@ const EditPostForm: React.FC<{
                     rows={3}
                     autoFocus
                 />
-                
+
                 {media.length > 0 && (
                     <div className="mt-4 grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
                         {media.map((item, index) => (
@@ -113,9 +115,9 @@ const EditPostForm: React.FC<{
                         ))}
                     </div>
                 )}
-                
+
                 <div className="flex items-center justify-between mt-2">
-                     <div className="relative">
+                    <div className="relative">
                         <input
                             type="file"
                             ref={imageInputRef}
@@ -140,8 +142,8 @@ const EditPostForm: React.FC<{
                         >
                             <PlusIcon className="w-6 h-6" />
                         </button>
-                         {mediaOptionsOpen && (
-                            <div 
+                        {mediaOptionsOpen && (
+                            <div
                                 className="absolute bottom-full left-0 mb-2 w-40 bg-[--card-color] border border-[--border-color] rounded-lg shadow-lg z-10"
                                 onMouseLeave={() => setMediaOptionsOpen(false)}
                             >
@@ -168,7 +170,7 @@ const EditPostForm: React.FC<{
                         <span className={`text-sm ${remainingChars < 0 ? 'text-red-500' : 'text-[--text-secondary]'}`}>
                             {remainingChars}
                         </span>
-                        
+
                         <button
                             type="button"
                             onClick={onCancel}
@@ -176,7 +178,7 @@ const EditPostForm: React.FC<{
                         >
                             Cancel
                         </button>
-                        
+
                         <button
                             type="submit"
                             disabled={(!content.trim() && media.length === 0) || remainingChars < 0}
@@ -216,10 +218,10 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
             reader.readAsDataURL(file);
         });
         // Reset file input to allow selecting the same file again
-        if(imageInputRef.current) {
+        if (imageInputRef.current) {
             imageInputRef.current.value = "";
         }
-        if(videoInputRef.current) {
+        if (videoInputRef.current) {
             videoInputRef.current.value = "";
         }
         setMediaOptionsOpen(false);
@@ -250,16 +252,16 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
             onReply(postId, replyContent, [mediaItem]);
         }
     };
-    
+
     const remainingChars = CHARACTER_LIMIT - newPostContent.length;
-    
+
     return (
         <div className="min-h-screen py-12">
             <div className="container mx-auto max-w-2xl px-4">
                 <h1 className="text-4xl font-bold mb-8">Community Hub</h1>
-                
+
                 {currentUser ? (
-                    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-4 mb-8">
+                    <PremiumCard className="p-6 mb-8">
                         <form onSubmit={handlePostSubmit}>
                             <div className="flex items-start space-x-4">
                                 <UserCircleIcon className="w-12 h-12 text-[--text-secondary] flex-shrink-0" />
@@ -324,7 +326,7 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
                                         <PlusIcon className="w-6 h-6" />
                                     </button>
                                     {mediaOptionsOpen && (
-                                        <div 
+                                        <div
                                             className="absolute bottom-full left-0 mb-2 w-40 bg-[--card-color] border border-[--border-color] rounded-lg shadow-lg z-10"
                                             onMouseLeave={() => setMediaOptionsOpen(false)}
                                         >
@@ -347,22 +349,23 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
                                         </div>
                                     )}
                                 </div>
-                                
+
                                 <div className="flex items-center space-x-4">
                                     <span className={`text-sm ${remainingChars < 0 ? 'text-red-500' : 'text-[--text-secondary]'}`}>
                                         {remainingChars}
                                     </span>
-                                    <button
+
+                                    <PremiumButton
                                         type="submit"
                                         disabled={(!newPostContent.trim() && media.length === 0) || remainingChars < 0}
-                                        className="px-5 py-2 rounded-full text-sm font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-6 py-2"
                                     >
                                         Post
-                                    </button>
+                                    </PremiumButton>
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </PremiumCard>
                 ) : (
                     <SignInToPost setView={setView} />
                 )}
@@ -370,15 +373,15 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
                 {/* Feed */}
                 <div className="space-y-4">
                     {posts.map(post => (
-                       editingPostId === post.id ? (
-                           <EditPostForm
+                        editingPostId === post.id ? (
+                            <EditPostForm
                                 key={post.id}
                                 post={post}
                                 onSave={handleSaveEdit}
                                 onCancel={() => setEditingPostId(null)}
-                           />
-                       ) : (
-                           <CommunityPostCard
+                            />
+                        ) : (
+                            <CommunityPostCard
                                 key={post.id}
                                 post={post}
                                 onLike={onLike}
@@ -389,8 +392,8 @@ const CommunityFeed: React.FC<CommunityFeedProps> = ({ posts, addPost, onLike, o
                                 onReply={onReply}
                                 currentUser={currentUser}
                                 setView={setView}
-                           />
-                       )
+                            />
+                        )
                     ))}
                 </div>
             </div>

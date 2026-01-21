@@ -14,17 +14,37 @@ const FeatureCard: React.FC<{
     buttonText: string;
     onClick: () => void;
 }> = ({ icon, title, description, buttonText, onClick }) => (
-    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-8 flex flex-col items-start h-full feature-card">
-        <div className="w-12 h-12 rounded-lg bg-[--primary-color]/10 flex items-center justify-center mb-4">
-            {icon}
+    <div className="bg-[--card-color] border border-[--border-color] rounded-[2.5rem] p-8 flex flex-col items-start h-full feature-card group relative overflow-hidden transition-all duration-300 hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10 hover:scale-[1.02]">
+
+        {/* Glow effect on hover (Card) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+        <div className="w-14 h-14 rounded-2xl bg-[--bg-color] border border-[--border-color] flex items-center justify-center mb-6 relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 group-hover:border-red-500/30 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+            <div className="transform transition-transform duration-300 group-hover:scale-110">
+                {icon}
+            </div>
         </div>
-        <h3 className="text-2xl font-bold mb-2">{title}</h3>
-        <p className="text-[--text-secondary] flex-grow mb-6">{description}</p>
+
+        <h3 className="text-2xl font-bold mb-3 relative z-10">{title}</h3>
+        <p className="text-[--text-secondary] flex-grow mb-8 relative z-10 leading-relaxed">{description}</p>
+
         <button
             onClick={onClick}
-            className="w-full mt-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-base font-medium bg-[--primary-color] text-white hover:opacity-90 transition-opacity"
+            className="w-full mt-auto relative z-10 flex items-center justify-center gap-2 px-6 py-3.5 rounded-full text-base font-bold text-white transition-all duration-300 overflow-hidden group/btn bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
+            style={{
+                backgroundSize: '200% 100%',
+                backgroundImage: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+            }}
         >
-            {buttonText} <ArrowRightIcon className="w-5 h-5" />
+            {/* Shimmer Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/20 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                style={{
+                    animation: 'shimmer 2s infinite linear'
+                }}
+            />
+
+            <span className="relative z-10">{buttonText}</span>
+            <ArrowRightIcon className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" />
         </button>
     </div>
 );
@@ -69,9 +89,12 @@ const SuccessStories = () => (
                     { img: 'https://picsum.photos/seed/bookstore/600/400', title: 'The Bookstore That Reading Built', description: 'After dozens of upvotes, a vacant storefront was transformed into a thriving independent bookstore, thanks to a passionate founder.' },
                     { img: 'https://picsum.photos/seed/park/600/400', title: 'From Vacant Lot to Vibrant Park', description: 'Bridgehead helped organize community interest, leading to a partnership that created a new public green space for everyone to enjoy.' },
                 ].map(story => (
-                    <div key={story.title} className="bg-[--card-color] rounded-xl overflow-hidden group border border-[--border-color] transition-all duration-300 hover:border-[--primary-color]">
-                        <div className="overflow-hidden h-56"><img src={story.img} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" /></div>
-                        <div className="p-6 text-left">
+                    <div key={story.title} className="bg-[--card-color] rounded-[2.5rem] overflow-hidden group relative border-2 border-[--border-color] transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-900/50 hover:scale-[1.02]">
+
+                        <div className="overflow-hidden h-56 relative z-0">
+                            <img src={story.img} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </div>
+                        <div className="p-6 text-left relative z-20">
                             <h3 className="text-xl font-bold mb-2">{story.title}</h3>
                             <p className="text-[--text-secondary]">{story.description}</p>
                         </div>
@@ -133,17 +156,17 @@ const CommunityInsights = () => {
             <div className="max-w-6xl mx-auto text-center">
                 <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-16">Bridgehead in Action</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-8 stat-card">
+                    <div className="bg-[--card-color] border-2 border-[--border-color] rounded-[2.5rem] p-8 stat-card transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-900/50 hover:scale-[1.02]">
                         <LightBulbIcon className="w-12 h-12 text-[--primary-color] mx-auto mb-4" />
                         <span ref={ideas.ref} className="block text-5xl font-bold text-[--primary-color]">{ideas.count.toLocaleString()}+</span>
                         <p className="text-[--text-secondary] mt-2">Community Ideas Shared</p>
                     </div>
-                    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-8 stat-card">
+                    <div className="bg-[--card-color] border-2 border-[--border-color] rounded-[2.5rem] p-8 stat-card transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-900/50 hover:scale-[1.02]">
                         <SparklesIcon className="w-12 h-12 text-[--primary-color] mx-auto mb-4" />
                         <span ref={opportunities.ref} className="block text-5xl font-bold text-[--primary-color]">{opportunities.count.toLocaleString()}+</span>
                         <p className="text-[--text-secondary] mt-2">Opportunities Explored</p>
                     </div>
-                    <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-8 stat-card">
+                    <div className="bg-[--card-color] border-2 border-[--border-color] rounded-[2.5rem] p-8 stat-card transition-all duration-300 hover:border-red-600 hover:shadow-2xl hover:shadow-red-900/50 hover:scale-[1.02]">
                         <BuildingOfficeIcon className="w-12 h-12 text-[--primary-color] mx-auto mb-4" />
                         <span ref={properties.ref} className="block text-5xl font-bold text-[--primary-color]">{properties.count.toLocaleString()}+</span>
                         <p className="text-[--text-secondary] mt-2">Properties Listed</p>
@@ -157,15 +180,29 @@ const CommunityInsights = () => {
 // Section: AI Generator CTA
 const AIGeneratorCTA: React.FC<{ setView: (view: View) => void }> = ({ setView }) => (
     <div className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center bg-[--card-color] border border-[--border-color] rounded-2xl p-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-4">Got an Area in Mind?<br />Let Our AI Suggest Businesses.</h2>
-            <p className="text-lg text-[--text-secondary] max-w-2xl mx-auto mb-8">Enter your location and discover tailored business ideas in seconds, powered by real-world data.</p>
+        <div className="max-w-4xl mx-auto text-center bg-[--card-color] border border-[--border-color] rounded-[2.5rem] p-12 relative overflow-hidden group hover:border-red-500/30 transition-all duration-300">
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighter mb-4 relative z-10">Got an Area in Mind?<br />Let Our AI Suggest Businesses.</h2>
+            <p className="text-lg text-[--text-secondary] max-w-2xl mx-auto mb-8 relative z-10">Enter your location and discover tailored business ideas in seconds, powered by real-world data.</p>
             <button
                 onClick={() => setView(View.AI_SUGGESTIONS)}
-                className="px-8 py-4 rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity flex items-center justify-center gap-3 mx-auto"
+                className="relative group/btn flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-bold text-white transition-all duration-300 overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-lg shadow-red-500/20 hover:shadow-red-500/40 mx-auto"
+                style={{
+                    backgroundSize: '200% 100%',
+                    backgroundImage: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+                }}
             >
-                <SparklesIcon className="w-6 h-6" />
-                Generate Ideas Now
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/20 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                    style={{
+                        animation: 'shimmer 2s infinite linear'
+                    }}
+                />
+
+                <SparklesIcon className="w-6 h-6 relative z-10 transition-transform duration-300 group-hover/btn:scale-110 group-hover/btn:rotate-12" />
+                <span className="relative z-10">Generate Ideas Now</span>
             </button>
         </div>
     </div>
@@ -183,7 +220,7 @@ const Testimonials = () => (
                     { name: 'David Chen', role: 'Community Member', quote: 'I never thought my idea for a tool library would go anywhere. Now it\'s a real place people use every day. It\'s incredible.' },
                     { name: 'Maria Garcia', role: 'Property Owner', quote: 'Listing my vacant property was simple, and I found the perfect tenant who is truly invested in our neighborhood\'s success.' },
                 ].map(testimonial => (
-                    <div key={testimonial.name} className="bg-[--card-color] border border-[--border-color] rounded-xl p-8 text-left testimonial-card">
+                    <div key={testimonial.name} className="bg-[--card-color] border border-[--border-color] rounded-[2.5rem] p-8 text-left testimonial-card">
                         <QuoteIcon className="quote-icon" />
                         <p className="text-lg text-white mb-6 relative z-10">"{testimonial.quote}"</p>
                         <div className="flex items-center">
@@ -208,10 +245,24 @@ const JoinTheMovementCTA: React.FC<{ onLearnMoreClick: () => void }> = ({ onLear
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4">Be Part of the Change</h2>
             <p className="text-lg text-[--text-secondary] max-w-2xl mx-auto mb-8">Join thousands of people shaping better neighborhoods through ideas and innovation.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
-                    Join Bridgehead
+                <button className="relative px-8 py-4 w-full sm:w-auto rounded-full text-lg font-bold text-white transition-all duration-300 overflow-hidden group/btn bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
+                    style={{
+                        backgroundSize: '200% 100%',
+                        backgroundImage: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+                    }}
+                >
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/20 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                        style={{
+                            animation: 'shimmer 2s infinite linear'
+                        }}
+                    />
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                        Join Bridgehead
+                        <ArrowRightIcon className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    </span>
                 </button>
-                <button onClick={onLearnMoreClick} className="px-8 py-4 w-full sm:w-auto rounded-lg text-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">
+                <button onClick={onLearnMoreClick} className="px-8 py-4 w-full sm:w-auto rounded-full text-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">
                     Learn More
                 </button>
             </div>
@@ -226,8 +277,24 @@ const Newsletter = () => (
             <h2 className="text-3xl font-bold mb-2">Stay in the Loop</h2>
             <p className="text-[--text-secondary] mb-6">Get updates on trending business ideas and local opportunities.</p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
-                <input type="email" placeholder="Enter your email" required className="flex-grow w-full bg-transparent border-2 border-[--border-color] rounded-lg px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300" />
-                <button type="submit" className="px-6 py-3 rounded-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">Subscribe</button>
+                <input type="email" placeholder="Enter your email" required className="flex-grow w-full bg-transparent border-2 border-[--border-color] rounded-full px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300" />
+                <button type="submit" className="relative px-6 py-3 rounded-full font-bold text-white transition-all duration-300 overflow-hidden group/btn bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
+                    style={{
+                        backgroundSize: '200% 100%',
+                        backgroundImage: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+                    }}
+                >
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/20 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
+                        style={{
+                            animation: 'shimmer 2s infinite linear'
+                        }}
+                    />
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                        Subscribe
+                        <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    </span>
+                </button>
             </form>
             <p className="text-xs text-[--text-secondary] mt-4">No spam, just smart opportunities.</p>
         </div>

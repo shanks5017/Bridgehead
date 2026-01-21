@@ -93,7 +93,7 @@ const CategoryAutocomplete: React.FC<CategoryAutocompleteProps> = ({
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
                 required={required}
-                className="w-full bg-transparent border-2 border-[--border-color] rounded-lg px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300"
+                className="w-full bg-transparent border-2 border-[--border-color] rounded-full px-4 py-3 placeholder-[--text-secondary] focus:outline-none focus:ring-2 focus:ring-[--primary-color] focus:border-transparent transition-all duration-300"
             />
 
             {/* Autocomplete Dropdown */}
@@ -107,8 +107,8 @@ const CategoryAutocomplete: React.FC<CategoryAutocompleteProps> = ({
                             key={category}
                             onClick={() => handleSelectCategory(category)}
                             className={`px-4 py-3 cursor-pointer transition-colors flex items-center gap-3 ${index === highlightedIndex
-                                    ? 'bg-[--primary-color] text-white'
-                                    : 'hover:bg-white/5'
+                                ? 'bg-[--primary-color] text-white'
+                                : 'hover:bg-white/5'
                                 }`}
                             onMouseEnter={() => setHighlightedIndex(index)}
                         >

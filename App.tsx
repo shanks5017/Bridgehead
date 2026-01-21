@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, DemandPost, RentalPost, CommunityPost, MediaItem, Location, Conversation, Message, User } from './types';
 import CustomCursor from './components/CustomCursor';
-import { GoogleGenAI, Chat } from "@google/genai";
+import { createChatSession } from './services/groqService';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Home from './components/Home';
@@ -112,7 +112,7 @@ const App: React.FC = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(() => {
     return localStorage.getItem('bridgehead_selected_conversation') || null;
   });
-  const [aruChat, setAruChat] = useState<Chat | null>(null);
+  const [aruChat, setAruChat] = useState<ReturnType<typeof createChatSession> | null>(null);
 
   const [savedDemandIds, setSavedDemandIds] = useState<string[]>([]);
   const [savedRentalIds, setSavedRentalIds] = useState<string[]>([]);
@@ -353,19 +353,12 @@ const App: React.FC = () => {
 
   // Initialize ARU chat instance
   useEffect(() => {
-    if (!process.env.API_KEY) {
-      console.error("API_KEY not found for ARU chatbot.");
-      return;
-    };
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    const systemInstruction = "You are ARU, a helpful AI assistant for the Bridgehead app. Bridgehead connects community needs (demands) with entrepreneurs. Users can post demands for businesses they want, and entrepreneurs can find rental properties and get business ideas. Keep your answers concise and helpful. Be friendly and engaging. When providing instructions or steps, always use a numbered or bulleted list. Do not write steps in a single paragraph.";
-
-    const chatInstance = ai.chats.create({
-      model: 'gemini-flash-lite-latest',
-      config: { systemInstruction },
-    });
+    // Re-initialize when currentUser changes to update the name
+    const userName = currentUser?.name?.split(' ')[0] || 'Friend';
+    const userId = currentUser?.id || 'guest';
+    const chatInstance = createChatSession('aru-session', userId, userName);
     setAruChat(chatInstance);
-  }, []);
+  }, [currentUser]);
 
   // Load saved IDs from localStorage on mount
   useEffect(() => {
@@ -990,40 +983,37 @@ const App: React.FC = () => {
       }
 
       try {
-        const result = await aruChat.sendMessageStream({ message: text });
-
-        let modelResponse = '';
+        // Show typing indicator
         const responseMessageId = crypto.randomUUID();
-
         setConversations(prev => prev.map(convo => {
           if (convo.id === ARU_CONVERSATION_ID) {
             return {
               ...convo,
               messages: [
                 ...convo.messages,
-                { id: responseMessageId, senderId: 'aru-bot', text: '...', timestamp: new Date().toISOString() }
+                { id: responseMessageId, senderId: 'aru-bot', text: 'Typing...', timestamp: new Date().toISOString() }
               ],
             };
           }
           return convo;
         }));
 
-        for await (const chunk of result) {
-          modelResponse += chunk.text;
-          setConversations(prev => prev.map(convo => {
-            if (convo.id === ARU_CONVERSATION_ID) {
-              const updatedMessages = convo.messages.map(msg =>
-                msg.id === responseMessageId ? { ...msg, text: modelResponse } : msg
-              );
-              return {
-                ...convo,
-                messages: updatedMessages,
-                lastMessageTimestamp: new Date().toISOString()
-              };
-            }
-            return convo;
-          }));
-        }
+        const modelResponse = await aruChat.sendMessage(text);
+
+        // Update with actual response
+        setConversations(prev => prev.map(convo => {
+          if (convo.id === ARU_CONVERSATION_ID) {
+            const updatedMessages = convo.messages.map(msg =>
+              msg.id === responseMessageId ? { ...msg, text: modelResponse } : msg
+            );
+            return {
+              ...convo,
+              messages: updatedMessages,
+              lastMessageTimestamp: new Date().toISOString()
+            };
+          }
+          return convo;
+        }));
       } catch (error) {
         console.error("ARU chat error:", error);
         const errorMessage: Message = {
@@ -1269,7 +1259,12 @@ const App: React.FC = () => {
         />
       )}
       {view !== View.COLLABORATION && <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />}
-      {view !== View.COLLABORATION && <Chatbot isChatbotOpen={isChatbotOpen} onChatbotToggle={setIsChatbotOpen} />}
+      {view !== View.COLLABORATION && <Chatbot
+        isChatbotOpen={isChatbotOpen}
+        onChatbotToggle={setIsChatbotOpen}
+        userName={currentUser?.name?.split(' ')[0] || 'Friend'}
+        userId={currentUser?.id || 'guest'}
+      />}
       <ScrollToTopButton />
       {toast && (
         <Toast
