@@ -25,6 +25,7 @@
     "firebase": "^12.6.0",
     "firebase-admin": "^13.6.0",
     "gridfs-stream": "^1.1.1",
+    "groq-sdk": "^0.37.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.19.4",
     "multer": "^2.0.2",

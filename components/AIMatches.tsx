@@ -1,21 +1,21 @@
 
 import React, { useState } from 'react';
 import { DemandPost, RentalPost, MatchResult, View } from '../types';
-import { findMatches } from '../services/geminiService';
+import { findMatches } from '../services/groqService';
 import { LoadingState, EmptyState } from './LandingPages';
 import DemandCard from './DemandCard';
 import RentalCard from './RentalCard';
 import { LinkIcon, PlusIcon, SparklesIcon } from './icons';
 
 interface AIMatchesProps {
-  demands: DemandPost[];
-  rentals: RentalPost[];
-  onPostSelect: (post: DemandPost | RentalPost) => void;
-  onDemandUpvote: (id: string) => void;
-  onDemandSaveToggle: (id: string) => void;
-  onRentalSaveToggle: (id: string) => void;
-  savedDemandIds: string[];
-  savedRentalIds: string[];
+    demands: DemandPost[];
+    rentals: RentalPost[];
+    onPostSelect: (post: DemandPost | RentalPost) => void;
+    onDemandUpvote: (id: string) => void;
+    onDemandSaveToggle: (id: string) => void;
+    onRentalSaveToggle: (id: string) => void;
+    savedDemandIds: string[];
+    savedRentalIds: string[];
 }
 
 const MatchCard: React.FC<{
@@ -36,7 +36,7 @@ const MatchCard: React.FC<{
                     <DemandCard post={demand} onPostSelect={onPostSelect} onUpvote={onDemandUpvote} isSaved={isDemandSaved} onSaveToggle={onDemandSaveToggle} />
                 </div>
                 <div className="text-white text-4xl font-bold p-4 rounded-full bg-[--primary-color]">
-                    <PlusIcon className="w-8 h-8"/>
+                    <PlusIcon className="w-8 h-8" />
                 </div>
                 <div className="w-full lg:w-80 flex-shrink-0">
                     <RentalCard post={rental} onPostSelect={onPostSelect} isSaved={isRentalSaved} onSaveToggle={onRentalSaveToggle} />
@@ -44,7 +44,7 @@ const MatchCard: React.FC<{
             </div>
             <div className="mt-6 border-t border-[--border-color] pt-6">
                 <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold flex items-center gap-2"><SparklesIcon className="w-5 h-5 text-yellow-400"/> AI Analysis</h3>
+                    <h3 className="text-xl font-bold flex items-center gap-2"><SparklesIcon className="w-5 h-5 text-yellow-400" /> AI Analysis</h3>
                     <div className="text-right">
                         <div className="font-bold text-lg">{(match.confidenceScore * 100).toFixed(0)}%</div>
                         <div className="text-xs text-[--text-secondary]">Confidence</div>
@@ -85,10 +85,10 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
     }
 
     if (error) {
-         return (
+        return (
             <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
                 <EmptyState title="An Error Occurred" message={error} />
-                 <button
+                <button
                     onClick={handleFindMatches}
                     className="mt-8 px-6 py-3 rounded-lg text-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors"
                 >
@@ -100,7 +100,7 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
 
     if (!matches) {
         return (
-             <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center text-center px-4">
+            <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center text-center px-4">
                 <LinkIcon className="w-16 h-16 mx-auto text-[--primary-color] mb-4" />
                 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4">AI Opportunity Matchmaker</h1>
                 <p className="text-lg text-[--text-secondary] max-w-2xl mx-auto mb-8">
@@ -134,7 +134,7 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
                             const rental = rentals.find(r => r.id === match.rentalId);
                             if (!demand || !rental) return null;
 
-                            return <MatchCard 
+                            return <MatchCard
                                 key={`${match.demandId}-${match.rentalId}`}
                                 match={match}
                                 demand={demand}

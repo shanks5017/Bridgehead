@@ -198,7 +198,8 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
         let processedPosts: (DemandPost & { distance?: number; trendingScore?: number })[] = posts.filter(post => {
             const matchesSearch =
                 post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                post.description?.toLowerCase().includes(searchTerm.toLowerCase());
+                post.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                post.location.address.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesCategory = selectedCategories.length === 0 ? true : selectedCategories.includes(post.category);
             const matchesSaved = !showSavedOnly || savedPostIds.includes(post.id);
             return matchesSearch && matchesCategory && matchesSaved;
@@ -315,10 +316,10 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                         <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[--text-secondary]" />
                         <input
                             type="text"
-                            placeholder="Search demands by keyword..."
+                            placeholder="Search by keyword, city, or district..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-[--card-color] border-2 border-[--border-color] rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
+                            className="w-full bg-[--card-color] border-2 border-[--border-color] rounded-full pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
                         />
                     </div>
                     {/* Feed Mode Toggle: Near Me vs Trending */}

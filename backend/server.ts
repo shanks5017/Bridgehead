@@ -10,6 +10,7 @@ import statsRoutes from './routes/stats';
 import conversationRoutes from './routes/conversations';
 import userRoutes from './routes/users';
 import communityRoutes from './routes/community'; // Join the Hive
+import aiRoutes from './routes/ai';
 import './models/ensureModels';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -106,6 +107,7 @@ app.use('/api/conversations', conversationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Basic route
 app.get('/', (req: Request, res: Response) => {

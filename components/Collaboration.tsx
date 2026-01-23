@@ -104,12 +104,19 @@ const ConversationListItem: React.FC<{
         <button
             onClick={onClick}
             style={{ animationDelay }}
-            className={`w-full text-left p-4 relative group transition-all duration-300 transform hover:scale-[1.02] border-l-2
+            className={`w-full text-left p-4 relative group/item transition-all duration-300 rounded-2xl mb-2 overflow-hidden
                 ${isSelected
-                    ? 'bg-gradient-to-r from-[#FF3B30]/10 to-transparent border-[#FF3B30]'
-                    : 'border-transparent hover:bg-white/5'
+                    ? 'text-white bg-gradient-to-r from-red-600/20 via-red-500/10 to-transparent border border-red-500/50 shadow-[0_0_15px_rgba(220,38,38,0.3)]'
+                    : 'text-[#E0E0E0] hover:bg-white/5 border border-transparent hover:border-white/10'
                 } animate-in slide-in-from-left-4 fade-in fill-mode-backwards`}
         >
+            {/* Hover Glow Effect */}
+            <div className={`absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 pointer-events-none`} />
+
+            {/* Active Shimmer */}
+            {isSelected && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+            )}
             <div className="flex items-start gap-3">
                 <ParticipantAvatar participantId={conversation.participant.id} className="w-12 h-12" />
 
@@ -233,11 +240,11 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
     });
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] bg-[#050505] text-white font-sans overflow-hidden">
+        <div className="flex h-[calc(100vh-4rem)] bg-black text-white font-sans overflow-hidden p-4 gap-4">
 
             {/* --- 1. Sidebar: Active Deal Flow --- */}
             {/* Mobile: Hidden if chat open. Desktop: Always visible (w-96) */}
-            <aside className={`border-r border-[#1A1A1A] flex flex-col bg-[#050505] z-10 w-full md:w-96 ${selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
+            <aside className={`flex flex-col bg-[#050505] z-10 w-full md:w-96 rounded-[2.5rem] border border-[#1A1A1A] overflow-hidden shadow-2xl ${selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
 
                 {/* Header Section */}
                 <div className="p-5 border-b border-[#1A1A1A]">
@@ -294,7 +301,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
 
             {/* --- 2. Main Chat: The Context Hub --- */}
             {/* Mobile: Hidden if no chat. Desktop: Always visible (flex-1) */}
-            <main className={`flex-col relative bg-[#000000] w-full md:flex-1 ${!selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
+            <main className={`flex-col relative bg-[#050505] w-full md:flex-1 rounded-[2.5rem] border border-[#1A1A1A] overflow-hidden shadow-2xl ${!selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
                 {selectedConversation ? (
                     <>
                         {/* Chat Header */}
@@ -331,10 +338,13 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                             {/* View Deal Details Action */}
                             <button
                                 onClick={() => setDetailsOpen(true)}
-                                className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-full border border-[#333] hover:border-[#FF3B30] text-[#888] hover:text-[#FF3B30] transition-colors group bg-transparent whitespace-nowrap"
+                                className="group relative flex items-center gap-2 px-3 md:px-4 py-2 rounded-full overflow-hidden transition-all duration-300 shadow-lg hover:shadow-red-500/20"
                             >
-                                <span className="text-xs font-semibold uppercase tracking-wider hidden sm:inline">View Details</span>
-                                <LinkIcon className="w-3.5 h-3.5" />
+                                <div className="absolute inset-0 bg-[#333] group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-500 transition-all duration-300" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine opacity-0 group-hover:opacity-100" />
+
+                                <span className="relative z-10 text-xs font-semibold uppercase tracking-wider hidden sm:inline text-[#888] group-hover:text-white transition-colors">View Details</span>
+                                <LinkIcon className="relative z-10 w-3.5 h-3.5 text-[#888] group-hover:text-white transition-colors" />
                             </button>
                         </header>
 
@@ -423,8 +433,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                         )}
 
                         {/* --- 3. Message Area: The Professional Thread --- */}
-                        {/* Added pb-32 to fix overlap with input bar */}
-                        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 pb-32 space-y-6 scrollbar-thin scrollbar-thumb-[#222]">
+                        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-thin scrollbar-thumb-[#222]">
                             {selectedConversation.messages.map(msg => {
                                 const isMe = msg.senderId === 'currentUser';
                                 const isAru = msg.senderId === 'aru-bot';
@@ -484,7 +493,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                         </div>
 
                         {/* --- 4. Input Bar: The Deal-Making Console --- */}
-                        <div className="absolute bottom-4 left-0 right-0 px-4 md:bottom-8 md:px-8 pointer-events-none z-30">
+                        <div className="shrink-0 px-4 md:px-8 pb-4 md:pb-8 pt-4 z-30 bg-[#050505] border-t border-[#1A1A1A]">
                             <form onSubmit={handleSend} className="max-w-4xl mx-auto pointer-events-auto">
 
                                 {/* Media Preview Area */}
@@ -560,9 +569,11 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                                     <button
                                         type="submit"
                                         disabled={!message.trim() && media.length === 0}
-                                        className="p-2 mr-2 rounded-full bg-[#FF3B30] text-white hover:bg-[#D32F2F] disabled:opacity-50 disabled:bg-[#333] transition-all shadow-md group shrink-0"
+                                        className="relative p-2 mr-2 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed group overflow-hidden shadow-lg shadow-red-500/30 hover:shadow-red-500/50 shrink-0"
                                     >
-                                        <PaperAirplaneIcon className="w-5 h-5 -ml-0.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-red-600 to-red-500 group-hover:scale-110 transition-transform duration-300" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
+                                        <PaperAirplaneIcon className="relative z-10 w-5 h-5 -ml-0.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                     </button>
                                 </div>
 

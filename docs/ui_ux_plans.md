@@ -26,12 +26,12 @@
 
 | Component | Issue | Priority |
 |-----------|-------|----------|
-| Custom Cursor | ✅ Resolved (User Verified) | � DONE |
-| Sidebar Animation | ✅ Resolved (User Verified) | � DONE |
-| Post Button | ✅ Styled & Discoverable | � DONE |
-| Image Sizing | ✅(Standardized 16:9) | � DONE |
-| Rental Hero | ✅ Clickable & Fixed | 🔴 DONE |
-| Loading States | Some missing | 🟢 LOW |
+| Custom Cursor | ✅ Resolved (User Verified) |  DONE |
+| Sidebar Animation | ✅ Resolved (User Verified) |  DONE |
+| Post Button | ✅ Styled & Discoverable | DONE |
+| Image Sizing | ✅(Standardized 16:9) |  DONE |
+| Rental Hero | ✅ Clickable & Fixed | DONE |
+| Loading States | ✅ fixed |  Done |
 
 ---
 

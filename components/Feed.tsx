@@ -328,15 +328,15 @@ const Feed: React.FC<FeedProps> = ({
                                 {/* User Stats Display */}
                                 {currentUser && (
                                     <div className="grid grid-cols-3 gap-2 w-full mb-4 text-center">
-                                        <div className="bg-white/5 rounded-lg p-2">
+                                        <div className="bg-white/5 rounded-2xl p-2">
                                             <p className="text-xs text-white/50">Score</p>
                                             <p className="font-bold text-[#FF0000] text-sm">{userStats.reputationScore}</p>
                                         </div>
-                                        <div className="bg-white/5 rounded-lg p-2">
+                                        <div className="bg-white/5 rounded-2xl p-2">
                                             <p className="text-xs text-white/50">Needs</p>
                                             <p className="font-bold text-white text-sm">{userStats.demandPosts}</p>
                                         </div>
-                                        <div className="bg-white/5 rounded-lg p-2">
+                                        <div className="bg-white/5 rounded-2xl p-2">
                                             <p className="text-xs text-white/50">Rentals</p>
                                             <p className="font-bold text-white text-sm">{userStats.rentalListings}</p>
                                         </div>

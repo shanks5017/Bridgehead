@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DemandPost, Location, View } from '../types';
 import { Input, TextArea, FileInput } from './common/FormComponents';
 import { LocationPinIcon, LoadingSpinner } from './icons';
-import { reverseGeocode, geocode } from '../services/geminiService';
+import { reverseGeocode, geocode } from '../services/groqService';
 import { compressImage } from '../utils/imageUtils';
 import PremiumCard from './common/PremiumCard';
 import PremiumButton from './common/PremiumButton';

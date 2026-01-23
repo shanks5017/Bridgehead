@@ -47,15 +47,19 @@ const SignInToPost: React.FC<{ setView: (view: View) => void }> = ({ setView }) 
         <div className="flex items-center justify-center gap-4">
             <button
                 onClick={() => setView(View.SIGN_IN)}
-                className="px-6 py-2 rounded-lg text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
+                className="px-6 py-2 rounded-full text-sm font-medium bg-white/10 text-white hover:bg-white/20 transition-all duration-200"
             >
                 Sign In
             </button>
             <button
                 onClick={() => setView(View.SIGN_UP)}
-                className="px-6 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#FF0000] to-[#8B0000] text-white hover:opacity-90 transition-all duration-200 shadow-[0_0_15px_rgba(255,0,0,0.3)]"
+                className="group relative px-6 py-2 rounded-full text-sm font-semibold text-white overflow-hidden transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.02]"
+                style={{
+                    background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)',
+                }}
             >
-                Sign Up
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
+                <span className="relative z-10">Sign Up</span>
             </button>
         </div>
     </div>
@@ -72,7 +76,7 @@ const TopicSidebar: React.FC<{
 }> = ({ topics, activeTopic, onTopicSelect }) => {
     return (
         <div className="h-fit">
-            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-xl p-4">
+            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-6">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <span className="text-2xl">🏛️</span>
                     <span>The Tribes</span>
@@ -84,22 +88,48 @@ const TopicSidebar: React.FC<{
                             <button
                                 key={topic.id}
                                 onClick={() => onTopicSelect(topic.id)}
-                                className={`
-                  w-full flex items-center justify-between px-4 py-3 rounded-full
-                  transition-all duration-300 text-left group
-                  ${isActive
-                                        ? 'bg-gradient-to-r from-[#FF0000] to-[#8B0000] text-white shadow-[0_0_20px_rgba(255,0,0,0.5)]'
-                                        : 'bg-[#050505] text-[#A0A0A0] hover:bg-[#1a1a1a] hover:text-white border border-[#333333]'
-                                    }
-                `}
+                                className={`group relative w-full flex items-center justify-between px-4 py-3 rounded-full text-base font-medium transition-all duration-300 overflow-hidden ${isActive
+                                    ? 'text-white bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-xl shadow-red-500/50'
+                                    : 'text-[--text-secondary] hover:text-white'
+                                    }`}
+                                style={{
+                                    background: isActive
+                                        ? 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
+                                        : 'transparent',
+                                }}
                             >
-                                <div className="flex items-center gap-3">
-                                    <span className="text-xl">{topic.icon}</span>
+                                {/* Animated gradient background on hover */}
+                                {!isActive && (
+                                    <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/20 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
+                                        style={{
+                                            backgroundSize: '200% 100%',
+                                            animation: 'shimmer 2s infinite linear'
+                                        }}
+                                    />
+                                )}
+
+                                {/* Glow effect on hover */}
+                                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/30" />
+
+                                {/* Icon with premium animation */}
+                                <div className="relative z-10 flex items-center gap-3 transform transition-all duration-300 group-hover:translate-x-1">
+                                    <div className="transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                                        <span className="text-xl">{topic.icon}</span>
+                                    </div>
                                     <span className="font-medium">{topic.name}</span>
                                 </div>
-                                <span className={`text-xs px-2 py-1 rounded-full ${isActive ? 'bg-white/20' : 'bg-[#1a1a1a] group-hover:bg-[#222222]'}`}>
+
+                                {/* Count Badge */}
+                                <span className={`relative z-10 text-xs px-2 py-1 rounded-full border border-white/10 transition-colors ${isActive ? 'bg-white/20 text-white' : 'bg-white/5 text-[--text-secondary] group-hover:text-white group-hover:bg-white/10'}`}>
                                     {topic.count}
                                 </span>
+
+                                {/* Shine effect on active */}
+                                {isActive && (
+                                    <div className="absolute inset-0 opacity-30">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine" />
+                                    </div>
+                                )}
                             </button>
                         );
                     })}
@@ -134,7 +164,7 @@ const Leaderboard: React.FC<{
     return (
         <div className="h-fit space-y-6">
             {/* Top Contributors */}
-            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-xl p-4">
+            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-6">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <TrophyIcon className="w-6 h-6 text-[#FFD700]" />
                     <span>Hall of Fame</span>
@@ -144,7 +174,7 @@ const Leaderboard: React.FC<{
                         <div
                             key={leader.id}
                             className={`
-                flex items-center gap-3 p-3 rounded-lg bg-[#050505]
+                flex items-center gap-3 p-3 rounded-full bg-[#050505]
                 transition-all duration-200 hover:bg-[#1a1a1a]
                 ${getRankBorder(leader.rank)}
               `}
@@ -163,7 +193,7 @@ const Leaderboard: React.FC<{
             </div>
 
             {/* Trending This Week */}
-            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-xl p-4">
+            <div className="bg-[#121212]/80 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-6">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <FireIcon className="w-6 h-6 text-[#FF0000]" />
                     <span>Trending</span>
@@ -172,7 +202,7 @@ const Leaderboard: React.FC<{
                     {trendingPosts.map((post, index) => (
                         <div
                             key={post.id}
-                            className="p-3 rounded-lg bg-[#050505] border border-[#333333] hover:border-[#FF0000]/50 transition-all duration-200 cursor-pointer group"
+                            className="p-3 rounded-2xl bg-[#050505] border border-[#333333] hover:border-[#FF0000]/50 transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-start gap-2">
                                 <span className="text-[#FF0000] font-bold text-sm">#{index + 1}</span>
@@ -233,7 +263,7 @@ const DiscussionCard: React.FC<{
     };
 
     return (
-        <div className="discussion-card bg-[#121212] border border-[#333333] rounded-xl p-5 hover:border-[#FF0000]/50 transition-all duration-300 cursor-pointer group">
+        <div className="discussion-card bg-[#121212] border border-[#333333] rounded-[2rem] p-5 hover:border-[#FF0000]/50 transition-all duration-300 cursor-pointer group">
             <div className="flex items-start gap-4">
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF0000] to-[#8B0000] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
@@ -318,13 +348,13 @@ const DiscussionCard: React.FC<{
                                     value={replyContent}
                                     onChange={(e) => setReplyContent(e.target.value)}
                                     placeholder="Write a reply..."
-                                    className="flex-1 bg-[#1A1A1A] text-white border border-[#333333] rounded-lg px-4 py-2 focus:outline-none focus:border-[#FF0000]"
+                                    className="flex-1 bg-[#1A1A1A] text-white border border-[#333333] rounded-full px-4 py-2 focus:outline-none focus:border-[#FF0000]"
                                     onKeyDown={(e) => { if (e.key === 'Enter') handleSubmitReply(); }}
                                 />
                                 <button
                                     onClick={handleSubmitReply}
                                     disabled={!replyContent.trim() || isSubmitting}
-                                    className="px-4 py-2 bg-[#FF0000] text-white rounded-lg font-medium hover:bg-[#CC0000] disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 bg-[#FF0000] text-white rounded-full font-medium hover:bg-[#CC0000] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_0_10px_rgba(255,0,0,0.2)] hover:shadow-[0_0_15px_rgba(255,0,0,0.4)]"
                                 >
                                     {isSubmitting ? '...' : 'Reply'}
                                 </button>
@@ -333,7 +363,7 @@ const DiscussionCard: React.FC<{
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
@@ -391,7 +421,7 @@ const CreatePostBox: React.FC<{
     return (
         <div
             className={`
-        bg-[#121212] border rounded-xl p-5 mb-6 transition-all duration-300
+        bg-[#121212] border rounded-[2rem] p-5 mb-6 transition-all duration-300
         ${isFocused
                     ? 'border-[#FF0000] shadow-[0_0_20px_rgba(255,0,0,0.3)]'
                     : 'border-[#333333] hover:border-[#FF0000]/50'
@@ -503,9 +533,13 @@ const CreatePostBox: React.FC<{
                             <button
                                 type="submit"
                                 disabled={(!content.trim() && media.length === 0) || remainingChars < 0}
-                                className="px-6 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#FF0000] to-[#8B0000] text-white hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(255,0,0,0.3)]"
+                                className="group relative px-6 py-2 rounded-full text-sm font-semibold text-white overflow-hidden transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{
+                                    background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)',
+                                }}
                             >
-                                Post
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
+                                <span className="relative z-10">Post</span>
                             </button>
                         </div>
                     </div>

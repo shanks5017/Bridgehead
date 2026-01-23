@@ -12,7 +12,6 @@
     "@firebase/app": "^0.14.6",
     "@firebase/auth": "^1.11.1",
     "@firebase/firestore": "^4.9.2",
-    "@google/genai": "^1.29.1",
     "@heroicons/react": "^2.2.0",
     "@tanstack/react-virtual": "^3.13.13",
     "bcryptjs": "^3.0.3",
