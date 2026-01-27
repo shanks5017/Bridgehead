@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DemandPost } from '../types';
+import { DemandPost, View } from '../types';
 import { ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, HeartIcon, BookmarkIcon } from './icons';
 import { getImageUrl } from '../utils/imageUrlUtils';
 import { sanitizeLocation } from '../utils/locationUtils';
@@ -13,9 +13,10 @@ interface DemandCardProps {
   isSaved: boolean;
   onSaveToggle: (id: string) => void;
   layout?: 'grid' | 'feed';
+  setView?: (view: View) => void;
 }
 
-const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, isSaved, onSaveToggle, layout = 'grid' }) => {
+const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, isSaved, onSaveToggle, layout = 'grid', setView }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const prevImage = (e: React.MouseEvent) => {
@@ -36,6 +37,15 @@ const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, i
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSaveToggle(post.id);
+  };
+
+  const handleUsernameClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const createdBy = post.createdBy as any;
+    if (createdBy?.username && setView) {
+      localStorage.setItem('viewingUsername', createdBy.username);
+      setView(View.PROFILE);
+    }
   };
 
   const timeAgo = (dateString: string) => {
@@ -88,13 +98,35 @@ const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, i
                 </button>
               </>
             )}
+            <div className="absolute top-2 right-2 z-20">
+              <button
+                onClick={handleSave}
+                className={`p-2 rounded-full transition-all duration-300 ${isSaved ? 'bg-yellow-400 text-black scale-110' : 'bg-black/40 text-white'
+                  } hover:text-yellow-400 hover:bg-yellow-400/10 hover:scale-110`}
+                aria-label={isSaved ? 'Unsave post' : 'Save post'}
+              >
+                <BookmarkIcon className="w-5 h-5" isFilled={isSaved} />
+              </button>
+            </div>
             <div className="absolute bottom-2 left-2 z-20 bg-[--primary-color] text-white text-xs font-semibold px-3 py-1 rounded-full">{post.category}</div>
           </div>
         )}
         <div className={`p-6 flex-1 flex flex-col justify-between relative z-10 ${!isGridLayout && 'md:p-8'}`}>
           <div>
-            {/* Username - placeholder for now */}
-            <p className="text-sm font-semibold text-white/90 mb-1">Community Member</p>
+            {/* Posted by username - clickable */}
+            {post.createdBy && typeof post.createdBy === 'object' && (post.createdBy as any).username ? (
+              <p className="text-sm font-semibold text-white/70 mb-1">
+                Posted by{' '}
+                <span
+                  className="text-[#FF0000] hover:underline cursor-pointer"
+                  onClick={handleUsernameClick}
+                >
+                  @{(post.createdBy as any).username}
+                </span>
+              </p>
+            ) : (
+              <p className="text-sm font-semibold text-white/90 mb-1">Community Member</p>
+            )}
             {/* Title - increased hierarchy */}
             <h3 className="font-bold text-xl text-white mb-1 truncate">{post.title}</h3>
             {/* Description preview */}
@@ -123,24 +155,14 @@ const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, i
                 timeAgo(post.createdAt)
               )}
             </span>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={handleSave}
-                className={`p-2 rounded-full transition-all duration-300 ${isSaved ? 'text-white scale-110' : 'text-[--text-secondary]'
-                  } hover:text-white hover:bg-white/10`}
-                aria-label={isSaved ? 'Unsave post' : 'Save post'}
-              >
-                <BookmarkIcon className="w-5 h-5" isFilled={isSaved} />
-              </button>
-              <button
-                onClick={handleLike}
-                className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-300 ease-out rounded-full px-3 py-1 bg-white/5 hover:bg-[#FF0000]/10"
-                style={{ color: post.upvotes > 0 ? '#FF0000' : 'var(--text-secondary)' }}
-              >
-                <HeartIcon className="w-4 h-4" isFilled={post.upvotes > 0} />
-                {post.upvotes}
-              </button>
-            </div>
+            <button
+              onClick={handleLike}
+              className="flex items-center gap-1.5 text-sm font-semibold transition-all duration-300 ease-out rounded-full px-3 py-1 bg-white/5 hover:bg-[#FF0000]/10"
+              style={{ color: post.upvotes > 0 ? '#FF0000' : 'var(--text-secondary)' }}
+            >
+              <HeartIcon className="w-4 h-4" isFilled={post.upvotes > 0} />
+              {post.upvotes}
+            </button>
           </div>
         </div>
       </div>

@@ -347,6 +347,10 @@ const Profile: React.FC<ProfileProps> = ({
     const [copyLinkText, setCopyLinkText] = useState('Copy Profile Link');
     const [activeTab, setActiveTab] = useState<Tab>('demands');
 
+    // Viewing other user's profile
+    const [viewedUser, setViewedUser] = useState<User | null>(null);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(false);
+
     // Image Editor State
     const [isImageEditorOpen, setIsImageEditorOpen] = useState(false);
     const [isPhotoOptionsOpen, setIsPhotoOptionsOpen] = useState(false);
@@ -362,6 +366,34 @@ const Profile: React.FC<ProfileProps> = ({
     // Confirmation Modal State
     const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
     const [solvedSuccess, setSolvedSuccess] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
+
+    // Check if viewing another user's profile
+    useEffect(() => {
+        const viewingUsername = localStorage.getItem('viewingUsername');
+        if (viewingUsername && viewingUsername !== user.username) {
+            setIsLoadingProfile(true);
+            fetch(`http://localhost:5000/api/users/username/${viewingUsername}`)
+                .then(res => res.json())
+                .then(data => {
+                    setViewedUser({
+                        id: data.id,
+                        name: data.name,
+                        username: data.username,
+                        email: data.email,
+                        bio: data.bio,
+                        profilePicture: data.profilePicture,
+                    });
+                    setIsLoadingProfile(false);
+                })
+                .catch(() => setIsLoadingProfile(false));
+        } else {
+            setViewedUser(null);
+            localStorage.removeItem('viewingUsername');
+        }
+    }, [user.username]);
+
+    const displayedUser = viewedUser || user;
+    const isOwnProfile = !viewedUser;
 
     // --- USER'S OWN POSTS (already filtered from App.tsx) ---
     const myCommunityPosts = communityPosts.filter(post =>
@@ -998,6 +1030,7 @@ const Profile: React.FC<ProfileProps> = ({
                         setViewingDemand(null);
                     }}
                     isOwner={true}
+                    setView={setView}
                 />
             )}
 
@@ -1024,6 +1057,7 @@ const Profile: React.FC<ProfileProps> = ({
                         setViewingRental(null);
                     }}
                     isOwner={true}
+                    setView={setView}
                 />
             )}
 

@@ -50,9 +50,9 @@ export const getDemandPosts = async (req, res) => {
             $maxDistance: locationQuery.maxDistance
           }
         }
-      });
+      }).populate('createdBy', 'username fullName');
     } else {
-      posts = await DemandPost.find().sort({ createdAt: -1 });
+      posts = await DemandPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
     }
 
     res.json(posts.map(formatPostResponse));
@@ -180,9 +180,9 @@ export const getRentalPosts = async (req, res) => {
             $maxDistance: locationQuery.maxDistance
           }
         }
-      });
+      }).populate('createdBy', 'username fullName');
     } else {
-      posts = await RentalPost.find().sort({ createdAt: -1 });
+      posts = await RentalPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
     }
 
     res.json(posts.map(formatPostResponse));
@@ -221,7 +221,7 @@ export const createRentalPost = async (req, res) => {
 // @route   GET /api/posts/demands/mine
 export const getMyDemandPosts = async (req, res) => {
   try {
-    const posts = await DemandPost.find({ createdBy: req.userId }).sort({ createdAt: -1 });
+    const posts = await DemandPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
     res.json(posts.map(formatPostResponse));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -232,7 +232,7 @@ export const getMyDemandPosts = async (req, res) => {
 // @route   GET /api/posts/rentals/mine
 export const getMyRentalPosts = async (req, res) => {
   try {
-    const posts = await RentalPost.find({ createdBy: req.userId }).sort({ createdAt: -1 });
+    const posts = await RentalPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
     res.json(posts.map(formatPostResponse));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });

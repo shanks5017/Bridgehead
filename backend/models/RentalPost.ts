@@ -30,6 +30,7 @@ export interface IRentalPost extends Document {
   comments: IComment[];
   upvotes: number;
   upvotedBy: (Types.ObjectId | IUser)[];
+  hashtags: string[];
   createdAt: Date;
   updatedAt: Date;
   addComment: (userId: Types.ObjectId, content: string) => Promise<IComment>;
@@ -75,7 +76,8 @@ const RentalPostSchema = new Schema<IRentalPost>({
   createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   comments: [CommentSchema],
   upvotes: { type: Number, default: 0 },
-  upvotedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+  upvotedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  hashtags: [{ type: String, index: true }]
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -92,41 +94,53 @@ RentalPostSchema.index({
   'location.address': 'text'
 });
 
+// Index for hashtag queries
+RentalPostSchema.index({ hashtags: 1 });
+
+// Pre-save middleware to extract hashtags from description
+RentalPostSchema.pre('save', function (next) {
+  if (this.isModified('description')) {
+    const { extractHashtags } = require('../utils/hashtagUtils');
+    this.hashtags = extractHashtags(this.description);
+  }
+  next();
+});
+
 // Virtual for comment count
-RentalPostSchema.virtual('commentCount').get(function() {
+RentalPostSchema.virtual('commentCount').get(function () {
   return this.comments.length;
 });
 
 // Method to add a comment
-RentalPostSchema.methods.addComment = async function(userId: Types.ObjectId, content: string) {
+RentalPostSchema.methods.addComment = async function (userId: Types.ObjectId, content: string) {
   const comment = {
     _id: new Types.ObjectId(),
     content,
     createdBy: userId,
     createdAt: new Date()
   };
-  
+
   this.comments.push(comment);
   await this.save();
-  
+
   // Add to user's comments
   await mongoose.model('User').findByIdAndUpdate(userId, {
     $push: { comments: this._id }
   });
-  
+
   return comment;
 };
 
 // Method to toggle upvote
-RentalPostSchema.methods.toggleUpvote = async function(userId: Types.ObjectId) {
+RentalPostSchema.methods.toggleUpvote = async function (userId: Types.ObjectId) {
   const userIndex = this.upvotedBy.indexOf(userId);
   const User = mongoose.model('User');
-  
+
   if (userIndex === -1) {
     // Add upvote
     this.upvotedBy.push(userId);
     this.upvotes += 1;
-    
+
     // Add to user's upvoted posts
     await User.findByIdAndUpdate(userId, {
       $addToSet: { upvotedRentalPosts: this._id }
@@ -135,13 +149,13 @@ RentalPostSchema.methods.toggleUpvote = async function(userId: Types.ObjectId) {
     // Remove upvote
     this.upvotedBy.splice(userIndex, 1);
     this.upvotes = Math.max(0, this.upvotes - 1);
-    
+
     // Remove from user's upvoted posts
     await User.findByIdAndUpdate(userId, {
       $pull: { upvotedRentalPosts: this._id }
     });
   }
-  
+
   await this.save();
   return this.upvotes;
 };

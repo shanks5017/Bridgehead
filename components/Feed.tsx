@@ -31,14 +31,7 @@ type FeedItem =
 
 const CHARACTER_LIMIT = 280;
 
-// Mock Data for Sidebars
-const MOCK_TRENDING = [
-    { tag: '#BridgeHead', posts: 3241 },
-    { tag: '#LocalDeals', posts: 1856 },
-    { tag: '#MumbaiStartups', posts: 1124 },
-    { tag: '#CommunityFirst', posts: 892 },
-];
-
+// Mock Data for Suggested Shops (to be replaced with real data later)
 const MOCK_SUGGESTED_SHOPS = [
     { name: 'Urban Coffee House', category: 'Food & Beverages' },
     { name: 'TechHub Coworking', category: 'Workspace' },
@@ -200,7 +193,7 @@ const Feed: React.FC<FeedProps> = ({
 }) => {
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [activeNav, setActiveNav] = useState('home');
-    const [trending, setTrending] = useState(MOCK_TRENDING);
+    const [trending, setTrending] = useState<{ tag: string; posts: number }[]>([]);
     const [suggestedShops, setSuggestedShops] = useState(MOCK_SUGGESTED_SHOPS);
     const [userStats, setUserStats] = useState({
         demandPosts: 0,
@@ -318,11 +311,17 @@ const Feed: React.FC<FeedProps> = ({
                                 ) : (
                                     <UserCircleIcon className="w-16 h-16 text-white/70 mb-3" />
                                 )}
-                                <h3 className="font-bold text-white text-base mb-1">
+                                <h3
+                                    className="font-bold text-white text-base mb-1 cursor-pointer hover:text-[#FF0000] transition-colors"
+                                    onClick={() => setView(View.PROFILE)}
+                                >
                                     {currentUser?.name || 'Guest User'}
                                 </h3>
-                                <p className="text-xs text-white/50 mb-4">
-                                    @{currentUser?.name?.toLowerCase().replace(' ', '_') || 'guest'}
+                                <p
+                                    className="text-xs text-white/50 mb-4 cursor-pointer hover:text-[#FF0000] transition-colors"
+                                    onClick={() => setView(View.PROFILE)}
+                                >
+                                    @{currentUser?.username || currentUser?.name?.toLowerCase().replace(/\s+/g, '_') || 'guest'}
                                 </p>
 
                                 {/* User Stats Display */}

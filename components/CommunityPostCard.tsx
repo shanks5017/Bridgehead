@@ -195,8 +195,24 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
             <div className="w-full">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                        <span className="font-bold text-white">{post.author}</span>
-                        <span className="text-[--text-secondary]">{post.username}</span>
+                        <span
+                            className="font-bold text-white cursor-pointer hover:underline"
+                            onClick={() => {
+                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                                setView(View.PROFILE);
+                            }}
+                        >
+                            {post.author}
+                        </span>
+                        <span
+                            className="text-[--text-secondary] cursor-pointer hover:text-[--primary-color] transition-colors"
+                            onClick={() => {
+                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                                setView(View.PROFILE);
+                            }}
+                        >
+                            {post.username}
+                        </span>
                         <span className="text-[--text-secondary]">·</span>
                         <span className="text-[--text-secondary] text-sm">{timeAgo(post.createdAt)}</span>
                     </div>

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import DemandPost from '../models/DemandPost';
 import RentalPost from '../models/RentalPost';
+import { getTrendingHashtags } from '../services/trendingService';
 
 export const getUserStats = async (req: Request, res: Response) => {
     try {
@@ -28,18 +29,13 @@ export const getUserStats = async (req: Request, res: Response) => {
 
 export const getTrendingStats = async (req: Request, res: Response) => {
     try {
-        // 1. Trending Hashtags (Mock logic using aggregation or just returning high-value cats)
-        // Real implementation: Aggregate #tags from description content
+        // Get limit from query params (default: 10)
+        const limit = parseInt(req.query.limit as string) || 10;
 
-        const trendingTags = [
-            { tag: '#BridgeHead', posts: 1240 },
-            { tag: '#LocalBusiness', posts: 856 },
-            { tag: '#Startup', posts: 654 },
-            { tag: '#Community', posts: 523 },
-            { tag: '#Growth', posts: 231 }
-        ];
+        // Get real trending hashtags from service (with caching)
+        const trendingTags = await getTrendingHashtags(limit);
 
-        // 2. Suggested Shops (Mock for now, could be top rated rentals or demands)
+        // Suggested Shops (Mock for now, could be top rated rentals or demands)
         const suggestedShops = [
             { name: 'Urban Coffee House', category: 'Food & Beverages' },
             { name: 'TechHub Repair', category: 'Services' },
@@ -51,6 +47,11 @@ export const getTrendingStats = async (req: Request, res: Response) => {
             suggestedShops: suggestedShops
         });
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching trending stats', error });
+        console.error('Error fetching trending stats:', error);
+        res.status(500).json({
+            message: 'Error fetching trending stats',
+            trending: [], // Fallback to empty array
+            suggestedShops: []
+        });
     }
 };

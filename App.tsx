@@ -788,7 +788,7 @@ const App: React.FC = () => {
           ...p,
           id: p._id,
           author: p.authorName || 'Anonymous', // Map name
-          username: p.authorBadge === 'entrepreneur' ? '@founder' : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`,
+          username: p.authorUsername ? `@${p.authorUsername}` : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`,
           avatar: p.authorAvatar || 'user1',
           likes: p.likesCount || 0,
           replies: p.repliesCount || 0,

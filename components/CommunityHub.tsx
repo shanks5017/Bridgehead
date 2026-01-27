@@ -229,7 +229,8 @@ const DiscussionCard: React.FC<{
     post: CommunityPost;
     onLike: (id: string) => void;
     onReply: (postId: string, content: string) => void;
-}> = ({ post, onLike, onReply }) => {
+    setView?: (view: View) => void;
+}> = ({ post, onLike, onReply, setView }) => {
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -274,8 +275,26 @@ const DiscussionCard: React.FC<{
                 <div className="flex-1 min-w-0">
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-2">
-                        <span className="text-white font-semibold">{post.author}</span>
-                        <span className="text-[#A0A0A0] text-sm">{post.username}</span>
+                        <span
+                            className="text-white font-semibold cursor-pointer hover:underline"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                                setView && setView(View.PROFILE);
+                            }}
+                        >
+                            {post.author}
+                        </span>
+                        <span
+                            className="text-[#A0A0A0] text-sm cursor-pointer hover:text-[#FF0000] transition-colors"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                                setView && setView(View.PROFILE);
+                            }}
+                        >
+                            {post.username}
+                        </span>
                         <span className="text-[#666666]">•</span>
                         <span className="text-[#A0A0A0] text-sm">{timeAgo(post.createdAt)}</span>
                     </div>
@@ -622,6 +641,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                         post={post}
                                         onLike={onLike}
                                         onReply={(postId, content) => onReply(postId, content, [])}
+                                        setView={setView}
                                     />
                                 ))
                             )}
@@ -655,6 +675,7 @@ const CommunityHub: React.FC<CommunityHubProps> = ({
                                     }}
                                     onLike={onLike}
                                     onReply={(postId, content) => onReply(postId, content, [])}
+                                    setView={setView}
                                 />
                             ))}
                         </div>

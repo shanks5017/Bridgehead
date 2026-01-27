@@ -1,5 +1,5 @@
 import React from 'react';
-import { RentalPost } from '../types';
+import { RentalPost, View } from '../types';
 import { XIcon, LocationPinIcon, PhoneIcon, EnvelopeIcon, SparklesIcon, PencilIcon, ArrowLeftIcon, ChevronUpIcon, BuildingOfficeIcon } from './icons';
 import PremiumCard from './common/PremiumCard';
 import PremiumButton from './common/PremiumButton';
@@ -9,9 +9,10 @@ interface RentalDetailModalProps {
     onClose: () => void;
     onEdit: () => void;
     isOwner?: boolean;
+    setView?: (view: View) => void;
 }
 
-const RentalDetailModal: React.FC<RentalDetailModalProps> = ({ post, onClose, onEdit, isOwner = true }) => {
+const RentalDetailModal: React.FC<RentalDetailModalProps> = ({ post, onClose, onEdit, isOwner = true, setView }) => {
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
     const handlePrevImage = () => {
@@ -20,6 +21,15 @@ const RentalDetailModal: React.FC<RentalDetailModalProps> = ({ post, onClose, on
 
     const handleNextImage = () => {
         setCurrentImageIndex(prev => (prev < post.images.length - 1 ? prev + 1 : 0));
+    };
+
+    const handleUsernameClick = () => {
+        const createdBy = post.createdBy as any;
+        if (createdBy?.username && setView) {
+            localStorage.setItem('viewingUsername', createdBy.username);
+            onClose();
+            setView(View.PROFILE);
+        }
     };
 
     const formatDate = (dateString: string) => {
@@ -135,10 +145,23 @@ const RentalDetailModal: React.FC<RentalDetailModalProps> = ({ post, onClose, on
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                                     <SparklesIcon className="w-4 h-4" />
                                     <span>Posted on {formatDate(post.createdAt)}</span>
                                 </div>
+
+                                {/* Posted by username */}
+                                {post.createdBy && typeof post.createdBy === 'object' && (post.createdBy as any).username && (
+                                    <div className="text-sm text-gray-400">
+                                        Posted by{' '}
+                                        <span
+                                            className="text-[#FF0000] hover:underline cursor-pointer font-semibold"
+                                            onClick={handleUsernameClick}
+                                        >
+                                            @{(post.createdBy as any).username}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Price & Size */}

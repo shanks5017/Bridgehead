@@ -1,8 +1,10 @@
 
+
 export interface User {
   id: string;
   name: string;
   email: string;
+  username?: string; // Unique username for login
   avatar?: string; // URL or placeholder
   bio?: string;
   phone?: string;
@@ -60,6 +62,7 @@ export interface DemandPost {
   openToCollaboration: boolean;
   status?: 'active' | 'solved';
   createdBy?: string; // User ID who created this post
+  hashtags?: string[];
 }
 
 export interface RentalPost {
@@ -77,6 +80,7 @@ export interface RentalPost {
   openToCollaboration: boolean;
   status?: 'active' | 'rented';
   createdBy?: string; // User ID who created this post
+  hashtags?: string[];
 }
 
 export interface MediaItem {
@@ -97,6 +101,7 @@ export interface CommunityPost {
   isLiked: boolean;
   isReposted: boolean;
   createdAt: string;
+  hashtags?: string[];
 }
 
 export interface Message {

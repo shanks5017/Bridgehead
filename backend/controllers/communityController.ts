@@ -75,6 +75,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
         const newPost = new CommunityPost({
             author: req.user.id,
             authorName: req.user.fullName,
+            authorUsername: req.user.username, // Add username for profile navigation
             authorAvatar: req.user.avatarUrl, // Virtual or stored
             authorBadge: req.user.verified ? 'entrepreneur' : undefined,
             content,

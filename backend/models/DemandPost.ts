@@ -28,6 +28,7 @@ export interface IDemandPost extends Document {
   status: 'active' | 'fulfilled' | 'expired';
   createdBy: Types.ObjectId | IUser;
   comments: IComment[];
+  hashtags: string[];
   createdAt: Date;
   updatedAt: Date;
   addComment: (userId: Types.ObjectId, content: string) => Promise<IComment>;
@@ -71,7 +72,8 @@ const DemandPostSchema = new Schema<IDemandPost>({
     default: 'active'
   },
   createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  comments: [CommentSchema]
+  comments: [CommentSchema],
+  hashtags: [{ type: String, index: true }]
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -88,41 +90,54 @@ DemandPostSchema.index({
   'location.address': 'text'
 });
 
+// Index for hashtag queries
+DemandPostSchema.index({ hashtags: 1 });
+
+// Pre-save middleware to extract hashtags from description
+DemandPostSchema.pre('save', function (next) {
+  if (this.isModified('description')) {
+    // Import hashtagUtils dynamically to avoid circular dependency
+    const { extractHashtags } = require('../utils/hashtagUtils');
+    this.hashtags = extractHashtags(this.description);
+  }
+  next();
+});
+
 // Virtual for comment count
-DemandPostSchema.virtual('commentCount').get(function() {
+DemandPostSchema.virtual('commentCount').get(function () {
   return this.comments.length;
 });
 
 // Method to add a comment
-DemandPostSchema.methods.addComment = async function(userId: Types.ObjectId, content: string) {
+DemandPostSchema.methods.addComment = async function (userId: Types.ObjectId, content: string) {
   const comment = {
     _id: new Types.ObjectId(),
     content,
     createdBy: userId,
     createdAt: new Date()
   };
-  
+
   this.comments.push(comment);
   await this.save();
-  
+
   // Add to user's comments
   await mongoose.model('User').findByIdAndUpdate(userId, {
     $push: { comments: this._id }
   });
-  
+
   return comment;
 };
 
 // Method to toggle upvote
-DemandPostSchema.methods.toggleUpvote = async function(userId: Types.ObjectId) {
+DemandPostSchema.methods.toggleUpvote = async function (userId: Types.ObjectId) {
   const userIndex = this.upvotedBy.indexOf(userId);
   const User = mongoose.model('User');
-  
+
   if (userIndex === -1) {
     // Add upvote
     this.upvotedBy.push(userId);
     this.upvotes += 1;
-    
+
     // Add to user's upvoted posts
     await User.findByIdAndUpdate(userId, {
       $addToSet: { upvotedDemandPosts: this._id }
@@ -131,13 +146,13 @@ DemandPostSchema.methods.toggleUpvote = async function(userId: Types.ObjectId) {
     // Remove upvote
     this.upvotedBy.splice(userIndex, 1);
     this.upvotes = Math.max(0, this.upvotes - 1);
-    
+
     // Remove from user's upvoted posts
     await User.findByIdAndUpdate(userId, {
       $pull: { upvotedDemandPosts: this._id }
     });
   }
-  
+
   await this.save();
   return this.upvotes;
 };

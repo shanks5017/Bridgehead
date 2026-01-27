@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { DemandPost } from '../types';
+import { DemandPost, View } from '../types';
 import { ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, UpvoteIcon, ChatBubbleLeftRightIcon, PhoneIcon } from './icons';
 import { EnvelopeIcon } from './icons';
 import { getImageUrl } from '../utils/imageUrlUtils';
@@ -11,11 +10,20 @@ interface DemandDetailProps {
   onViewDemand: () => void;
   onImageClick: (images: string[], index: number) => void;
   onStartCollaboration: (post: DemandPost) => void;
+  setView?: (view: View) => void;
 }
 
-const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onViewDemand, onImageClick, onStartCollaboration }) => {
+const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onViewDemand, onImageClick, onStartCollaboration, setView }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const mapSrc = `https://maps.google.com/maps?q=${post.location.latitude},${post.location.longitude}&z=15&output=embed`;
+
+  const handleUsernameClick = () => {
+    const createdBy = post.createdBy as any;
+    if (createdBy?.username && setView) {
+      localStorage.setItem('viewingUsername', createdBy.username);
+      setView(View.PROFILE);
+    }
+  };
 
   return (
     <div className="min-h-screen py-12">
@@ -92,6 +100,20 @@ const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onViewDemand,
             <div>
               <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{post.category}</span>
               <h1 className="text-4xl font-extrabold my-2">{post.title}</h1>
+
+              {/* Posted by username */}
+              {post.createdBy && typeof post.createdBy === 'object' && (post.createdBy as any).username && (
+                <div className="text-sm text-gray-400 mb-3">
+                  Posted by{' '}
+                  <span
+                    className="text-[#FF0000] hover:underline cursor-pointer font-semibold"
+                    onClick={handleUsernameClick}
+                  >
+                    @{(post.createdBy as any).username}
+                  </span>
+                </div>
+              )}
+
               <a
                 href={`https://www.google.com/maps?q=${post.location.latitude},${post.location.longitude}`}
                 target="_blank"

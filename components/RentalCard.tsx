@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RentalPost } from '../types';
+import { RentalPost, View } from '../types';
 import { ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, BookmarkIcon } from './icons';
 import ImageContainer from './common/ImageContainer';
 import { getImageUrl } from '../utils/imageUrlUtils';
@@ -11,9 +11,10 @@ interface RentalCardProps {
   isSaved: boolean;
   onSaveToggle: (id: string) => void;
   layout?: 'grid' | 'feed';
+  setView?: (view: View) => void;
 }
 
-const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, onSaveToggle, layout = 'grid' }) => {
+const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, onSaveToggle, layout = 'grid', setView }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const prevImage = (e: React.MouseEvent) => {
@@ -29,6 +30,15 @@ const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, on
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSaveToggle(post.id);
+  };
+
+  const handleUsernameClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const createdBy = post.createdBy as any;
+    if (createdBy?.username && setView) {
+      localStorage.setItem('viewingUsername', createdBy.username);
+      setView(View.PROFILE);
+    }
   };
 
   const timeAgo = (dateString: string) => {
@@ -91,6 +101,20 @@ const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, on
         </div>
         <div className={`p-6 flex-1 flex flex-col justify-between relative z-10 ${!isGridLayout && 'md:p-8'}`}>
           <div>
+            {/* Posted by username - clickable */}
+            {post.createdBy && typeof post.createdBy === 'object' && (post.createdBy as any).username ? (
+              <p className="text-sm font-semibold text-white/70 mb-1">
+                Posted by{' '}
+                <span
+                  className="text-[#FF0000] hover:underline cursor-pointer"
+                  onClick={handleUsernameClick}
+                >
+                  @{(post.createdBy as any).username}
+                </span>
+              </p>
+            ) : (
+              <p className="text-sm font-semibold text-white/90 mb-1">Community Member</p>
+            )}
             <h3 className="font-bold text-lg truncate">{post.title}</h3>
             {post.description && (
               <p className="text-sm text-white/70 mb-2 line-clamp-1">
