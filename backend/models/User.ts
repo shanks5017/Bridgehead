@@ -27,6 +27,8 @@ export interface IUser extends Document {
   reputationScore: number;
   dealsCompleted: number;
   isVerifiedEntrepreneur: boolean;
+  profilePicture: string;
+  originalProfilePicture: string;
 }
 
 interface IUserModel extends Model<IUser> {
@@ -138,9 +140,7 @@ const userSchema = new Schema<IUser>({
   }
 });
 
-// Indexes
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ username: 1 }, { unique: true });
+
 
 
 // Middleware to hash password before saving

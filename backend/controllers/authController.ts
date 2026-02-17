@@ -19,6 +19,7 @@ export const register = async (req: Request<{}, {}, SignUpRequest>, res: Respons
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Register validation errors:', errors.array());
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
@@ -89,10 +90,12 @@ export const login = async (req: Request<{}, {}, LoginRequest>, res: Response) =
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Login validation errors:', errors.array());
       return res.status(400).json({ error: errors.array()[0].msg });
     }
 
     const { identifier, password } = req.body;
+    console.log('Login attempt for identifier:', identifier);
 
     // Normalize and sanitize input
     const normalizedIdentifier = identifier.toLowerCase().trim();

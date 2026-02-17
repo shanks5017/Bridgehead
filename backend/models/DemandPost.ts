@@ -90,8 +90,7 @@ DemandPostSchema.index({
   'location.address': 'text'
 });
 
-// Index for hashtag queries
-DemandPostSchema.index({ hashtags: 1 });
+
 
 // Pre-save middleware to extract hashtags from description
 DemandPostSchema.pre('save', function (next) {

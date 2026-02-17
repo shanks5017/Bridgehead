@@ -70,7 +70,7 @@ const CommunityPostSchema: Schema = new Schema(
 CommunityPostSchema.index({ topic: 1, createdAt: -1 }); // Filtered Feed
 CommunityPostSchema.index({ createdAt: -1 }); // Global Feed
 CommunityPostSchema.index({ author: 1, createdAt: -1 }); // Profile Feed
-CommunityPostSchema.index({ hashtags: 1 }); // Hashtag queries
+
 
 // Pre-save middleware to extract hashtags from content
 CommunityPostSchema.pre('save', function (next) {

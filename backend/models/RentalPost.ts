@@ -94,8 +94,7 @@ RentalPostSchema.index({
   'location.address': 'text'
 });
 
-// Index for hashtag queries
-RentalPostSchema.index({ hashtags: 1 });
+
 
 // Pre-save middleware to extract hashtags from description
 RentalPostSchema.pre('save', function (next) {
