@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View } from '../types';
 import { Input } from './common/FormComponents';
 import { GoogleIcon, MicrosoftIcon } from './icons';
+import { config } from '../src/config';
 
 interface SignUpProps {
   onSignUp: (name: string, email: string, username: string, password: string) => boolean;
@@ -58,7 +59,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const response = await fetch('/api/auth/check-username', {
+      const response = await fetch(`${config.api.baseUrl}/auth/check-username`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username }),
@@ -108,7 +109,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const response = await fetch('/api/auth/check-email', {
+      const response = await fetch(`${config.api.baseUrl}/auth/check-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

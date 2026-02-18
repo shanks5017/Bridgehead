@@ -16,7 +16,17 @@ const getEnv = (key: string, defaultValue?: string): string => {
 
 export const config = {
     api: {
-        baseUrl: getEnv('VITE_API_BASE_URL', 'http://localhost:5001/api'),
+        baseUrl: (() => {
+            const envUrl = getEnv('VITE_API_BASE_URL');
+            if (envUrl) return envUrl;
+
+            // If in production mode and no env var, default to Render backend
+            if (import.meta.env.PROD) {
+                return 'https://bridgehead-backend.onrender.com/api';
+            }
+
+            return 'http://localhost:5001/api';
+        })(),
         timeout: 30000,
     },
     gemini: {
