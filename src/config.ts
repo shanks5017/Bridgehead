@@ -18,7 +18,11 @@ export const config = {
     api: {
         baseUrl: (() => {
             const envUrl = getEnv('VITE_API_BASE_URL');
-            if (envUrl) return envUrl;
+
+            // If env var is set, ensure it ends with /api
+            if (envUrl) {
+                return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+            }
 
             // If in production mode and no env var, default to Render backend
             if (import.meta.env.PROD) {
