@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:5001/api/ai';
+import { config } from '../src/config';
+
+const API_URL = `${config.api.baseUrl}/ai`;
 
 // --- Types ---
 export interface ChatMessage {

@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { config } from '../src/config';
 import { DemandPost, RentalPost, CommunityPost, MediaItem, User, View } from '../types';
 import DemandCard from './DemandCard';
 import RentalCard from './RentalCard';
@@ -205,7 +206,7 @@ const Feed: React.FC<FeedProps> = ({
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await fetch('http://localhost:5001/api/stats/trending');
+                const response = await fetch(`${config.api.baseUrl}/stats/trending`);
                 if (response.ok) {
                     const data = await response.json();
                     setTrending(data.trending);
@@ -220,7 +221,7 @@ const Feed: React.FC<FeedProps> = ({
         if (currentUser?.id) {
             const fetchUserStats = async () => {
                 try {
-                    const response = await fetch(`http://localhost:5001/api/stats/user/${currentUser.id}`);
+                    const response = await fetch(`${config.api.baseUrl}/stats/user/${currentUser.id}`);
                     if (response.ok) {
                         const data = await response.json();
                         setUserStats(data);

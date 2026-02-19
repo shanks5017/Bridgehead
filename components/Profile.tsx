@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { config } from '../src/config';
 import { User, View, DemandPost, RentalPost, CommunityPost, Conversation } from '../types';
 import { compressImage } from '../utils/imageUtils';
 import DemandDetailModal from './DemandDetailModal';
@@ -372,7 +373,7 @@ const Profile: React.FC<ProfileProps> = ({
         const viewingUsername = localStorage.getItem('viewingUsername');
         if (viewingUsername && viewingUsername !== user.username) {
             setIsLoadingProfile(true);
-            fetch(`http://localhost:5000/api/users/username/${viewingUsername}`)
+            fetch(`${config.api.baseUrl}/users/username/${viewingUsername}`)
                 .then(res => res.json())
                 .then(data => {
                     setViewedUser({
