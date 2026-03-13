@@ -11,80 +11,63 @@ const CustomCursor: React.FC = () => {
     // Refs for physics variables
     const mousePos = useRef({ x: 0, y: 0 });
     const ringPos = useRef({ x: 0, y: 0 });
-    const dotPos = useRef({ x: 0, y: 0 });
     const isHovering = useRef(false);
     const isClicking = useRef(false);
 
     useEffect(() => {
-        // Only enable on devices with fine pointer (mouse)
         const hasMouse = window.matchMedia('(pointer: fine)').matches;
         if (!hasMouse) return;
 
         setIsVisible(true);
 
         const onMouseMove = (e: MouseEvent) => {
-            mousePos.current = { x: e.clientX, y: e.clientY };
+            mousePos.current.x = e.clientX;
+            mousePos.current.y = e.clientY;
         };
 
         const onMouseDown = () => { isClicking.current = true; };
         const onMouseUp = () => { isClicking.current = false; };
 
-        // Interaction sensing
         const onMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            // Check if hovering over clickable elements
             const isClickable = target.matches('a, button, input, textarea, select, [role="button"]') ||
                 target.closest('a, button, input, textarea, select, [role="button"]');
-
             isHovering.current = !!isClickable;
         };
 
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mousedown', onMouseDown);
-        window.addEventListener('mouseup', onMouseUp);
-        // Using capture phase for mouseover to catch deep elements
-        document.addEventListener('mouseover', onMouseOver, { capture: true });
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+        window.addEventListener('mousedown', onMouseDown, { passive: true });
+        window.addEventListener('mouseup', onMouseUp, { passive: true });
+        document.addEventListener('mouseover', onMouseOver, { capture: true, passive: true });
 
-        // Animation Loop
         let animationFrameId: number;
+        let lastHovering = false;
+        let lastClicking = false;
 
         const loop = () => {
             const dot = cursorDotRef.current;
             const ring = cursorRingRef.current;
 
             if (dot && ring) {
-                // 1. Dot follows mouse instantly (or very fast)
-                // Linear lerp for dot
-                dotPos.current.x += (mousePos.current.x - dotPos.current.x) * 1; // Instant
-                dotPos.current.y += (mousePos.current.y - dotPos.current.y) * 1;
+                // Smooth follow for ring - Snappier lerp (0.35)
+                ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.35;
+                ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.35;
 
-                // 2. Ring follows with delay (Smooth Spring-like Lerp)
-                // Lerp factor 0.25 for faster/smoother follow (reduced lag)
-                ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.25;
-                ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.25;
-
-                // Apply Transforms
+                // Sync dot (translate3d is faster than top/left)
                 dot.style.transform = `translate3d(${mousePos.current.x}px, ${mousePos.current.y}px, 0) translate(-50%, -50%)`;
 
-                // Ring Transformations based on State
                 let scale = 1;
-                if (isClicking.current) {
-                    scale = 0.8;
-                } else if (isHovering.current) {
-                    scale = 1.5;
-                }
+                if (isClicking.current) scale = 0.8;
+                else if (isHovering.current) scale = 1.5;
 
-                // Opacity/Color logic could be CSS transitions, let's toggle classes
-                if (isHovering.current) {
-                    ring.classList.add('cursor-hover');
-                } else {
-                    ring.classList.remove('cursor-hover');
+                // Only update classList and scale if changed
+                if (isHovering.current !== lastHovering) {
+                    ring.classList.toggle('cursor-hover', isHovering.current);
+                    lastHovering = isHovering.current;
                 }
-
-                if (isClicking.current) {
-                    ring.classList.add('cursor-clicking');
-                } else {
-                    ring.classList.remove('cursor-clicking');
+                if (isClicking.current !== lastClicking) {
+                    ring.classList.toggle('cursor-clicking', isClicking.current);
+                    lastClicking = isClicking.current;
                 }
 
                 ring.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%) scale(${scale})`;

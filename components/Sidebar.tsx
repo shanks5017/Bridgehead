@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, User } from '../types';
 import {
   SparklesIcon, PlusIcon, BookmarkIcon, LinkIcon, XIcon, HomeIcon,
@@ -15,12 +15,12 @@ interface SidebarProps {
   onSignOut: () => void;
 }
 
-const NavLink: React.FC<{
+const NavLink = React.memo(({ icon, label, isActive, onClick }: {
   icon: React.ReactNode;
   label: string;
   isActive: boolean;
   onClick: () => void;
-}> = ({ icon, label, isActive, onClick }) => (
+}) => (
   <button
     onClick={onClick}
     className={`group relative w-full flex items-center gap-3 px-4 py-2.5 rounded-full text-base font-medium transition-all duration-300 overflow-hidden ${isActive
@@ -61,7 +61,7 @@ const NavLink: React.FC<{
       </div>
     )}
   </button>
-);
+));
 
 const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpen, setIsSidebarOpen, currentUser, onSignOut }) => {
   const [isPostMenuOpen, setIsPostMenuOpen] = useState(false);
@@ -71,17 +71,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpe
   const [scrollProgress, setScrollProgress] = useState(0);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const handleScroll = () => {
-    if (navRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = navRef.current;
-      const height = scrollHeight - clientHeight;
-      if (height > 0) {
-        setScrollProgress((scrollTop / height) * 100);
-      } else {
-        setScrollProgress(0);
+  const handleScroll = useCallback(() => {
+    if (!navRef.current) return;
+    
+    window.requestAnimationFrame(() => {
+      if (navRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = navRef.current;
+        const height = scrollHeight - clientHeight;
+        if (height > 0) {
+          setScrollProgress((scrollTop / height) * 100);
+        } else {
+          setScrollProgress(0);
+        }
       }
-    }
-  };
+    });
+  }, []);
 
   const handleNavigation = (view: View) => {
     onNavigate(view);
@@ -135,8 +139,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpe
       >
         {/* Red Slidebar for Sidebar */}
         <div
-          className="absolute top-0 right-0 z-[60] w-[2px] bg-[#FF0000] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-          style={{ height: `${scrollProgress}%` }}
+          className="absolute top-0 right-0 z-[60] w-[2px] bg-[#FF0000] transition-transform duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)] origin-top"
+          style={{ transform: `scaleY(${scrollProgress / 100})`, height: '100%' }}
         />
 
         <div className="flex items-center justify-end h-16 px-4 border-b border-[--border-color] flex-shrink-0">
@@ -210,4 +214,4 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpe
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

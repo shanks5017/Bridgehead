@@ -1,17 +1,19 @@
-
 import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { RentalPost } from '../types';
 import RentalCard from './RentalCard';
 import { EmptyState } from './LandingPages';
-import { SearchIcon, ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, LoadingSpinner, BookmarkIcon } from './icons';
+import { SearchIcon, ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, LoadingSpinner, BookmarkIcon, PlusIcon } from './icons';
 import HeroAnimation from './HeroAnimation';
 import PremiumButton from './common/PremiumButton';
+import Skeleton from './common/Skeleton';
 
 interface RentalListingsProps {
     posts: RentalPost[];
     onPostSelect: (post: RentalPost) => void;
     savedPostIds: string[];
     onSaveToggle: (id: string) => void;
+    isLoading?: boolean;
 }
 
 const haversineDistance = (
@@ -39,10 +41,11 @@ const CategoryRow: React.FC<{
     onPostSelect: (post: RentalPost) => void;
     savedPostIds: string[];
     onSaveToggle: (id: string) => void;
-}> = ({ title, posts, onPostSelect, savedPostIds, onSaveToggle }) => {
+}> = React.memo(({ title, posts, onPostSelect, savedPostIds, onSaveToggle }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
+    const [showAllPosts, setShowAllPosts] = useState(false);
 
     const checkScrollability = useCallback(() => {
         const el = scrollContainerRef.current;
@@ -52,6 +55,10 @@ const CategoryRow: React.FC<{
             setCanScrollRight(hasOverflow && el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
         }
     }, []);
+
+    const displayedPosts = useMemo(() => {
+        return showAllPosts ? posts : posts.slice(0, 10);
+    }, [posts, showAllPosts]);
 
     useEffect(() => {
         const el = scrollContainerRef.current;
@@ -66,7 +73,7 @@ const CategoryRow: React.FC<{
                 window.removeEventListener('resize', checkScrollability);
             }
         };
-    }, [checkScrollability, posts]);
+    }, [checkScrollability, displayedPosts]);
 
     const scroll = (direction: 'left' | 'right') => {
         const el = scrollContainerRef.current;
@@ -82,7 +89,17 @@ const CategoryRow: React.FC<{
     if (posts.length === 0) return null;
     return (
         <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-4 px-4 sm:px-6 lg:px-8">{title}</h2>
+            <div className="flex items-center justify-between mb-4 px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl font-bold">{title}</h2>
+                {posts.length > 10 && !showAllPosts && (
+                    <button 
+                        onClick={() => setShowAllPosts(true)}
+                        className="text-[--primary-color] font-bold hover:underline"
+                    >
+                        Load More Listings ({posts.length - 10}+)
+                    </button>
+                )}
+            </div>
             <div className="relative group">
                 {canScrollLeft && (
                     <button
@@ -94,11 +111,22 @@ const CategoryRow: React.FC<{
                     </button>
                 )}
                 <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 px-4 sm:px-6 lg:px-8 hide-scrollbar">
-                    {posts.map(post => (
+                    {displayedPosts.map(post => (
                         <div key={post.id} className="w-80 flex-shrink-0">
                             <RentalCard post={post} onPostSelect={onPostSelect} isSaved={savedPostIds.includes(post.id)} onSaveToggle={onSaveToggle} />
                         </div>
                     ))}
+                    {posts.length > 10 && !showAllPosts && (
+                        <div className="w-80 flex-shrink-0 flex items-center justify-center">
+                            <button 
+                                onClick={() => setShowAllPosts(true)}
+                                className="w-full h-full border-2 border-dashed border-[--border-color] rounded-[2.5rem] flex flex-col items-center justify-center gap-2 text-[--text-secondary] hover:text-[--primary-color] hover:border-[--primary-color] transition-all"
+                            >
+                                <PlusIcon className="w-10 h-10" />
+                                <span className="font-bold">Load More {posts.length - 10} Listings</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
                 {canScrollRight && (
                     <button
@@ -112,9 +140,9 @@ const CategoryRow: React.FC<{
             </div>
         </div>
     )
-};
+});
 
-const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle }) => {
+const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle, isLoading }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -124,6 +152,7 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
     const [locationError, setLocationError] = useState('');
     const [radius, setRadius] = useState<number>(25);
     const [showSavedOnly, setShowSavedOnly] = useState(false);
+    const [visibleCategoriesCount, setVisibleCategoriesCount] = useState(8);
 
     const featuredPosts = useMemo(() => {
         return [...posts]
@@ -138,6 +167,18 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
         }, 5000); // Auto-slide every 5 seconds
         return () => clearTimeout(timer);
     }, [currentSlide, featuredPosts.length]);
+
+    const postsByCategory = useMemo(() => {
+        return posts.reduce((acc, post) => {
+            if (!acc.find(cat => cat.title === post.category)) {
+                acc.push({
+                    title: post.category,
+                    posts: posts.filter(p => p.category === post.category)
+                });
+            }
+            return acc;
+        }, [] as { title: string, posts: RentalPost[] }[]);
+    }, [posts]);
 
     const handleSortByDistance = () => {
         if (sortByDistance) {
@@ -211,170 +252,258 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
 
     return (
         <div className="min-h-screen">
-            {featuredPosts.length > 0 && !searchTerm && selectedCategories.length === 0 && (
-                <div
-                    onClick={() => currentFeaturedPost && onPostSelect(currentFeaturedPost)}
-                    className="h-[calc(100vh-4rem)] w-full relative flex items-end p-8 text-white bg-black overflow-hidden cursor-pointer"
-                >
-                    {/* Background Image Slides */}
-                    {featuredPosts.map((post, index) => (
-                        <div
-                            key={post.id}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                        >
-                            <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to top, rgba(13, 13, 13, 1) 5%, rgba(13, 13, 13, 0.7) 40%, transparent 100%)' }}></div>
-                            {post.images.length > 0 && (
-                                <img src={post.images[0]} alt={post.title} className="w-full h-full object-cover" />
-                            )}
-                        </div>
-                    ))}
-
-                    {/* Animation Overlay */}
-                    <HeroAnimation />
-
-                    {/* Content */}
-                    {currentFeaturedPost && (
-                        <div className="relative z-20 max-w-3xl">
-                            <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{currentFeaturedPost.category}</span>
-                            <h1 className="text-4xl md:text-6xl font-extrabold my-2">{currentFeaturedPost.title}</h1>
-                            <p className="text-lg text-white/80 max-w-2xl line-clamp-2 mb-6">${currentFeaturedPost.price.toLocaleString()}/mo for {currentFeaturedPost.squareFeet.toLocaleString()} sqft</p>
-
-                            {/* Explicit CTA Button */}
-                            <PremiumButton
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent double-trigger if parent clicks
-                                    onPostSelect(currentFeaturedPost);
-                                }}
-                                className="px-6 py-3 shadow-lg hover:scale-105"
-                            >
-                                View Listing <ArrowRightIcon className="w-5 h-5" />
-                            </PremiumButton>
-                        </div>
-                    )}
-
-                    {/* Slideshow Controls */}
-                    {featuredPosts.length > 1 && (
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-x-12">
-                            <button onClick={(e) => { e.stopPropagation(); prevSlide(); }} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Previous slide">
-                                <ArrowLeftIcon className="w-6 h-6" />
-                            </button>
-                            <div className="flex gap-2">
-                                {featuredPosts.map((_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={(e) => { e.stopPropagation(); goToSlide(index); }}
-                                        className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50 hover:bg-white/75'}`}
-                                        aria-label={`Go to slide ${index + 1}`}
-                                    />
-                                ))}
-                            </div>
-                            <button onClick={(e) => { e.stopPropagation(); nextSlide(); }} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Next slide">
-                                <ArrowRightIcon className="w-6 h-6" />
-                            </button>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Filters */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-8 space-y-4">
-                <div className="flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-grow">
-                        <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[--text-secondary]" />
-                        <input
-                            type="text"
-                            placeholder="Search by keyword, city, or district..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-[--card-color] border-2 border-[--border-color] rounded-full pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
-                        />
+            {isLoading ? (
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+                    <div className="h-96 w-full mb-12">
+                        <Skeleton className="w-full h-full rounded-3xl" />
                     </div>
-
-                    <PremiumButton
-                        onClick={handleSortByDistance}
-                        disabled={isLocating}
-                        variant={sortByDistance ? 'primary' : 'secondary'}
-                        className="px-6 py-3"
-                    >
-                        {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
-                        Nearby
-                    </PremiumButton>
-                    <PremiumButton
-                        onClick={() => setShowSavedOnly(!showSavedOnly)}
-                        variant={showSavedOnly ? 'primary' : 'secondary'}
-                        className="px-6 py-3"
-                    >
-                        <BookmarkIcon className="w-5 h-5" isFilled={showSavedOnly} />
-                        Saved
-                    </PremiumButton>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                    <button
-                        onClick={() => setSelectedCategories([])}
-                        className={`px-3 py-1.5 text-sm rounded-full transition-colors font-medium ${selectedCategories.length === 0
-                            ? 'bg-[--primary-color] text-white'
-                            : 'bg-white/5 text-[--text-secondary] hover:bg-white/10 hover:text-white'
-                            }`}
-                    >
-                        All Types
-                    </button>
-                    {categories.map(([category]) => (
-                        <button
-                            key={category}
-                            onClick={() => handleCategoryToggle(category)}
-                            className={`px-3 py-1.5 text-sm rounded-full transition-colors font-medium ${selectedCategories.includes(category)
-                                ? 'bg-[--primary-color] text-white'
-                                : 'bg-white/5 text-[--text-secondary] hover:bg-white/10 hover:text-white'
-                                }`}
-                        >
-                            {category}
-                        </button>
-                    ))}
-                </div>
-                {sortByDistance && (
-                    <div className="pt-2 flex items-center gap-2 flex-wrap">
-                        <span className="text-[--text-secondary] text-sm font-medium mr-2">Radius:</span>
-                        {[5, 10, 25, 50].map(r => (
-                            <button
-                                key={r}
-                                onClick={() => setRadius(r)}
-                                className={`px-3 py-1 text-sm rounded-full transition-colors ${radius === r
-                                    ? 'bg-[--primary-color] text-white font-semibold'
-                                    : 'bg-white/5 hover:bg-white/10'
-                                    }`}
-                            >
-                                {r} km
-                            </button>
-                        ))}
-                    </div>
-                )}
-                {locationError && <p className="text-red-500 text-sm mt-2">{locationError}</p>}
-            </div>
-
-            {filteredPosts.length === 0 ? (
-                <EmptyState
-                    title={showSavedOnly ? "No Saved Rentals" : "No Rentals Found"}
-                    message={showSavedOnly ? "You haven't saved any rentals yet. Click the bookmark icon on a listing to save it." : "Try adjusting your search or filters. Or, check back later for new listings!"}
-                />
-            ) : sortByDistance || searchTerm || selectedCategories.length > 0 || showSavedOnly ? (
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {filteredPosts.map(post => <RentalCard key={post.id} post={post} onPostSelect={onPostSelect} isSaved={savedPostIds.includes(post.id)} onSaveToggle={onSaveToggle} />)}
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                            <div key={i} className="h-80">
+                                <Skeleton className="w-full h-48 mb-4 rounded-2xl" />
+                                <Skeleton variant="text" width="60%" className="mb-2" />
+                                <Skeleton variant="text" width="40%" />
+                            </div>
+                        ))}
                     </div>
                 </div>
             ) : (
-                posts.reduce((acc, post) => {
-                    if (!acc.find(cat => cat.title === post.category)) {
-                        acc.push({
-                            title: post.category,
-                            posts: posts.filter(p => p.category === post.category)
-                        });
-                    }
-                    return acc;
-                }, [] as { title: string, posts: RentalPost[] }[]).map(({ title, posts }) => (
-                    <CategoryRow key={title} title={title} posts={posts} onPostSelect={onPostSelect} savedPostIds={savedPostIds} onSaveToggle={onSaveToggle} />
-                ))
+                <>
+                    {featuredPosts.length > 0 && !searchTerm && selectedCategories.length === 0 && (
+                        <div
+                            onClick={() => currentFeaturedPost && onPostSelect(currentFeaturedPost)}
+                            className="h-[calc(100vh-4rem)] w-full relative flex items-end p-8 text-white bg-black overflow-hidden cursor-pointer"
+                        >
+                            {/* Background Image Slides */}
+                            {featuredPosts.map((post, index) => (
+                                <div
+                                    key={post.id}
+                                    className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                                >
+                                    <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to top, rgba(13, 13, 13, 1) 5%, rgba(13, 13, 13, 0.7) 40%, transparent 100%)' }}></div>
+                                    {post.images.length > 0 && (
+                                        <img src={post.images[0]} alt={post.title} className="w-full h-full object-cover" />
+                                    )}
+                                </div>
+                            ))}
+
+                            {/* Animation Overlay */}
+                            <HeroAnimation />
+
+                            {/* Content */}
+                            {currentFeaturedPost && (
+                                <div className="relative z-20 max-w-3xl">
+                                    <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{currentFeaturedPost.category}</span>
+                                    <h1 className="text-4xl md:text-6xl font-extrabold my-2">{currentFeaturedPost.title}</h1>
+                                    <p className="text-lg text-white/80 max-w-2xl line-clamp-2 mb-6">${currentFeaturedPost.price.toLocaleString()}/mo for {currentFeaturedPost.squareFeet.toLocaleString()} sqft</p>
+
+                                    {/* Explicit CTA Button */}
+                                    <PremiumButton
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent double-trigger if parent clicks
+                                            onPostSelect(currentFeaturedPost);
+                                        }}
+                                        className="px-6 py-3 shadow-lg hover:scale-105"
+                                    >
+                                        View Listing <ArrowRightIcon className="w-5 h-5" />
+                                    </PremiumButton>
+                                </div>
+                            )}
+
+                            {/* Slideshow Controls */}
+                            {featuredPosts.length > 1 && (
+                                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-x-12">
+                                    <button onClick={(e) => { e.stopPropagation(); prevSlide(); }} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Previous slide">
+                                        <ArrowLeftIcon className="w-6 h-6" />
+                                    </button>
+                                    <div className="flex gap-2">
+                                        {featuredPosts.map((_, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={(e) => { e.stopPropagation(); goToSlide(index); }}
+                                                className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? 'bg-white' : 'bg-white/50 hover:bg-white/75'}`}
+                                                aria-label={`Go to slide ${index + 1}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <button onClick={(e) => { e.stopPropagation(); nextSlide(); }} className="p-2 rounded-full bg-black/30 hover:bg-black/60 transition-colors" aria-label="Next slide">
+                                        <ArrowRightIcon className="w-6 h-6" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Filters */}
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-8 space-y-4">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="relative flex-grow">
+                                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[--text-secondary]" />
+                                <input
+                                    type="text"
+                                    placeholder="Search by keyword, city, or district..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full bg-[--card-color] border-2 border-[--border-color] rounded-full pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
+                                />
+                            </div>
+
+                            <PremiumButton
+                                onClick={handleSortByDistance}
+                                disabled={isLocating}
+                                variant={sortByDistance ? 'primary' : 'secondary'}
+                                className="px-6 py-3"
+                            >
+                                {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
+                                Nearby
+                            </PremiumButton>
+                            <PremiumButton
+                                onClick={() => setShowSavedOnly(!showSavedOnly)}
+                                variant={showSavedOnly ? 'primary' : 'secondary'}
+                                className="px-6 py-3"
+                            >
+                                <BookmarkIcon className="w-5 h-5" isFilled={showSavedOnly} />
+                                Saved
+                            </PremiumButton>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <button
+                                onClick={() => setSelectedCategories([])}
+                                className={`px-3 py-1.5 text-sm rounded-full transition-colors font-medium ${selectedCategories.length === 0
+                                    ? 'bg-[--primary-color] text-white'
+                                    : 'bg-white/5 text-[--text-secondary] hover:bg-white/10 hover:text-white'
+                                    }`}
+                            >
+                                All Types
+                            </button>
+                            {categories.map(([category]) => (
+                                <button
+                                    key={category}
+                                    onClick={() => handleCategoryToggle(category)}
+                                    className={`px-3 py-1.5 text-sm rounded-full transition-colors font-medium ${selectedCategories.includes(category)
+                                        ? 'bg-[--primary-color] text-white'
+                                        : 'bg-white/5 text-[--text-secondary] hover:bg-white/10 hover:text-white'
+                                        }`}
+                                >
+                                    {category}
+                                </button>
+                            ))}
+                        </div>
+                        {sortByDistance && (
+                            <div className="pt-2 flex items-center gap-2 flex-wrap">
+                                <span className="text-[--text-secondary] text-sm font-medium mr-2">Radius:</span>
+                                {[5, 10, 25, 50].map(r => (
+                                    <button
+                                        key={r}
+                                        onClick={() => setRadius(r)}
+                                        className={`px-3 py-1 text-sm rounded-full transition-colors ${radius === r
+                                            ? 'bg-[--primary-color] text-white font-semibold'
+                                            : 'bg-white/5 hover:bg-white/10'
+                                            }`}
+                                    >
+                                        {r} km
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {locationError && <p className="text-red-500 text-sm mt-2">{locationError}</p>}
+                    </div>
+
+                    {filteredPosts.length === 0 ? (
+                        <EmptyState
+                            title={showSavedOnly ? "No Saved Rentals" : "No Rentals Found"}
+                            message={showSavedOnly ? "You haven't saved any rentals yet. Click the bookmark icon on a listing to save it." : "Try adjusting your search or filters. Or, check back later for new listings!"}
+                        />
+                    ) : sortByDistance || searchTerm || selectedCategories.length > 0 || showSavedOnly ? (
+                        <VirtualizedGrid
+                            posts={filteredPosts}
+                            onPostSelect={onPostSelect}
+                            savedPostIds={savedPostIds}
+                            onSaveToggle={onSaveToggle}
+                        />
+                    ) : (
+                        postsByCategory.map(({ title, posts }) => (
+                            <CategoryRow key={title} title={title} posts={posts} onPostSelect={onPostSelect} savedPostIds={savedPostIds} onSaveToggle={onSaveToggle} />
+                        ))
+                    )}
+                </>
             )}
+        </div>
+    );
+};
+
+// Virtualized Grid Component for performance
+interface VirtualizedGridProps {
+    posts: (RentalPost & { distance?: number })[];
+    onPostSelect: (post: RentalPost) => void;
+    savedPostIds: string[];
+    onSaveToggle: (id: string) => void;
+}
+
+const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle }) => {
+    const parentRef = useRef<HTMLDivElement>(null);
+    const [columnCount, setColumnCount] = useState(4);
+
+    useEffect(() => {
+        const updateColumns = () => {
+            const width = window.innerWidth;
+            if (width < 640) setColumnCount(1);
+            else if (width < 768) setColumnCount(2);
+            else if (width < 1024) setColumnCount(3);
+            else setColumnCount(4);
+        };
+        updateColumns();
+        window.addEventListener('resize', updateColumns);
+        return () => window.removeEventListener('resize', updateColumns);
+    }, []);
+
+    const rowVirtualizer = useVirtualizer({
+        count: Math.ceil(posts.length / columnCount),
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 450,
+        overscan: 2,
+    });
+
+    return (
+        <div ref={parentRef} className="container mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-20rem)] overflow-auto">
+            <div
+                style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
+                }}
+            >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const startIdx = virtualRow.index * columnCount;
+                    const rowPosts = posts.slice(startIdx, startIdx + columnCount);
+
+                    return (
+                        <div
+                            key={virtualRow.key}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: `${virtualRow.size}px`,
+                                transform: `translateY(${virtualRow.start}px)`,
+                            }}
+                        >
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {rowPosts.map(post => (
+                                    <RentalCard
+                                        key={post.id}
+                                        post={post}
+                                        onPostSelect={onPostSelect}
+                                        isSaved={savedPostIds.includes(post.id)}
+                                        onSaveToggle={onSaveToggle}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };

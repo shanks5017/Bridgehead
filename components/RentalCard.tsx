@@ -151,4 +151,4 @@ const RentalCard: React.FC<RentalCardProps> = ({ post, onPostSelect, isSaved, on
   );
 };
 
-export default RentalCard;
+export default React.memo(RentalCard);

@@ -368,6 +368,11 @@ const Profile: React.FC<ProfileProps> = ({
     const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
     const [solvedSuccess, setSolvedSuccess] = useState<{ type: 'demand' | 'rental', id: string } | null>(null);
 
+    // Pagination State
+    const [visibleDemandsCount, setVisibleDemandsCount] = useState(10);
+    const [visibleRentalsCount, setVisibleRentalsCount] = useState(10);
+    const [visibleCommunityCount, setVisibleCommunityCount] = useState(10);
+
     // Check if viewing another user's profile
     useEffect(() => {
         const viewingUsername = localStorage.getItem('viewingUsername');
@@ -703,7 +708,7 @@ const Profile: React.FC<ProfileProps> = ({
                 {activeTab === 'demands' && (
                     <div className="animate-fade-in-up space-y-4">
                         {myDemands.length > 0 ? (
-                            myDemands.map((post) => (
+                            myDemands.slice(0, visibleDemandsCount).map((post) => (
                                 <PremiumCard key={post.id} className="flex flex-col md:flex-row p-0 hover:border-gray-500 transition-all cursor-pointer group">
                                     <div className="w-full md:w-48 h-48 md:h-auto bg-gray-800 shrink-0 relative overflow-hidden">
                                         {post.images && post.images.length > 0 ? (
@@ -773,7 +778,7 @@ const Profile: React.FC<ProfileProps> = ({
                                                 <PremiumButton
                                                     variant="secondary"
                                                     onClick={() => setDeleteConfirm({ type: 'demand', id: post.id })}
-                                                    className="px-3 py-1.5 text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
+                                                    className="px-3 py-1.5 text-xs text-red-100 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
                                                 >
                                                     Delete
                                                 </PremiumButton>
@@ -782,7 +787,22 @@ const Profile: React.FC<ProfileProps> = ({
                                     </div>
                                 </PremiumCard>
                             ))
-                        ) : (
+                        ) : null}
+
+                        {myDemands.length > visibleDemandsCount && (
+                            <div className="flex justify-center pt-4">
+                                <PremiumButton
+                                    onClick={() => setVisibleDemandsCount(prev => prev + 10)}
+                                    variant="secondary"
+                                    className="px-8 py-3 text-sm"
+                                >
+                                    <PlusIcon className="w-5 h-5" />
+                                    Load More Demands ({myDemands.length - visibleDemandsCount} Left)
+                                </PremiumButton>
+                            </div>
+                        )}
+
+                        {myDemands.length === 0 && (
                             <EmptyState category="Demand" action={() => setView(View.POST_DEMAND)} />
                         )}
                         <PremiumButton
@@ -799,7 +819,7 @@ const Profile: React.FC<ProfileProps> = ({
                 {activeTab === 'rentals' && (
                     <div className="animate-fade-in-up space-y-4">
                         {rentalPosts.length > 0 ? (
-                            rentalPosts.map((post) => (
+                            rentalPosts.slice(0, visibleRentalsCount).map((post) => (
                                 <PremiumCard key={post.id} className="flex flex-col md:flex-row p-0 hover:border-gray-500 transition-all cursor-pointer group">
                                     <div className="w-full md:w-48 h-48 md:h-auto bg-gray-800 shrink-0 relative overflow-hidden">
                                         {post.images && post.images.length > 0 ? (
@@ -871,7 +891,7 @@ const Profile: React.FC<ProfileProps> = ({
                                                 <PremiumButton
                                                     variant="secondary"
                                                     onClick={() => setDeleteConfirm({ type: 'rental', id: post.id })}
-                                                    className="px-3 py-1.5 text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
+                                                    className="px-3 py-1.5 text-xs text-red-100 bg-red-500/10 hover:bg-red-500/20 h-auto border-red-500/20"
                                                 >
                                                     Delete
                                                 </PremiumButton>
@@ -880,7 +900,22 @@ const Profile: React.FC<ProfileProps> = ({
                                     </div>
                                 </PremiumCard>
                             ))
-                        ) : (
+                        ) : null}
+
+                        {rentalPosts.length > visibleRentalsCount && (
+                            <div className="flex justify-center pt-4">
+                                <PremiumButton
+                                    onClick={() => setVisibleRentalsCount(prev => prev + 10)}
+                                    variant="secondary"
+                                    className="px-8 py-3 text-sm"
+                                >
+                                    <PlusIcon className="w-5 h-5" />
+                                    Load More Rentals ({rentalPosts.length - visibleRentalsCount} Left)
+                                </PremiumButton>
+                            </div>
+                        )}
+
+                        {rentalPosts.length === 0 && (
                             <EmptyState category="Rental" action={() => setView(View.POST_RENTAL)} />
                         )}
                         <PremiumButton
@@ -897,7 +932,7 @@ const Profile: React.FC<ProfileProps> = ({
                 {activeTab === 'community' && (
                     <div className="animate-fade-in-up space-y-4">
                         {myCommunityPosts.length > 0 ? (
-                            myCommunityPosts.map(post => (
+                            myCommunityPosts.slice(0, visibleCommunityCount).map(post => (
                                 <PremiumCard key={post.id} className="p-6 hover:border-gray-500 transition-all cursor-pointer">
                                     <div className="flex justify-between items-start mb-3">
                                         <div className="flex items-center gap-3">
@@ -925,7 +960,22 @@ const Profile: React.FC<ProfileProps> = ({
                                     </div>
                                 </PremiumCard>
                             ))
-                        ) : (
+                        ) : null}
+
+                        {myCommunityPosts.length > visibleCommunityCount && (
+                            <div className="flex justify-center pt-4">
+                                <PremiumButton
+                                    onClick={() => setVisibleCommunityCount(prev => prev + 10)}
+                                    variant="secondary"
+                                    className="px-8 py-3 text-sm"
+                                >
+                                    <PlusIcon className="w-5 h-5" />
+                                    Load More Community ({myCommunityPosts.length - visibleCommunityCount} Left)
+                                </PremiumButton>
+                            </div>
+                        )}
+
+                        {myCommunityPosts.length === 0 && (
                             <EmptyState category="Discussion" action={() => setView(View.COMMUNITY_FEED)} />
                         )}
                         <PremiumButton

@@ -170,4 +170,4 @@ const DemandCard: React.FC<DemandCardProps> = ({ post, onPostSelect, onUpvote, i
   );
 };
 
-export default DemandCard;
+export default React.memo(DemandCard);

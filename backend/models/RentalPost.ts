@@ -21,7 +21,11 @@ export interface IRentalPost extends Document {
   };
   images: string[];
   price: number;
+  pricePerSqFtYearly?: number;
   squareFeet: number;
+  leaseType?: string;
+  amenities?: string[];
+  zoningCode?: string;
   phone?: string;
   email?: string;
   openToCollaboration: boolean;
@@ -64,7 +68,11 @@ const RentalPostSchema = new Schema<IRentalPost>({
   location: { type: LocationSchema, required: true },
   images: [{ type: String }],
   price: { type: Number, required: true },
+  pricePerSqFtYearly: { type: Number },
   squareFeet: { type: Number, required: true },
+  leaseType: { type: String },
+  amenities: [{ type: String }],
+  zoningCode: { type: String },
   phone: { type: String },
   email: { type: String },
   openToCollaboration: { type: Boolean, default: true },

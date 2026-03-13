@@ -36,4 +36,4 @@ const PremiumCard: React.FC<PremiumCardProps> = ({ children, className = '', onC
     );
 };
 
-export default PremiumCard;
+export default React.memo(PremiumCard);

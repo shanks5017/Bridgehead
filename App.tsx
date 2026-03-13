@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, DemandPost, RentalPost, CommunityPost, MediaItem, Location, Conversation, Message, User } from './types';
 import CustomCursor from './components/CustomCursor';
 import { createChatSession } from './services/groqService';
@@ -30,6 +30,7 @@ import { config } from './src/config';
 import Toast from './components/common/Toast';
 import QuickPostButton from './components/QuickPostButton';
 
+
 const API_BASE_URL = config.api.baseUrl;
 
 
@@ -54,15 +55,22 @@ const MOCK_ADMIN_USER: User = {
   isPhoneVerified: true,
 };
 // Global Scroll Progress Component
-const GlobalScrollProgress = () => {
+const GlobalScrollProgress = React.memo(() => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (windowHeight > 0) {
-        const progress = (window.scrollY / windowHeight) * 100;
-        setScrollProgress(progress);
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          if (windowHeight > 0) {
+            const progress = (window.scrollY / windowHeight) * 100;
+            setScrollProgress(progress);
+          }
+          ticking.current = false;
+        });
+        ticking.current = true;
       }
     };
 
@@ -72,11 +80,11 @@ const GlobalScrollProgress = () => {
 
   return (
     <div
-      className="fixed top-0 right-0 z-[100] w-[2px] md:w-[4px] bg-[#FF0000] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-      style={{ height: `${scrollProgress}%` }}
+      className="fixed top-0 right-0 z-[100] w-[2px] md:w-[4px] bg-[#FF0000] transition-transform duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)] origin-top"
+      style={{ transform: `scaleY(${scrollProgress / 100})`, height: '100%' }}
     />
   );
-};
+});
 
 const App: React.FC = () => {
   // Use Global Scroll Progress
@@ -118,8 +126,9 @@ const App: React.FC = () => {
   const [savedRentalIds, setSavedRentalIds] = useState<string[]>([]);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  const handleSetView = (newView: View, skipSave: boolean = false) => {
+  const handleSetView = useCallback((newView: View, skipSave: boolean = false) => {
     // Views that are entirely protected and require a user to be logged in.
     const protectedViews = [
       View.POST_DEMAND,
@@ -141,7 +150,7 @@ const App: React.FC = () => {
       }
     }
     window.scrollTo(0, 0);
-  };
+  }, [currentUser]);
 
   // Auto-dismiss toast after 5 seconds
   useEffect(() => {
@@ -259,12 +268,12 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setCurrentUser(null);
     handleSetView(View.HOME);
-  };
+  }, [handleSetView]);
 
   const handleUpdateUser = async (updatedUser: User) => {
     try {
@@ -419,6 +428,7 @@ const App: React.FC = () => {
 
   // --- DATA FETCHING AND MUTATIONS ---
   const fetchPosts = async () => {
+    setIsDataLoading(true);
     try {
       const [demandsRes, rentalsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/posts/demands`),
@@ -435,6 +445,8 @@ const App: React.FC = () => {
 
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsDataLoading(false);
     }
   };
 
@@ -1104,6 +1116,24 @@ const App: React.FC = () => {
           onCommunityReply={handleReplyPost}
           currentUser={currentUser}
           setView={handleSetView}
+          isLoading={isDataLoading}
+        />;
+      case View.DEMAND_FEED:
+        return <DemandFeed
+          posts={demandPosts}
+          onPostSelect={setSelectedPost}
+          onUpvote={handleUpvote}
+          savedPostIds={savedDemandIds}
+          onSaveToggle={handleDemandSaveToggle}
+          isLoading={isDataLoading}
+        />;
+      case View.RENTAL_LISTINGS:
+        return <RentalListings
+          posts={rentalPosts}
+          onPostSelect={setSelectedPost}
+          savedPostIds={savedRentalIds}
+          onSaveToggle={handleRentalSaveToggle}
+          isLoading={isDataLoading}
         />;
       case View.DEMAND_FEED:
         return <DemandFeed posts={demandPosts} onPostSelect={handlePostSelect} onUpvote={handleUpvote} savedPostIds={savedDemandIds} onSaveToggle={handleDemandSaveToggle} />;

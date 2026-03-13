@@ -57,11 +57,13 @@
 
 | Aspect | Rating | Details |
 |--------|--------|---------|
-| **Compute** | ⭐⭐⭐⭐ | 4 ARM cores, 24GB RAM (Always Free) |
-| **Storage** | ⭐⭐⭐ | 200GB block storage |
-| **Network** | ⭐⭐⭐⭐ | 10TB/month egress |
-| **Reliability** | ⭐⭐⭐ | Good, but less than AWS/GCP |
-| **Cost** | ⭐⭐⭐⭐⭐ | $0/month (forever free) |
+| **Compute** | ⭐⭐⭐⭐ | Auto-scaling (Render) |
+| **Storage** | ⭐⭐⭐ | MongoDB Atlas (Free Tier) |
+| **Network** | ⭐⭐⭐⭐ | Global CDN (Vercel) |
+| **Reliability** | ⭐⭐⭐ | High availability |
+| **Cost** | ⭐⭐⭐⭐ | $0/month (Hobby Tier) |
+
+**Best For**: Current Production Setup (Verified)
 
 **Best For**: MVP, testing, development with real users
 
@@ -100,8 +102,8 @@
 
 | Stage | Recommended | Cost | Why |
 |-------|-------------|------|-----|
-| MVP (0-1k users) | Oracle Free | $0 | Test with real users, no cost |
-| Growth (1k-10k) | Railway | $20-50 | Easy scaling, managed |
+| MVP (0-1k users) | Render + Vercel | $0 | Zero cost, easy deployment |
+| Growth (1k-10k) | Render + Vercel (Pro) | $20-50 | Auto-scaling supported |
 | Production (10k+) | DigitalOcean | $50-200 | Full control, dedicated |
 
 ---

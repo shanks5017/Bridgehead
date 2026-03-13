@@ -96,4 +96,4 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
     );
 };
 
-export default ImageContainer;
+export default React.memo(ImageContainer);

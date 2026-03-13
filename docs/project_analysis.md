@@ -12,8 +12,8 @@ Styling	Tailwind CSS (via CDN)	⚠️ Should migrate to build
 Backend	Express.js 4.21, TypeScript	✅ Solid
 Database	MongoDB (Mongoose 8.19)	✅ Good choice
 Real-time	Socket.io 4.8	✅ Implemented
-Auth	JWT + bcryptjs	✅ Working
-AI	Google Gemini API	✅ Integrated
+Auth	JWT + bcryptjs	✅ Working (Email + Username)
+AI	Groq SDK (Llama-3)	✅ Integrated (Backend)
 File Storage	GridFS + Sharp	✅ Good approach
 Email	Nodemailer	✅ Ready
 Project Structure Summary
@@ -128,14 +128,13 @@ MONGODB_ATLAS_SETUP.md
  exists	✅
 Migration is Straightforward: Simply change MONGODB_URI to Atlas connection string.
 
-6️⃣ AI Integration (Local Fine-tuned Models)
-Current AI Setup:
+6️⃣ AI Integration (Groq / Llama-3)
 
-✅ Gemini integration for business suggestions
-✅ Gemini for demand/rental matching
-⚠️ Issue: API key exposed in frontend (process.env.API_KEY in Chatbot.tsx)
-Location: 
-Chatbot.tsx
+Current AI Setup:
+✅ Groq SDK integration in `backend/controllers/aiController.ts`
+✅ Models: `llama-3.3-70b-versatile` (Complex) & `llama-3.1-8b-instant` (Fast)
+✅ System Prompts for security and persona (ARU)
+✅ API Key Secured: YES (Moved to backend)
 Future AI Features - Architecture Needed:
 
 ┌─────────────────────────────────────────────────────────────┐
@@ -272,18 +271,13 @@ Requests/sec	~100	~500
 DB Connections	~50	~200
 Server Instances	2-3	6-10
 1️⃣1️⃣ Deployment Options
-Oracle Cloud Free Tier Analysis:
 
-Aspect	Rating	Notes
-Compute	⭐⭐⭐⭐	4 ARM cores, 24GB RAM (Always Free)
-Storage	⚠️	200GB block storage (adequate)
-Network	⭐⭐⭐⭐	Generous egress (10TB/month)
-Database	⭐⭐⭐⭐	Autonomous DB 20GB free
-Reliability	⭐⭐⭐	Good, but less than AWS/GCP
-Recommendation: Oracle Free Tier is suitable for MVP/testing with these caveats:
+Current Production Setup:
+*   **Frontend**: Vercel (Auto-deploy from GitHub)
+*   **Backend**: Render (Node.js Service)
+*   **Database**: MongoDB Atlas (Free Tier)
 
-Use external MongoDB Atlas (free tier 512MB)
-Consider upgrading for production traffic
+This setup is active and verified.
 Better Alternatives for Production:
 
 Option	Cost/mo	Best For

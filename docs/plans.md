@@ -36,56 +36,71 @@ This document serves as the **master plan** for transforming Bridgehead from a f
 
 ## 📊 Current State Assessment
 
+## 📊 Current State Assessment
+
 ### What's Working ✅
 
 | Feature | Status | Evidence |
 |---------|--------|----------|
-| User Authentication | ✅ Working | JWT + bcryptjs (salt: 10) |
+| User Authentication | ✅ Working | JWT + bcryptjs (Email & Username Support) |
 | Demand Posting | ✅ Working | DemandPost model with GeoJSON |
 | Rental Listings | ✅ Working | RentalPost with pricing |
 | Community Hub | ✅ Working | 3-column layout implemented |
-| AI Business Suggestions | ✅ Working | Gemini 2.5-flash integration |
-| AI Matching | ✅ Working | Demand ↔ Rental matching |
+| AI Business Suggestions | ✅ Working | Groq (Llama-3) integration via Backend |
+| AI Matching | ✅ Working | Groq (Llama-3) integration via Backend |
 | Real-time Messaging | ✅ Working | Socket.io implemented |
 | File Upload | ✅ Working | GridFS + Sharp optimization |
 | Geospatial Queries | ✅ Working | 2dsphere indexes |
+| Deployment | ✅ Working | Vercel (Frontend) + Render (Backend) |
 
 ### What Needs Improvement ⚠️
 
 | Area | Issue | Priority | Details |
 |------|-------|----------|---------|
-| Security | API key in frontend | 🔴 CRITICAL | → [security_plans.md](file:///d:/og%20project/Bridgehead/docs/security_plans.md) |
-| Security | CORS too permissive | 🔴 CRITICAL | `origin: "*"` |
 | Security | Missing Helmet.js | 🔴 HIGH | No HTTP security headers |
-| Scalability | In-memory rate limiter | 🔴 HIGH | Won't work with multiple servers |
-| Scalability | No pagination | 🔴 HIGH | Will break with large datasets |
-| Performance | No compression | 🔴 HIGH | Missing gzip/brotli |
-| Performance | No caching headers | 🔴 HIGH | Static assets not cached |
-| Features | Username login missing | 🟡 MEDIUM | Only email login works |
-| Features | Google OAuth incomplete | 🟡 MEDIUM | UI exists, backend missing |
+| Security | CORS too permissive | 🔴 HIGH | `origin: "*"` in `server.ts` |
+| Security | No Rate Limiting | 🔴 HIGH | Backend lacks global rate limiter |
+| Scalability | No Pagination | 🔴 HIGH | Feeds load all posts at once |
+| Features | Notifications | 🟡 MEDIUM | No Notification model/controller |
+| Features | Success Stories | 🟡 MEDIUM | Missing feature |
+| Features | Archive System | 🟢 LOW | No archival for old posts |
 
 ---
 
 ## 🗓️ Development Roadmap
 
-### Phase 1: Security & Stability (Week 1-2) 🔴
+### Phase 1: Security Hardening (Immediate) 🔴
 
-**Objective**: Make the application production-secure
+**Objective**: Secure the production application.
 
-| Task | File Changes | Estimated Time |
-|------|--------------|----------------|
-| Move Gemini API to backend | Create `/api/ai/*` routes, Update `Chatbot.tsx` | 4-6 hours |
-| Add Helmet.js | `backend/server.ts` | 30 minutes |
-| Add mongo-sanitize | `backend/server.ts` | 30 minutes |
-| Fix CORS whitelist | `backend/server.ts` | 30 minutes |
-| Add compression | `backend/server.ts` | 30 minutes |
-| Implement username login | `authController.ts`, `SignIn.tsx` | 2-3 hours |
+| Task | Details | Status |
+|------|---------|--------|
+| Helmet.js | Add HTTP security headers | [ ] Todo |
+| mongo-sanitize | Prevent NoSQL injection | [ ] Todo |
+| CORS Config | Restrict to Vercel domain | [ ] Todo |
+| Rate Limiting | Add `express-rate-limit` | [ ] Todo |
+| Compression | Add Gzip/Brotli compression | [ ] Todo |
 
-**Deliverables**:
-- [ ] All API keys secured in backend
-- [ ] Security middleware suite installed
-- [ ] Username/email login working
-- [ ] CORS properly configured
+### Phase 2: Missing Core Features 🟡
+
+**Objective**: Complete the user experience.
+
+| Task | Details | Status |
+|------|---------|--------|
+| Notification System | Model + Controller + UI | [ ] Todo |
+| Success Stories | Share completed matches | [ ] Todo |
+| Password Reset | Email flow (already implemented?) | [x] Done |
+| Social Login | Google OAuth | [ ] Planned |
+
+### Phase 3: Scalability & Optimization 🟢
+
+**Objective**: Prepare for growth.
+
+| Task | Details | Status |
+|------|---------|--------|
+| Pagination | Implement cursor-based pagination | [ ] Todo |
+| Redis | Caching & Session Store | [ ] Planned |
+| CD Pipeline | Auto-deploy on push (Working) | [x] Done |
 
 ---
 

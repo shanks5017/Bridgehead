@@ -7,6 +7,9 @@ import CommunityPostCard from './CommunityPostCard';
 import { EmptyState } from './LandingPages';
 import { XIcon, PlusIcon, ImageIcon, VideoCameraIcon, HomeIcon, UserCircleIcon, BookmarkIcon, LightBulbIcon, BuildingOfficeIcon, ArrowRightIcon } from './icons';
 
+import PremiumButton from './common/PremiumButton';
+import Skeleton from './common/Skeleton';
+
 interface FeedProps {
     demandPosts: DemandPost[];
     rentalPosts: RentalPost[];
@@ -23,6 +26,7 @@ interface FeedProps {
     onCommunityReply: (postId: string, content: string, media: MediaItem[]) => void;
     currentUser: User | null;
     setView: (view: View) => void;
+    isLoading?: boolean;
 }
 
 type FeedItem =
@@ -190,7 +194,7 @@ const Feed: React.FC<FeedProps> = ({
     onPostSelect, onDemandUpvote, savedDemandIds, onDemandSaveToggle,
     savedRentalIds, onRentalSaveToggle, onCommunityLike,
     onCommunityRepost, onCommunityEdit, onCommunityReply,
-    currentUser, setView
+    currentUser, setView, isLoading
 }) => {
     const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [activeNav, setActiveNav] = useState('home');
@@ -202,6 +206,7 @@ const Feed: React.FC<FeedProps> = ({
         communityContributions: 0,
         reputationScore: 0
     });
+    const [visibleItemsCount, setVisibleItemsCount] = useState(20);
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -266,6 +271,35 @@ const Feed: React.FC<FeedProps> = ({
             setScrollProgress(progress);
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="h-screen bg-[#000000] overflow-hidden flex flex-col relative">
+                <div className="shrink-0 bg-[#000000]/95 backdrop-blur-sm z-10 border-b border-[#333333]">
+                    <div className="max-w-7xl mx-auto w-full px-4 py-2">
+                        <Skeleton className="h-8 w-48 mb-2 rounded-lg" />
+                        <Skeleton className="h-4 w-64 rounded-lg" />
+                    </div>
+                </div>
+                <div className="flex-1 overflow-hidden w-full">
+                    <div className="max-w-7xl mx-auto w-full lg:grid lg:grid-cols-4 lg:gap-6 lg:px-4 h-full">
+                        <aside className="hidden lg:block lg:col-span-1 py-6 space-y-6">
+                            <Skeleton className="h-64 w-full rounded-[2.5rem]" />
+                            <Skeleton className="h-48 w-full rounded-[2.5rem]" />
+                        </aside>
+                        <main className="col-span-1 lg:col-span-2 h-full py-6 space-y-6">
+                            {[1, 2, 3].map(i => (
+                                <Skeleton key={i} className="h-80 w-full rounded-[2.5rem]" />
+                            ))}
+                        </main>
+                        <aside className="hidden lg:block lg:col-span-1 py-6 space-y-6">
+                            <Skeleton className="h-96 w-full rounded-[2.5rem]" />
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (combinedFeed.length === 0) {
         return (
@@ -392,7 +426,7 @@ const Feed: React.FC<FeedProps> = ({
                         onScroll={handleScroll}
                     >
                         <div className="space-y-6 pb-20 lg:pb-0">
-                            {combinedFeed.map(item => {
+                            {combinedFeed.slice(0, visibleItemsCount).map(item => {
                                 switch (item.type) {
                                     case 'demand':
                                         return (
@@ -442,6 +476,18 @@ const Feed: React.FC<FeedProps> = ({
                                 }
                                 return null;
                             })}
+
+                            {combinedFeed.length > visibleItemsCount && (
+                                <div className="flex justify-center py-8">
+                                    <PremiumButton
+                                        onClick={() => setVisibleItemsCount(prev => prev + 20)}
+                                        className="px-12 py-4 text-lg"
+                                    >
+                                        <PlusIcon className="w-6 h-6" />
+                                        Load More Activity ({combinedFeed.length - visibleItemsCount} Left)
+                                    </PremiumButton>
+                                </div>
+                            )}
                         </div>
                     </main>
 

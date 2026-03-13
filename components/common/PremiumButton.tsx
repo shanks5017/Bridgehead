@@ -56,4 +56,4 @@ const PremiumButton: React.FC<PremiumButtonProps> = ({
     );
 };
 
-export default PremiumButton;
+export default React.memo(PremiumButton);

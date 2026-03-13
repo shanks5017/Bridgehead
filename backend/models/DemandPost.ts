@@ -19,6 +19,9 @@ export interface IDemandPost extends Document {
     coordinates: [number, number];
     address: string;
   };
+  demographics?: string[];
+  urgencyScore?: number;
+  distanceRadiusMiles?: number;
   images: string[];
   upvotes: number;
   upvotedBy: (Types.ObjectId | IUser)[];
@@ -60,6 +63,9 @@ const DemandPostSchema = new Schema<IDemandPost>({
   category: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: LocationSchema, required: true },
+  demographics: [{ type: String }],
+  urgencyScore: { type: Number },
+  distanceRadiusMiles: { type: Number },
   images: [{ type: String }],
   upvotes: { type: Number, default: 0 },
   upvotedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],

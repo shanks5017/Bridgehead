@@ -6,6 +6,7 @@ import { LoadingState, EmptyState } from './LandingPages';
 import DemandCard from './DemandCard';
 import RentalCard from './RentalCard';
 import { LinkIcon, PlusIcon, SparklesIcon } from './icons';
+import PremiumButton from './common/PremiumButton';
 
 interface AIMatchesProps {
     demands: DemandPost[];
@@ -64,6 +65,7 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
     const [matches, setMatches] = useState<MatchResult[] | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [visibleMatchesCount, setVisibleMatchesCount] = useState(5);
 
     const handleFindMatches = async () => {
         setIsLoading(true);
@@ -129,7 +131,7 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
                     <EmptyState title="No Strong Matches Found" message="The AI couldn't find any high-confidence matches right now. Check back when more demands or rentals are added!" />
                 ) : (
                     <div className="space-y-8">
-                        {matches.map(match => {
+                        {matches.slice(0, visibleMatchesCount).map(match => {
                             const demand = demands.find(d => d.id === match.demandId);
                             const rental = rentals.find(r => r.id === match.rentalId);
                             if (!demand || !rental) return null;
@@ -147,6 +149,18 @@ const AIMatches: React.FC<AIMatchesProps> = ({ demands, rentals, onPostSelect, o
                                 isRentalSaved={savedRentalIds.includes(rental.id)}
                             />
                         })}
+
+                        {matches.length > visibleMatchesCount && (
+                            <div className="flex justify-center pt-8">
+                                <PremiumButton
+                                    onClick={() => setVisibleMatchesCount(prev => prev + 5)}
+                                    className="px-12 py-4 text-lg"
+                                >
+                                    <PlusIcon className="w-6 h-6" />
+                                    Load More Matches ({matches.length - visibleMatchesCount} Left)
+                                </PremiumButton>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
