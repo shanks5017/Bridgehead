@@ -1121,7 +1121,7 @@ const App: React.FC = () => {
       case View.DEMAND_FEED:
         return <DemandFeed
           posts={demandPosts}
-          onPostSelect={setSelectedPost}
+          onPostSelect={handlePostSelect}
           onUpvote={handleUpvote}
           savedPostIds={savedDemandIds}
           onSaveToggle={handleDemandSaveToggle}
@@ -1130,17 +1130,13 @@ const App: React.FC = () => {
       case View.RENTAL_LISTINGS:
         return <RentalListings
           posts={rentalPosts}
-          onPostSelect={setSelectedPost}
+          onPostSelect={handlePostSelect}
           savedPostIds={savedRentalIds}
           onSaveToggle={handleRentalSaveToggle}
           isLoading={isDataLoading}
         />;
-      case View.DEMAND_FEED:
-        return <DemandFeed posts={demandPosts} onPostSelect={handlePostSelect} onUpvote={handleUpvote} savedPostIds={savedDemandIds} onSaveToggle={handleDemandSaveToggle} />;
       case View.POST_DEMAND:
         return <PostDemandForm addDemandPost={addDemandPost} setView={handleSetView} />;
-      case View.RENTAL_LISTINGS:
-        return <RentalListings posts={rentalPosts} onPostSelect={handlePostSelect} savedPostIds={savedRentalIds} onSaveToggle={handleRentalSaveToggle} />;
       case View.POST_RENTAL:
         return <PostRentalForm addRentalPost={addRentalPost} setView={handleSetView} />;
       case View.AI_SUGGESTIONS:
