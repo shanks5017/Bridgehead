@@ -18,6 +18,11 @@ export interface IDemandPost extends Document {
     type: string;
     coordinates: [number, number];
     address: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    lat?: number;
+    lng?: number;
   };
   demographics?: string[];
   urgencyScore?: number;
@@ -27,7 +32,7 @@ export interface IDemandPost extends Document {
   upvotedBy: (Types.ObjectId | IUser)[];
   phone?: string;
   email?: string;
-  openToCollaboration: boolean;
+  collaborationOpen: boolean;
   status: 'active' | 'fulfilled' | 'expired';
   createdBy: Types.ObjectId | IUser;
   comments: IComment[];
@@ -42,14 +47,19 @@ const LocationSchema = new Schema({
   type: {
     type: String,
     enum: ['Point'],
-    required: true,
+    required: false,
     default: 'Point'
   },
   coordinates: {
     type: [Number], // [longitude, latitude]
-    required: true
+    required: false
   },
-  address: { type: String, required: true }
+  address: { type: String, required: true },
+  city: { type: String },
+  state: { type: String },
+  zip: { type: String },
+  lat: { type: Number },
+  lng: { type: Number }
 }, { _id: false });
 
 const CommentSchema = new Schema({
@@ -71,17 +81,18 @@ const DemandPostSchema = new Schema<IDemandPost>({
   upvotedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   phone: { type: String },
   email: { type: String },
-  openToCollaboration: { type: Boolean, default: true },
+  collaborationOpen: { type: Boolean, default: true },
   status: {
     type: String,
     enum: ['active', 'fulfilled', 'expired'],
     default: 'active'
   },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: false },
   comments: [CommentSchema],
   hashtags: [{ type: String, index: true }]
 }, {
   timestamps: true,
+  collection: 'demands',
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 });

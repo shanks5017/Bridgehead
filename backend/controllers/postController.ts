@@ -18,13 +18,28 @@ const formatPostResponse = (post) => {
   const postObject = post.toObject();
   postObject.id = postObject._id;
 
-  // Transform GeoJSON back to simple lat/lng for frontend
-  if (postObject.location && postObject.location.coordinates) {
-    postObject.location = {
-      latitude: postObject.location.coordinates[1],
-      longitude: postObject.location.coordinates[0],
-      address: postObject.location.address
-    };
+  // Handle collaboration field name differences
+  if (postObject.collaborationOpen !== undefined) {
+    postObject.openToCollaboration = postObject.collaborationOpen;
+  }
+
+  // Transform location for frontend
+  if (postObject.location) {
+    if (Array.isArray(postObject.location.coordinates) && postObject.location.coordinates.length >= 2) {
+      // GeoJSON structure (long, lat)
+      postObject.location = {
+        latitude: postObject.location.coordinates[1],
+        longitude: postObject.location.coordinates[0],
+        address: postObject.location.address || ''
+      };
+    } else if (postObject.location.lat !== undefined && postObject.location.lng !== undefined) {
+      // Flat structure from existing DB data
+      postObject.location = {
+        latitude: postObject.location.lat,
+        longitude: postObject.location.lng,
+        address: postObject.location.address || ''
+      };
+    }
   }
 
   delete postObject._id;
