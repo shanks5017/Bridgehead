@@ -1,5 +1,5 @@
 import React from 'react';
-import { XIcon, TrashIcon, SparklesIcon, CheckCircleIcon } from './icons';
+import { XIcon, TrashIcon, CheckCircleIcon } from './icons';
 
 interface ConfirmationModalProps {
     isOpen: boolean;
@@ -20,95 +20,69 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     title,
     message,
     confirmText,
-    cancelText = 'Cancel'
+    cancelText = 'ABORT'
 }) => {
     if (!isOpen) return null;
 
     const isDelete = type === 'delete';
-    const isSuccess = type === 'success';
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-foundation/90 backdrop-blur-sm animate-fade-in p-6"
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-md mx-4 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-scale-up"
+                className="relative w-full max-w-md bg-white border border-ink neo-shadow-lg animate-slide-up overflow-hidden"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Header */}
-                <div className={`p-6 text-center ${isSuccess ? 'bg-gradient-to-br from-green-900/30 to-emerald-900/30' : ''}`}>
-                    {/* Icon */}
-                    <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDelete
-                            ? 'bg-red-500/10 border-2 border-red-500/30'
-                            : 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/30'
-                        }`}>
-                        {isDelete ? (
-                            <TrashIcon className="w-8 h-8 text-red-500" />
-                        ) : (
-                            <div className="relative">
-                                <CheckCircleIcon className="w-8 h-8 text-green-400" />
-                                <SparklesIcon className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+                {/* Visual Indicator Line */}
+                <div className={`h-2 w-full ${isDelete ? 'bg-accent-blue' : 'bg-accent-green'} border-b border-ink`} />
+
+                <div className="p-8 space-y-6">
+                    {/* Header Area */}
+                    <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 border border-ink flex items-center justify-center ${isDelete ? 'bg-accent-blue/10' : 'bg-accent-green/10'}`}>
+                            {isDelete ? <TrashIcon className="w-6 h-6 text-accent-blue" /> : <CheckCircleIcon className="w-6 h-6 text-accent-green" />}
+                        </div>
+                        <div className="space-y-1">
+                            <h3 className="text-2xl font-serif-italic font-bold tracking-tight uppercase leading-none">
+                                {title}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                                <span className={`w-1.5 h-1.5 rounded-full ${isDelete ? 'bg-accent-blue' : 'bg-accent-green'}`} />
+                                <span className="text-[10px] font-mono tracking-widest uppercase opacity-50 font-bold">Protocol Confirmation</span>
                             </div>
-                        )}
+                        </div>
                     </div>
 
-                    {/* Title */}
-                    <h3 className={`text-xl font-bold mb-2 ${isDelete ? 'text-white' : 'text-green-400'}`}>
-                        {title}
-                    </h3>
-
-                    {/* Message */}
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    {/* Message Body */}
+                    <p className="text-sm font-medium leading-relaxed opacity-70">
                         {message}
                     </p>
 
-                    {/* Celebration particles for success */}
-                    {isSuccess && (
-                        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                            <div className="absolute top-4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
-                            <div className="absolute top-8 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                            <div className="absolute top-6 left-1/3 w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                            <div className="absolute top-10 right-1/3 w-1.5 h-1.5 bg-lime-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
-                        </div>
-                    )}
-                </div>
-
-                {/* Actions */}
-                <div className="p-4 bg-white/5 border-t border-white/10 flex gap-3">
-                    {isDelete ? (
-                        <>
-                            <button
-                                onClick={onClose}
-                                className="flex-1 px-4 py-3 rounded-lg font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition-colors"
-                            >
-                                {cancelText}
-                            </button>
-                            <button
-                                onClick={onConfirm}
-                                className="flex-1 px-4 py-3 rounded-lg font-medium text-white bg-red-600 hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
-                            >
-                                <TrashIcon className="w-4 h-4" />
-                                {confirmText || 'Delete'}
-                            </button>
-                        </>
-                    ) : (
+                    {/* Action Block */}
+                    <div className="flex gap-3 pt-4 border-t border-ink/5">
+                        <button
+                            onClick={onClose}
+                            className="neo-button flex-1 py-4 text-xs font-bold"
+                        >
+                            {cancelText}
+                        </button>
                         <button
                             onClick={onConfirm}
-                            className="w-full px-4 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 transition-all flex items-center justify-center gap-2"
+                            className={`neo-button flex-1 py-4 text-xs font-bold ${isDelete ? 'bg-accent-blue text-white' : 'bg-accent-green text-white'}`}
                         >
-                            <CheckCircleIcon className="w-5 h-5" />
-                            {confirmText || 'Great!'}
+                            {confirmText || (isDelete ? 'CONFIRM DELETE' : 'ACKNOWLEDGE')}
                         </button>
-                    )}
+                    </div>
                 </div>
 
-                {/* Close button */}
+                {/* Corner Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-1 rounded-full text-gray-500 hover:text-white hover:bg-white/10 transition-colors"
+                    className="absolute top-4 right-4 w-8 h-8 border border-ink flex items-center justify-center hover:bg-foundation transition-all active:translate-y-px"
                 >
-                    <XIcon className="w-5 h-5" />
+                    <XIcon className="w-4 h-4" />
                 </button>
             </div>
         </div>

@@ -10,7 +10,8 @@ import {
   updateDemandPost,
   deleteDemandPost,
   updateRentalPost,
-  deleteRentalPost
+  deleteRentalPost,
+  upvoteRentalPost
 } from '../controllers/postController';
 import { auth } from '../middleware/auth';
 import { uploadImages, uploadToGridFS, handleGridFSUploadError } from '../middleware/gridfs-native'; // Native GridFS implementation
@@ -41,5 +42,6 @@ router.get('/rentals/mine', auth, getMyRentalPosts); // Get user's own posts
 router.post('/rentals', auth, createRentalPost);
 router.put('/rentals/:id', auth, updateRentalPost);
 router.delete('/rentals/:id', auth, deleteRentalPost);
+router.put('/rentals/:id/upvote', auth, upvoteRentalPost);
 
 export default router;

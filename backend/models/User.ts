@@ -185,8 +185,8 @@ userSchema.virtual('profileUrl').get(function () {
 
 // Virtual for user's avatar URL
 userSchema.virtual('avatarUrl').get(function () {
-  if (this.avatar) {
-    return this.avatar.startsWith('http') ? this.avatar : `/uploads/avatars/${this.avatar}`;
+  if (this.profilePicture) {
+    return this.profilePicture.startsWith('http') ? this.profilePicture : `/uploads/avatars/${this.profilePicture}`;
   }
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(this.fullName)}&background=random`;
 });

@@ -1,14 +1,9 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { config } from '../src/config';
 import { DemandPost, RentalPost, CommunityPost, MediaItem, User, View } from '../types';
 import DemandCard from './DemandCard';
 import RentalCard from './RentalCard';
 import CommunityPostCard from './CommunityPostCard';
-import { EmptyState } from './LandingPages';
-import { XIcon, PlusIcon, ImageIcon, VideoCameraIcon, HomeIcon, UserCircleIcon, BookmarkIcon, LightBulbIcon, BuildingOfficeIcon, ArrowRightIcon } from './icons';
-
-import PremiumButton from './common/PremiumButton';
-import Skeleton from './common/Skeleton';
 
 interface FeedProps {
     demandPosts: DemandPost[];
@@ -26,6 +21,7 @@ interface FeedProps {
     onCommunityReply: (postId: string, content: string, media: MediaItem[]) => void;
     currentUser: User | null;
     setView: (view: View) => void;
+    onNavigateToAIAssistant: () => void;
     isLoading?: boolean;
 }
 
@@ -34,177 +30,25 @@ type FeedItem =
     | { type: 'rental'; post: RentalPost; createdAt: Date }
     | { type: 'community'; post: CommunityPost; createdAt: Date };
 
-const CHARACTER_LIMIT = 280;
-
-// Mock Data for Suggested Shops (to be replaced with real data later)
-const MOCK_SUGGESTED_SHOPS = [
-    { name: 'Urban Coffee House', category: 'Food & Beverages' },
-    { name: 'TechHub Coworking', category: 'Workspace' },
-    { name: 'EcoMart Groceries', category: 'Retail' },
-];
-
-// EditPostForm is copied from CommunityFeed to allow editing directly from the main feed
-const EditPostForm: React.FC<{
-    post: CommunityPost;
-    onSave: (id: string, content: string, media: MediaItem[]) => void;
-    onCancel: () => void;
-}> = ({ post, onSave, onCancel }) => {
-    const [content, setContent] = useState(post.content);
-    const [media, setMedia] = useState<MediaItem[]>(post.media || []);
-    const imageInputRef = useRef<HTMLInputElement>(null);
-    const videoInputRef = useRef<HTMLInputElement>(null);
-    const [mediaOptionsOpen, setMediaOptionsOpen] = useState(false);
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (!files) return;
-
-        Array.from(files).forEach((file: File) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const url = e.target?.result as string;
-                const type = file.type.startsWith('image/') ? 'image' : 'video';
-                if (type === 'image' || type === 'video') {
-                    setMedia(prev => [...prev, { type, url }]);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-        if (imageInputRef.current) imageInputRef.current.value = "";
-        if (videoInputRef.current) videoInputRef.current.value = "";
-        setMediaOptionsOpen(false);
-    };
-
-    const removeMedia = (index: number) => {
-        setMedia(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const handleSave = (e: React.FormEvent) => {
-        e.preventDefault();
-        if ((content.trim() || media.length > 0) && content.length <= CHARACTER_LIMIT) {
-            onSave(post.id, content, media);
-        }
-    };
-
-    const remainingChars = CHARACTER_LIMIT - content.length;
-
-    return (
-        <div className="bg-[--card-color] border border-[--border-color] rounded-xl p-4">
-            <form onSubmit={handleSave}>
-                <textarea
-                    value={content}
-                    onChange={e => setContent(e.target.value)}
-                    placeholder="What's on your mind?"
-                    className="w-full bg-transparent text-lg text-[--text-primary] placeholder-[--text-secondary] focus:outline-none resize-none"
-                    rows={3}
-                    autoFocus
-                />
-
-                {media.length > 0 && (
-                    <div className="mt-4 grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                        {media.map((item, index) => (
-                            <div key={index} className="relative aspect-square">
-                                {item.type === 'image' ? (
-                                    <img src={item.url} alt={`Preview ${index}`} className="w-full h-full object-cover rounded-lg" />
-                                ) : (
-                                    <div className="w-full h-full relative">
-                                        <video src={item.url} className="w-full h-full object-cover rounded-lg" />
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/30"><VideoCameraIcon className="w-8 h-8 text-white" /></div>
-                                    </div>
-                                )}
-                                <button type="button" onClick={() => removeMedia(index)} className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 text-white z-10"><XIcon className="w-4 h-4" /></button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                <div className="flex items-center justify-between mt-2">
-                    <div className="relative">
-                        <input type="file" ref={imageInputRef} onChange={handleFileChange} accept="image/*" multiple className="hidden" />
-                        <input type="file" ref={videoInputRef} onChange={handleFileChange} accept="video/*" multiple className="hidden" />
-                        <button type="button" onClick={() => setMediaOptionsOpen(!mediaOptionsOpen)} className="text-[--primary-color] p-2 rounded-full hover:bg-[--primary-color]/10 transition-colors" title="Add Photo or Video"><PlusIcon className="w-6 h-6" /></button>
-                        {mediaOptionsOpen && (
-                            <div className="absolute bottom-full left-0 mb-2 w-40 bg-[--card-color] border border-[--border-color] rounded-lg shadow-lg z-10" onMouseLeave={() => setMediaOptionsOpen(false)}>
-                                <button type="button" onClick={() => imageInputRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-2 text-left text-[--text-secondary] hover:bg-white/10 hover:text-white"><ImageIcon className="w-5 h-5" /><span>Photo</span></button>
-                                <button type="button" onClick={() => videoInputRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-2 text-left text-[--text-secondary] hover:bg-white/10 hover:text-white"><VideoCameraIcon className="w-5 h-5" /><span>Video</span></button>
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        <span className={`text-sm ${remainingChars < 0 ? 'text-red-500' : 'text-[--text-secondary]'}`}>{remainingChars}</span>
-                        <button type="button" onClick={onCancel} className="px-5 py-2 rounded-full text-sm font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">Cancel</button>
-                        <button type="submit" disabled={(!content.trim() && media.length === 0) || remainingChars < 0} className="px-5 py-2 rounded-full text-sm font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity disabled:opacity-50">Save</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    );
-};
-
-const FeedNavLink: React.FC<{
-    icon: React.ReactNode;
-    label: string;
-    isActive: boolean;
-    onClick: () => void;
-}> = ({ icon, label, isActive, onClick }) => (
-    <button
-        onClick={onClick}
-        className={`group relative w-full flex items-center gap-3 px-4 py-3 rounded-full text-base font-medium transition-all duration-300 overflow-hidden ${isActive
-            ? 'text-white bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-xl shadow-red-500/50'
-            : 'text-[--text-secondary] hover:text-white'
-            }`}
-        style={{
-            background: isActive
-                ? 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
-                : 'transparent',
-        }}
-    >
-        {/* Animated gradient background on hover */}
-        {!isActive && (
-            <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/20 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
-                style={{
-                    backgroundSize: '200% 100%',
-                    animation: 'shimmer 2s infinite linear'
-                }}
-            />
-        )}
-
-        {/* Glow effect on hover */}
-        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/30" />
-
-        {/* Icon with premium animation */}
-        <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-            {icon}
-        </div>
-
-        {/* Text with smooth transition */}
-        <span className="relative z-10 transform transition-all duration-300 group-hover:translate-x-1">{label}</span>
-
-        {/* Shine effect on active */}
-        {isActive && (
-            <div className="absolute inset-0 opacity-30">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine" />
-            </div>
-        )}
-    </button>
-);
+// Import icons locally since they are used
+import { PlusIcon, HomeIcon, BookmarkIcon, LightBulbIcon, BuildingOfficeIcon, ArrowRightIcon } from './icons';
+import Footer from './Footer';
 
 const Feed: React.FC<FeedProps> = ({
     demandPosts, rentalPosts, communityPosts,
     onPostSelect, onDemandUpvote, savedDemandIds, onDemandSaveToggle,
     savedRentalIds, onRentalSaveToggle, onCommunityLike,
-    onCommunityRepost, onCommunityEdit, onCommunityReply,
-    currentUser, setView, isLoading
+    onCommunityRepost, onCommunityReply,
+    currentUser, setView, onNavigateToAIAssistant, isLoading,
+    onRentalUpvote, userId
 }) => {
-    const [editingPostId, setEditingPostId] = useState<string | null>(null);
     const [activeNav, setActiveNav] = useState('home');
     const [trending, setTrending] = useState<{ tag: string; posts: number }[]>([]);
-    const [suggestedShops, setSuggestedShops] = useState(MOCK_SUGGESTED_SHOPS);
+    const [suggestedShops, setSuggestedShops] = useState<{ name: string; category: string }[]>([]);
     const [userStats, setUserStats] = useState({
         demandPosts: 0,
         rentalListings: 0,
         communityContributions: 0,
-        reputationScore: 0
     });
     const [visibleItemsCount, setVisibleItemsCount] = useState(20);
 
@@ -214,8 +58,8 @@ const Feed: React.FC<FeedProps> = ({
                 const response = await fetch(`${config.api.baseUrl}/stats/trending`);
                 if (response.ok) {
                     const data = await response.json();
-                    setTrending(data.trending);
-                    setSuggestedShops(data.suggestedShops);
+                    setTrending(data.trending || []);
+                    setSuggestedShops(data.suggestedShops || []);
                 }
             } catch (error) {
                 console.error('Error fetching trending stats:', error);
@@ -247,54 +91,17 @@ const Feed: React.FC<FeedProps> = ({
         return [...demands, ...rentals, ...community].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     }, [demandPosts, rentalPosts, communityPosts]);
 
-    const handleSaveEdit = (id: string, content: string, media: MediaItem[]) => {
-        onCommunityEdit(id, content, media);
-        setEditingPostId(null);
-    };
-
-    const handleVideoReply = (postId: string, mediaItem: MediaItem) => {
-        const originalPost = communityPosts.find(p => p.id === postId);
-        if (originalPost) {
-            const replyContent = `Replying to ${originalPost.username}`;
-            onCommunityReply(postId, replyContent, [mediaItem]);
-        }
-    };
-
-    // MUST be before any early returns to follow Rules of Hooks
-    const [scrollProgress, setScrollProgress] = useState(0);
-
-    const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        const windowHeight = scrollHeight - clientHeight;
-        if (windowHeight > 0) {
-            const progress = (scrollTop / windowHeight) * 100;
-            setScrollProgress(progress);
-        }
-    };
-
     if (isLoading) {
         return (
-            <div className="h-screen bg-[#000000] overflow-hidden flex flex-col relative">
-                <div className="shrink-0 bg-[#000000]/95 backdrop-blur-sm z-10 border-b border-[#333333]">
-                    <div className="max-w-7xl mx-auto w-full px-4 py-2">
-                        <Skeleton className="h-8 w-48 mb-2 rounded-lg" />
-                        <Skeleton className="h-4 w-64 rounded-lg" />
-                    </div>
-                </div>
-                <div className="flex-1 overflow-hidden w-full">
-                    <div className="max-w-7xl mx-auto w-full lg:grid lg:grid-cols-4 lg:gap-6 lg:px-4 h-full">
-                        <aside className="hidden lg:block lg:col-span-1 py-6 space-y-6">
-                            <Skeleton className="h-64 w-full rounded-[2.5rem]" />
-                            <Skeleton className="h-48 w-full rounded-[2.5rem]" />
-                        </aside>
-                        <main className="col-span-1 lg:col-span-2 h-full py-6 space-y-6">
-                            {[1, 2, 3].map(i => (
-                                <Skeleton key={i} className="h-80 w-full rounded-[2.5rem]" />
-                            ))}
-                        </main>
-                        <aside className="hidden lg:block lg:col-span-1 py-6 space-y-6">
-                            <Skeleton className="h-96 w-full rounded-[2.5rem]" />
-                        </aside>
+            <div className="p-8">
+                <div className="max-w-7xl mx-auto space-y-8 animate-pulse">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                        <div className="col-span-1 h-96 bg-white border border-ink" />
+                        <div className="col-span-2 space-y-8">
+                            <div className="h-[400px] bg-white border border-ink" />
+                            <div className="h-[400px] bg-white border border-ink" />
+                        </div>
+                        <div className="col-span-1 h-96 bg-white border border-ink" />
                     </div>
                 </div>
             </div>
@@ -303,264 +110,213 @@ const Feed: React.FC<FeedProps> = ({
 
     if (combinedFeed.length === 0) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <EmptyState
-                    title="The Feed is Quiet"
-                    message="No new demands, rentals, or community posts yet. Be the first to start something!"
-                />
+            <div className="flex items-center justify-center p-8">
+                <div className="max-w-md w-full bg-white border border-ink neo-shadow-md p-12 text-center">
+                    <h2 className="text-4xl font-serif-italic font-bold tracking-tight uppercase leading-none">THE FEED IS SILENT</h2>
+                    <p className="mt-4 opacity-70 leading-relaxed font-medium">No signals detected in the network.</p>
+                    <button onClick={() => setView(View.POST_DEMAND)} className="neo-button neo-button-primary mt-8">INITIATE DEMAND</button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="h-screen bg-[#000000] overflow-hidden flex flex-col relative">
-            {/* Reading Progress Bar (Slidebar) */}
-            <div
-                className="fixed top-0 right-0 z-50 w-[2px] md:w-[4px] bg-[#FF0000] transition-all duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-                style={{ height: `${scrollProgress}%` }}
-            />
-
-            {/* Page Header - Fixed at Top */}
-            <div className="shrink-0 bg-[#000000]/95 backdrop-blur-sm z-10 border-b border-[#333333]">
-                <div className="max-w-7xl mx-auto w-full px-4 py-2">
-                    <h1 className="text-3xl font-bold text-white">Activity Feed</h1>
-                    <p className="text-[#A0A0A0]">What's happening in your network</p>
-                </div>
-            </div>
-
-            {/* 3-Column Holy Grail Layout: Mobile (1-col) | Desktop (3-col grid) */}
-            <div className="flex-1 overflow-hidden w-full">
-                <div className="max-w-7xl mx-auto w-full lg:grid lg:grid-cols-4 lg:gap-6 lg:px-4 h-full">
-
-                    {/* LEFT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
-                    <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6">
-                        {/* Mini Profile Card */}
-                        <div className="bg-[#121212] rounded-[2.5rem] p-6 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                            <div className="flex flex-col items-center text-center">
-                                {currentUser?.profilePicture ? (
-                                    <img
-                                        src={currentUser.profilePicture}
-                                        alt={currentUser.name}
-                                        className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-[#FF0000]/30"
-                                    />
-                                ) : (
-                                    <UserCircleIcon className="w-16 h-16 text-white/70 mb-3" />
-                                )}
-                                <h3
-                                    className="font-bold text-white text-base mb-1 cursor-pointer hover:text-[#FF0000] transition-colors"
-                                    onClick={() => setView(View.PROFILE)}
-                                >
-                                    {currentUser?.name || 'Guest User'}
-                                </h3>
-                                <p
-                                    className="text-xs text-white/50 mb-4 cursor-pointer hover:text-[#FF0000] transition-colors"
-                                    onClick={() => setView(View.PROFILE)}
-                                >
-                                    @{currentUser?.username || currentUser?.name?.toLowerCase().replace(/\s+/g, '_') || 'guest'}
-                                </p>
-
-                                {/* User Stats Display */}
-                                {currentUser && (
-                                    <div className="grid grid-cols-3 gap-2 w-full mb-4 text-center">
-                                        <div className="bg-white/5 rounded-2xl p-2">
-                                            <p className="text-xs text-white/50">Score</p>
-                                            <p className="font-bold text-[#FF0000] text-sm">{userStats.reputationScore}</p>
+        <div className="bg-foundation flex flex-col">
+            <div 
+                className="flex-1"
+            >
+                <div className="max-w-7xl mx-auto px-6 md:px-12 pt-6">
+                    <div className="lg:grid lg:grid-cols-4 lg:gap-12 pb-20">
+                        {/* LEFT SIDEBAR - User Info & Nav */}
+                        <aside className="hidden lg:flex flex-col gap-8 col-span-1 sticky top-28 self-start">
+                            {/* Profile Box */}
+                            <div className="bg-white border border-ink p-6 neo-shadow-sm hover:neo-shadow-md transition-all">
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className="w-16 h-16 neo-border bg-foundation overflow-hidden cursor-pointer"
+                                            onClick={() => setView(View.PROFILE)}
+                                        >
+                                            {currentUser?.profilePicture ? (
+                                                <img src={currentUser.profilePicture} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center font-bold text-2xl font-serif-italic italic opacity-20">
+                                                    {currentUser?.name?.[0] || 'G'}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="bg-white/5 rounded-2xl p-2">
-                                            <p className="text-xs text-white/50">Needs</p>
-                                            <p className="font-bold text-white text-sm">{userStats.demandPosts}</p>
-                                        </div>
-                                        <div className="bg-white/5 rounded-2xl p-2">
-                                            <p className="text-xs text-white/50">Rentals</p>
-                                            <p className="font-bold text-white text-sm">{userStats.rentalListings}</p>
+                                        <div className="min-w-0">
+                                            <h3 className="font-serif-italic font-bold truncate uppercase tracking-tight leading-none text-lg">{currentUser?.name || 'Guest User'}</h3>
+                                            <p className="text-[10px] font-mono opacity-50 truncate">@{currentUser?.username || 'guest_system'}</p>
                                         </div>
                                     </div>
-                                )}
+
+                                    {currentUser && (
+                                        <div className="grid grid-cols-2 gap-px bg-ink border border-ink">
+                                            <div className="bg-white p-4">
+                                                <p className="text-[10px] font-mono opacity-40 uppercase tracking-widest leading-none mb-2">Score</p>
+                                                <p className="text-2xl font-serif-italic font-bold leading-none text-accent-green">{userStats.reputationScore}</p>
+                                            </div>
+                                            <div className="bg-white p-4">
+                                                <p className="text-[10px] font-mono opacity-40 uppercase tracking-widest leading-none mb-2">Active</p>
+                                                <p className="text-2xl font-serif-italic font-bold leading-none">{userStats.demandPosts + userStats.rentalListings}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <button
+                                        onClick={() => setView(View.POST_DEMAND)}
+                                        className="neo-button neo-button-primary w-full"
+                                    >
+                                        <PlusIcon className="w-4 h-4 mr-2" />
+                                        Emit Signal
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Internal Navigation */}
+                            <nav className="bg-white border border-ink flex flex-col divide-y divide-ink">
                                 <button
-                                    onClick={() => setView(View.POST_DEMAND)}
-                                    className="group relative w-full py-2.5 px-4 bg-gradient-to-r from-[#FF0000] to-red-600 text-white rounded-full font-bold shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:scale-[1.02] transition-all duration-300 overflow-hidden"
+                                    onClick={() => setActiveNav('home')}
+                                    className={`flex items-center gap-4 px-6 py-4 transition-colors font-bold uppercase tracking-tight text-sm ${activeNav === 'home' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                        <PlusIcon className="w-5 h-5" />
-                                        Post
-                                    </span>
+                                    <HomeIcon className="w-5 h-5 font-bold" />
+                                    Global Stream
+                                </button>
+                                <button
+                                    onClick={() => setView(View.DEMAND_FEED)}
+                                    className={`flex items-center gap-4 px-6 py-4 transition-colors font-bold uppercase tracking-tight text-sm ${activeNav === 'demands' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
+                                >
+                                    <LightBulbIcon className="w-5 h-5" />
+                                    Demand Only
+                                </button>
+                                <button
+                                    onClick={() => setView(View.RENTAL_LISTINGS)}
+                                    className={`flex items-center gap-4 px-6 py-4 transition-colors font-bold uppercase tracking-tight text-sm ${activeNav === 'rentals' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
+                                >
+                                    <BuildingOfficeIcon className="w-5 h-5" />
+                                    Rental Hub
+                                </button>
+                                <button
+                                    onClick={() => setView(View.SAVED_POSTS)}
+                                    className={`flex items-center gap-4 px-6 py-4 transition-colors font-bold uppercase tracking-tight text-sm ${activeNav === 'saved' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
+                                >
+                                    <BookmarkIcon className="w-5 h-5" />
+                                    Indexed Archive
+                                </button>
+                            </nav>
+                        </aside>
+
+                        {/* CENTER COLUMN - Main Stream (DYNAMIC SCROLL) */}
+                        <div
+                            className="col-span-1 lg:col-span-2 space-y-8 px-2"
+                        >
+                            <div className="space-y-8">
+                                {combinedFeed.slice(0, visibleItemsCount).map(item => {
+                                    switch (item.type) {
+                                        case 'demand':
+                                            return (
+                                                <DemandCard
+                                                    key={`demand-${item.post.id}`}
+                                                    post={item.post as DemandPost}
+                                                    onPostSelect={onPostSelect}
+                                                    onUpvote={onDemandUpvote}
+                                                    isSaved={savedDemandIds.includes(item.post.id)}
+                                                    onSaveToggle={onDemandSaveToggle}
+                                                    layout="feed"
+                                                    setView={setView}
+                                                    userId={userId}
+                                                />
+                                            );
+                                        case 'rental':
+                                            return (
+                                                <RentalCard
+                                                    key={`rental-${item.post.id}`}
+                                                    post={item.post as RentalPost}
+                                                    onPostSelect={onPostSelect}
+                                                    isSaved={savedRentalIds.includes(item.post.id)}
+                                                    onSaveToggle={onRentalSaveToggle}
+                                                    layout="feed"
+                                                    setView={setView}
+                                                    userId={userId}
+                                                    onUpvote={onRentalUpvote}
+                                                />
+                                            );
+                                        case 'community':
+                                            return (
+                                                <CommunityPostCard
+                                                    key={`community-${item.post.id}`}
+                                                    post={item.post as CommunityPost}
+                                                    onLike={onCommunityLike}
+                                                    onRepost={onCommunityRepost}
+                                                    onEdit={() => { }}
+                                                    onReply={onCommunityReply}
+                                                    onVideoReply={() => { }}
+                                                    currentUser={currentUser}
+                                                    setView={setView}
+                                                />
+                                            );
+                                    }
+                                    return null;
+                                })}
+
+                                {combinedFeed.length > visibleItemsCount && (
+                                    <button
+                                        onClick={() => setVisibleItemsCount(prev => prev + 20)}
+                                        className="neo-button w-full py-6 text-lg font-bold mt-8"
+                                    >
+                                        LOAD MORE SIGNALS ({combinedFeed.length - visibleItemsCount} REMAINING)
+                                    </button>
+                                )}
+
+                                <div className="mt-20 border-t border-ink pt-12">
+                                    <Footer setView={setView} onNavigateToAIAssistant={onNavigateToAIAssistant} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* RIGHT SIDEBAR - Trending & Suggested */}
+                        <aside className="hidden lg:flex flex-col gap-8 col-span-1 sticky top-28 self-start">
+                            {/* Trending Box */}
+                            <div className="bg-white border border-ink p-6 neo-shadow-sm hover:neo-shadow-md transition-all">
+                                <h4 className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-50 mb-6 font-bold">Market Intelligence</h4>
+                                <div className="divide-y divide-ink/10 border-t border-ink/10">
+                                    {trending.map((item, index) => (
+                                        <div key={index} className="py-4 group cursor-pointer hover:bg-foundation/30 transition-colors -mx-6 px-6">
+                                            <p className="text-sm font-bold uppercase tracking-tight group-hover:text-accent-blue transition-colors">{item.tag}</p>
+                                            <p className="text-[10px] font-mono opacity-40 uppercase tracking-widest mt-1">{item.posts.toLocaleString()} DATA POINTS</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button className="w-full mt-6 text-[10px] font-mono tracking-widest uppercase opacity-40 hover:opacity-100 hover:text-accent-blue flex items-center justify-between transition-all pt-6 border-t border-ink">
+                                    Expand Index
+                                    <ArrowRightIcon className="w-3 h-3" />
                                 </button>
                             </div>
-                        </div>
 
-                        {/* Navigation Links */}
-                        <div className="bg-[#121212] rounded-[2.5rem] p-4 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                            <nav className="space-y-2">
-                                <FeedNavLink
-                                    icon={<HomeIcon className="w-5 h-5" />}
-                                    label="Home"
-                                    isActive={activeNav === 'home'}
-                                    onClick={() => { setActiveNav('home'); setView(View.FEED); }}
-                                />
-                                <FeedNavLink
-                                    icon={<LightBulbIcon className="w-5 h-5" />}
-                                    label="Explore"
-                                    isActive={activeNav === 'demands'}
-                                    onClick={() => { setActiveNav('demands'); setView(View.DEMAND_FEED); }}
-                                />
-                                <FeedNavLink
-                                    icon={<BuildingOfficeIcon className="w-5 h-5" />}
-                                    label="Notifications"
-                                    isActive={activeNav === 'notifications'}
-                                    onClick={() => setActiveNav('notifications')}
-                                />
-                                <FeedNavLink
-                                    icon={<BookmarkIcon className="w-5 h-5" />}
-                                    label="Saved"
-                                    isActive={activeNav === 'saved'}
-                                    onClick={() => { setActiveNav('saved'); setView(View.SAVED_POSTS); }}
-                                />
-                            </nav>
-                        </div>
-                    </aside>
-
-                    {/* CENTER COLUMN - 50% (col-span-2) - Full Width on Mobile */}
-                    <main
-                        className="col-span-1 lg:col-span-2 h-full overflow-y-auto hide-scrollbar px-4 lg:px-0 py-6"
-                        onScroll={handleScroll}
-                    >
-                        <div className="space-y-6 pb-20 lg:pb-0">
-                            {combinedFeed.slice(0, visibleItemsCount).map(item => {
-                                switch (item.type) {
-                                    case 'demand':
-                                        return (
-                                            <DemandCard
-                                                key={`demand-${item.post.id}`}
-                                                post={item.post as DemandPost}
-                                                onPostSelect={onPostSelect}
-                                                onUpvote={onDemandUpvote}
-                                                isSaved={savedDemandIds.includes(item.post.id)}
-                                                onSaveToggle={onDemandSaveToggle}
-                                                layout="feed"
-                                            />
-                                        );
-                                    case 'rental':
-                                        return (
-                                            <RentalCard
-                                                key={`rental-${item.post.id}`}
-                                                post={item.post as RentalPost}
-                                                onPostSelect={onPostSelect}
-                                                isSaved={savedRentalIds.includes(item.post.id)}
-                                                onSaveToggle={onRentalSaveToggle}
-                                                layout="feed"
-                                            />
-                                        );
-                                    case 'community':
-                                        const post = item.post as CommunityPost;
-                                        return editingPostId === post.id ? (
-                                            <EditPostForm
-                                                key={`edit-${post.id}`}
-                                                post={post}
-                                                onSave={handleSaveEdit}
-                                                onCancel={() => setEditingPostId(null)}
-                                            />
-                                        ) : (
-                                            <CommunityPostCard
-                                                key={`community-${post.id}`}
-                                                post={post}
-                                                onLike={onCommunityLike}
-                                                onRepost={onCommunityRepost}
-                                                onEdit={setEditingPostId}
-                                                onReply={onCommunityReply}
-                                                onVideoReply={handleVideoReply}
-                                                currentUser={currentUser}
-                                                setView={setView}
-                                            />
-                                        );
-                                }
-                                return null;
-                            })}
-
-                            {combinedFeed.length > visibleItemsCount && (
-                                <div className="flex justify-center py-8">
-                                    <PremiumButton
-                                        onClick={() => setVisibleItemsCount(prev => prev + 20)}
-                                        className="px-12 py-4 text-lg"
-                                    >
-                                        <PlusIcon className="w-6 h-6" />
-                                        Load More Activity ({combinedFeed.length - visibleItemsCount} Left)
-                                    </PremiumButton>
+                            {/* Suggestions */}
+                            <div className="bg-white border border-ink p-6 neo-shadow-sm hover:neo-shadow-md transition-all">
+                                <h4 className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-50 mb-6 font-bold">Suggested Nodes</h4>
+                                <div className="divide-y divide-ink/10 border-t border-ink/10">
+                                    {suggestedShops.slice(0, 3).map((shop, index) => (
+                                        <div key={index} className="py-4 flex items-center justify-between">
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-bold uppercase tracking-tight truncate leading-none mb-1">{shop.name}</p>
+                                                <p className="text-[10px] font-mono opacity-40 uppercase tracking-widest">{shop.category}</p>
+                                            </div>
+                                            <button className="text-[10px] font-bold font-mono tracking-widest uppercase border border-ink px-2 py-1 hover:bg-ink hover:text-white transition-all">
+                                                Track
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                        </div>
-                    </main>
-
-                    {/* RIGHT SIDEBAR - 25% (col-span-1) - Hidden on Mobile */}
-                    <aside className="hidden lg:block lg:col-span-1 h-full overflow-y-auto hide-scrollbar py-6 space-y-6 pr-2">
-                        {/* Trending Section */}
-                        <div className="bg-[#121212] rounded-[2.5rem] p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                            <h4 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#FF0000]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                                Trending Now
-                            </h4>
-                            <div className="space-y-3">
-                                {trending.map((item, index) => (
-                                    <button
-                                        key={index}
-                                        className="w-full text-left px-4 py-3 rounded-full hover:bg-white/5 transition-all group relative overflow-hidden"
-                                    >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                                            style={{
-                                                backgroundSize: '200% 100%',
-                                                animation: 'shimmer 2s infinite linear'
-                                            }}
-                                        />
-                                        <div className="relative z-10">
-                                            <p className="font-semibold text-white text-sm group-hover:text-[#FF0000] transition-colors">
-                                                {item.tag}
-                                            </p>
-                                            <p className="text-xs text-white/50 mt-0.5">{item.posts.toLocaleString()} posts</p>
-                                        </div>
-                                    </button>
-                                ))}
                             </div>
-                        </div>
-
-                        {/* Suggested Shops */}
-                        <div className="bg-[#121212] rounded-[2.5rem] p-5 border border-white/10 shadow-[0_4px_20px_rgba(255,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(255,0,0,0.12)] transition-all duration-300">
-                            <h4 className="font-bold text-white text-sm mb-4">Suggested Shops</h4>
-                            <div className="space-y-3">
-                                {suggestedShops.map((shop, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center justify-between px-4 py-3 rounded-full hover:bg-white/5 transition-all group relative overflow-hidden"
-                                    >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                                            style={{
-                                                backgroundSize: '200% 100%',
-                                                animation: 'shimmer 2s infinite linear'
-                                            }}
-                                        />
-                                        <div className="relative z-10 flex-1">
-                                            <p className="font-semibold text-white text-sm mb-0.5 group-hover:text-[#FF0000] transition-colors">{shop.name}</p>
-                                            <p className="text-xs text-white/50">{shop.category}</p>
-                                        </div>
-                                        <button className="relative z-10 ml-2 px-4 py-1.5 text-xs font-bold rounded-full bg-[#FF0000]/10 text-[#FF0000] border border-[#FF0000]/20 hover:bg-[#FF0000] hover:text-white hover:border-[#FF0000] transition-all shadow-[0_0_10px_rgba(255,0,0,0.1)] hover:shadow-[0_0_15px_rgba(255,0,0,0.4)]">
-                                            Follow
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                            <button className="w-full mt-4 py-3 rounded-full text-sm font-semibold text-white/70 hover:text-white hover:bg-white/5 transition-all group relative overflow-hidden">
-                                <span className="relative z-10 flex items-center justify-center gap-2">
-                                    Show more
-                                    <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </span>
-                            </button>
-                        </div>
-                    </aside>
+                        </aside>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Feed;
+export default React.memo(Feed);

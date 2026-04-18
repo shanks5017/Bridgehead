@@ -43,9 +43,10 @@ interface CategoryRowProps {
     onUpvote: (id: string) => void;
     onSaveToggle: (id: string) => void;
     savedPostIds: string[];
+    userId?: string;
 }
 
-const CategoryRow: React.FC<CategoryRowProps> = React.memo(({ title, posts, onPostSelect, onUpvote, onSaveToggle, savedPostIds }) => {
+const CategoryRow: React.FC<CategoryRowProps> = React.memo(({ title, posts, onPostSelect, onUpvote, onSaveToggle, savedPostIds, userId }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
@@ -105,25 +106,27 @@ const CategoryRow: React.FC<CategoryRowProps> = React.memo(({ title, posts, onPo
                     </button>
                 )}
             </div>
-            <div className="relative group">
+            <div className="relative group/row">
                 {canScrollLeft && (
                     <button
                         onClick={() => scroll('left')}
-                        className="absolute left-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-r from-[--bg-color] to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                        className="absolute left-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-r from-[--bg-color] to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
                         aria-label="Scroll left"
                     >
                         <ArrowLeftIcon className="w-8 h-8 text-white rounded-full bg-black/50 p-1" />
                     </button>
                 )}
-                <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 px-4 sm:px-6 lg:px-8 hide-scrollbar">
+                <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 px-4 sm:px-6 lg:px-8 hide-scrollbar items-stretch">
                     {displayedPosts.map(post => (
-                        <div key={post.id} className="w-80 flex-shrink-0">
+                        <div key={post.id} className="w-80 flex-shrink-0 flex flex-col">
                             <DemandCard
                                 post={post}
                                 onPostSelect={onPostSelect}
                                 onUpvote={onUpvote}
                                 isSaved={savedPostIds.includes(post.id)}
                                 onSaveToggle={onSaveToggle}
+                                className="h-full"
+                                userId={userId}
                             />
                         </div>
                     ))}
@@ -142,7 +145,7 @@ const CategoryRow: React.FC<CategoryRowProps> = React.memo(({ title, posts, onPo
                 {canScrollRight && (
                     <button
                         onClick={() => scroll('right')}
-                        className="absolute right-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-l from-[--bg-color] to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                        className="absolute right-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-l from-[--bg-color] to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
                         aria-label="Scroll right"
                     >
                         <ArrowRightIcon className="w-8 h-8 text-white rounded-full bg-black/50 p-1" />
@@ -153,7 +156,7 @@ const CategoryRow: React.FC<CategoryRowProps> = React.memo(({ title, posts, onPo
     )
 });
 
-const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, savedPostIds, onSaveToggle, isLoading }) => {
+const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, savedPostIds, onSaveToggle, isLoading, userId }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -464,6 +467,7 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                             onUpvote={onUpvote}
                             savedPostIds={savedPostIds}
                             onSaveToggle={onSaveToggle}
+                            userId={userId}
                         />
                     ) : (
                         <>
@@ -476,6 +480,7 @@ const DemandFeed: React.FC<DemandFeedProps> = ({ posts, onPostSelect, onUpvote, 
                                     onUpvote={onUpvote}
                                     onSaveToggle={onSaveToggle}
                                     savedPostIds={savedPostIds}
+                                    userId={userId}
                                 />
                             ))}
                             {postsByCategory.length > visibleCategoriesCount && (
@@ -504,9 +509,11 @@ interface VirtualizedGridProps {
     onUpvote: (id: string) => void;
     savedPostIds: string[];
     onSaveToggle: (id: string) => void;
+    isLoading?: boolean;
+    userId?: string;
 }
 
-const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, onUpvote, savedPostIds, onSaveToggle }) => {
+const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, onUpvote, savedPostIds, onSaveToggle, isLoading, userId }) => {
     const parentRef = useRef<HTMLDivElement>(null);
     const [columnCount, setColumnCount] = useState(4);
 
@@ -565,6 +572,7 @@ const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, 
                                         onUpvote={onUpvote}
                                         isSaved={savedPostIds.includes(post.id)}
                                         onSaveToggle={onSaveToggle}
+                                        userId={userId}
                                     />
                                 ))}
                             </div>

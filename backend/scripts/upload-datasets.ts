@@ -24,9 +24,9 @@ async function uploadData() {
     if (!admin) {
         console.log('👤 Creating Admin User...');
         admin = new User({
-            fullName: 'Shashank Admin',
+            fullName: 'Shashank',
             email: adminEmail,
-            username: 'shashank_5017',
+            username: 'shashank',
             password: 'shashank@5017U', // Will be hashed by pre-save middleware
             userType: 'entrepreneur',
             verified: true
@@ -34,7 +34,11 @@ async function uploadData() {
         await admin.save();
         console.log('✅ Admin User created.');
     } else {
-        console.log('✅ Admin User already exists.');
+        console.log('✅ Admin User already exists. Updating username to "shashank"...');
+        admin.username = 'shashank';
+        admin.fullName = 'Shashank';
+        await admin.save();
+        console.log('✅ Admin User updated.');
     }
 
     const adminId = admin._id;

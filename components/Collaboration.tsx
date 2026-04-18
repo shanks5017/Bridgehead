@@ -79,12 +79,12 @@ const ParticipantAvatar: React.FC<{ participantId: string; className: string }> 
         if (className.includes('w-8')) iconSize = 'w-4 h-4';
 
         return (
-            <div className={`${className} flex-shrink-0 rounded-full bg-gradient-to-br from-[#FF3B30] to-orange-600 flex items-center justify-center animate-pulse duration-[3000ms]`}>
-                <SparklesIcon className={`${iconSize} text-white`} />
+            <div className={`${className} flex-shrink-0 border-2 border-white bg-ink flex items-center justify-center`}>
+                <SparklesIcon className={`${iconSize} text-accent-green`} />
             </div>
         );
     }
-    return <UserCircleIcon className={`${className} flex-shrink-0 text-[#888888]`} />;
+    return <UserCircleIcon className={`${className} flex-shrink-0 text-ink/30 border-2 border-ink/20`} />;
 };
 
 // --- Component: Deal Flow List Item ---
@@ -95,70 +95,50 @@ const ConversationListItem: React.FC<{
     index: number;
 }> = ({ conversation, isSelected, onClick, index }) => {
     const isAru = conversation.participant.id === 'aru-bot';
-    const isRead = true; // Mock read status for now
-
-    // Staggered Animation Delay
-    const animationDelay = `${index * 50}ms`;
 
     return (
         <button
             onClick={onClick}
-            style={{ animationDelay }}
-            className={`w-full text-left p-4 relative group/item transition-all duration-300 rounded-2xl mb-2 overflow-hidden
+            className={`w-full text-left p-5 relative border-b border-ink/10 transition-all duration-200
                 ${isSelected
-                    ? 'text-white bg-gradient-to-r from-red-600/20 via-red-500/10 to-transparent border border-red-500/50 shadow-[0_0_15px_rgba(220,38,38,0.3)]'
-                    : 'text-[#E0E0E0] hover:bg-white/5 border border-transparent hover:border-white/10'
-                } animate-in slide-in-from-left-4 fade-in fill-mode-backwards`}
+                    ? 'bg-accent-green text-ink border-2 border-ink'
+                    : 'bg-white text-ink hover:bg-foundation'
+                }`}
         >
-            {/* Hover Glow Effect */}
-            <div className={`absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-
-            {/* Active Shimmer */}
-            {isSelected && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
-            )}
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-4">
                 <ParticipantAvatar participantId={conversation.participant.id} className="w-12 h-12" />
 
                 <div className="flex-1 min-w-0">
-                    {/* Header: Name + Badge */}
-                    <div className="flex justify-between items-center mb-0.5">
+                    <div className="flex justify-between items-center mb-1">
                         <div className="flex items-center gap-2">
-                            <span className={`font-bold text-sm truncate ${isSelected ? 'text-white' : 'text-[#E0E0E0]'}`}>
+                            <span className={`font-serif-italic font-black text-sm uppercase tracking-tight ${isSelected ? 'text-ink' : 'text-ink'}`}>
                                 {conversation.participant.name}
                             </span>
                             {isAru ? (
-                                <span className="text-[10px] uppercase tracking-wider text-yellow-500 border border-yellow-500/30 px-1.5 rounded bg-yellow-500/10">AI Agent</span>
+                                <span className={`text-[9px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 border ${isSelected ? 'border-ink text-ink' : 'border-accent-green text-accent-green'}`}>AI_AGENT</span>
                             ) : (
-                                <span className="text-[10px] uppercase tracking-wider text-[#FF3B30] border border-[#FF3B30]/30 px-1.5 rounded bg-[#FF3B30]/10">Entrepreneur</span>
+                                <span className={`text-[9px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 border ${isSelected ? 'border-ink/20 text-ink/60' : 'border-ink/10 text-ink/40'}`}>PARTNER</span>
                             )}
                         </div>
-                        {/* Read Status Icon */}
-                        {isRead ? (
-                            <div className="w-4 h-4 rounded-full border border-[#444] bg-[#222] flex items-center justify-center">
-                                <span className="block w-2 h-1 border-l border-b border-[#666] -rotate-45 mb-0.5" />
-                            </div>
-                        ) : (
-                            <div className="w-2 h-2 rounded-full bg-[#FF3B30] shadow-[0_0_8px_#FF3B30]" />
-                        )}
-                    </div>
-
-                    {/* Subtitle: Listing Name */}
-                    <p className="text-xs text-[#888888] font-medium truncate mb-1">
-                        {isAru ? 'Bridgehead Assistant' : conversation.participant.postTitle}
-                    </p>
-
-                    {/* Last Message Preview */}
-                    <div className="flex justify-between items-end">
-                        <p className={`text-xs truncate max-w-[140px] ${isSelected ? 'text-white/70' : 'text-[#666]'}`}>
-                            {conversation.messages[conversation.messages.length - 1]?.text}
-                        </p>
-                        <span className="text-[10px] text-[#444] group-hover:text-[#666] transition-colors">
+                        <span className={`text-[9px] font-mono font-bold opacity-40`}>
                             {formatTimestamp(conversation.lastMessageTimestamp)}
                         </span>
                     </div>
+
+                    <p className={`text-[11px] font-bold uppercase tracking-tight truncate mb-1 opacity-60`}>
+                        {isAru ? 'ZONEK Operational Support' : conversation.participant.postTitle}
+                    </p>
+
+                    <p className={`text-[11px] truncate max-w-[200px] opacity-40 font-mono italic`}>
+                        {conversation.messages[conversation.messages.length - 1]?.text}
+                    </p>
                 </div>
             </div>
+            {isSelected && (
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <div className="w-2 h-2 bg-ink animate-pulse" />
+                </div>
+            )}
         </button>
     );
 };
@@ -240,39 +220,36 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
     });
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] bg-black text-white font-sans overflow-hidden p-4 gap-4">
+        <div className="flex h-[calc(100vh-5rem)] mt-20 bg-foundation text-ink font-sans overflow-hidden">
 
             {/* --- 1. Sidebar: Active Deal Flow --- */}
-            {/* Mobile: Hidden if chat open. Desktop: Always visible (w-96) */}
-            <aside className={`flex flex-col bg-[#050505] z-10 w-full md:w-96 rounded-[2.5rem] border border-[#1A1A1A] overflow-hidden shadow-2xl ${selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
+            <aside className={`flex flex-col bg-white z-10 w-full md:w-96 border-r-2 border-ink overflow-hidden ${selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
 
                 {/* Header Section */}
-                <div className="p-5 border-b border-[#1A1A1A]">
-                    <h2 className="text-xs font-bold tracking-[0.2em] text-[#888] uppercase mb-4">Active Deal Flow</h2>
-
+                <div className="p-6 border-b-2 border-ink bg-foundation">
                     {/* Search Bar */}
-                    <div className="relative mb-4">
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#444]" />
+                    <div className="relative mb-6">
+                        <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink/40" />
                         <input
                             type="text"
-                            placeholder="Search deals, leads..."
+                            placeholder="SEARCH_SIGNAL..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-[#121212] border border-[#222] rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-[#444] focus:outline-none focus:border-[#FF3B30] transition-colors"
+                            className="w-full bg-white border-2 border-ink px-4 py-3 pl-11 text-[11px] font-mono font-bold text-ink placeholder-ink/30 focus:outline-none focus:ring-2 focus:ring-accent-green transition-all"
                         />
                     </div>
 
                     {/* Filter Toggles */}
-                    <div className="flex p-0.5 bg-[#121212] rounded-lg border border-[#222]">
+                    <div className="flex border-2 border-ink bg-white overflow-hidden">
                         <button
                             onClick={() => setFilter('all')}
-                            className={`flex-1 py-1.5 text-[11px] font-semibold uppercase tracking-wide rounded-md transition-all ${filter === 'all' ? 'bg-[#FF3B30] text-white shadow-lg' : 'text-[#666] hover:text-white'}`}
+                            className={`flex-1 py-3 text-[10px] font-mono font-black uppercase tracking-widest transition-all ${filter === 'all' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
                         >
                             My Demands
                         </button>
                         <button
                             onClick={() => setFilter('opportunities')}
-                            className={`flex-1 py-1.5 text-[11px] font-semibold uppercase tracking-wide rounded-md transition-all ${filter === 'opportunities' ? 'bg-[#FF3B30] text-white shadow-lg' : 'text-[#666] hover:text-white'}`}
+                            className={`flex-1 py-3 text-[10px] font-mono font-black uppercase tracking-widest border-l-2 border-ink transition-all ${filter === 'opportunities' ? 'bg-ink text-white' : 'hover:bg-foundation'}`}
                         >
                             Opportunities
                         </button>
@@ -280,7 +257,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                 </div>
 
                 {/* Conversation List */}
-                <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 scrollbar-thin scrollbar-thumb-[#222] scrollbar-track-transparent">
+                <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-ink/10 scrollbar-track-transparent">
                     {filteredConversations.map((convo, index) => (
                         <ConversationListItem
                             key={convo.id}
@@ -291,46 +268,47 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                         />
                     ))}
                     {filteredConversations.length === 0 && (
-                        <div className="p-8 text-center text-[#444]">
-                            <p className="text-sm">No active deals found.</p>
+                        <div className="p-12 text-center">
+                            <p className="text-[10px] font-mono font-bold uppercase opacity-30 tracking-[0.3em]">No Active Signals Found</p>
                         </div>
                     )}
                 </div>
             </aside>
 
 
-            {/* --- 2. Main Chat: The Context Hub --- */}
-            {/* Mobile: Hidden if no chat. Desktop: Always visible (flex-1) */}
-            <main className={`flex-col relative bg-[#050505] w-full md:flex-1 rounded-[2.5rem] border border-[#1A1A1A] overflow-hidden shadow-2xl ${!selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
+            {/* --- 2. Main Chat Area --- */}
+            <main className={`flex-col relative bg-foundation w-full md:flex-1 overflow-hidden ${!selectedConversationId ? 'hidden md:flex' : 'flex'}`}>
                 {selectedConversation ? (
                     <>
                         {/* Chat Header */}
-                        <header className="h-20 shrink-0 border-b border-[#1A1A1A] bg-[#050505]/95 backdrop-blur-sm flex items-center justify-between px-4 md:px-6 z-20">
-                            <div className="flex items-center gap-4">
+                        <header className="h-20 shrink-0 border-b-2 border-ink bg-white flex items-center justify-between px-6 md:px-12 z-20 overflow-hidden relative">
+                            <div className="absolute top-0 right-0 w-32 h-full bg-ink/5 skew-x-[-20deg] translate-x-16" />
+                            
+                            <div className="flex items-center gap-6 relative z-10">
                                 {/* Back Button (Mobile Only) */}
                                 <button
                                     onClick={() => setSelectedConversationId(null)}
-                                    className="md:hidden p-2 -ml-2 text-[#888] hover:text-white transition-colors"
+                                    className="md:hidden p-2 -ml-2 text-ink hover:text-accent-green transition-colors"
                                 >
                                     <ArrowLeftIcon className="w-5 h-5" />
                                 </button>
 
-                                <ParticipantAvatar participantId={selectedConversation.participant.id} className="w-10 h-10" />
-                                <div>
-                                    {/* Listing Title Prominently */}
-                                    <h1 className="text-sm md:text-lg font-bold text-white leading-tight flex items-center gap-2 line-clamp-1">
-                                        {selectedConversation.participant.id === 'aru-bot' ? 'BridgeHead Assistant' : selectedConversation.participant.postTitle}
-                                        {selectedConversation.participant.id === 'aru-bot' && <SparklesIcon className="w-4 h-4 text-[#FF3B30]" />}
-                                    </h1>
-                                    {/* User Name + Verified Badge */}
-                                    <div className="flex items-center gap-1.5 mt-0.5">
-                                        <span className="text-xs text-[#888] font-medium tracking-wide">{selectedConversation.participant.name}</span>
-                                        {selectedConversation.participant.id !== 'aru-bot' && (
-                                            <div className="flex items-center gap-0.5 text-[#FF3B30]">
-                                                <VerifiedIcon className="w-3 h-3" />
-                                                <span className="text-[10px] font-bold uppercase hidden sm:inline">Verified Lead</span>
-                                            </div>
-                                        )}
+                                <div className="flex items-center gap-4">
+                                    <ParticipantAvatar participantId={selectedConversation.participant.id} className="w-10 h-10 border-2 border-ink" />
+                                    <div>
+                                        <h1 className="text-lg font-serif-italic font-black text-ink uppercase tracking-tight leading-none flex items-center gap-2">
+                                            {selectedConversation.participant.id === 'aru-bot' ? 'ARU' : selectedConversation.participant.postTitle}
+                                            {selectedConversation.participant.id === 'aru-bot' && <SparklesIcon className="w-4 h-4 text-accent-green" />}
+                                        </h1>
+                                        <div className="flex items-center gap-2 mt-1.5">
+                                            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-ink/40">{selectedConversation.participant.name}</span>
+                                            {selectedConversation.participant.id !== 'aru-bot' && (
+                                                <div className="flex items-center gap-1 text-accent-green">
+                                                    <VerifiedIcon className="w-3 h-3" />
+                                                    <span className="text-[9px] font-mono font-black uppercase">Verified_Node</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -338,93 +316,88 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                             {/* View Deal Details Action */}
                             <button
                                 onClick={() => setDetailsOpen(true)}
-                                className="group relative flex items-center gap-2 px-3 md:px-4 py-2 rounded-full overflow-hidden transition-all duration-300 shadow-lg hover:shadow-red-500/20"
+                                className="group bg-ink text-foundation px-6 py-3 text-[10px] font-mono font-black uppercase tracking-widest neo-border hover:bg-accent-green hover:text-ink transition-all active:translate-y-px"
                             >
-                                <div className="absolute inset-0 bg-[#333] group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-500 transition-all duration-300" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine opacity-0 group-hover:opacity-100" />
-
-                                <span className="relative z-10 text-xs font-semibold uppercase tracking-wider hidden sm:inline text-[#888] group-hover:text-white transition-colors">View Details</span>
-                                <LinkIcon className="relative z-10 w-3.5 h-3.5 text-[#888] group-hover:text-white transition-colors" />
+                                View_Intel
                             </button>
                         </header>
 
-                        {/* --- Deal Details Modal / Slide-over --- */}
+                        {/* --- Deal Details Side Panel --- */}
                         {detailsOpen && (
-                            <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-end animate-in fade-in duration-200">
-                                <div className="w-full md:w-96 bg-[#0A0A0A] border-l border-[#1A1A1A] h-full overflow-y-auto p-6 animate-in slide-in-from-right duration-300 shadow-2xl">
+                            <div className="absolute inset-0 z-50 bg-ink/60 backdrop-blur-sm flex justify-end">
+                                <div className="w-full md:w-96 bg-white border-l-2 border-ink h-full overflow-y-auto p-10 shadow-[ -10px_0_30px_rgba(0,0,0,0.1)]">
                                     {/* Modal Header */}
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h3 className="text-sm font-bold uppercase tracking-widest text-[#666]">Deal Intelligence</h3>
+                                    <div className="flex items-center justify-between mb-12">
+                                        <h3 className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-ink/30">Deal Intelligence</h3>
                                         <button
                                             onClick={() => setDetailsOpen(false)}
-                                            className="p-2 -mr-2 text-[#888] hover:text-white hover:bg-white/10 rounded-full transition-all"
+                                            className="p-2 -mr-2 bg-foundation border-2 border-ink hover:bg-accent-green transition-all"
                                         >
                                             <XIcon className="w-5 h-5" />
                                         </button>
                                     </div>
 
                                     {/* Participant Profile */}
-                                    <div className="flex flex-col items-center mb-8">
-                                        <div className="relative mb-4">
-                                            <ParticipantAvatar participantId={selectedConversation.participant.id} className="w-24 h-24 text-[#333]" />
+                                    <div className="flex flex-col items-center mb-12">
+                                        <div className="relative mb-6">
+                                            <ParticipantAvatar participantId={selectedConversation.participant.id} className="w-32 h-32 border-4 border-ink" />
                                             {selectedConversation.participant.id !== 'aru-bot' && (
-                                                <div className="absolute bottom-0 right-0 bg-[#0A0A0A] p-1 rounded-full border border-[#1A1A1A]">
-                                                    <VerifiedIcon className="w-6 h-6 text-[#FF3B30]" />
+                                                <div className="absolute bottom-0 right-0 bg-accent-green p-2 border-4 border-ink">
+                                                    <VerifiedIcon className="w-8 h-8 text-ink" />
                                                 </div>
                                             )}
                                         </div>
-                                        <h2 className="text-xl font-bold text-white mb-1">{selectedConversation.participant.name}</h2>
-                                        <p className="text-sm text-[#666]">
-                                            {selectedConversation.participant.id === 'aru-bot' ? 'Bridgehead AI' : 'Verified Entrepreneur'}
+                                        <h2 className="text-2xl font-serif-italic font-black text-ink uppercase mb-2">{selectedConversation.participant.name}</h2>
+                                        <p className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-40">
+                                            {selectedConversation.participant.id === 'aru-bot' ? 'Operational Assistant' : 'Verified Partner'}
                                         </p>
                                     </div>
 
                                     {/* Deal Context */}
-                                    <div className="space-y-6">
+                                    <div className="space-y-8">
                                         {/* Reference Post */}
-                                        <div className="p-4 rounded-xl bg-[#121212] border border-[#222]">
-                                            <p className="text-[10px] uppercase tracking-wide text-[#FF3B30] mb-2 font-bold">Subject of Negotiation</p>
-                                            <h4 className="text-sm font-semibold text-[#E0E0E0] leading-snug mb-3">
-                                                {selectedConversation.participant.id === 'aru-bot' ? 'Your Personal Assistant' : selectedConversation.participant.postTitle}
+                                        <div className="p-6 border-2 border-ink bg-foundation">
+                                            <p className="text-[9px] font-mono font-black uppercase tracking-widest text-accent-green mb-3">Target Signal</p>
+                                            <h4 className="text-lg font-serif-italic font-black text-ink uppercase leading-tight mb-6">
+                                                {selectedConversation.participant.id === 'aru-bot' ? 'System Operational Logic' : selectedConversation.participant.postTitle}
                                             </h4>
                                             {selectedConversation.participant.id !== 'aru-bot' && (
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs text-[#666] bg-[#1A1A1A] px-2 py-1 rounded border border-[#333]">Demand</span>
-                                                    <span className="text-xs text-[#666] bg-[#1A1A1A] px-2 py-1 rounded border border-[#333]">Active</span>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-[10px] font-mono font-bold uppercase px-3 py-1 bg-ink text-foundation">Demand_Active</span>
+                                                    <span className="text-[10px] font-mono font-bold uppercase px-3 py-1 border border-ink/20">Operational</span>
                                                 </div>
                                             )}
                                         </div>
 
                                         {/* Status Indicators */}
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <div className="p-3 rounded-lg bg-[#121212] border border-[#222]">
-                                                <p className="text-[10px] text-[#666] uppercase mb-1">Contract Status</p>
-                                                <p className="text-xs font-bold text-white flex items-center gap-1">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="p-4 border-2 border-ink bg-white">
+                                                <p className="text-[9px] font-mono font-bold text-ink/30 uppercase mb-1">Contract</p>
+                                                <p className="text-xs font-black text-ink uppercase flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-yellow-500" />
                                                     Drafting
                                                 </p>
                                             </div>
-                                            <div className="p-3 rounded-lg bg-[#121212] border border-[#222]">
-                                                <p className="text-[10px] text-[#666] uppercase mb-1">Deal Value</p>
-                                                <p className="text-xs font-bold text-white">Negotiating</p>
+                                            <div className="p-4 border-2 border-ink bg-white">
+                                                <p className="text-[9px] font-mono font-bold text-ink/30 uppercase mb-1">Valuation</p>
+                                                <p className="text-xs font-black text-ink uppercase">Negotiating</p>
                                             </div>
                                         </div>
 
                                         {/* Action Buttons */}
-                                        <div className="space-y-2 pt-4">
-                                            <button className="w-full py-3 rounded-lg bg-white text-black font-bold text-sm hover:bg-gray-200 transition-colors">
-                                                View Original Post
+                                        <div className="space-y-4 pt-4">
+                                            <button className="w-full py-4 bg-ink text-foundation font-serif-italic font-black text-lg uppercase neo-border hover:bg-accent-green hover:text-ink transition-all">
+                                                View Source Signal
                                             </button>
-                                            <button className="w-full py-3 rounded-lg border border-[#333] text-[#E0E0E0] font-medium text-sm hover:border-[#FF3B30] hover:text-[#FF3B30] transition-colors">
-                                                Generate Contract
+                                            <button className="w-full py-4 border-2 border-ink text-ink font-mono font-black text-[10px] uppercase tracking-widest hover:bg-foundation transition-all">
+                                                Generate Proposal
                                             </button>
                                         </div>
 
                                         {/* Danger Zone */}
-                                        <div className="pt-8 border-t border-[#1A1A1A]">
-                                            <button className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-red-900/30 bg-red-900/10 text-red-500 font-medium text-sm hover:bg-red-900/20 transition-colors">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                                                End Negotiation
+                                        <div className="pt-12 border-t-2 border-ink/5">
+                                            <button className="w-full flex items-center justify-center gap-3 py-4 border-2 border-red-500 text-red-500 font-mono font-black text-[10px] uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all">
+                                                End Interaction
                                             </button>
                                         </div>
                                     </div>
@@ -461,22 +434,25 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
 
                                                 {/* Text Message Bubble */}
                                                 {msg.text && (
-                                                    <div className={`relative px-4 py-3 md:px-5 md:py-3 shadow-lg break-words transition-all duration-200
+                                                    <div className={`relative px-6 py-4 border-2 transition-all duration-200
                                                     ${isMe
-                                                            ? 'bg-gradient-to-b from-[#FF3B30] to-[#D32F2F] text-white rounded-2xl rounded-tr-sm'
-                                                            : 'bg-[#1A1A1A] border border-[#333] text-[#E0E0E0] rounded-2xl rounded-tl-sm'
+                                                            ? 'bg-ink border-ink text-foundation'
+                                                            : 'bg-white border-ink text-ink'
                                                         }
                                                 `}>
+                                                        {isMe && <div className="absolute top-0 right-0 w-2 h-full bg-accent-green opacity-30" />}
+                                                        {!isMe && <div className="absolute top-0 left-0 w-2 h-full bg-accent-green opacity-10" />}
+
                                                         {msg.text === '...' ? (
-                                                            <div className="flex gap-1.5 px-1 py-1">
-                                                                {[0, 1, 2].map(i => <div key={i} className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.2}s` }} />)}
+                                                            <div className="flex gap-2">
+                                                                {[0, 1, 2].map(i => <div key={i} className="w-2 h-2 bg-accent-green" style={{ animation: `pulse 1.5s infinite ${i * 0.2}s` }} />)}
                                                             </div>
                                                         ) : isAru ? (
-                                                            <div className="text-sm leading-relaxed text-gray-200 markdown-content">
+                                                            <div className="text-[13px] leading-relaxed font-bold uppercase tracking-tight markdown-content">
                                                                 {renderModelMessage(msg.text)}
                                                             </div>
                                                         ) : (
-                                                            <p className="text-sm leading-relaxed">{msg.text}</p>
+                                                            <p className="text-[13px] leading-relaxed font-bold uppercase tracking-tight">{msg.text}</p>
                                                         )}
                                                     </div>
                                                 )}
@@ -484,7 +460,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                                         </div>
 
                                         {/* Timestamp (Hover Only) */}
-                                        <span className={`opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-[#666] px-12 ${isMe ? 'text-right' : 'text-left'}`}>
+                                        <span className={`opacity-0 group-hover:opacity-100 transition-opacity text-[9px] font-mono font-bold uppercase text-ink/30 mt-2 ${isMe ? 'text-right' : 'text-left'}`}>
                                             {formatTimestamp(new Date().toISOString())}
                                         </span>
                                     </div>
@@ -492,15 +468,15 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                             })}
                         </div>
 
-                        {/* --- 4. Input Bar: The Deal-Making Console --- */}
-                        <div className="shrink-0 px-4 md:px-8 pb-4 md:pb-8 pt-4 z-30 bg-[#050505] border-t border-[#1A1A1A]">
-                            <form onSubmit={handleSend} className="max-w-4xl mx-auto pointer-events-auto">
+                        {/* --- 4. Input Bar: The Command Dispatch --- */}
+                        <div className="shrink-0 px-6 md:px-12 pb-8 z-30 bg-foundation border-t-2 border-ink">
+                            <form onSubmit={handleSend} className="max-w-7xl mx-auto pt-8">
 
                                 {/* Media Preview Area */}
                                 {media.length > 0 && (
-                                    <div className="flex gap-4 p-4 mb-2 bg-[#121212]/90 backdrop-blur-md rounded-2xl border border-[#333] overflow-x-auto">
+                                    <div className="flex gap-4 p-4 mb-4 bg-white border-2 border-ink neo-shadow-sm overflow-x-auto">
                                         {media.map((item, index) => (
-                                            <div key={index} className="relative shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-[#555] group">
+                                            <div key={index} className="relative shrink-0 w-24 h-24 border-2 border-ink group">
                                                 {item.type === 'image' ? (
                                                     <img src={item.url} alt="Preview" className="w-full h-full object-cover" />
                                                 ) : (
@@ -509,7 +485,7 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                                                 <button
                                                     type="button"
                                                     onClick={() => removeMedia(index)}
-                                                    className="absolute top-1 right-1 p-1 bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    className="absolute -top-2 -right-2 p-1 bg-white border-2 border-ink hover:bg-red-500 hover:text-white transition-all shadow-sm"
                                                 >
                                                     <XIcon className="w-3 h-3" />
                                                 </button>
@@ -518,39 +494,39 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                                     </div>
                                 )}
 
-                                <div className="relative flex items-center bg-[#121212]/80 backdrop-blur-md border border-[#333] rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all focus-within:border-[#FF3B30]/50 focus-within:shadow-[0_8px_32px_rgba(255,59,48,0.1)]">
+                                <div className="flex items-center bg-white border-2 border-ink neo-shadow-sm focus-within:ring-2 focus-within:ring-accent-green transition-all">
 
                                     {/* Utility Menu Button & Inputs */}
-                                    <div className="relative">
+                                    <div className="relative border-r-2 border-ink">
                                         <input type="file" ref={imageInputRef} onChange={handleFileChange} accept="image/*" multiple className="hidden" />
                                         <input type="file" ref={videoInputRef} onChange={handleFileChange} accept="video/*" multiple className="hidden" />
 
                                         <button
                                             type="button"
                                             onClick={() => setMediaOptionsOpen(!mediaOptionsOpen)}
-                                            className="p-3 ml-1 text-[#666] hover:text-white transition-colors rounded-full hover:bg-white/5"
+                                            className="p-5 text-ink/30 hover:text-ink hover:bg-foundation transition-all"
                                         >
                                             <PlusIcon className="w-6 h-6" />
                                         </button>
 
                                         {/* Media Options Popup */}
                                         {mediaOptionsOpen && (
-                                            <div className="absolute bottom-full left-0 mb-2 w-48 bg-[#1A1A1A] border border-[#333] rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 z-50">
+                                            <div className="absolute bottom-full left-0 mb-4 w-56 bg-white border-2 border-ink neo-shadow-md z-50 overflow-hidden">
                                                 <button
                                                     type="button"
                                                     onClick={() => { imageInputRef.current?.click(); setMediaOptionsOpen(false); }}
-                                                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#E0E0E0] hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-colors"
+                                                    className="w-full flex items-center gap-4 px-6 py-4 text-[10px] font-mono font-black uppercase tracking-widest text-ink hover:bg-accent-green transition-all"
                                                 >
                                                     <ImageIcon className="w-5 h-5" />
-                                                    <span className="text-sm font-medium">Add Photos</span>
+                                                    Add_Signal_Images
                                                 </button>
                                                 <button
                                                     type="button"
                                                     onClick={() => { videoInputRef.current?.click(); setMediaOptionsOpen(false); }}
-                                                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-[#E0E0E0] hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] transition-colors border-t border-[#333]"
+                                                    className="w-full flex items-center gap-4 px-6 py-4 text-[10px] font-mono font-black uppercase tracking-widest text-ink border-t-2 border-ink hover:bg-accent-green transition-all"
                                                 >
                                                     <VideoCameraIcon className="w-5 h-5" />
-                                                    <span className="text-sm font-medium">Add Video</span>
+                                                    Add_Technical_Video
                                                 </button>
                                             </div>
                                         )}
@@ -561,50 +537,55 @@ const Collaboration: React.FC<CollaborationProps> = ({ conversations, onSendMess
                                         type="text"
                                         value={message}
                                         onChange={e => setMessage(e.target.value)}
-                                        placeholder="Type your proposal..."
-                                        className="flex-1 bg-transparent border-none text-white placeholder-[#555] px-4 py-4 focus:ring-0 focus:outline-none text-sm min-w-0" // min-w-0 prevents overflow
+                                        placeholder="DISPATCH_PROPOSAL..."
+                                        className="flex-1 bg-transparent border-none text-[12px] font-bold uppercase text-ink placeholder-ink/20 px-6 py-5 focus:ring-0 focus:outline-none min-w-0" // min-w-0 prevents overflow
                                     />
 
                                     {/* Send Button */}
                                     <button
                                         type="submit"
                                         disabled={!message.trim() && media.length === 0}
-                                        className="relative p-2 mr-2 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed group overflow-hidden shadow-lg shadow-red-500/30 hover:shadow-red-500/50 shrink-0"
+                                        className="bg-ink text-foundation p-5 border-l-2 border-ink hover:bg-accent-green hover:text-ink transition-all disabled:opacity-20"
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-red-600 to-red-500 group-hover:scale-110 transition-transform duration-300" />
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shine" />
-                                        <PaperAirplaneIcon className="relative z-10 w-5 h-5 -ml-0.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                        <PaperAirplaneIcon className="w-6 h-6 transform -rotate-45" />
                                     </button>
                                 </div>
 
-                                {/* Helper Legend */}
-                                <div className="text-center mt-3 opacity-0 hover:opacity-100 transition-opacity duration-500 hidden md:block">
-                                    <p className="text-[10px] text-[#444] tracking-widest uppercase">Press Enter to Send • Deal Responsibly</p>
-                                </div>
+                                {/* Helper Legend Removed */}
                             </form>
                         </div>
                     </>
                 ) : (
-                    /* --- Empty State --- */
-                    /* Hidden on mobile if no chat (actually parent hides it), but simpler to just leave it flex */
-                    <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#000000]">
-                        <div className="w-24 h-24 mb-6 rounded-3xl bg-gradient-to-tr from-[#111] to-[#222] border border-[#333] shadow-[0_0_50px_rgba(255,59,48,0.1)] flex items-center justify-center rotate-3 hover:rotate-0 transition-all duration-500">
-                            <span className="text-4xl font-black text-white tracking-tighter">BH</span>
-                        </div>
-                        <h2 className="text-2xl font-bold text-white mb-2 tracking-tight text-center">Marketplace Insights</h2>
-                        <p className="text-[#666] max-w-md text-center text-sm">
-                            Select a deal from the flow to view details, negotiate terms, or finalize contracts.
-                        </p>
-
-                        {/* Mock Widget */}
-                        <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-md">
-                            <div className="bg-[#121212] p-4 rounded-xl border border-[#222]">
-                                <p className="text-[10px] text-[#666] uppercase tracking-wide mb-1">Total Deals</p>
-                                <p className="text-xl font-bold text-white">1,248</p>
+                    /* --- 5. Empty State: System Briefing --- */
+                    <div className="flex-1 flex flex-col items-center justify-center p-8 bg-foundation relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                        
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            <div className="w-24 h-24 mb-10 bg-white border-2 border-ink neo-shadow-md flex items-center justify-center rotate-3">
+                                <span className="text-4xl font-serif-italic font-black text-ink tracking-tighter">BH</span>
                             </div>
-                            <div className="bg-[#121212] p-4 rounded-xl border border-[#222]">
-                                <p className="text-[10px] text-[#666] uppercase tracking-wide mb-1">Avg. Response</p>
-                                <p className="text-xl font-bold text-[#FF3B30]">&lt; 2h</p>
+                            
+                            <h2 className="text-3xl font-serif-italic font-black text-ink uppercase mb-3 tracking-tight">Intelligence Dashboard</h2>
+                            <p className="text-[10px] font-mono font-bold text-ink/40 max-w-sm uppercase tracking-[0.2em] mb-12">
+                                Select an active transaction signal to monitor negotiation progress and execute contract logic.
+                            </p>
+
+                            {/* Tactical Metrics */}
+                            <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+                                <div className="bg-white p-6 border-2 border-ink neo-shadow-sm">
+                                    <p className="text-[9px] font-mono font-black text-ink/30 uppercase tracking-widest mb-2">Total_Active_Streams</p>
+                                    <p className="text-3xl font-serif-italic font-black text-ink leading-none">1,248</p>
+                                    <div className="mt-4 h-1 bg-foundation relative overflow-hidden">
+                                        <div className="absolute inset-y-0 left-0 bg-accent-green w-3/4 animate-loading-slide" />
+                                    </div>
+                                </div>
+                                <div className="bg-white p-6 border-2 border-ink neo-shadow-sm">
+                                    <p className="text-[9px] font-mono font-black text-ink/30 uppercase tracking-widest mb-2">Signal_Latency</p>
+                                    <p className="text-3xl font-serif-italic font-black text-accent-green leading-none">&lt; 2h</p>
+                                    <div className="mt-4 flex gap-1">
+                                        {[0, 1, 2, 3, 4].map(i => <div key={i} className={`h-1 flex-1 ${i < 4 ? 'bg-accent-green' : 'bg-foundation'}`} />)}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

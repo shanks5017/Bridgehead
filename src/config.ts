@@ -37,7 +37,7 @@ export const config = {
         apiKey: getEnv('VITE_GEMINI_API_KEY') || getEnv('GEMINI_API_KEY'),
     },
     app: {
-        name: 'BridgeHead',
+        name: 'ZONEK',
         version: '1.0.0',
         env: getEnv('MODE', 'development'),
     }

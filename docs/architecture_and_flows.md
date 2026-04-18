@@ -1,17 +1,17 @@
 # BridgeHead: Architecture Analysis & Flow Optimization
-> **Role:** Senior Product Architect  
-> **Date:** 2025-11-23  
+> **Role:** Senior Software Developer / Architect  
+> **Date:** April 1, 2026 [Revision 3.0]  
 > **Reference:** Project Architecture Document (README.md) & Codebase  
 
-## 1. Architectural & Business Logic Analysis
+### 1. Architectural & Business Intelligence Analysis
 
-### Core Component Logic
-The application relies on a **Unidirectional Data Flow** centered around `App.tsx`.
-*   **Single Source of Truth:** `App.tsx` holds the master state (`demandPosts`, `rentalPosts`, `currentUser`). This ensures that when a "Demand" is added, the "Feed" and "AI Suggestions" update synchronously without complex state synchronization logic.
-*   **The "Demand-Supply" Bridge:**
-    *   **Demand Posts (Pull):** Created by "Local Observers". These are *signals* of market gaps (e.g., "Need a late-night pharmacy").
-    *   **Rental Posts (Push):** Created by Landlords/Brokers. These are *assets* waiting for utilization.
-    *   **The Bridge:** The `AIMatches.tsx` and `geminiService.ts` components act as the connector, using semantic analysis to map *Abstract Needs* (Demands) to *Physical Space* (Rentals).
+### The Market Intelligence Engine
+The platform has evolved from a simple marketplace to a **Distributed Intelligence System**.
+*   **The Scraper Microservice:** A dedicated Node.js service that autonomously pulls data from Justdial, Sulekha, and OLX. This provides the "Cold Start" data that populates the marketplace before users even arrive.
+*   **The "50/100" Data Pipeline:** 
+    1. **Extraction:** Raw business listing & demand data from verified directories.
+    2. **Synthesis:** AI-driven categorization and sentiment analysis.
+    3. **Scoring:** The **Market Potential Score (MPS)** calculation (Demand Intensity / Competitor Density * Rental Feasibility).
 
 ### Scalability Critique: The Switch Statement
 *   **Current State:** `renderView` in `App.tsx` uses a massive switch statement.
@@ -37,20 +37,19 @@ The application relies on a **Unidirectional Data Flow** centered around `App.ts
     *   User sees their post immediately on the `DemandFeed`.
     *   **Gamification:** "You are the 5th person to request Food & Drink in this area!"
 
-### Persona B: The Entrepreneur (The Builder)
-*Goal: To find a viable business opportunity and the space to execute it.*
+### Persona B: The Entrepreneur (Data-First Builder)
+*Goal: To launch a business with 50% of the market research already complete.*
 
-1.  **Discovery (`AISuggestions.tsx`):**
-    *   User enters a target neighborhood.
-    *   **AI Analysis:** System aggregates all `DemandPosts` within a 2km radius.
-    *   **Output:** "High demand for *Specialty Coffee* (12 requests) and *Co-working* (8 requests)."
-2.  **Viability Check:**
-    *   User clicks "Analyze Opportunity" on "Specialty Coffee".
-    *   **AI Deep Dive:** `geminiService.ts` generates a mini-business plan (Competitor density, estimated footfall).
-3.  **The Asset Match:**
-    *   System queries `rentalPosts` for properties tagged "Retail/Cafe" within the same radius.
-    *   **Result:** "3 Spaces Available for a Cafe near these Demands."
-4.  **Connection:** User clicks a Rental Listing -> "Contact Landlord" with a pre-filled message: *"I'm interested in this space for a Coffee Shop, backed by local demand data."*
+1.  **Deep Market Analysis (`MarketAnalysis.tsx`):**
+    *   User selects a business category and location.
+    *   **System Synthesis:** Scraper data from **Justdial** (Competitors), **Sulekha** (B2B/B2C Demands), and **OLX** (Rental Benchmarks) is aggregated.
+    *   **Market Feasibility Report:** AI generates a score (MPS) and a SWOT analysis.
+2.  **Opportunity Discovery:**
+    *   **AI Insight:** "High demand for *Specialty Coffee* in Vidyanagar (Sulekha indicates 15 unsolved requests; Justdial shows 0 competitors within 2km)."
+3.  **Asset Matching:**
+    *   System filters `rentalPosts` (Local + OLX Scraped) to find the perfect physical unit.
+4.  **Actionable Execution Plan:** 
+    *   User receives a step-by-step roadmap: *"Secure Unit A (OLX), apply for local FSSAI, target these 15 specific demand-posters."*
 
 ---
 

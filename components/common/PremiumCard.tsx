@@ -1,39 +1,55 @@
 import React from 'react';
 
-interface PremiumCardProps {
-    children: React.ReactNode;
-    className?: string;
-    onClick?: () => void;
+interface PremiumCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'outline' | 'filled' | 'elevated';
+  shadow?: 'none' | 'sm' | 'md' | 'lg';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-const PremiumCard: React.FC<PremiumCardProps> = ({ children, className = '', onClick }) => {
-    return (
-        <div
-            onClick={onClick}
-            className={`
-                bg-[--card-color] 
-                border border-[--border-color] 
-                rounded-[2.5rem] 
-                overflow-hidden 
-                group 
-                relative 
-                transition-all duration-300 
-                hover:border-red-500/50 
-                hover:shadow-2xl hover:shadow-red-500/10 
-                hover:scale-[1.01]
-                ${onClick ? 'cursor-pointer' : ''} 
-                ${className}
-            `}
-        >
-            {/* Internal Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+const PremiumCard: React.FC<PremiumCardProps> = ({
+  children,
+  className = '',
+  variant = 'filled',
+  shadow = 'sm',
+  padding = 'md',
+  ...props
+}) => {
+  const baseStyles = 'bg-white border border-ink transition-all duration-300';
+  
+  const variants = {
+    outline: 'bg-transparent',
+    filled: 'bg-white',
+    elevated: 'bg-white neo-shadow-md',
+  };
 
-            {/* Content */}
-            <div className="relative z-10 h-full w-full">
-                {children}
-            </div>
-        </div>
-    );
+  const shadows = {
+    none: '',
+    sm: 'neo-shadow-sm hover:neo-shadow-md',
+    md: 'neo-shadow-md hover:neo-shadow-lg',
+    lg: 'neo-shadow-lg',
+  };
+
+  const paddings = {
+    none: 'p-0',
+    sm: 'p-4',
+    md: 'p-6 md:p-8',
+    lg: 'p-10 md:p-12',
+  };
+
+  return (
+    <div
+      className={`
+        ${baseStyles}
+        ${variants[variant]}
+        ${shadows[shadow]}
+        ${paddings[padding]}
+        ${className}
+      `}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 };
 
-export default React.memo(PremiumCard);
+export default PremiumCard;

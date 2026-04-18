@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { RentalPost, Location, View } from '../types';
 import { Input, TextArea, FileInput } from './common/FormComponents';
-import { LocationPinIcon, LoadingSpinner } from './icons';
+import { LocationPinIcon, LoadingSpinner, ArrowLeftIcon } from './icons';
 import { reverseGeocode, geocode } from '../services/groqService';
 import { compressImage } from '../utils/imageUtils';
-import PremiumCard from './common/PremiumCard';
-import PremiumButton from './common/PremiumButton';
 import CategoryAutocomplete from './CategoryAutocomplete';
 import { RENTAL_CATEGORIES } from '../constants/categories';
 
 interface PostRentalFormProps {
-  addRentalPost: (post: Omit<RentalPost, 'id' | 'createdAt'>) => void;
+  addRentalPost: (post: Omit<RentalPost, 'id' | 'createdAt' | 'upvotes'>) => void;
   setView: (view: View) => void;
-  // Edit mode props
   editingPost?: RentalPost;
   updateRentalPost?: (id: string, post: Partial<RentalPost>) => void;
   onCancelEdit?: () => void;
@@ -42,8 +39,7 @@ const PostRentalForm: React.FC<PostRentalFormProps> = ({
   const [phone, setPhone] = useState(editingPost?.phone || '');
   const [email, setEmail] = useState(editingPost?.email || '');
   const [openToCollaboration, setOpenToCollaboration] = useState(editingPost?.openToCollaboration ?? true);
-  const [showPreview, setShowPreview] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileSelect = async (files: File[]) => {
     try {
@@ -53,7 +49,6 @@ const PostRentalForm: React.FC<PostRentalFormProps> = ({
       setImages(prev => [...prev, ...compressedImages]);
     } catch (error) {
       console.error('Error compressing images:', error);
-      alert('Failed to process images. Please try again.');
     }
   }
 
@@ -74,23 +69,21 @@ const PostRentalForm: React.FC<PostRentalFormProps> = ({
           setAddressInput(address);
           setLocationStatus('success');
         } catch (error: any) {
-          setLocationError(`Error getting address: ${error.message}`);
+          setLocationError(`Error: ${error.message}`);
           setLocation({ latitude, longitude, address: `Near ${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
           setAddressInput(`Near ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
           setLocationStatus('error');
         }
       },
       error => {
-        setLocationError(`Error getting location: ${error.message}`);
+        setLocationError(`Error: ${error.message}`);
         setLocationStatus('error');
       }
     );
   };
 
   const handleAddressBlur = async () => {
-    if (!addressInput.trim() || addressInput === location?.address) {
-      return;
-    }
+    if (!addressInput.trim() || addressInput === location?.address) return;
     setLocationStatus('geocoding');
     setLocationError('');
     try {
@@ -104,25 +97,12 @@ const PostRentalForm: React.FC<PostRentalFormProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !category || !description || !location || !price || !squareFeet) {
-      alert('Please fill all fields and ensure the location is verified.');
-      return;
-    }
+    if (!title || !category || !description || !location || !price || !squareFeet || images.length === 0) return;
 
-    // Image validation
-    if (images.length === 0) {
-      alert('📸 Please add at least 1 image! \n\nProperty photos help tenants make decisions and get 5x more interest. It only takes a moment! 😊');
-      return;
-    }
-
-    if (images.length > 5) {
-      alert('You can upload a maximum of 5 images. Please remove some images and try again.');
-      return;
-    }
-
-    const postData: Omit<RentalPost, 'id' | 'createdAt'> = {
+    setIsSubmitting(true);
+    const postData: Omit<RentalPost, 'id' | 'createdAt' | 'upvotes'> = {
       title,
       category,
       description,
@@ -135,262 +115,179 @@ const PostRentalForm: React.FC<PostRentalFormProps> = ({
       openToCollaboration,
     };
 
-    if (isEditMode && editingPost && updateRentalPost) {
-      // Update existing post
-      updateRentalPost(editingPost.id, postData);
-      if (onCancelEdit) onCancelEdit();
-    } else {
-      // Create new post
-      addRentalPost(postData);
-      setView(View.RENTAL_LISTINGS);
+    try {
+        if (isEditMode && editingPost && updateRentalPost) {
+          updateRentalPost(editingPost.id, postData);
+          if (onCancelEdit) onCancelEdit();
+        } else {
+          addRentalPost(postData);
+          setView(View.RENTAL_LISTINGS);
+        }
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
   const isLocating = locationStatus === 'getting_coords' || locationStatus === 'geocoding';
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 relative overflow-hidden">
-      {/* Animated Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20 animate-gradient-shift"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+    <div className="min-h-screen bg-foundation py-20 px-6 md:px-12">
+      <div className="max-w-3xl mx-auto space-y-8 animate-slide-up">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-ink pb-8">
+            <div>
+                <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 bg-accent-green rounded-full" />
+                    <span className="text-[10px] font-mono tracking-widest uppercase opacity-50">Property Registration</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-serif-italic font-bold tracking-tight uppercase leading-none">
+                    {isEditMode ? 'Modify Listing' : 'List Property'}
+                </h1>
+            </div>
+            <button 
+                onClick={() => setView(View.RENTAL_LISTINGS)}
+                className="p-3 border border-ink hover:bg-white transition-all group"
+            >
+                <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            </button>
+        </div>
 
-      <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto">
-        <PremiumCard className="p-8 space-y-6 backdrop-blur-sm shadow-2xl">
-          <h2 className="text-3xl font-bold text-center">
-            {isEditMode ? 'Edit Your Property Listing' : 'List a Commercial Property'}
-          </h2>
-          <p className="text-center text-[--text-secondary]">
-            {isEditMode
-              ? 'Update your property details below.'
-              : 'Connect with entrepreneurs looking for their next location.'
-            }
-          </p>
+        <form onSubmit={handleSubmit} className="space-y-8">
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Property Title</label>
+                        <Input 
+                            placeholder="e.g., Prime Downtown Retail Space" 
+                            value={title} 
+                            onChange={e => setTitle(e.target.value)} 
+                            required 
+                            className="neo-input"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Property Type</label>
+                        <CategoryAutocomplete
+                            value={category}
+                            onChange={setCategory}
+                            categories={RENTAL_CATEGORIES}
+                            placeholder="e.g., Retail Space, Office..."
+                            required
+                        />
+                    </div>
+                </div>
 
-          <Input label="Property Title" placeholder="e.g., Prime Downtown Retail Space" value={title} onChange={e => setTitle(e.target.value)} required />
-          <CategoryAutocomplete
-            label="Property Type"
-            value={category}
-            onChange={setCategory}
-            categories={RENTAL_CATEGORIES}
-            placeholder="e.g., Retail Space, Office Space, Restaurant Space..."
-            required
-          />
-          <div className="flex gap-4">
-            <Input label="Price ($/month)" type="number" placeholder="2500" value={price} onChange={e => setPrice(e.target.value)} required />
-            <Input label="Square Feet" type="number" placeholder="1200" value={squareFeet} onChange={e => setSquareFeet(e.target.value)} required />
-          </div>
-          <TextArea label="Description" placeholder="Describe the property, its features, and nearby attractions..." value={description} onChange={e => setDescription(e.target.value)} required />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Price ($/MO)</label>
+                        <Input type="number" placeholder="2500" value={price} onChange={e => setPrice(e.target.value)} required className="neo-input" />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Square Footage (SQFT)</label>
+                        <Input type="number" placeholder="1200" value={squareFeet} onChange={e => setSquareFeet(e.target.value)} required className="neo-input" />
+                    </div>
+                </div>
 
-          <div className="w-full space-y-2">
-            <div className="flex items-end gap-2">
-              <div className="flex-grow">
-                <Input
-                  label="Location"
-                  placeholder="Enter property address"
-                  value={addressInput}
-                  onChange={e => {
-                    setAddressInput(e.target.value);
-                    if (locationStatus === 'success' || locationStatus === 'error') {
-                      setLocationStatus('idle');
-                      setLocation(null);
-                      setLocationError('');
-                    }
-                  }}
-                  onBlur={handleAddressBlur}
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Property Description</label>
+                    <TextArea
+                        placeholder="Describe the property, features, and target tenant..."
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        required
+                        className="neo-input min-h-[120px]"
+                    />
+                    <div className="flex justify-end px-1">
+                        <span className="text-[10px] font-mono opacity-40">{description.length}/2000</span>
+                    </div>
+                </div>
+            </section>
+
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Property Location</label>
+                    <div className="flex gap-2">
+                        <Input
+                            placeholder="Full Address or Plot Coordinates"
+                            value={addressInput}
+                            onChange={e => setAddressInput(e.target.value)}
+                            onBlur={handleAddressBlur}
+                            className="neo-input flex-1"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleGetLocation}
+                            disabled={isLocating}
+                            className={`p-3 border border-ink transition-all ${isLocating ? 'bg-foundation opacity-50' : 'bg-white hover:bg-foundation'}`}
+                        >
+                            {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
+                        </button>
+                    </div>
+                    {locationStatus === 'success' && <p className="text-[10px] font-mono text-accent-green uppercase tracking-widest px-1 mt-1">✓ Geodata Verified</p>}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-ink/10">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Contact Phone (Optional)</label>
+                        <Input type="tel" placeholder="(123) 456-7890" value={phone} onChange={e => setPhone(e.target.value)} className="neo-input" />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Contact Email (Optional)</label>
+                        <Input type="email" placeholder="owner@example.com" value={email} onChange={e => setEmail(e.target.value)} className="neo-input" />
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-foundation/30 border border-ink/10">
+                    <div>
+                        <p className="font-bold text-sm uppercase tracking-tight">Direct Engagement</p>
+                        <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest">Allow tenant collaboration requests</p>
+                    </div>
+                    <button 
+                        type="button"
+                        onClick={() => setOpenToCollaboration(!openToCollaboration)}
+                        className={`w-12 h-6 border border-ink relative transition-all ${openToCollaboration ? 'bg-accent-green' : 'bg-white'}`}
+                    >
+                        <div className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 border border-ink bg-white transition-all ${openToCollaboration ? 'right-1' : 'left-1'}`} />
+                    </button>
+                </div>
+            </section>
+
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">High-Res Documentation (1-5 Required)</label>
+                <FileInput
+                    onFilesSelected={handleFileSelect}
+                    imagePreviews={images}
+                    onRemoveImage={handleRemoveImage}
+                    accept="image/*"
                 />
-              </div>
-              <PremiumButton
-                type="button"
-                variant="secondary"
-                onClick={handleGetLocation}
-                disabled={isLocating}
-                className="flex-shrink-0 h-[50px] aspect-square flex items-center justify-center p-0"
-                aria-label="Use current location"
-              >
-                {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
-              </PremiumButton>
-            </div>
-            {locationStatus === 'geocoding' && <p className="text-sm text-[--text-secondary] flex items-center gap-2"><LoadingSpinner className="w-4 h-4" /> Verifying address...</p>}
-            {locationStatus === 'getting_coords' && <p className="text-sm text-[--text-secondary] flex items-center gap-2"><LoadingSpinner className="w-4 h-4" /> Getting coordinates...</p>}
-            {locationStatus === 'success' && location && <p className="text-sm text-green-400">✓ Location verified</p>}
-            {locationError && <p className="text-red-500 text-sm mt-2">{locationError}</p>}
-          </div>
-
-          <div className="border-t border-[--border-color] pt-6 space-y-6">
-            <h3 className="text-xl font-bold text-center">Optional Information</h3>
-            <p className="text-center text-sm text-[--text-secondary] -mt-4">Provide contact details for potential tenants or collaborators.</p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Input label="Contact Phone (Optional)" type="tel" placeholder="(123) 456-7890" value={phone} onChange={e => setPhone(e.target.value)} />
-              <Input label="Contact Email (Optional)" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
-            </div>
-
-            <div className="flex items-center justify-between bg-white/5 p-4 rounded-lg">
-              <div>
-                <label htmlFor="collaboration-toggle" className="font-medium text-white">Open to Collaboration</label>
-                <p className="text-sm text-[--text-secondary]">Allow other users to message you about this property.</p>
-              </div>
-              <label htmlFor="collaboration-toggle" className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="collaboration-toggle" className="sr-only peer" checked={openToCollaboration} onChange={() => setOpenToCollaboration(!openToCollaboration)} />
-                <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-[--primary-color] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[--primary-color]"></div>
-              </label>
-            </div>
-          </div>
-
-          {/* Image Upload with Validation */}
-          <div className="space-y-2">
-            <FileInput
-              label="Upload Property Images (1-5 required)"
-              onFilesSelected={handleFileSelect}
-              imagePreviews={images}
-              onRemoveImage={handleRemoveImage}
-              accept="image/*"
-            />
-
-            {/* Image Upload Status */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {/* Visual Indicator */}
-                <div className={`w-3 h-3 rounded-full transition-colors ${images.length >= 1 && images.length <= 5 ? 'bg-green-500' : 'bg-yellow-500'
-                  }`} />
-
-                {/* Image Count */}
-                <span className={`text-xs font-medium transition-colors ${images.length >= 1 && images.length <= 5 ? 'text-green-400' : 'text-yellow-400'
-                  }`}>
-                  {images.length} / 5 images
-                </span>
-              </div>
-            </div>
-
-            {/* Friendly Validation Message */}
-            {images.length === 0 ? (
-              <p className="text-xs text-yellow-400 flex items-start gap-1.5">
-                <span className="mt-0.5">📸</span>
-                <span>
-                  Please add at least 1 image! Property photos help tenants visualize the space and get 5x more inquiries.
-                  Great photos attract quality tenants! 😊
-                </span>
-              </p>
-            ) : images.length > 5 ? (
-              <p className="text-xs text-red-400 flex items-start gap-1.5">
-                <span className="mt-0.5">⚠️</span>
-                <span>
-                  Please remove {images.length - 5} image{images.length - 5 !== 1 ? 's' : ''}. Maximum is 5 images to keep loading fast!
-                </span>
-              </p>
-            ) : (
-              <p className="text-xs text-green-400 flex items-center gap-1.5">
-                <span>✓</span>
-                <span>Excellent! Your property photos look professional. This will attract serious tenants! 🏢</span>
-              </p>
-            )}
-          </div>
-
-
-          <div className="flex gap-3">
-            {isEditMode && onCancelEdit && (
-              <PremiumButton
-                type="button"
-                variant="secondary"
-                onClick={onCancelEdit}
-                className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
-              >
-                Cancel
-              </PremiumButton>
-            )}
-            <PremiumButton
-              type="button"
-              variant="secondary"
-              onClick={() => setShowPreview(true)}
-              className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
-            >
-              👁️ Preview
-            </PremiumButton>
-            <PremiumButton
-              type="submit"
-              className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
-            >
-              {isEditMode ? '✓ Update Listing' : 'List Property'}
-            </PremiumButton>
-          </div>
-
-          {/* Property Preview Modal */}
-          {showPreview && (
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowPreview(false)}>
-              <PremiumCard className="p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-bold">Preview Your Listing</h3>
-                  <button
-                    onClick={() => setShowPreview(false)}
-                    className="text-2xl hover:text-[--primary-color] transition-colors"
-                  >
-                    ✕
-                  </button>
+                <div className="flex justify-between items-center px-1">
+                    <span className={`text-[10px] font-mono uppercase tracking-widest ${images.length === 0 ? 'text-accent-blue' : 'text-accent-green'}`}>
+                        {images.length === 0 ? 'Media Required' : 'Media Processed'}
+                    </span>
+                    <span className="text-[10px] font-mono opacity-40">{images.length}/5</span>
                 </div>
+            </section>
 
-                <p className="text-sm text-[--text-secondary] mb-4">This is how your property listing will appear to tenants:</p>
-
-                {/* Preview Card */}
-                <div className="bg-[--background-color] rounded-lg overflow-hidden border border-[--border-color]">
-                  {/* Images Preview */}
-                  {images.length > 0 ? (
-                    <div className="relative h-64 bg-gray-800">
-                      <img src={images[0]} alt="Preview" className="w-full h-full object-cover" />
-                      {images.length > 1 && (
-                        <div className="absolute bottom-2 right-2 bg-black/70 text-white text-sm px-3 py-1 rounded-full">
-                          1 / {images.length}
-                        </div>
-                      )}
-                      <div className="absolute bottom-2 left-2 bg-[--primary-color] text-white text-xs font-semibold px-3 py-1.5 rounded-md">
-                        {category || 'Property Type'}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="h-64 bg-gray-800 flex items-center justify-center text-[--text-secondary]">
-                      📸 Add images to see them here
-                    </div>
-                  )}
-
-                  {/* Content Preview */}
-                  <div className="p-5">
-                    <h4 className="text-xl font-bold mb-2">{title || 'Your Property Title'}</h4>
-                    <p className="text-sm text-[--text-secondary] mb-3">
-                      📍 {location?.address || addressInput || 'Location will appear here'}
-                    </p>
-
-                    <div className="flex gap-4 mb-3">
-                      <div className="bg-white/5 px-3 py-1.5 rounded-lg">
-                        <span className="text-lg font-bold text-[--primary-color]">
-                          ${price || '0'}<span className="text-sm text-[--text-secondary]">/mo</span>
-                        </span>
-                      </div>
-                      <div className="bg-white/5 px-3 py-1.5 rounded-lg">
-                        <span className="text-sm text-[--text-secondary]">
-                          {squareFeet || '0'} sq ft
-                        </span>
-                      </div>
-                    </div>
-
-                    <p className="text-sm text-[--text-secondary] line-clamp-3">
-                      {description || 'Your description will appear here...'}
-                    </p>
-
-                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-[--border-color]">
-                      <span className="text-xs text-[--text-secondary]">Just now</span>
-                    </div>
-                  </div>
-                </div>
-
-                <PremiumButton
-                  onClick={() => setShowPreview(false)}
-                  className="w-full mt-4 px-6 py-3 text-lg font-semibold"
+            <div className="flex gap-4 pt-4">
+                <button 
+                    type="submit" 
+                    disabled={isSubmitting || images.length === 0}
+                    className="neo-button neo-button-primary flex-1 py-6 text-lg font-bold"
                 >
-                  Close Preview
-                </PremiumButton>
-              </PremiumCard>
+                    {isSubmitting ? 'UPLOADING...' : isEditMode ? 'UPDATE LISTING' : 'PUBLISH LISTING'}
+                </button>
+                {isEditMode && onCancelEdit && (
+                    <button 
+                        type="button" 
+                        onClick={onCancelEdit}
+                        className="neo-button flex-1 py-6 text-lg font-bold"
+                    >
+                        CANCEL
+                    </button>
+                )}
             </div>
-          )}
-        </PremiumCard>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

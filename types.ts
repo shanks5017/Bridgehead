@@ -56,6 +56,7 @@ export interface DemandPost {
   location: Location;
   images: string[]; // Array of base64 strings
   upvotes: number;
+  upvotedBy?: string[];
   createdAt: string;
   phone?: string;
   email?: string;
@@ -74,6 +75,8 @@ export interface RentalPost {
   images: string[]; // Array of base64 strings
   price: number; // Monthly rent
   squareFeet: number;
+  upvotes: number;
+  upvotedBy?: string[];
   createdAt: string;
   phone?: string;
   email?: string;
@@ -101,6 +104,7 @@ export interface CommunityPost {
   isLiked: boolean;
   isReposted: boolean;
   createdAt: string;
+  topic?: string;
   hashtags?: string[];
 }
 

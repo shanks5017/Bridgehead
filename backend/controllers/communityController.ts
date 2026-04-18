@@ -29,7 +29,8 @@ export const getFeed = async (req: AuthRequest, res: Response) => {
         }
 
         const posts = await CommunityPost.find(query)
-            .sort({ createdAt: -1 }) // Index usage: { topic, createdAt }
+            .sort({ createdAt: -1 })
+            .populate('author', 'username fullName profilePicture reputationScore')
             .limit(limitNum)
             .lean();
 
@@ -77,7 +78,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
             authorName: req.user.fullName,
             authorUsername: req.user.username, // Add username for profile navigation
             authorAvatar: req.user.avatarUrl, // Virtual or stored
-            authorBadge: req.user.verified ? 'entrepreneur' : undefined,
+            authorBadge: req.user.isVerifiedEntrepreneur ? 'entrepreneur' : undefined,
             content,
             media,
             topic

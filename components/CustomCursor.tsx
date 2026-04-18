@@ -100,20 +100,20 @@ const CustomCursor: React.FC = () => {
                 .custom-cursor-dot {
                     width: 12px;
                     height: 12px;
-                    background-color: white;
+                    background-color: #141414;
                     border-radius: 50%;
                     position: fixed;
                     top: 0;
                     left: 0;
                     pointer-events: none;
                     z-index: 9999;
-                    mix-blend-mode: difference;
+                    will-change: transform;
                 }
                 
                 .custom-cursor-ring {
                     width: 40px;
                     height: 40px;
-                    border: 1px solid rgba(255, 255, 255, 0.5);
+                    border: 1px solid rgba(20, 20, 20, 0.5);
                     border-radius: 50%;
                     position: fixed;
                     top: 0;
@@ -121,20 +121,19 @@ const CustomCursor: React.FC = () => {
                     pointer-events: none;
                     z-index: 9998;
                     transition: border-color 0.2s, background-color 0.2s, width 0.2s, height 0.2s;
-                    mix-blend-mode: difference;
+                    will-change: transform;
                 }
 
-                /* Hover State: Red Glow */
+                /* Hover State: Green Glow */
                 .custom-cursor-ring.cursor-hover {
-                    border-color: #FF0000;
-                    background-color: rgba(255, 0, 0, 0.1);
-                    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
-                    mix-blend-mode: normal; /* To show true color */
+                    border-color: #22C55E;
+                    background-color: rgba(34, 197, 94, 0.1);
+                    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
                 }
                 
                 /* Click State */
                 .custom-cursor-ring.cursor-clicking {
-                    background-color: rgba(255, 255, 255, 0.8);
+                    background-color: rgba(20, 20, 20, 0.1);
                 }
             `}</style>
 

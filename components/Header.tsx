@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MenuIcon, XIcon, UserCircleIcon, LogoutIcon, PencilIcon, LightBulbIcon, BuildingOfficeIcon } from './icons';
+import { MenuIcon, UserCircleIcon, LogoutIcon, PencilIcon, LightBulbIcon, BuildingOfficeIcon } from './icons';
 import { View, User } from '../types';
 
 interface HeaderProps {
@@ -47,42 +47,40 @@ const ProfileDropdown: React.FC<{ user: User; onSignOut: () => void; setView: (v
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const ProfileAvatar: React.FC<{ user: User, className: string }> = ({ user, className }) => {
-        if (user.profilePicture) {
-            return <img src={user.profilePicture} alt={user.name} className={`${className} rounded-full object-cover`} />;
-        }
-        return <UserCircleIcon className={`${className} text-white`} />;
-    };
-
     return (
         <div ref={dropdownRef} className="relative">
-            <button onClick={() => setIsOpen(!isOpen)} className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-                <ProfileAvatar user={user} className="w-10 h-10" />
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-10 h-10 neo-border bg-white flex items-center justify-center hover:neo-shadow-sm transition-all"
+            >
+                {user.profilePicture ? (
+                    <img src={user.profilePicture} alt={user.name} className="w-full h-full object-cover" />
+                ) : (
+                    <UserCircleIcon className="w-8 h-8 text-ink" />
+                )}
             </button>
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-[--card-color] border border-[--border-color] rounded-md shadow-lg z-50">
-                    <div className="px-4 py-3 border-b border-[--border-color]">
-                        <p className="text-sm font-semibold text-white truncate">{user.name}</p>
-                        <p className="text-xs text-[--text-secondary] truncate">{user.email}</p>
+                <div className="absolute right-0 mt-2 w-56 bg-foundation border border-ink neo-shadow-md z-[100] animate-slide-up">
+                    <div className="px-4 py-3 border-b border-ink/10">
+                        <p className="text-[10px] font-mono tracking-widest uppercase opacity-50">Active User</p>
+                        <p className="font-bold truncate">{user.name}</p>
                     </div>
                     <button
                         onClick={() => {
                             setView(View.PROFILE);
                             setIsOpen(false);
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-left text-[--text-secondary] hover:bg-white/10 hover:text-white transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-left font-bold hover:bg-ink hover:text-foundation transition-colors uppercase tracking-tight"
                     >
-                        <UserCircleIcon className="w-5 h-5" />
-                        My Profile
+                        Profile
                     </button>
                     <button
                         onClick={() => {
                             onSignOut();
                             setIsOpen(false);
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-left text-[--text-secondary] hover:bg-[--primary-color]/20 hover:text-[--primary-color] transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-left font-bold hover:bg-ink hover:text-foundation transition-colors uppercase tracking-tight border-t border-ink/10"
                     >
-                        <LogoutIcon className="w-5 h-5" />
                         Sign Out
                     </button>
                 </div>
@@ -93,177 +91,97 @@ const ProfileDropdown: React.FC<{ user: User; onSignOut: () => void; setView: (v
 
 const PostDropdown: React.FC<{ setView: (view: View) => void }> = ({ setView }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isClosing, setIsClosing] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-
-    const handleClose = () => {
-        setIsClosing(true);
-        setTimeout(() => {
-            setIsOpen(false);
-            setIsClosing(false);
-        }, 200); // Match animation duration
-    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                if (isOpen && !isClosing) {
-                    handleClose();
-                }
+                setIsOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isOpen, isClosing]);
-
-    const handleToggle = () => {
-        if (isOpen) {
-            handleClose();
-        } else {
-            setIsOpen(true);
-        }
-    };
-
-    // Reusing the Sidebar NavLink style logic for dropdown items
-    const DropdownItem = ({ icon, label, subLabel, onClick }: { icon: React.ReactNode, label: string, subLabel: string, onClick: () => void }) => (
-        <button
-            onClick={onClick}
-            className="group relative w-full flex items-center gap-3 px-4 py-3 rounded-full text-left transition-all duration-300 overflow-hidden text-[--text-secondary] hover:text-white"
-        >
-            {/* Animated gradient background on hover (From Sidebar) */}
-            <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-500/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
-                style={{
-                    backgroundSize: '200% 100%',
-                    animation: 'shimmer 2s infinite linear'
-                }}
-            />
-
-            {/* Glow effect on hover (From Sidebar) */}
-            <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/20" />
-
-            {/* Icon with premium animation (From Sidebar) */}
-            <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                {icon}
-            </div>
-
-            {/* Text Content */}
-            <div className="relative z-10 transform transition-all duration-300 group-hover:translate-x-1">
-                <div className="font-semibold text-sm">{label}</div>
-                <div className="text-xs opacity-70">{subLabel}</div>
-            </div>
-
-            {/* Shine effect (From Sidebar - simplified for dropdown) */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 animate-shine" />
-            </div>
-        </button>
-    );
+    }, []);
 
     return (
         <div ref={dropdownRef} className="relative">
             <button
-                onClick={handleToggle}
-                className="group relative px-4 py-2 rounded-full text-sm font-semibold overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/50 transition-all duration-300"
-                style={{
-                    background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)',
-                    backgroundSize: '200% 200%',
-                }}
+                onClick={() => setIsOpen(!isOpen)}
+                className="neo-button neo-button-primary"
             >
-                {/* Animated shimmer on hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/30 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
-                    style={{
-                        backgroundSize: '200% 100%',
-                        animation: 'shimmer 2s infinite linear'
-                    }}
-                />
-                <span className="relative z-10 flex items-center gap-2">
-                    <PencilIcon className="w-4 h-4" />
-                    <span>Post</span>
-                    <span className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>▼</span>
-                </span>
+                <PencilIcon className="w-4 h-4 mr-2" />
+                <span>Post</span>
             </button>
 
             {isOpen && (
-                <div
-                    className="absolute right-0 mt-2 w-64 bg-[--card-color] border border-[--border-color] rounded-2xl shadow-2xl z-50 overflow-hidden p-2"
-                    style={{
-                        animation: isClosing ? 'dropdownClose 0.2s ease-in forwards' : 'dropdownOpen 0.2s ease-out forwards'
-                    }}
-                >
-                    <DropdownItem
-                        icon={<LightBulbIcon className="w-6 h-6 text-red-500" />} // Using red to match theme as requested ("all colors matched")
-                        label="Post a Demand"
-                        subLabel="What's your community missing?"
-                        onClick={() => {
-                            setView(View.POST_DEMAND);
-                            handleClose();
-                        }}
-                    />
-                    <DropdownItem
-                        icon={<BuildingOfficeIcon className="w-6 h-6 text-red-500" />} // Using red to match theme
-                        label="Post a Rental"
-                        subLabel="List your commercial space"
-                        onClick={() => {
-                            setView(View.POST_RENTAL);
-                            handleClose();
-                        }}
-                    />
+                <div className="absolute right-0 mt-2 w-64 bg-white border border-ink neo-shadow-md z-[100] animate-slide-up">
+                    <button
+                        onClick={() => { setView(View.POST_DEMAND); setIsOpen(false); }}
+                        className="w-full text-left p-4 hover:bg-ink hover:text-white transition-colors group border-b border-ink/10"
+                    >
+                        <div className="flex items-center gap-3">
+                            <LightBulbIcon className="w-5 h-5" />
+                            <div className="font-bold uppercase tracking-tight">Demand Post</div>
+                        </div>
+                        <p className="text-[10px] font-mono tracking-widest mt-1 opacity-60 group-hover:opacity-100">Request a service or business</p>
+                    </button>
+                    <button
+                        onClick={() => { setView(View.POST_RENTAL); setIsOpen(false); }}
+                        className="w-full text-left p-4 hover:bg-ink hover:text-white transition-colors group"
+                    >
+                        <div className="flex items-center gap-3">
+                            <BuildingOfficeIcon className="w-5 h-5" />
+                            <div className="font-bold uppercase tracking-tight">Rental Post</div>
+                        </div>
+                        <p className="text-[10px] font-mono tracking-widest mt-1 opacity-60 group-hover:opacity-100">List a commercial property</p>
+                    </button>
                 </div>
             )}
         </div>
     );
 };
 
-
 const Header: React.FC<HeaderProps> = ({ setIsSidebarOpen, isSidebarOpen, currentView, currentUser, onSignOut, setView }) => {
     return (
-        <header
-            style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-            className={`fixed top-0 right-0 z-40 bg-[--bg-color]/80 backdrop-blur-md h-16 flex items-center px-4 sm:px-6 lg:px-8 border-b border-[--border-color] transition-all duration-300 left-0 w-full ${isSidebarOpen ? 'md:left-64 md:w-[calc(100%-16rem)]' : ''}`}
-        >
-            <div className="flex items-center justify-center w-full relative">
-                {/* Left aligned content */}
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center gap-4">
+        <header className="fixed top-0 right-0 left-0 h-20 bg-foundation border-b border-ink z-50 flex items-center px-6 md:px-12">
+            <div className="flex items-center justify-between w-full">
+                {/* Branding & Navigation Toggle */}
+                <div className="flex items-center gap-6">
                     <button
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className={`md:hidden text-white transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-                        aria-label="Toggle sidebar"
+                        className="md:hidden text-ink"
                     >
                         <MenuIcon className="w-6 h-6" />
                     </button>
-                    <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className={`text-xl font-semibold text-[--text-secondary] hover:text-white hidden sm:block transition-all duration-300 ${isSidebarOpen ? 'ml-4' : 'ml-0'}`}
-                        aria-label="Toggle sidebar"
+
+                    <div
+                        className="hidden md:flex items-center gap-3 cursor-pointer group"
+                        onClick={() => setView(View.HOME)}
                     >
+                        <img src="/favicon.png" alt="ZONEK Logo" className="w-8 h-8 object-contain transition-transform group-hover:scale-110" />
+                        <h1 className="text-2xl font-serif-italic font-black tracking-tighter leading-none text-ink">ZONEK</h1>
+                    </div>
+
+                    <div className="h-6 w-px bg-ink/10 hidden md:block" />
+
+                    <div className="font-serif-italic text-lg italic opacity-80">
                         {getViewTitle(currentView)}
-                    </button>
+                    </div>
                 </div>
 
-                {/* Centered Logo/Title */}
-                <h1 className="text-2xl font-bold text-white tracking-tighter">Bridgehead</h1>
-
-                {/* Right section (placeholder for balance) */}
-                <div className={`absolute right-0 hidden md:flex items-center gap-3 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                    {/* Post Button - Always Visible */}
+                {/* Search / Global Actions */}
+                <div className="flex items-center gap-4">
                     <PostDropdown setView={setView} />
 
-                    {/* Profile or Auth Buttons */}
                     {currentUser ? (
                         <ProfileDropdown user={currentUser} onSignOut={onSignOut} setView={setView} />
                     ) : (
-                        <div className="flex items-center gap-1 md:gap-2">
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setView(View.SIGN_IN)}
-                                className="px-2 py-1 md:px-4 md:py-2 rounded-md text-xs md:text-sm font-medium bg-transparent text-white hover:bg-white/10 transition-colors"
+                                className="neo-button text-xs py-2 px-4"
                             >
                                 Sign In
-                            </button>
-                            <button
-                                onClick={() => setView(View.SIGN_UP)}
-                                className="px-2 py-1 md:px-4 md:py-2 rounded-md text-xs md:text-sm font-medium bg-[--primary-color] text-white hover:opacity-90 transition-opacity"
-                            >
-                                Sign Up
                             </button>
                         </div>
                     )}
@@ -273,4 +191,4 @@ const Header: React.FC<HeaderProps> = ({ setIsSidebarOpen, isSidebarOpen, curren
     );
 };
 
-export default Header;
+export default React.memo(Header);

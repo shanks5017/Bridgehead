@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { View } from '../types';
 import { Input } from './common/FormComponents';
-import { GoogleIcon, MicrosoftIcon } from './icons';
+import { GoogleIcon, MicrosoftIcon, ArrowRightIcon } from './icons';
 import { config } from '../src/config';
 
 interface SignUpProps {
@@ -18,8 +17,8 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Validation states
   const [usernameStatus, setUsernameStatus] = useState<ValidationStatus>('unchecked');
   const [emailStatus, setEmailStatus] = useState<ValidationStatus>('unchecked');
   const [usernameMessage, setUsernameMessage] = useState('');
@@ -28,231 +27,182 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    // Basic validation
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      setError('Policy Breach: Passcode must be 8+ characters');
       return;
     }
-    const success = onSignUp(name, email, username, password);
-    if (!success) {
-      setError('Could not create account. Please try again.');
+    setIsSubmitting(true);
+    try {
+        const success = onSignUp(name, email, username, password);
+        if (!success) {
+          setError('Registration Failure: Signal could not be broadcast');
+        }
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
-  const handleSocialSignUp = (provider: 'google' | 'microsoft') => {
-    console.log(`Signing up with ${provider}...`);
-    // Mock social sign up logic would go here
-  };
-
-  // Validate username on blur
   const validateUsername = async () => {
     if (!username || username.length < 3) {
       setUsernameStatus('unchecked');
-      setUsernameMessage('');
       return;
     }
-
     setUsernameStatus('checking');
-    setUsernameMessage('');
-
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
-
       const response = await fetch(`${config.api.baseUrl}/auth/check-username`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username }),
-        signal: controller.signal
       });
-
-      clearTimeout(timeoutId);
-
-      if (response.status === 429) {
-        setUsernameStatus('error');
-        setUsernameMessage('Too many checks - you can still submit');
-        return;
-      }
-
       const data = await response.json();
-
-      if (data.available) {
-        setUsernameStatus('available');
-        setUsernameMessage(data.message || 'Likely available');
-      } else {
-        setUsernameStatus('taken');
-        setUsernameMessage(data.message || 'Already taken');
-      }
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        setUsernameStatus('error');
-        setUsernameMessage('Check timed out - you can still submit');
-      } else {
-        setUsernameStatus('error');
-        setUsernameMessage('Unable to verify - you can still submit');
-      }
+      setUsernameStatus(data.available ? 'available' : 'taken');
+      setUsernameMessage(data.message || (data.available ? 'Identity Available' : 'Identity Reserved'));
+    } catch (err) {
+      setUsernameStatus('error');
     }
   };
 
-  // Validate email on blur
   const validateEmail = async () => {
     if (!email || !email.includes('@')) {
       setEmailStatus('unchecked');
-      setEmailMessage('');
       return;
     }
-
     setEmailStatus('checking');
-    setEmailMessage('');
-
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
-
       const response = await fetch(`${config.api.baseUrl}/auth/check-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
-        signal: controller.signal
       });
-
-      clearTimeout(timeoutId);
-
-      if (response.status === 429) {
-        setEmailStatus('error');
-        setEmailMessage('Too many checks - you can still submit');
-        return;
-      }
-
       const data = await response.json();
-
-      if (data.available) {
-        setEmailStatus('available');
-        setEmailMessage(data.message || 'Likely available');
-      } else {
-        setEmailStatus('taken');
-        setEmailMessage(data.message || 'Already registered');
-      }
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        setEmailStatus('error');
-        setEmailMessage('Check timed out - you can still submit');
-      } else {
-        setEmailStatus('error');
-        setEmailMessage('Unable to verify - you can still submit');
-      }
-    }
-  };
-
-  const getStatusColor = (status: ValidationStatus) => {
-    switch (status) {
-      case 'available': return 'text-green-500';
-      case 'taken': return 'text-red-500';
-      case 'error': return 'text-yellow-500';
-      case 'checking': return 'text-blue-500';
-      default: return 'text-gray-500';
-    }
-  };
-
-  const getStatusIcon = (status: ValidationStatus) => {
-    switch (status) {
-      case 'available': return '✓';
-      case 'taken': return '✗';
-      case 'error': return '⚠';
-      case 'checking': return '⏳';
-      default: return '';
+      setEmailStatus(data.available ? 'available' : 'taken');
+      setEmailMessage(data.message || (data.available ? 'Email Valid' : 'Email Active'));
+    } catch (err) {
+      setEmailStatus('error');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12">
-      <div className="w-full max-w-md mx-auto bg-[--card-color] border border-[--border-color] rounded-xl p-8 space-y-6">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Create an Account</h2>
-          <p className="text-[--text-secondary]">Join Bridgehead to shape your community.</p>
+    <div className="min-h-screen bg-foundation flex items-center justify-center py-20 px-6">
+      <div className="w-full max-w-xl space-y-8 animate-slide-up">
+        {/* Brand Header */}
+        <div className="text-center space-y-2 mb-12">
+            <h1 className="text-6xl md:text-8xl font-serif-italic font-bold tracking-tighter uppercase leading-none opacity-10 select-none">
+                ZONEK
+            </h1>
+            <div className="flex items-center justify-center gap-2">
+                <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse" />
+                <span className="text-[10px] font-mono tracking-[0.4em] uppercase opacity-50 font-bold">Registration Protocol</span>
+            </div>
         </div>
 
-        <div className="space-y-3">
-          <button
-            type="button"
-            onClick={() => handleSocialSignUp('google')}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-[--border-color] rounded-lg text-white font-medium hover:bg-white/10 transition-colors"
-          >
-            <GoogleIcon className="w-6 h-6" />
-            Sign Up with Google
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSocialSignUp('microsoft')}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-[--border-color] rounded-lg text-white font-medium hover:bg-white/10 transition-colors"
-          >
-            <MicrosoftIcon className="w-6 h-6" />
-            Sign Up with Microsoft
-          </button>
+        {/* Form Container */}
+        <div className="bg-white border border-ink p-8 md:p-12 neo-shadow-lg space-y-8">
+            <div className="space-y-2">
+                <h2 className="text-4xl font-serif-italic font-bold tracking-tight uppercase leading-none">New Entity.</h2>
+                <p className="text-[10px] font-mono tracking-widest uppercase opacity-40">Initialize your presence in the network</p>
+            </div>
+
+            {/* Social Auth */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button type="button" className="flex items-center justify-center gap-3 px-4 py-4 border border-ink hover:bg-foundation transition-all font-bold uppercase tracking-tight text-xs">
+                    <GoogleIcon className="w-5 h-5 grayscale" />
+                    Google Base
+                </button>
+                <button type="button" className="flex items-center justify-center gap-3 px-4 py-4 border border-ink hover:bg-foundation transition-all font-bold uppercase tracking-tight text-xs">
+                    <MicrosoftIcon className="w-5 h-5 grayscale" />
+                    Microsoft Link
+                </button>
+            </div>
+
+            <div className="relative flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-ink/10"></div></div>
+                <span className="relative bg-white px-4 text-[10px] font-mono tracking-widest opacity-20 uppercase">OR INTERNAL DEPLOYMENT</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                    <div className="bg-accent-blue/5 border border-accent-blue/20 p-4 animate-shake">
+                        <p className="text-[10px] font-mono text-accent-blue uppercase font-bold tracking-widest leading-none">{error}</p>
+                    </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Legal Designation</label>
+                        <Input placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required className="neo-input" />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Network Alias</label>
+                        <Input 
+                            placeholder="username" 
+                            value={username} 
+                            onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
+                            onBlur={validateUsername}
+                            required 
+                            className="neo-input"
+                        />
+                        {usernameStatus !== 'unchecked' && (
+                            <p className={`text-[10px] font-mono uppercase tracking-widest px-1 mt-1 ${usernameStatus === 'available' ? 'text-accent-green' : 'text-accent-blue'}`}>
+                                {usernameStatus === 'checking' ? 'Validating...' : usernameMessage}
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Electronic Mail Address</label>
+                    <Input 
+                        type="email" 
+                        placeholder="you@domain.host" 
+                        value={email} 
+                        onChange={e => setEmail(e.target.value)} 
+                        onBlur={validateEmail}
+                        required 
+                        className="neo-input"
+                    />
+                    {emailStatus !== 'unchecked' && (
+                        <p className={`text-[10px] font-mono uppercase tracking-widest px-1 mt-1 ${emailStatus === 'available' ? 'text-accent-green' : 'text-accent-blue'}`}>
+                            {emailStatus === 'checking' ? 'Verifying...' : emailMessage}
+                        </p>
+                    )}
+                </div>
+
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Passcode Protocol</label>
+                    <Input 
+                        type="password" 
+                        placeholder="Min 8 Characters Required" 
+                        value={password} 
+                        onChange={e => setPassword(e.target.value)} 
+                        required 
+                        className="neo-input"
+                    />
+                </div>
+
+                <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="neo-button neo-button-primary w-full py-5 text-lg font-bold group mt-4"
+                >
+                    {isSubmitting ? 'INITIALIZING...' : 'CREATE IDENTITY'}
+                    <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </button>
+            </form>
+
+            <div className="pt-6 border-t border-ink/10 text-center">
+                <p className="text-[10px] font-mono tracking-widest uppercase opacity-40">
+                    Existing Entity?{' '}
+                    <button 
+                        type="button" 
+                        onClick={() => setView(View.SIGN_IN)} 
+                        className="font-bold text-accent-blue hover:underline underline-offset-4"
+                    >
+                        Initialize Session
+                    </button>
+                </p>
+            </div>
         </div>
-
-        <div className="flex items-center text-center">
-          <hr className="flex-grow border-t border-[--border-color]" />
-          <span className="px-4 text-xs font-medium text-[--text-secondary]">OR</span>
-          <hr className="flex-grow border-t border-[--border-color]" />
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && <p className="text-red-500 text-sm text-center bg-red-500/10 p-3 rounded-md">{error}</p>}
-
-          <Input label="Full Name" type="text" placeholder="Alex Johnson" value={name} onChange={e => setName(e.target.value)} required />
-
-          {/* Username with validation */}
-          <div>
-            <Input
-              label="Username"
-              type="text"
-              placeholder="alex_j"
-              value={username}
-              onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, ''))}
-              onBlur={validateUsername}
-              required
-            />
-            {usernameStatus !== 'unchecked' && (
-              <p className={`text-xs mt-1 flex items-center gap-1 ${getStatusColor(usernameStatus)}`}>
-                <span>{getStatusIcon(usernameStatus)}</span>
-                <span>{usernameMessage}</span>
-              </p>
-            )}
-          </div>
-
-          {/* Email with validation */}
-          <div>
-            <Input
-              label="Email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              onBlur={validateEmail}
-              required
-            />
-            {emailStatus !== 'unchecked' && (
-              <p className={`text-xs mt-1 flex items-center gap-1 ${getStatusColor(emailStatus)}`}>
-                <span>{getStatusIcon(emailStatus)}</span>
-                <span>{emailMessage}</span>
-              </p>
-            )}
-          </div>
-
-          <Input label="Password" type="password" placeholder="8+ characters" value={password} onChange={e => setPassword(e.target.value)} required />
-
-          <button type="submit" className="w-full mt-4 px-6 py-3 rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
-            Create Account
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-[--text-secondary]">
-          Already have an account?{' '}
-          <button type="button" onClick={() => setView(View.SIGN_IN)} className="font-medium text-[--primary-color] hover:underline">
-            Sign In
-          </button>
-        </p>
       </div>
     </div>
   );

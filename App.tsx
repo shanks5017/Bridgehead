@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { View, DemandPost, RentalPost, CommunityPost, MediaItem, Location, Conversation, Message, User } from './types';
 import CustomCursor from './components/CustomCursor';
 import { createChatSession } from './services/groqService';
@@ -48,12 +49,14 @@ const MOCK_USER: User = {
 };
 const MOCK_ADMIN_USER: User = {
   id: 'admin-1',
-  name: 'Shanks (Admin)',
-  email: 'shanks@gmail.com',
+  name: 'Shashank',
+  username: 'shashank',
+  email: 'shashank5017sh@gmail.com', // Updated to match database email
   bio: 'Administrator for the Bridgehead platform.',
   isEmailVerified: true,
   isPhoneVerified: true,
 };
+
 // Global Scroll Progress Component
 const GlobalScrollProgress = React.memo(() => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -80,26 +83,48 @@ const GlobalScrollProgress = React.memo(() => {
 
   return (
     <div
-      className="fixed top-0 right-0 z-[100] w-[2px] md:w-[4px] bg-[#FF0000] transition-transform duration-150 ease-out shadow-[0_0_10px_rgba(255,0,0,0.5)] origin-top"
+      className="fixed top-0 right-0 z-[100] w-[2px] md:w-[3px] bg-ink transition-transform duration-150 ease-out origin-top pointer-events-none"
       style={{ transform: `scaleY(${scrollProgress / 100})`, height: '100%' }}
     />
   );
 });
 
-const App: React.FC = () => {
-  // Use Global Scroll Progress
-  const scrollProgress = <GlobalScrollProgress />;
+// Map every View enum value to a URL path
+const VIEW_TO_PATH: Record<View, string> = {
+  [View.HOME]: '/home',
+  [View.FEED]: '/feed',
+  [View.DEMAND_FEED]: '/demand',
+  [View.POST_DEMAND]: '/post-demand',
+  [View.RENTAL_LISTINGS]: '/rentals',
+  [View.POST_RENTAL]: '/post-rental',
+  [View.AI_SUGGESTIONS]: '/ai-suggestions',
+  [View.COMMUNITY_FEED]: '/community',
+  [View.DEMAND_DETAIL]: '/demand-detail',
+  [View.RENTAL_DETAIL]: '/rental-detail',
+  [View.SAVED_POSTS]: '/saved',
+  [View.AI_MATCHES]: '/ai-matches',
+  [View.COLLABORATION]: '/messages',
+  [View.SIGN_IN]: '/sign-in',
+  [View.SIGN_UP]: '/sign-up',
+  [View.PROFILE]: '/profile',
+};
 
-  // Initialize view from localStorage or default to HOME
+// Reverse map: path → View enum
+const PATH_TO_VIEW: Record<string, View> = Object.entries(VIEW_TO_PATH).reduce(
+  (acc, [viewKey, path]) => ({ ...acc, [path]: Number(viewKey) as View }),
+  {} as Record<string, View>
+);
+
+const App: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Initialize view from current URL path, fallback to HOME
   const [view, setView] = useState<View>(() => {
-    const savedView = localStorage.getItem('bridgehead_current_view');
-    // Convert string to number for numeric enum
-    if (savedView !== null) {
-      const viewNumber = parseInt(savedView, 10);
-      if (!isNaN(viewNumber) && viewNumber in View) {
-        return viewNumber as View;
-      }
-    }
+    // Treat root '/' same as '/home'
+    const pathname = location.pathname === '/' ? '/home' : location.pathname;
+    const pathView = PATH_TO_VIEW[pathname];
+    if (pathView !== undefined) return pathView;
     return View.HOME;
   });
 
@@ -160,6 +185,14 @@ const App: React.FC = () => {
     }
   }, [toast]);
 
+  const handleAuthError = useCallback(() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setCurrentUser(null);
+    handleSetView(View.SIGN_IN);
+    setToast({ message: 'Session expired. Please sign in again.', type: 'warning' });
+  }, [handleSetView]);
+
   // --- Authentication Handlers ---
   const handleSignIn = async (identifier: string, password: string): Promise<boolean> => {
     try {
@@ -180,8 +213,14 @@ const App: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(data.user));
       setCurrentUser(data.user);
 
-      // Fetch user's own posts after login
-      await fetchMyPosts();
+      // Immediately fetch latest user posts with the NEW token
+      const [demandsRes, rentalsRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/posts/demands/mine`, { headers: { 'Authorization': `Bearer ${data.token}` } }),
+        fetch(`${API_BASE_URL}/posts/rentals/mine`, { headers: { 'Authorization': `Bearer ${data.token}` } })
+      ]);
+
+      if (demandsRes.ok) setMyDemandPosts(await demandsRes.json());
+      if (rentalsRes.ok) setMyRentalPosts(await rentalsRes.json());
 
       // Check if there was a redirect intention
       const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
@@ -202,17 +241,18 @@ const App: React.FC = () => {
   // Fetch user's own posts from backend (for Profile)
   const fetchMyPosts = async () => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    if (!token || token === 'null') return;
 
     try {
       const [demandsRes, rentalsRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/posts/demands/mine`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${API_BASE_URL}/posts/rentals/mine`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+        fetch(`${API_BASE_URL}/posts/demands/mine`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_BASE_URL}/posts/rentals/mine`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
+
+      if (demandsRes.status === 401 || rentalsRes.status === 401) {
+        handleAuthError();
+        return;
+      }
 
       if (demandsRes.ok) {
         const demands = await demandsRes.json();
@@ -348,9 +388,28 @@ const App: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
-    if (token && savedUser) {
+    if (token && token !== 'null' && savedUser && savedUser !== 'null') {
       try {
-        setCurrentUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        setCurrentUser(parsedUser);
+        // Fetch fresh user data if username is available
+        if (parsedUser.username) {
+          console.log(`🔄 Syncing user session for: ${parsedUser.username}`);
+          fetch(`${API_BASE_URL}/users/username/${parsedUser.username}`)
+            .then(res => {
+              if (res.status === 404) {
+                console.warn(`⚠️ Sync failed: Username "${parsedUser.username}" not found.`);
+                return null;
+              }
+              return res.ok ? res.json() : null;
+            })
+            .then(data => {
+              if (data) {
+                setCurrentUser(data);
+                localStorage.setItem('user', JSON.stringify(data));
+              }
+            }).catch(err => console.warn('Could not sync user data:', err));
+        }
         // Fetch user's posts from backend
         fetchMyPosts();
       } catch (e) {
@@ -388,15 +447,22 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Save current view to localStorage when it changes (but not on initial mount)
+  // Sync URL when view state changes
   const isInitialMount = React.useRef(true);
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      localStorage.setItem('bridgehead_current_view', view.toString());
+    const targetPath = VIEW_TO_PATH[view];
+    if (targetPath && location.pathname !== targetPath) {
+      navigate(targetPath);
     }
   }, [view]);
+
+  // Sync view state when user presses browser back/forward
+  useEffect(() => {
+    const pathView = PATH_TO_VIEW[location.pathname];
+    if (pathView !== undefined && pathView !== view) {
+      setView(pathView);
+    }
+  }, [location.pathname]);
 
 
   // Save demand IDs to localStorage when they change
@@ -746,7 +812,7 @@ const App: React.FC = () => {
     }
   };
 
-  const addRentalPost = async (post: Omit<RentalPost, 'id' | 'createdAt'>) => {
+  const addRentalPost = async (post: Omit<RentalPost, 'id' | 'createdAt' | 'upvotes'>) => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE_URL}/posts/rentals`, {
@@ -784,29 +850,60 @@ const App: React.FC = () => {
     }
   };
 
+  const handleRentalUpvote = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setToast({ message: 'Please sign in to upvote', type: 'warning' });
+        handleSetView(View.SIGN_IN);
+        return;
+      }
+      const res = await fetch(`${API_BASE_URL}/posts/rentals/${id}/upvote`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) throw new Error('Failed to upvote post');
+      const updatedPost = await res.json();
+      setRentalPosts(posts => posts.map(p => p.id === id ? updatedPost : p));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // --- Community API Integration ---
 
   const fetchCommunityPosts = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+    if (token && token !== 'null') {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     try {
       const res = await fetch(`${API_BASE_URL}/community/posts?limit=20`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        headers
       });
       const data = await res.json();
       if (res.ok) {
         // Map Backend Fields to Frontend Interface
-        const mappedPosts: CommunityPost[] = (data.data || []).map((p: any) => ({
-          ...p,
-          id: p._id,
-          author: p.authorName || 'Anonymous', // Map name
-          username: p.authorUsername ? `@${p.authorUsername}` : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`,
-          avatar: p.authorAvatar || 'user1',
-          likes: p.likesCount || 0,
-          replies: p.repliesCount || 0,
-          reposts: p.repostsCount || 0,
-          media: p.media || []
-        }));
+        const mappedPosts: CommunityPost[] = (data.data || []).map((p: any) => {
+          const authorObj = p.author && typeof p.author === 'object' ? p.author : null;
+          return {
+            ...p,
+            id: p._id,
+            author: authorObj?.fullName || p.authorName || 'Anonymous',
+            username: authorObj?.username ? `@${authorObj.username}` : (p.authorUsername ? `@${p.authorUsername}` : `@${(p.authorName || 'user').replace(/\s+/g, '').toLowerCase()}`),
+            avatar: authorObj?.profilePicture || p.authorAvatar || '', // Prioritize live profile picture
+            isVerified: p.authorBadge === 'entrepreneur' || authorObj?.isVerifiedEntrepreneur,
+            likes: p.likesCount || 0,
+            replies: p.repliesCount || 0,
+            reposts: p.repostsCount || 0,
+            media: p.media || []
+          };
+        });
         setCommunityPosts(mappedPosts);
       }
     } catch (error) {
@@ -821,18 +918,29 @@ const App: React.FC = () => {
     }
   }, [view, fetchCommunityPosts]);
 
-  const addCommunityPost = async (content: string, media: MediaItem[]) => {
+  const addCommunityPost = async (content: string, media: MediaItem[], topic: string = 'general') => {
     if (!currentUser) return;
+
+    const token = localStorage.getItem('token');
+    if (!token || token === 'null') {
+      handleAuthError();
+      return;
+    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/community/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ content, media, topic: 'general' })
+        body: JSON.stringify({ content, media, topic })
       });
+
+      if (res.status === 401) {
+        handleAuthError();
+        return;
+      }
 
       const rawPost = await res.json();
 
@@ -842,11 +950,12 @@ const App: React.FC = () => {
           ...rawPost,
           id: rawPost._id,
           author: rawPost.authorName || currentUser.name,
-          username: rawPost.authorBadge === 'entrepreneur' ? '@founder' : `@${(rawPost.authorName || currentUser.name).replace(/\s+/g, '').toLowerCase()}`,
-          avatar: rawPost.authorAvatar || 'user1',
-          likes: rawPost.likesCount || 0,
-          replies: rawPost.repliesCount || 0,
-          reposts: rawPost.repostsCount || 0,
+          username: rawPost.authorUsername ? `@${rawPost.authorUsername}` : `@${(rawPost.authorName || currentUser.name).replace(/\s+/g, '').toLowerCase()}`,
+          avatar: rawPost.authorAvatar || currentUser.profilePicture || '',
+          isVerified: rawPost.authorBadge === 'entrepreneur',
+          likes: 0,
+          replies: 0,
+          reposts: 0,
           media: rawPost.media || []
         };
 
@@ -1116,7 +1225,10 @@ const App: React.FC = () => {
           onCommunityReply={handleReplyPost}
           currentUser={currentUser}
           setView={handleSetView}
+          onNavigateToAIAssistant={handleNavigateToAIAssistant}
           isLoading={isDataLoading}
+          onRentalUpvote={handleRentalUpvote}
+          userId={currentUser?.id}
         />;
       case View.DEMAND_FEED:
         return <DemandFeed
@@ -1126,6 +1238,7 @@ const App: React.FC = () => {
           savedPostIds={savedDemandIds}
           onSaveToggle={handleDemandSaveToggle}
           isLoading={isDataLoading}
+          userId={currentUser?.id}
         />;
       case View.RENTAL_LISTINGS:
         return <RentalListings
@@ -1134,6 +1247,8 @@ const App: React.FC = () => {
           savedPostIds={savedRentalIds}
           onSaveToggle={handleRentalSaveToggle}
           isLoading={isDataLoading}
+          userId={currentUser?.id}
+          onUpvote={handleRentalUpvote}
         />;
       case View.POST_DEMAND:
         return <PostDemandForm addDemandPost={addDemandPost} setView={handleSetView} />;
@@ -1151,6 +1266,8 @@ const App: React.FC = () => {
           onRentalSaveToggle={handleRentalSaveToggle}
           savedDemandIds={savedDemandIds}
           savedRentalIds={savedRentalIds}
+          onNavigateToAIAssistant={handleNavigateToAIAssistant}
+          isLoading={isDataLoading}
         />;
       case View.COMMUNITY_FEED:
         return <CommunityHub
@@ -1209,9 +1326,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
-      <CustomCursor />
+    <div className="min-h-screen flex flex-col bg-foundation">
       <GlobalScrollProgress />
+      <CustomCursor />
       <Header
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
@@ -1228,55 +1345,15 @@ const App: React.FC = () => {
         currentUser={currentUser}
         onSignOut={handleSignOut}
       />
-      {/* Futuristic Sidebar Toggle for Desktop */}
-      <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        onMouseEnter={() => {
-          if (!isSidebarOpen && window.innerWidth > 768) setIsSidebarOpen(true);
-        }}
-        className={`hidden md:flex items-center justify-center fixed top-1/2 -translate-y-1/2 z-[60] transition-all duration-500 group ${isSidebarOpen ? 'left-72' : 'left-0'
-          }`}
-        style={{
-          width: '48px',
-          height: '120px',
-          background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1))',
-          borderTopRightRadius: '24px',
-          borderBottomRightRadius: '24px',
-          borderTop: '2px solid rgba(239, 68, 68, 0.5)',
-          borderRight: '2px solid rgba(239, 68, 68, 0.5)',
-          borderBottom: '2px solid rgba(239, 68, 68, 0.5)',
-          boxShadow: '0 0 20px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.1)',
-          transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-          willChange: isSidebarOpen ? 'transform' : 'auto',
-        }}
-        aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-      >
-        {/* Animated accent lines */}
-        <div className="absolute inset-0 overflow-hidden rounded-r-3xl">
-          <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
-          <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        </div>
-
-        {/* Icon */}
-        <div className="relative z-10 text-red-500 group-hover:text-red-400 transition-colors duration-300">
-          {isSidebarOpen ? (
-            <ArrowLeftIcon className="w-6 h-6 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-          ) : (
-            <ArrowRightIcon className="w-6 h-6 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-          )}
-        </div>
-
-        {/* Hover glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-r-3xl"></div>
-      </button>
-
       <main
-        style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-        className={`pt-16 transition-all duration-300 ${isSidebarOpen ? 'md:ml-72' : 'ml-0'}`}
+        className={`flex-1 transition-all duration-300 md:ml-20 ${view === View.DEMAND_DETAIL || view === View.RENTAL_DETAIL || view === View.COLLABORATION || view === View.AI_MATCHES || view === View.AI_SUGGESTIONS ? 'pt-0' : 'pt-20'
+          }`}
       >
         {renderView()}
       </main>
-      <Footer setView={handleSetView} onNavigateToAIAssistant={handleNavigateToAIAssistant} />
+      {view !== View.FEED && view !== View.COMMUNITY_FEED && view !== View.DEMAND_DETAIL && view !== View.AI_MATCHES && view !== View.AI_SUGGESTIONS && view !== View.COLLABORATION && (
+        <Footer setView={handleSetView} onNavigateToAIAssistant={handleNavigateToAIAssistant} />
+      )}
       {imageViewerState && (
         <ImageViewer
           images={imageViewerState.images}
@@ -1284,7 +1361,6 @@ const App: React.FC = () => {
           onClose={closeImageViewer}
         />
       )}
-      {view !== View.COLLABORATION && <QuickPostButton setView={handleSetView} isChatbotOpen={isChatbotOpen} />}
       {view !== View.COLLABORATION && <Chatbot
         isChatbotOpen={isChatbotOpen}
         onChatbotToggle={setIsChatbotOpen}
@@ -1299,7 +1375,7 @@ const App: React.FC = () => {
           onClose={() => setToast(null)}
         />
       )}
-    </>
+    </div>
   );
 };
 

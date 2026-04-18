@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { View } from '../types';
 import { Input } from './common/FormComponents';
-import { GoogleIcon, MicrosoftIcon } from './icons';
+import { GoogleIcon, MicrosoftIcon, ArrowRightIcon } from './icons';
 
 interface SignInProps {
   onSignIn: (identifier: string, password: string) => Promise<boolean>;
@@ -13,80 +12,128 @@ const SignIn: React.FC<SignInProps> = ({ onSignIn, setView }) => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     try {
       const success = await onSignIn(identifier, password);
-      // If success is false, App.tsx handles the toast, but we might want to set local error too if needed.
-      // However, App.tsx implementation returns false on failure and sets a toast.
-      // We can also set a generic error here if we want, or just rely on the toast.
-      // The original code set a specific hint message. Let's preserve that if it fails.
       if (!success) {
-        setError('Invalid credentials. Please check your email/username and password.');
+        setError('Verification Failed: Invalid credentials');
       }
     } catch (err) {
-      setError('An unexpected error occurred.');
+      setError('System Error: Authentication endpoint unreachable');
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
   const handleSocialSignIn = (provider: 'google' | 'microsoft') => {
-    console.log(`Signing in with ${provider}...`);
-    // Mock social sign in logic would go here
+    console.log(`Connecting to ${provider} gateway...`);
   };
 
-
   return (
-    <div className="min-h-screen flex items-center justify-center py-12">
-      <div className="w-full max-w-md mx-auto bg-[--card-color] border border-[--border-color] rounded-xl p-8 space-y-6">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Welcome Back</h2>
-          <p className="text-[--text-secondary]">Sign in to continue to Bridgehead.</p>
+    <div className="min-h-screen bg-foundation flex items-center justify-center py-20 px-6">
+      <div className="w-full max-w-lg space-y-8 animate-slide-up">
+        {/* Brand Header */}
+        <div className="text-center space-y-2 mb-12">
+            <h1 className="text-6xl md:text-8xl font-serif-italic font-bold tracking-tighter uppercase leading-none opacity-10 select-none">
+                ZONEK
+            </h1>
+            <div className="flex items-center justify-center gap-2">
+                <span className="w-2 h-2 bg-accent-blue rounded-full" />
+                <span className="text-[10px] font-mono tracking-[0.4em] uppercase opacity-50 font-bold">Authentication Gateway</span>
+            </div>
         </div>
 
-        <div className="space-y-3">
-          <button
-            type="button"
-            onClick={() => handleSocialSignIn('google')}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-[--border-color] rounded-lg text-white font-medium hover:bg-white/10 transition-colors"
-          >
-            <GoogleIcon className="w-6 h-6" />
-            Sign In with Google
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSocialSignIn('microsoft')}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-[--border-color] rounded-lg text-white font-medium hover:bg-white/10 transition-colors"
-          >
-            <MicrosoftIcon className="w-6 h-6" />
-            Sign In with Microsoft
-          </button>
+        {/* Form Container */}
+        <div className="bg-white border border-ink p-8 md:p-12 neo-shadow-lg space-y-8">
+            <div className="space-y-2">
+                <h2 className="text-4xl font-serif-italic font-bold tracking-tight uppercase leading-none">Welcome Back.</h2>
+                <p className="text-[10px] font-mono tracking-widest uppercase opacity-40">Re-establish secure session to platform</p>
+            </div>
+
+            {/* Social Auth */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                    type="button"
+                    onClick={() => handleSocialSignIn('google')}
+                    className="flex items-center justify-center gap-3 px-4 py-4 border border-ink hover:bg-foundation transition-all font-bold uppercase tracking-tight text-xs"
+                >
+                    <GoogleIcon className="w-5 h-5 grayscale" />
+                    Google Entry
+                </button>
+                <button
+                    type="button"
+                    onClick={() => handleSocialSignIn('microsoft')}
+                    className="flex items-center justify-center gap-3 px-4 py-4 border border-ink hover:bg-foundation transition-all font-bold uppercase tracking-tight text-xs"
+                >
+                    <MicrosoftIcon className="w-5 h-5 grayscale" />
+                    Microsoft Link
+                </button>
+            </div>
+
+            <div className="relative flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-ink/10"></div></div>
+                <span className="relative bg-white px-4 text-[10px] font-mono tracking-widest opacity-20 uppercase">OR INTERNAL PROTOCOL</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                    <div className="bg-accent-blue/5 border border-accent-blue/20 p-4 animate-shake">
+                        <p className="text-[10px] font-mono text-accent-blue uppercase font-bold tracking-widest leading-none">Error: {error}</p>
+                    </div>
+                )}
+
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Identity Identifier</label>
+                    <Input 
+                        type="text" 
+                        placeholder="you@domain.host or username" 
+                        value={identifier} 
+                        onChange={e => setIdentifier(e.target.value)} 
+                        required 
+                        className="neo-input"
+                    />
+                </div>
+
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-40 block px-1">Access Passcode</label>
+                    <Input 
+                        type="password" 
+                        placeholder="••••••••" 
+                        value={password} 
+                        onChange={e => setPassword(e.target.value)} 
+                        required 
+                        className="neo-input"
+                    />
+                </div>
+
+                <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="neo-button neo-button-primary w-full py-5 text-lg font-bold group"
+                >
+                    {isSubmitting ? 'VERIFYING...' : 'INITIALIZE SESSION'}
+                    <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </button>
+            </form>
+
+            <div className="pt-6 border-t border-ink/10 text-center">
+                <p className="text-[10px] font-mono tracking-widest uppercase opacity-40">
+                    New Operator?{' '}
+                    <button 
+                        type="button" 
+                        onClick={() => setView(View.SIGN_UP)} 
+                        className="font-bold text-accent-blue hover:underline underline-offset-4"
+                    >
+                        Register Identity
+                    </button>
+                </p>
+            </div>
         </div>
-
-        <div className="flex items-center text-center">
-          <hr className="flex-grow border-t border-[--border-color]" />
-          <span className="px-4 text-xs font-medium text-[--text-secondary]">OR</span>
-          <hr className="flex-grow border-t border-[--border-color]" />
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && <p className="text-red-500 text-sm text-center bg-red-500/10 p-3 rounded-md">{error}</p>}
-
-          <Input label="Email or Username" type="text" placeholder="you@example.com or username" value={identifier} onChange={e => setIdentifier(e.target.value)} required />
-          <Input label="Password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
-
-          <button type="submit" className="w-full mt-4 px-6 py-3 rounded-lg text-lg font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity">
-            Sign In
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-[--text-secondary]">
-          Don't have an account?{' '}
-          <button type="button" onClick={() => setView(View.SIGN_UP)} className="font-medium text-[--primary-color] hover:underline">
-            Sign Up
-          </button>
-        </p>
       </div>
     </div>
   );

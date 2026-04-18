@@ -1,8 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { CommunityPost, MediaItem, User, View } from '../types';
-import { UserCircleIcon, ReplyIcon, RepostIcon, HeartIcon, VideoCameraIcon, PencilIcon, PlusIcon, ImageIcon, XIcon } from './icons';
-import ImageContainer from './common/ImageContainer';
-import PremiumCard from './common/PremiumCard';
+import { 
+    UserCircleIcon, 
+    ReplyIcon, 
+    RepostIcon, 
+    HeartIcon, 
+    VideoCameraIcon, 
+    PencilIcon, 
+    PlusIcon, 
+    ImageIcon, 
+    XIcon 
+} from './icons';
 
 interface CommunityPostCardProps {
     post: CommunityPost;
@@ -21,35 +29,32 @@ const timeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds}s`;
+    if (seconds < 60) return `${seconds}S`;
     const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m`;
+    if (minutes < 60) return `${minutes}M`;
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h`;
-    const days = Math.floor(hours / 24);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (hours < 24) return `${hours}H`;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
 };
-
 
 const ActionButton: React.FC<{
     icon: React.ReactNode;
     count: number;
     onClick: () => void;
-    hoverColor: string;
     activeColor?: string;
     isActive?: boolean;
-}> = ({ icon, count, onClick, hoverColor, activeColor, isActive }) => {
-    const activeClass = isActive ? activeColor : 'text-[--text-secondary]';
-
+}> = ({ icon, count, onClick, activeColor, isActive }) => {
     return (
         <button
             onClick={onClick}
-            className={`flex items-center space-x-2 ${activeClass} ${hoverColor} transition-colors group`}
+            className={`flex items-center gap-3 group px-4 py-2 border border-ink transition-all ${
+                isActive ? activeColor : 'bg-white hover:bg-foundation'
+            }`}
         >
-            <div className="p-2 rounded-full group-hover:bg-[--primary-color]/10 transition-colors">
+            <div className="transform transition-transform group-hover:scale-110">
                 {icon}
             </div>
-            <span className="text-sm">{count > 0 ? count : ''}</span>
+            {count > 0 && <span className="text-[10px] font-bold font-mono tracking-widest">{count}</span>}
         </button>
     );
 };
@@ -57,121 +62,40 @@ const ActionButton: React.FC<{
 const MediaGrid: React.FC<{ media: CommunityPost['media'] }> = ({ media }) => {
     if (!media || media.length === 0) return null;
 
-    const gridClasses = {
-        1: 'grid-cols-1',
-        2: 'grid-cols-2',
-        3: 'grid-cols-2', // Will handle with spans
-        4: 'grid-cols-2',
-    }[media.length] || 'grid-cols-2';
-
     return (
-        <div className={`mt-3 grid ${gridClasses} gap-1.5 rounded-xl overflow-hidden border border-[--border-color]`}>
-            {media.map((item, index) => {
-                const isImage = item.type === 'image';
-                const isLastItemWithOddCount = media.length % 2 !== 0 && index === media.length - 1;
-
-                return (
-                    <div
-                        key={index}
-                        className={`relative ${isLastItemWithOddCount ? 'col-span-2' : ''}`}
-                    >
-                        {isImage ? (
-                            <ImageContainer
-                                src={item.url}
-                                alt={`Post media ${index + 1}`}
-                                aspectRatio="video"
-                                className="w-full"
-                            />
-                        ) : (
-                            <div className="relative aspect-video">
-                                <video controls src={item.url} className="w-full h-full object-cover bg-black" />
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
+        <div className="mt-6 grid grid-cols-2 gap-px bg-ink border border-ink overflow-hidden neo-shadow-sm">
+            {media.map((item, index) => (
+                <div 
+                    key={index} 
+                    className={`relative bg-white overflow-hidden ${media.length === 1 ? 'col-span-2 aspect-[16/9]' : 'aspect-square'}`}
+                >
+                    {item.type === 'image' ? (
+                        <img 
+                            src={item.url} 
+                            alt="" 
+                            className="w-full h-full object-cover transition-all duration-700 hover:scale-[1.05]" 
+                        />
+                    ) : (
+                        <video src={item.url} className="w-full h-full object-cover bg-black" />
+                    )}
+                </div>
+            ))}
         </div>
     );
 };
 
-
-const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onRepost, onEdit, onVideoReply, onReply, currentUser, setView }) => {
+const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ 
+    post, onLike, onRepost, onEdit, onVideoReply, onReply, currentUser, setView 
+}) => {
     const isCurrentUserPost = currentUser?.name === post.author;
-    const videoReplyInputRef = useRef<HTMLInputElement>(null);
-
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState('');
     const [replyMedia, setReplyMedia] = useState<MediaItem[]>([]);
-    const [mediaOptionsOpen, setMediaOptionsOpen] = useState(false);
     const replyImageInputRef = useRef<HTMLInputElement>(null);
-    const replyVideoInputRef = useRef<HTMLInputElement>(null);
-
-    const withAuthCheck = (action: () => void) => {
-        return () => {
-            if (!currentUser) {
-                setView(View.SIGN_IN);
-            } else {
-                action();
-            }
-        };
-    };
-
-    const handleReplyClick = () => {
-        withAuthCheck(() => {
-            setIsReplying(!isReplying);
-            if (!isReplying) { // When opening for the first time
-                setReplyContent(`@${post.username} `);
-            }
-        })();
-    };
-
-    const handleVideoReplyClick = () => {
-        videoReplyInputRef.current?.click();
-    };
-
-    const handleVideoFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const url = e.target?.result as string;
-            const videoMedia: MediaItem = { type: 'video', url };
-            onVideoReply(post.id, videoMedia);
-        };
-        reader.readAsDataURL(file);
-
-        if (videoReplyInputRef.current) {
-            videoReplyInputRef.current.value = "";
-        }
-    };
-
-    const handleReplyFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (!files) return;
-
-        Array.from(files).forEach((file: File) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const url = e.target?.result as string;
-                const type = file.type.startsWith('image/') ? 'image' : 'video';
-                setReplyMedia(prev => [...prev, { type, url }]);
-            };
-            reader.readAsDataURL(file);
-        });
-
-        if (replyImageInputRef.current) replyImageInputRef.current.value = "";
-        if (replyVideoInputRef.current) replyVideoInputRef.current.value = "";
-        setMediaOptionsOpen(false);
-    };
-
-    const removeReplyMedia = (index: number) => {
-        setReplyMedia(prev => prev.filter((_, i) => i !== index));
-    };
 
     const handleReplySubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if ((replyContent.trim() || replyMedia.length > 0) && replyContent.length <= CHARACTER_LIMIT) {
+        if (replyContent.trim() || replyMedia.length > 0) {
             onReply(post.id, replyContent, replyMedia);
             setIsReplying(false);
             setReplyContent('');
@@ -179,167 +103,115 @@ const CommunityPostCard: React.FC<CommunityPostCardProps> = ({ post, onLike, onR
         }
     };
 
-    const remainingChars = CHARACTER_LIMIT - replyContent.length;
-
-
     return (
-        <PremiumCard className="p-6 flex items-start space-x-4">
-            <input
-                type="file"
-                ref={videoReplyInputRef}
-                onChange={handleVideoFileChange}
-                accept="video/*"
-                className="hidden"
-            />
-            <UserCircleIcon className="w-12 h-12 text-[--text-secondary] flex-shrink-0" />
-            <div className="w-full">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                        <span
-                            className="font-bold text-white cursor-pointer hover:underline"
-                            onClick={() => {
-                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
-                                setView(View.PROFILE);
-                            }}
-                        >
-                            {post.author}
-                        </span>
-                        <span
-                            className="text-[--text-secondary] cursor-pointer hover:text-[--primary-color] transition-colors"
-                            onClick={() => {
-                                localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
-                                setView(View.PROFILE);
-                            }}
-                        >
-                            {post.username}
-                        </span>
-                        <span className="text-[--text-secondary]">·</span>
-                        <span className="text-[--text-secondary] text-sm">{timeAgo(post.createdAt)}</span>
-                    </div>
-                    {isCurrentUserPost && (
-                        <button
-                            onClick={() => onEdit(post.id)}
-                            className="text-[--text-secondary] hover:text-[--primary-color] p-1 rounded-full transition-colors"
-                            aria-label="Edit post"
-                        >
-                            <PencilIcon className="w-5 h-5" />
-                        </button>
+        <div className="bg-white border-2 border-ink p-8 transition-all hover:neo-shadow-md animate-slide-up group">
+            <div className="flex gap-6">
+                {/* Author Identity Block */}
+                <div 
+                    className="w-16 h-16 border-2 border-ink flex-shrink-0 bg-foundation overflow-hidden cursor-pointer hover:neo-shadow-sm transition-all"
+                    onClick={() => {
+                        localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                        setView(View.PROFILE);
+                    }}
+                >
+                    {post.avatar ? (
+                        <img src={post.avatar} alt={post.author} className="w-full h-full object-cover" />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center font-bold text-2xl font-serif-italic italic opacity-20">
+                            {post.author?.[0]}
+                        </div>
                     )}
                 </div>
-                {post.content && (
-                    <p className="text-white mt-2 whitespace-pre-wrap break-words">
+
+                <div className="flex-1 min-w-0">
+                    {/* Post Metadata Protocol */}
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <span 
+                                className="font-serif-italic font-bold text-2xl uppercase tracking-tighter hover:text-accent-green cursor-pointer transition-colors leading-none"
+                                onClick={() => {
+                                    localStorage.setItem('viewingUsername', post.username?.replace('@', '') || '');
+                                    setView(View.PROFILE);
+                                }}
+                            >
+                                {post.author}
+                            </span>
+                            <span className="text-[10px] font-mono opacity-40 uppercase tracking-[0.2em]">{post.username}</span>
+                            <span className="text-[10px] font-mono opacity-20">—</span>
+                            <span className="text-[10px] font-mono opacity-40 uppercase tracking-[0.2em]">{timeAgo(post.createdAt)}</span>
+                        </div>
+                        {isCurrentUserPost && (
+                            <button onClick={() => onEdit(post.id)} className="p-2 border border-ink hover:bg-foundation transition-all">
+                                <PencilIcon className="w-4 h-4" />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Discussion Content */}
+                    <p className="text-xl leading-snug font-bold uppercase tracking-tight opacity-90 break-words mb-6">
                         {post.content}
                     </p>
-                )}
-                <MediaGrid media={post.media} />
-                <div className="flex items-center justify-between mt-4">
-                    <div className="flex items-center space-x-4 w-full max-w-sm justify-between">
-                        <ActionButton
-                            icon={<ReplyIcon className="w-5 h-5" />}
-                            count={post.replies}
-                            onClick={handleReplyClick}
-                            hoverColor="hover:text-blue-500"
+
+                    <MediaGrid media={post.media} />
+
+                    {/* Interaction Array */}
+                    <div className="mt-8 flex flex-wrap items-center gap-4">
+                        <ActionButton 
+                            icon={<ReplyIcon className="w-4 h-4" />} 
+                            count={post.replies} 
+                            onClick={() => setIsReplying(!isReplying)} 
                         />
-                        <ActionButton
-                            icon={<RepostIcon className="w-5 h-5" />}
-                            count={post.reposts}
-                            onClick={withAuthCheck(() => onRepost(post.id))}
-                            hoverColor="hover:text-green-500"
-                            activeColor="text-green-500"
+                        <ActionButton 
+                            icon={<RepostIcon className="w-4 h-4" />} 
+                            count={post.reposts} 
+                            onClick={() => onRepost(post.id)}
                             isActive={post.isReposted}
+                            activeColor="bg-ink text-white"
                         />
-                        <ActionButton
-                            icon={<HeartIcon className="w-5 h-5" isFilled={post.isLiked} />}
-                            count={post.likes}
-                            onClick={withAuthCheck(() => onLike(post.id))}
-                            hoverColor="hover:text-pink-500"
-                            activeColor="text-pink-500"
+                        <ActionButton 
+                            icon={<HeartIcon className="w-4 h-4" isFilled={post.isLiked} />} 
+                            count={post.likes} 
+                            onClick={() => onLike(post.id)}
                             isActive={post.isLiked}
+                            activeColor="bg-accent-green text-ink"
                         />
-                        <ActionButton
-                            icon={<VideoCameraIcon className="w-5 h-5" />}
-                            count={0}
-                            onClick={withAuthCheck(handleVideoReplyClick)}
-                            hoverColor="hover:text-purple-500"
-                        />
+                        <button className="ml-auto text-[10px] font-mono tracking-widest uppercase opacity-40 hover:opacity-100 hover:text-accent-green transition-all pb-1 border-b border-transparent hover:border-accent-green">
+                            REPLICATE INTEL
+                        </button>
                     </div>
+
+                    {/* Inline Communication Protocol */}
+                    {isReplying && (
+                        <div className="mt-8 p-6 bg-foundation/30 border-2 border-ink animate-slide-up">
+                            <form onSubmit={handleReplySubmit}>
+                                <textarea
+                                    value={replyContent}
+                                    onChange={e => setReplyContent(e.target.value)}
+                                    placeholder={`RESPOND TO ${post.username}...`}
+                                    className="w-full bg-transparent border-none focus:ring-0 resize-none text-lg font-bold uppercase placeholder:opacity-20 translate-y-1"
+                                    rows={2}
+                                    autoFocus
+                                />
+                                <div className="mt-6 flex items-center justify-between border-t border-ink/10 pt-6">
+                                    <div className="flex gap-2">
+                                        <input type="file" ref={replyImageInputRef} hidden accept="image/*" multiple />
+                                        <button type="button" onClick={() => replyImageInputRef.current?.click()} className="p-3 border border-ink hover:bg-white transition-all"><ImageIcon className="w-4 h-4" /></button>
+                                        <button type="button" className="p-3 border border-ink hover:bg-white transition-all"><VideoCameraIcon className="w-4 h-4" /></button>
+                                    </div>
+                                    <div className="flex items-center gap-6">
+                                        <span className={`text-[10px] font-mono tracking-widest ${CHARACTER_LIMIT - replyContent.length < 0 ? 'text-red-600' : 'opacity-40'}`}>
+                                            {CHARACTER_LIMIT - replyContent.length} BITS
+                                        </span>
+                                        <button type="submit" className="neo-button neo-button-primary py-2 px-8 text-xs font-bold">EMIT REPLY</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    )}
                 </div>
-
-                {isReplying && (
-                    <div className="mt-4">
-                        <form onSubmit={handleReplySubmit}>
-                            <textarea
-                                value={replyContent}
-                                onChange={e => setReplyContent(e.target.value)}
-                                placeholder={`Replying to ${post.username}...`}
-                                className="w-full bg-transparent text-[--text-primary] placeholder-[--text-secondary] focus:outline-none resize-none"
-                                rows={2}
-                                autoFocus
-                            />
-                            {replyMedia.length > 0 && (
-                                <div className="mt-2 grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                                    {replyMedia.map((item, index) => (
-                                        <div key={index} className="relative aspect-square">
-                                            {item.type === 'image' ? (
-                                                <img src={item.url} alt={`Preview ${index}`} className="w-full h-full object-cover rounded-lg" />
-                                            ) : (
-                                                <div className="w-full h-full relative">
-                                                    <video src={item.url} className="w-full h-full object-cover rounded-lg" />
-                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                                                        <VideoCameraIcon className="w-6 h-6 text-white" />
-                                                    </div>
-                                                </div>
-                                            )}
-                                            <button type="button" onClick={() => removeReplyMedia(index)} className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 text-white z-10">
-                                                <XIcon className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <div className="flex items-center justify-between mt-2">
-                                <div className="relative">
-                                    <input type="file" ref={replyImageInputRef} onChange={handleReplyFileChange} accept="image/*" multiple className="hidden" />
-                                    <input type="file" ref={replyVideoInputRef} onChange={handleReplyFileChange} accept="video/*" multiple className="hidden" />
-                                    <button
-                                        type="button"
-                                        onClick={() => setMediaOptionsOpen(!mediaOptionsOpen)}
-                                        className="text-[--primary-color] p-2 rounded-full hover:bg-[--primary-color]/10 transition-colors"
-                                        title="Add Media"
-                                    >
-                                        <PlusIcon className="w-5 h-5" />
-                                    </button>
-                                    {mediaOptionsOpen && (
-                                        <div className="absolute bottom-full left-0 mb-2 w-40 bg-[--card-color] border border-[--border-color] rounded-lg shadow-lg z-10" onMouseLeave={() => setMediaOptionsOpen(false)}>
-                                            <button type="button" onClick={() => replyImageInputRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-2 text-left text-[--text-secondary] hover:bg-white/10 hover:text-white">
-                                                <ImageIcon className="w-5 h-5" /><span>Photo</span>
-                                            </button>
-                                            <button type="button" onClick={() => replyVideoInputRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-2 text-left text-[--text-secondary] hover:bg-white/10 hover:text-white">
-                                                <VideoCameraIcon className="w-5 h-5" /><span>Video</span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex items-center space-x-4">
-                                    <span className={`text-sm ${remainingChars < 0 ? 'text-red-500' : 'text-[--text-secondary]'}`}>
-                                        {remainingChars}
-                                    </span>
-                                    <button type="button" onClick={() => setIsReplying(false)} className="px-4 py-1.5 rounded-full text-sm font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors">
-                                        Cancel
-                                    </button>
-                                    <button type="submit" disabled={(!replyContent.trim() && replyMedia.length === 0) || remainingChars < 0} className="px-4 py-1.5 rounded-full text-sm font-semibold bg-[--primary-color] text-white hover:opacity-90 transition-opacity disabled:opacity-50">
-                                        Reply
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                )}
             </div>
-        </PremiumCard>
+        </div>
     );
 };
 
-export default CommunityPostCard;
+export default React.memo(CommunityPostCard);

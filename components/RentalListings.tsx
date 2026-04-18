@@ -41,7 +41,9 @@ const CategoryRow: React.FC<{
     onPostSelect: (post: RentalPost) => void;
     savedPostIds: string[];
     onSaveToggle: (id: string) => void;
-}> = React.memo(({ title, posts, onPostSelect, savedPostIds, onSaveToggle }) => {
+    userId?: string;
+    onUpvote?: (id: string) => void;
+}> = React.memo(({ title, posts, onPostSelect, savedPostIds, onSaveToggle, userId, onUpvote }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
@@ -100,20 +102,20 @@ const CategoryRow: React.FC<{
                     </button>
                 )}
             </div>
-            <div className="relative group">
+            <div className="relative group/row">
                 {canScrollLeft && (
                     <button
                         onClick={() => scroll('left')}
-                        className="absolute left-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-r from-[--bg-color] to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                        className="absolute left-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-r from-[--bg-color] to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
                         aria-label="Scroll left"
                     >
                         <ArrowLeftIcon className="w-8 h-8 text-white rounded-full bg-black/50 p-1" />
                     </button>
                 )}
-                <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 px-4 sm:px-6 lg:px-8 hide-scrollbar">
+                <div ref={scrollContainerRef} className="flex overflow-x-auto space-x-6 pb-4 px-4 sm:px-6 lg:px-8 hide-scrollbar items-stretch">
                     {displayedPosts.map(post => (
-                        <div key={post.id} className="w-80 flex-shrink-0">
-                            <RentalCard post={post} onPostSelect={onPostSelect} isSaved={savedPostIds.includes(post.id)} onSaveToggle={onSaveToggle} />
+                        <div key={post.id} className="w-80 flex-shrink-0 flex flex-col">
+                            <RentalCard post={post} onPostSelect={onPostSelect} isSaved={savedPostIds.includes(post.id)} onSaveToggle={onSaveToggle} className="h-full" userId={userId} onUpvote={onUpvote} />
                         </div>
                     ))}
                     {posts.length > 10 && !showAllPosts && (
@@ -131,7 +133,7 @@ const CategoryRow: React.FC<{
                 {canScrollRight && (
                     <button
                         onClick={() => scroll('right')}
-                        className="absolute right-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-l from-[--bg-color] to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                        className="absolute right-0 top-0 bottom-0 z-20 w-16 h-full bg-gradient-to-l from-[--bg-color] to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
                         aria-label="Scroll right"
                     >
                         <ArrowRightIcon className="w-8 h-8 text-white rounded-full bg-black/50 p-1" />
@@ -142,7 +144,7 @@ const CategoryRow: React.FC<{
     )
 });
 
-const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle, isLoading }) => {
+const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle, isLoading, userId, onUpvote }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -420,10 +422,12 @@ const RentalListings: React.FC<RentalListingsProps> = ({ posts, onPostSelect, sa
                             onPostSelect={onPostSelect}
                             savedPostIds={savedPostIds}
                             onSaveToggle={onSaveToggle}
+                            userId={userId}
+                            onUpvote={onUpvote}
                         />
                     ) : (
                         postsByCategory.map(({ title, posts }) => (
-                            <CategoryRow key={title} title={title} posts={posts} onPostSelect={onPostSelect} savedPostIds={savedPostIds} onSaveToggle={onSaveToggle} />
+                            <CategoryRow key={title} title={title} posts={posts} onPostSelect={onPostSelect} savedPostIds={savedPostIds} onSaveToggle={onSaveToggle} userId={userId} onUpvote={onUpvote} />
                         ))
                     )}
                 </>
@@ -438,9 +442,11 @@ interface VirtualizedGridProps {
     onPostSelect: (post: RentalPost) => void;
     savedPostIds: string[];
     onSaveToggle: (id: string) => void;
+    userId?: string;
+    onUpvote?: (id: string) => void;
 }
 
-const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle }) => {
+const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, savedPostIds, onSaveToggle, userId, onUpvote }) => {
     const parentRef = useRef<HTMLDivElement>(null);
     const [columnCount, setColumnCount] = useState(4);
 
@@ -497,6 +503,8 @@ const VirtualizedGrid: React.FC<VirtualizedGridProps> = ({ posts, onPostSelect, 
                                         onPostSelect={onPostSelect}
                                         isSaved={savedPostIds.includes(post.id)}
                                         onSaveToggle={onSaveToggle}
+                                        userId={userId}
+                                        onUpvote={onUpvote}
                                     />
                                 ))}
                             </div>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DemandPost, View } from '../types';
-import { ArrowLeftIcon, ArrowRightIcon, LocationPinIcon, UpvoteIcon, ChatBubbleLeftRightIcon, PhoneIcon } from './icons';
-import { EnvelopeIcon } from './icons';
+import { ArrowLeftIcon, LocationPinIcon, UpvoteIcon, ChatBubbleLeftRightIcon, PhoneIcon, EnvelopeIcon } from './icons';
 import { getImageUrl } from '../utils/imageUrlUtils';
 
 interface DemandDetailProps {
@@ -13,7 +12,7 @@ interface DemandDetailProps {
   setView?: (view: View) => void;
 }
 
-const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onViewDemand, onImageClick, onStartCollaboration, setView }) => {
+const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onImageClick, onStartCollaboration, setView }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const mapSrc = `https://maps.google.com/maps?q=${post.location.latitude},${post.location.longitude}&z=15&output=embed`;
 
@@ -26,172 +25,244 @@ const DemandDetail: React.FC<DemandDetailProps> = ({ post, onBack, onViewDemand,
   };
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="container mx-auto max-w-6xl px-4">
-        {/* Navigation Buttons - Sidebar Style */}
-        <div className="flex gap-3 mb-6">
-          <button
-            onClick={onBack}
-            className="group relative flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-medium transition-all duration-300 overflow-hidden text-white shadow-xl shadow-red-500/50"
-            style={{
-              background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)',
-            }}
-          >
-            {/* Glow effect on hover */}
-            <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/30" />
-            {/* Icon with animation */}
-            <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
-              <ArrowLeftIcon className="w-5 h-5" />
-            </div>
-            {/* Text with smooth transition */}
-            <span className="relative z-10 transform transition-all duration-300 group-hover:-translate-x-0.5">Back to Feed</span>
-            {/* Shine effect */}
-            <div className="absolute inset-0 opacity-30">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine" />
-            </div>
-          </button>
+    <div className="min-h-screen bg-foundation/50 pb-20 overflow-x-hidden">
+      {/* Top Protocol Bar (Sticky Nav) */}
+      <div className="sticky top-20 z-30 bg-white border-b-2 border-ink px-6 md:px-12 py-4 flex items-center justify-between">
+        <button
+          onClick={onBack}
+          className="neo-button group flex items-center gap-3 active:translate-y-0.5"
+        >
+          <ArrowLeftIcon className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm font-bold tracking-tight">BACK TO NETWORK</span>
+        </button>
 
-          <button
-            onClick={onViewDemand}
-            className="group relative flex items-center gap-2 px-5 py-2.5 rounded-full text-base font-medium transition-all duration-300 overflow-hidden text-white shadow-xl shadow-red-500/50"
-            style={{
-              background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)',
-            }}
-          >
-            {/* Glow effect on hover */}
-            <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-red-500/30" />
-            {/* Text with smooth transition */}
-            <span className="relative z-10 transform transition-all duration-300 group-hover:translate-x-0.5">View Demand</span>
-            {/* Icon with animation */}
-            <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-              <ArrowRightIcon className="w-5 h-5" />
+        <div className="flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-2">
+                <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse" />
+                <span className="text-[10px] font-mono tracking-widest uppercase opacity-60">SIGNAL ACTIVE // ID: {post.id.substring(0, 8)}</span>
             </div>
-            {/* Shine effect */}
-            <div className="absolute inset-0 opacity-30">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine" />
-            </div>
-          </button>
+            <button 
+                onClick={() => onStartCollaboration(post)}
+                className="neo-button-primary neo-button px-8"
+            >
+                INITIATE
+            </button>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-          {/* Left Column: Images and Details */}
-          <div className="space-y-6">
-            {/* Image Gallery */}
-            <div>
-              <div className="aspect-video w-full rounded-xl overflow-hidden bg-[--card-color] border border-[--border-color] cursor-pointer" onClick={() => post.images.length > 0 && onImageClick(post.images.map(getImageUrl), currentImageIndex)}>
+      <main className="max-w-7xl mx-auto px-6 md:px-12 mt-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* LEFT: SIGNAL INTELLIGENCE (8/12) */}
+          <div className="lg:col-span-8 space-y-12 animate-slide-up">
+            
+            {/* Title & Stats Block */}
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-3">
+                <span className="bg-ink text-foundation px-3 py-1 text-[10px] font-mono tracking-[0.2em] font-bold">
+                    [ {post.category.toUpperCase()} ]
+                </span>
+                <span className="bg-accent-green/10 text-accent-green border border-accent-green/20 px-3 py-1 text-[10px] font-mono tracking-[0.2em] font-bold flex items-center gap-2">
+                    <UpvoteIcon className="w-3 h-3" />
+                    {post.upvotes} UPVOTES detected
+                </span>
+                <span className="bg-white border border-ink/10 px-3 py-1 text-[10px] font-mono tracking-[0.2em] opacity-40 font-bold">
+                    SIGNAL EMITTED: {new Date(post.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-serif-italic font-extrabold tracking-tighter leading-[0.85] uppercase max-w-3xl">
+                {post.title}
+              </h1>
+            </div>
+
+            {/* Gallery Viewport */}
+            <div className="space-y-4 group">
+              <div 
+                className="neo-border neo-shadow-md bg-white aspect-video relative overflow-hidden cursor-pointer"
+                onClick={() => post.images.length > 0 && onImageClick(post.images.map(getImageUrl), currentImageIndex)}
+              >
                 {post.images.length > 0 ? (
-                  <img src={getImageUrl(post.images[currentImageIndex])} alt={post.title} className="w-full h-full object-cover" />
+                  <img 
+                    src={getImageUrl(post.images[currentImageIndex])} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                  />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[--text-secondary]">No Image</div>
+                  <div className="w-full h-full flex items-center justify-center font-serif-italic text-4xl opacity-10 uppercase tracking-tighter">
+                    NO SIGNAL VISUALS
+                  </div>
+                )}
+                
+                {/* Image Counter Overlay */}
+                {post.images.length > 0 && (
+                  <div className="absolute bottom-6 right-6 bg-ink text-foundation px-4 py-2 font-mono text-xs neo-border shadow-[4px_4px_0px_#22C55E]">
+                    FRAME: 0{currentImageIndex + 1} / 0{post.images.length}
+                  </div>
                 )}
               </div>
+
+              {/* Thumbnails */}
               {post.images.length > 1 && (
-                <div className="flex space-x-2 mt-3 overflow-x-auto hide-scrollbar pb-2">
+                <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
                   {post.images.map((img, index) => (
-                    <button key={index} onClick={() => setCurrentImageIndex(index)} className={`flex-shrink-0 w-20 h-14 rounded-md overflow-hidden border-2 ${currentImageIndex === index ? 'border-[--primary-color]' : 'border-transparent'}`}>
-                      <img src={getImageUrl(img)} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    <button 
+                        key={index} 
+                        onClick={() => setCurrentImageIndex(index)} 
+                        className={`flex-shrink-0 w-24 h-16 neo-border transition-all transition-duration-300 ${currentImageIndex === index ? 'neo-shadow-sm translate-y-[-4px] translate-x-[-4px] border-accent-green' : 'opacity-40 hover:opacity-100 hover:translate-y-[-2px]'}`}
+                    >
+                      <img src={getImageUrl(img)} alt={`Frame ${index + 1}`} className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Details */}
-            <div>
-              <span className="text-sm font-bold uppercase tracking-widest text-[--primary-color]">{post.category}</span>
-              <h1 className="text-4xl font-extrabold my-2">{post.title}</h1>
-
-              {/* Posted by username */}
-              {post.createdBy && typeof post.createdBy === 'object' && (post.createdBy as any).username && (
-                <div className="text-sm text-gray-400 mb-3">
-                  Posted by{' '}
-                  <span
-                    className="text-[#FF0000] hover:underline cursor-pointer font-semibold"
-                    onClick={handleUsernameClick}
-                  >
-                    @{(post.createdBy as any).username}
-                  </span>
+            {/* In-depth Intelligence Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-ink/10">
+                <div className="space-y-4">
+                    <h3 className="text-[10px] font-mono tracking-[0.3em] opacity-40 font-bold uppercase">Signal Breakdown</h3>
+                    <p className="text-xl leading-relaxed font-medium opacity-80 whitespace-pre-wrap">
+                        {post.description}
+                    </p>
                 </div>
-              )}
-
-              <a
-                href={`https://www.google.com/maps?q=${post.location.latitude},${post.location.longitude}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-lg text-[--text-secondary] mt-1 hover:text-[--primary-color] transition-colors w-fit"
-              >
-                <LocationPinIcon className="w-5 h-5 mr-2 flex-shrink-0" />
-                <span className="truncate">{post.location.address}</span>
-              </a>
-              <div className="flex items-center gap-1.5 text-lg font-semibold text-[--text-secondary] mt-4">
-                <UpvoteIcon className="w-5 h-5 text-[--primary-color]" />
-                {post.upvotes} Upvotes
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold mb-2">Description</h2>
-              <p className="text-[--text-secondary] leading-relaxed whitespace-pre-wrap">{post.description}</p>
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Contact & Collaboration</h2>
-              <div className="space-y-4">
-                {post.openToCollaboration ? (
-                  <div className="bg-white/5 p-4 rounded-lg flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-white">This user is open to collaboration!</p>
-                      <p className="text-sm text-[--text-secondary]">Start a conversation to discuss this demand.</p>
+                
+                <div className="space-y-8">
+                    <div className="space-y-4">
+                        <h3 className="text-[10px] font-mono tracking-[0.3em] opacity-40 font-bold uppercase">Engagement Matrix</h3>
+                        <div className="bg-white border border-ink p-6 neo-shadow-sm space-y-6">
+                            {post.openToCollaboration ? (
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-accent-green text-white">
+                                            <ChatBubbleLeftRightIcon className="w-5 h-5" />
+                                        </div>
+                                        <span className="font-bold text-sm tracking-tight uppercase">Collaboration Link Active</span>
+                                    </div>
+                                    <p className="text-xs opacity-60 leading-normal">
+                                        This signal source is hunting for strategic partners. Initiate secure link below to proceed.
+                                    </p>
+                                    <button 
+                                        onClick={() => onStartCollaboration(post)}
+                                        className="w-full neo-button-primary neo-button h-12"
+                                    >
+                                        ESTABLISH SESSION
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex items-center gap-3 opacity-40 grayscale">
+                                    <div className="p-2 bg-ink text-foundation">
+                                        <ChatBubbleLeftRightIcon className="w-5 h-5" />
+                                    </div>
+                                    <span className="font-bold text-sm tracking-tight uppercase">Engagement Restricted</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <button
-                      onClick={() => onStartCollaboration(post)}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-[--primary-color] text-white hover:opacity-90 transition-opacity"
-                    >
-                      <ChatBubbleLeftRightIcon className="w-5 h-5" />
-                      Message
-                    </button>
-                  </div>
-                ) : (
-                  <div className="bg-white/5 p-4 rounded-lg">
-                    <p className="font-semibold text-white">Collaboration</p>
-                    <p className="text-sm text-[--text-secondary]">This user is not currently looking for collaborators.</p>
-                  </div>
-                )}
 
-                {(post.email || post.phone) && (
-                  <div className="bg-white/5 p-4 rounded-lg space-y-3">
-                    {post.email && (
-                      <div className="flex items-center gap-3">
-                        <EnvelopeIcon className="w-5 h-5 text-[--text-secondary]" />
-                        <a href={`mailto:${post.email}`} className="text-white hover:underline">{post.email}</a>
-                      </div>
+                    {(post.email || post.phone) && (
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-mono tracking-[0.3em] opacity-40 font-bold uppercase">External Comms</h3>
+                            <div className="bg-foundation border border-ink p-6 space-y-4">
+                                {post.email && (
+                                    <a href={`mailto:${post.email}`} className="flex items-center gap-3 hover:text-accent-green transition-colors group">
+                                        <EnvelopeIcon className="w-4 h-4 opacity-40 group-hover:opacity-100" />
+                                        <span className="text-sm font-mono lowercase truncate">{post.email}</span>
+                                    </a>
+                                )}
+                                {post.phone && (
+                                    <a href={`tel:${post.phone}`} className="flex items-center gap-3 hover:text-accent-green transition-colors group">
+                                        <PhoneIcon className="w-4 h-4 opacity-40 group-hover:opacity-100" />
+                                        <span className="text-sm font-mono truncate">{post.phone}</span>
+                                    </a>
+                                )}
+                            </div>
+                        </div>
                     )}
-                    {post.phone && (
-                      <div className="flex items-center gap-3">
-                        <PhoneIcon className="w-5 h-5 text-[--text-secondary]" />
-                        <a href={`tel:${post.phone}`} className="text-white hover:underline">{post.phone}</a>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                </div>
             </div>
           </div>
 
-          {/* Right Column: Map */}
-          <div className="h-96 md:h-full w-full rounded-xl overflow-hidden border border-[--border-color]">
-            <iframe
-              title="Location Map"
-              src={mapSrc}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
+          {/* RIGHT: STRATEGIC CONTEXT (4/12) */}
+          <aside className="lg:col-span-4 space-y-8 sticky top-[180px] self-start animate-slide-up stagger-1">
+            
+            {/* Maps Intel Module */}
+            <div className="space-y-4">
+                <h3 className="text-[10px] font-mono tracking-[0.3em] opacity-40 font-bold uppercase">Strategic Location</h3>
+                <div className="bg-white neo-border neo-shadow-md overflow-hidden">
+                    <div className="p-4 bg-ink/5 border-b border-ink flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <LocationPinIcon className="w-3 h-3 text-accent-green" />
+                            <span className="text-[10px] font-mono font-bold tracking-widest uppercase">Coordinates Lock</span>
+                        </div>
+                        <span className="text-[8px] font-mono opacity-40">LAT: {post.location.latitude.toFixed(4)} // LNG: {post.location.longitude.toFixed(4)}</span>
+                    </div>
+                    <div className="h-96 md:h-[500px] w-full bg-foundation/20">
+                        <iframe
+                            title="Strategic Map Viewport"
+                            src={mapSrc}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0, filter: 'grayscale(0.6) contrast(1.1)' }}
+                            allowFullScreen={false}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </div>
+                    <div className="p-4 flex items-center justify-between gap-4">
+                        <p className="text-[10px] font-mono font-bold uppercase tracking-tight truncate flex-1">{post.location.address}</p>
+                        <a 
+                            href={`https://www.google.com/maps?q=${post.location.latitude},${post.location.longitude}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-foundation p-2 neo-border hover:bg-white active:translate-y-px transition-all"
+                        >
+                            <ArrowLeftIcon className="w-3 h-3 rotate-[135deg]" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {/* Signal Source Box */}
+            <div className="space-y-4 pt-4">
+                <h3 className="text-[10px] font-mono tracking-[0.3em] opacity-40 font-bold uppercase">Signal Source</h3>
+                <div className="bg-white border-2 border-ink p-6 neo-shadow-sm hover:neo-shadow-md transition-all group cursor-pointer" onClick={handleUsernameClick}>
+                    <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 neo-border bg-foundation overflow-hidden">
+                            {(post.createdBy as any)?.profilePicture ? (
+                                <img src={(post.createdBy as any).profilePicture} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center font-serif-italic text-2xl font-bold opacity-20 uppercase">
+                                    {(post.createdBy as any)?.username?.[0] || 'N'}
+                                </div>
+                            )}
+                        </div>
+                        <div className="min-w-0">
+                            <h4 className="text-xl font-serif-italic font-bold tracking-tight lowercase truncate group-hover:text-accent-green transition-colors">
+                                @{(post.createdBy as any)?.username || 'unidentified_node'}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-1">
+                                <div className="text-[10px] font-mono tracking-widest opacity-40 uppercase">Node Reputation</div>
+                                <div className="text-[10px] font-mono font-bold text-accent-green">{(post.createdBy as any)?.reputation || '0.98'}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-6 pt-6 border-t border-ink/10 flex items-center justify-between">
+                        <span className="text-[8px] font-mono opacity-40 uppercase tracking-widest">Protocol Verified Entrepreneur</span>
+                        <div className="w-2 h-2 bg-accent-green rotate-45" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Auxiliary Actions */}
+            <div className="grid grid-cols-2 gap-4">
+                <button className="neo-button text-[10px] tracking-widest font-mono uppercase bg-foundation/30">Bookmark</button>
+                <button className="neo-button text-[10px] tracking-widest font-mono uppercase bg-foundation/30">Share Intel</button>
+            </div>
+            
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

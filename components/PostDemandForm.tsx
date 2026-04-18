@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { DemandPost, Location, View } from '../types';
 import { Input, TextArea, FileInput } from './common/FormComponents';
-import { LocationPinIcon, LoadingSpinner } from './icons';
+import { LocationPinIcon, LoadingSpinner, ArrowLeftIcon } from './icons';
 import { reverseGeocode, geocode } from '../services/groqService';
 import { compressImage } from '../utils/imageUtils';
-import PremiumCard from './common/PremiumCard';
-import PremiumButton from './common/PremiumButton';
 import CategoryAutocomplete from './CategoryAutocomplete';
 import { DEMAND_CATEGORIES } from '../constants/categories';
 
 interface PostDemandFormProps {
   addDemandPost: (post: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'>) => void;
   setView: (view: View) => void;
-  // Edit mode props
   editingPost?: DemandPost;
   updateDemandPost?: (id: string, post: Partial<DemandPost>) => void;
   onCancelEdit?: () => void;
@@ -40,8 +37,7 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({
   const [phone, setPhone] = useState(editingPost?.phone || '');
   const [email, setEmail] = useState(editingPost?.email || '');
   const [openToCollaboration, setOpenToCollaboration] = useState(editingPost?.openToCollaboration ?? true);
-  const [showPreview, setShowPreview] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileSelect = async (files: File[]) => {
     try {
@@ -51,7 +47,6 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({
       setImages(prev => [...prev, ...compressedImages]);
     } catch (error) {
       console.error('Error compressing images:', error);
-      alert('Failed to process images. Please try again.');
     }
   }
 
@@ -86,9 +81,7 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({
   };
 
   const handleAddressBlur = async () => {
-    if (!addressInput.trim() || addressInput === location?.address) {
-      return;
-    }
+    if (!addressInput.trim() || addressInput === location?.address) return;
     setLocationStatus('geocoding');
     setLocationError('');
     try {
@@ -102,31 +95,11 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (description.length < 20 || !title || !category || !location || images.length === 0) return;
 
-    // Client-side validation
-    if (description.length < 20) {
-      alert('Please provide a more detailed description (at least 20 characters). This helps people understand your demand better!');
-      return;
-    }
-
-    if (!title || !category || !description || !location) {
-      alert('Please fill all required fields and ensure the location is verified.');
-      return;
-    }
-
-    // Image validation
-    if (images.length === 0) {
-      alert('📸 Please add at least 1 image! \n\nImages help people visualize your demand and increase engagement by 3x. It only takes a moment! 😊');
-      return;
-    }
-
-    if (images.length > 5) {
-      alert('You can upload a maximum of 5 images. Please remove some images and try again.');
-      return;
-    }
-
+    setIsSubmitting(true);
     const postData: Omit<DemandPost, 'id' | 'createdAt' | 'upvotes'> = {
       title,
       category,
@@ -138,305 +111,172 @@ const PostDemandForm: React.FC<PostDemandFormProps> = ({
       openToCollaboration,
     };
 
-    if (isEditMode && editingPost && updateDemandPost) {
-      // Update existing post
-      updateDemandPost(editingPost.id, postData);
-      if (onCancelEdit) onCancelEdit();
-    } else {
-      // Create new post
-      addDemandPost(postData);
-      setView(View.DEMAND_FEED);
+    try {
+        if (isEditMode && editingPost && updateDemandPost) {
+          updateDemandPost(editingPost.id, postData);
+          if (onCancelEdit) onCancelEdit();
+        } else {
+          addDemandPost(postData);
+          setView(View.DEMAND_FEED);
+        }
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
   const isLocating = locationStatus === 'getting_coords' || locationStatus === 'geocoding';
 
-  // Description validation state
-  const descriptionLength = description.length;
-  const isDescriptionValid = descriptionLength >= 20 && descriptionLength <= 2000;
-  const descriptionProgress = Math.min((descriptionLength / 20) * 100, 100);
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 relative overflow-hidden">
-      {/* Animated Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20 animate-gradient-shift"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
-
-      <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto">
-        <PremiumCard className="p-8 space-y-6 backdrop-blur-sm shadow-2xl">
-          <h2 className="text-3xl font-bold text-center">
-            {isEditMode ? 'Edit Your Demand' : 'Post a New Demand'}
-          </h2>
-          <p className="text-center text-[--text-secondary]">
-            {isEditMode
-              ? 'Update your demand details below.'
-              : "What's missing in your community? Let entrepreneurs know."
-            }
-          </p>
-
-          <Input label="Demand Title" placeholder="e.g., A 24/7 Soda Shop" value={title} onChange={e => setTitle(e.target.value)} required />
-          <CategoryAutocomplete
-            label="Category"
-            value={category}
-            onChange={setCategory}
-            categories={DEMAND_CATEGORIES}
-            placeholder="e.g., Gaming Lounge, Cafe, Grocery Store..."
-            required
-          />
-
-          {/* Enhanced Description Field with Validation */}
-          <div className="space-y-2">
-            <TextArea
-              label="Description"
-              placeholder="Describe the business or service you'd like to see..."
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              required
-            />
-
-            {/* Character Count and Progress Indicator */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                {/* Visual Indicator Circle */}
-                <div className={`w-3 h-3 rounded-full transition-colors ${isDescriptionValid ? 'bg-green-500' : 'bg-red-500'
-                  }`} />
-
-                {/* Character Count */}
-                <span className={`text-xs font-medium transition-colors ${isDescriptionValid ? 'text-green-400' : 'text-red-400'
-                  }`}>
-                  {descriptionLength} / 2000 characters
-                </span>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden max-w-[120px]">
-                <div
-                  className={`h-full transition-all duration-300 ${isDescriptionValid ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                  style={{ width: `${descriptionProgress}%` }}
-                />
-              </div>
+    <div className="min-h-screen bg-foundation py-20 px-6 md:px-12">
+      <div className="max-w-3xl mx-auto space-y-8 animate-slide-up">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-ink pb-8">
+            <div>
+                <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 bg-accent-blue rounded-full" />
+                    <span className="text-[10px] font-mono tracking-widest uppercase opacity-50">Signal Initiation</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-serif-italic font-bold tracking-tight uppercase leading-none">
+                    {isEditMode ? 'Modify Demand' : 'Voice a Need'}
+                </h1>
             </div>
-
-            {/* Friendly Validation Message */}
-            {descriptionLength < 20 ? (
-              <p className="text-xs text-red-400 flex items-start gap-1.5">
-                <span className="mt-0.5">ℹ️</span>
-                <span>
-                  Please add {20 - descriptionLength} more character{20 - descriptionLength !== 1 ? 's' : ''} to help people understand your demand better.
-                  Detailed descriptions get more attention! Thank you for your patience. 😊
-                </span>
-              </p>
-            ) : (
-              <p className="text-xs text-green-400 flex items-center gap-1.5">
-                <span>✓</span>
-                <span>Perfect! Your description looks great. This will help entrepreneurs understand your needs!</span>
-              </p>
-            )}
-          </div>
-
-
-          <div className="w-full space-y-2">
-            <div className="flex items-end gap-2">
-              <div className="flex-grow">
-                <Input
-                  label="Location"
-                  placeholder="Enter address or use current location"
-                  value={addressInput}
-                  onChange={e => {
-                    setAddressInput(e.target.value);
-                    if (locationStatus === 'success' || locationStatus === 'error') {
-                      setLocationStatus('idle');
-                      setLocation(null);
-                      setLocationError('');
-                    }
-                  }}
-                  onBlur={handleAddressBlur}
-                />
-              </div>
-              <PremiumButton
-                type="button"
-                variant="secondary"
-                onClick={handleGetLocation}
-                disabled={isLocating}
-                className="flex-shrink-0 h-[50px] aspect-square flex items-center justify-center p-0"
-                aria-label="Use current location"
-              >
-                {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
-              </PremiumButton>
-            </div>
-            {locationStatus === 'geocoding' && <p className="text-sm text-[--text-secondary] flex items-center gap-2"><LoadingSpinner className="w-4 h-4" /> Verifying address...</p>}
-            {locationStatus === 'getting_coords' && <p className="text-sm text-[--text-secondary] flex items-center gap-2"><LoadingSpinner className="w-4 h-4" /> Getting coordinates...</p>}
-            {locationStatus === 'success' && location && <p className="text-sm text-green-400">✓ Location verified</p>}
-            {locationError && <p className="text-red-500 text-sm mt-2">{locationError}</p>}
-          </div>
-
-          <div className="border-t border-[--border-color] pt-6 space-y-6">
-            <h3 className="text-xl font-bold text-center">Optional Information</h3>
-            <p className="text-center text-sm text-[--text-secondary] -mt-4">Provide contact details if you're open to being contacted directly.</p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Input label="Contact Phone (Optional)" type="tel" placeholder="(123) 456-7890" value={phone} onChange={e => setPhone(e.target.value)} />
-              <Input label="Contact Email (Optional)" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
-            </div>
-
-            <div className="flex items-center justify-between bg-white/5 p-4 rounded-lg">
-              <div>
-                <label htmlFor="collaboration-toggle" className="font-medium text-white">Open to Collaboration</label>
-                <p className="text-sm text-[--text-secondary]">Allow other users to message you about this demand.</p>
-              </div>
-              <label htmlFor="collaboration-toggle" className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="collaboration-toggle" className="sr-only peer" checked={openToCollaboration} onChange={() => setOpenToCollaboration(!openToCollaboration)} />
-                <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-[--primary-color] peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[--primary-color]"></div>
-              </label>
-            </div>
-          </div>
-
-          {/* Image Upload with Validation */}
-          <div className="space-y-2">
-            <FileInput
-              label="Upload Images (1-5 required)"
-              onFilesSelected={handleFileSelect}
-              imagePreviews={images}
-              onRemoveImage={handleRemoveImage}
-              accept="image/*"
-            />
-
-            {/* Image Upload Status */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {/* Visual Indicator */}
-                <div className={`w-3 h-3 rounded-full transition-colors ${images.length >= 1 && images.length <= 5 ? 'bg-green-500' : 'bg-yellow-500'
-                  }`} />
-
-                {/* Image Count */}
-                <span className={`text-xs font-medium transition-colors ${images.length >= 1 && images.length <= 5 ? 'text-green-400' : 'text-yellow-400'
-                  }`}>
-                  {images.length} / 5 images
-                </span>
-              </div>
-            </div>
-
-            {/* Friendly Validation Message */}
-            {images.length === 0 ? (
-              <p className="text-xs text-yellow-400 flex items-start gap-1.5">
-                <span className="mt-0.5">📸</span>
-                <span>
-                  Please add at least 1 image! Photos help people visualize your demand and get 3x more engagement.
-                  Great visuals make your post stand out! 😊
-                </span>
-              </p>
-            ) : images.length > 5 ? (
-              <p className="text-xs text-red-400 flex items-start gap-1.5">
-                <span className="mt-0.5">⚠️</span>
-                <span>
-                  Please remove {images.length - 5} image{images.length - 5 !== 1 ? 's' : ''}. Maximum is 5 images to keep loading fast!
-                </span>
-              </p>
-            ) : (
-              <p className="text-xs text-green-400 flex items-center gap-1.5">
-                <span>✓</span>
-                <span>Perfect! Your images look great. This will help your demand get noticed! 🌟</span>
-              </p>
-            )}
-          </div>
-
-
-          <div className="flex gap-3">
-            {isEditMode && onCancelEdit && (
-              <PremiumButton
-                type="button"
-                variant="secondary"
-                onClick={onCancelEdit}
-                className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
-              >
-                Cancel
-              </PremiumButton>
-            )}
-            <PremiumButton
-              type="button"
-              variant="secondary"
-              onClick={() => setShowPreview(true)}
-              className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
+            <button 
+                onClick={() => setView(View.DEMAND_FEED)}
+                className="p-3 border border-ink hover:bg-white transition-all group"
             >
-              👁️ Preview
-            </PremiumButton>
-            <PremiumButton
-              type="submit"
-              className="flex-1 mt-4 px-6 py-4 text-lg font-semibold"
-            >
-              {isEditMode ? '✓ Update Demand' : 'Post Demand'}
-            </PremiumButton>
-          </div>
+                <ArrowLeftIcon className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            </button>
+        </div>
 
-          {/* Ad Preview Modal */}
-          {showPreview && (
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowPreview(false)}>
-              <PremiumCard className="p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-2xl font-bold">Preview Your Ad</h3>
-                  <button
-                    onClick={() => setShowPreview(false)}
-                    className="text-2xl hover:text-[--primary-color] transition-colors"
-                  >
-                    ✕
-                  </button>
+        <form onSubmit={handleSubmit} className="space-y-8">
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Demand Title</label>
+                        <Input 
+                            placeholder="e.g., A 24/7 Soda Shop" 
+                            value={title} 
+                            onChange={e => setTitle(e.target.value)} 
+                            required 
+                            className="neo-input"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Category</label>
+                        <CategoryAutocomplete
+                            value={category}
+                            onChange={setCategory}
+                            categories={DEMAND_CATEGORIES}
+                            placeholder="e.g., Gaming Lounge, Cafe..."
+                            required
+                        />
+                    </div>
                 </div>
 
-                <p className="text-sm text-[--text-secondary] mb-4">This is how your demand post will appear to others:</p>
-
-                {/* Preview Card */}
-                <div className="bg-[--background-color] rounded-lg overflow-hidden border border-[--border-color]">
-                  {/* Images Preview */}
-                  {images.length > 0 ? (
-                    <div className="relative h-64 bg-gray-800">
-                      <img src={images[0]} alt="Preview" className="w-full h-full object-cover" />
-                      {images.length > 1 && (
-                        <div className="absolute bottom-2 right-2 bg-black/70 text-white text-sm px-3 py-1 rounded-full">
-                          1 / {images.length}
-                        </div>
-                      )}
-                      <div className="absolute bottom-2 left-2 bg-[--primary-color] text-white text-xs font-semibold px-3 py-1.5 rounded-md">
-                        {category || 'Category'}
-                      </div>
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Detailed Description</label>
+                    <TextArea
+                        placeholder="Describe the business or service you'd like to see..."
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        required
+                        className="neo-input min-h-[150px]"
+                    />
+                    <div className="flex justify-between items-center px-1">
+                        <span className={`text-[10px] font-mono uppercase tracking-widest ${description.length < 20 ? 'text-accent-blue' : 'opacity-40'}`}>
+                            {description.length < 20 ? `Need ${20 - description.length} more characters` : 'Verified Length'}
+                        </span>
+                        <span className="text-[10px] font-mono opacity-40">{description.length}/2000</span>
                     </div>
-                  ) : (
-                    <div className="h-64 bg-gray-800 flex items-center justify-center text-[--text-secondary]">
-                      📸 Add images to see them here
-                    </div>
-                  )}
+                </div>
+            </section>
 
-                  {/* Content Preview */}
-                  <div className="p-5">
-                    <h4 className="text-xl font-bold mb-2">{title || 'Your Demand Title'}</h4>
-                    <p className="text-sm text-[--text-secondary] mb-3">
-                      📍 {location?.address || addressInput || 'Location will appear here'}
-                    </p>
-                    <p className="text-sm text-[--text-secondary] line-clamp-3">
-                      {description || 'Your description will appear here...'}
-                    </p>
-
-                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-[--border-color]">
-                      <span className="text-xs text-[--text-secondary]">Just now</span>
-                      <div className="flex gap-2">
-                        <span className="text-sm text-[--text-secondary]">🔖</span>
-                        <span className="text-sm font-semibold">⬆️ 0</span>
-                      </div>
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <div className="space-y-1">
+                    <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Deployment Location</label>
+                    <div className="flex gap-2">
+                        <Input
+                            placeholder="Street, City, or Landmark"
+                            value={addressInput}
+                            onChange={e => setAddressInput(e.target.value)}
+                            onBlur={handleAddressBlur}
+                            className="neo-input flex-1"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleGetLocation}
+                            disabled={isLocating}
+                            className={`p-3 border border-ink transition-all ${isLocating ? 'bg-foundation opacity-50' : 'bg-white hover:bg-foundation'}`}
+                        >
+                            {isLocating ? <LoadingSpinner className="w-5 h-5" /> : <LocationPinIcon className="w-5 h-5" />}
+                        </button>
                     </div>
-                  </div>
+                    {locationStatus === 'success' && <p className="text-[10px] font-mono text-accent-green uppercase tracking-widest px-1 mt-1">✓ Coordinates Locked</p>}
+                    {locationError && <p className="text-[10px] font-mono text-accent-blue uppercase tracking-widest px-1 mt-1">! {locationError}</p>}
                 </div>
 
-                <PremiumButton
-                  onClick={() => setShowPreview(false)}
-                  className="w-full mt-4 px-6 py-3 text-lg font-semibold"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-ink/10">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Contact Phone (Optional)</label>
+                        <Input type="tel" placeholder="(123) 456-7890" value={phone} onChange={e => setPhone(e.target.value)} className="neo-input" />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Contact Email (Optional)</label>
+                        <Input type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="neo-input" />
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-foundation/30 border border-ink/10">
+                    <div>
+                        <p className="font-bold text-sm uppercase tracking-tight">Open to Collaboration</p>
+                        <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest">Allow direct network messaging</p>
+                    </div>
+                    <button 
+                        type="button"
+                        onClick={() => setOpenToCollaboration(!openToCollaboration)}
+                        className={`w-12 h-6 border border-ink relative transition-all ${openToCollaboration ? 'bg-accent-green' : 'bg-white'}`}
+                    >
+                        <div className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 border border-ink bg-white transition-all ${openToCollaboration ? 'right-1' : 'left-1'}`} />
+                    </button>
+                </div>
+            </section>
+
+            <section className="bg-white border border-ink p-8 neo-shadow-sm space-y-6">
+                <label className="text-[10px] font-mono tracking-widest uppercase opacity-50 block px-1">Visual Documentation (1-5 Required)</label>
+                <FileInput
+                    onFilesSelected={handleFileSelect}
+                    imagePreviews={images}
+                    onRemoveImage={handleRemoveImage}
+                    accept="image/*"
+                />
+                <div className="flex justify-between items-center px-1">
+                    <span className={`text-[10px] font-mono uppercase tracking-widest ${images.length === 0 ? 'text-accent-blue' : 'text-accent-green'}`}>
+                        {images.length === 0 ? 'Documentation Required' : 'Documentation Ready'}
+                    </span>
+                    <span className="text-[10px] font-mono opacity-40">{images.length}/5</span>
+                </div>
+            </section>
+
+            <div className="flex gap-4 pt-4">
+                <button 
+                    type="submit" 
+                    disabled={isSubmitting || images.length === 0 || description.length < 20}
+                    className="neo-button neo-button-primary flex-1 py-6 text-lg font-bold"
                 >
-                  Close Preview
-                </PremiumButton>
-              </PremiumCard>
+                    {isSubmitting ? 'TRANSMITTING...' : isEditMode ? 'UPDATE SIGNAL' : 'EMIT SIGNAL'}
+                </button>
+                {isEditMode && onCancelEdit && (
+                    <button 
+                        type="button" 
+                        onClick={onCancelEdit}
+                        className="neo-button flex-1 py-6 text-lg font-bold"
+                    >
+                        ABORT
+                    </button>
+                )}
             </div>
-          )}
-        </PremiumCard>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

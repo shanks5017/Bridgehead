@@ -65,9 +65,9 @@ export const getDemandPosts = async (req, res) => {
             $maxDistance: locationQuery.maxDistance
           }
         }
-      }).populate('createdBy', 'username fullName');
+      }).populate('createdBy', 'username fullName profilePicture reputationScore');
     } else {
-      posts = await DemandPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
+      posts = await DemandPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName profilePicture reputationScore');
     }
 
     res.json(posts.map(formatPostResponse));
@@ -144,7 +144,10 @@ export const createDemandPost = async (req, res) => {
     }
 
     const post = new DemandPost(postData);
-    const createdPost = await post.save();
+    let createdPost = await post.save();
+    
+    // Populate before sending back
+    createdPost = await DemandPost.findById(createdPost._id).populate('createdBy', 'username fullName profilePicture reputationScore');
 
     res.status(201).json({
       success: true,
@@ -165,15 +168,40 @@ export const createDemandPost = async (req, res) => {
 export const upvoteDemandPost = async (req, res) => {
   try {
     const post = await DemandPost.findById(req.params.id);
-    if (post) {
-      post.upvotes += 1;
-      const updatedPost = await post.save();
-      res.json(formatPostResponse(updatedPost));
-    } else {
-      res.status(404).json({ message: 'Post not found' });
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
     }
+
+    // Use toggleUpvote method from model
+    await post.toggleUpvote(req.userId);
+    
+    // Re-fetch with populated fields for consistent frontend response
+    const updatedPost = await DemandPost.findById(req.params.id).populate('createdBy', 'username fullName profilePicture reputationScore');
+    res.json(formatPostResponse(updatedPost));
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error upvoting demand post:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+// @desc    Upvote a rental post
+// @route   PUT /api/posts/rentals/:id/upvote
+export const upvoteRentalPost = async (req, res) => {
+  try {
+    const post = await RentalPost.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Use toggleUpvote method from model
+    await post.toggleUpvote(req.userId);
+    
+    // Re-fetch with populated fields for consistent frontend response
+    const updatedPost = await RentalPost.findById(req.params.id).populate('createdBy', 'username fullName profilePicture reputationScore');
+    res.json(formatPostResponse(updatedPost));
+  } catch (error) {
+    console.error('Error upvoting rental post:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
@@ -195,9 +223,9 @@ export const getRentalPosts = async (req, res) => {
             $maxDistance: locationQuery.maxDistance
           }
         }
-      }).populate('createdBy', 'username fullName');
+      }).populate('createdBy', 'username fullName profilePicture reputationScore');
     } else {
-      posts = await RentalPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
+      posts = await RentalPost.find().sort({ createdAt: -1 }).populate('createdBy', 'username fullName profilePicture reputationScore');
     }
 
     res.json(posts.map(formatPostResponse));
@@ -225,7 +253,11 @@ export const createRentalPost = async (req, res) => {
     }
 
     const post = new RentalPost(postData);
-    const createdPost = await post.save();
+    let createdPost = await post.save();
+    
+    // Populate before sending back
+    createdPost = await RentalPost.findById(createdPost._id).populate('createdBy', 'username fullName profilePicture reputationScore');
+    
     res.status(201).json(formatPostResponse(createdPost));
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -236,7 +268,7 @@ export const createRentalPost = async (req, res) => {
 // @route   GET /api/posts/demands/mine
 export const getMyDemandPosts = async (req, res) => {
   try {
-    const posts = await DemandPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
+    const posts = await DemandPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName profilePicture reputationScore');
     res.json(posts.map(formatPostResponse));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -247,7 +279,7 @@ export const getMyDemandPosts = async (req, res) => {
 // @route   GET /api/posts/rentals/mine
 export const getMyRentalPosts = async (req, res) => {
   try {
-    const posts = await RentalPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName');
+    const posts = await RentalPost.find({ createdBy: req.userId }).sort({ createdAt: -1 }).populate('createdBy', 'username fullName profilePicture reputationScore');
     res.json(posts.map(formatPostResponse));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -276,7 +308,8 @@ export const updateDemandPost = async (req, res) => {
       }
     });
 
-    const updatedPost = await post.save();
+    let updatedPost = await post.save();
+    updatedPost = await DemandPost.findById(updatedPost._id).populate('createdBy', 'username fullName profilePicture reputationScore');
     res.json(formatPostResponse(updatedPost));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -326,7 +359,8 @@ export const updateRentalPost = async (req, res) => {
       }
     });
 
-    const updatedPost = await post.save();
+    let updatedPost = await post.save();
+    updatedPost = await RentalPost.findById(updatedPost._id).populate('createdBy', 'username fullName profilePicture reputation');
     res.json(formatPostResponse(updatedPost));
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });

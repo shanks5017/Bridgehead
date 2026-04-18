@@ -17,7 +17,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     // Get token from header
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
-    if (!token) {
+    if (!token || token === 'null') {
       return res.status(401).json({ message: 'No token, authorization denied' });
     }
 
@@ -64,7 +64,7 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
-    if (token) {
+    if (token && token !== 'null') {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
       const user = await User.findById(decoded.userId).select('-password');
       if (user) {

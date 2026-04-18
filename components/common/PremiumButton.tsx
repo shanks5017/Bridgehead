@@ -1,59 +1,70 @@
 import React from 'react';
 
 interface PremiumButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    children: React.ReactNode;
-    icon?: React.ReactNode;
-    className?: string;
-    variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const PremiumButton: React.FC<PremiumButtonProps> = ({
-    children,
-    icon,
-    className = '',
-    variant = 'primary',
-    ...props
+  children,
+  className = '',
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false,
+  isLoading = false,
+  leftIcon,
+  rightIcon,
+  disabled,
+  ...props
 }) => {
-    // Base styles for all premium buttons
-    const baseStyles = "relative flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-300 overflow-hidden group/btn";
+  const baseStyles = 'inline-flex items-center justify-center font-bold uppercase tracking-widest transition-all active:translate-y-px disabled:opacity-50 disabled:cursor-not-allowed border border-ink';
+  
+  const variants = {
+    primary: 'bg-ink text-white neo-shadow-sm hover:neo-shadow-md',
+    secondary: 'bg-white text-ink neo-shadow-sm hover:neo-shadow-md',
+    outline: 'bg-transparent text-ink border-ink hover:bg-foundation',
+    ghost: 'bg-transparent text-ink border-transparent hover:bg-foundation',
+  };
 
-    // Variant specific styles
-    const variants = {
-        primary: "text-white bg-gradient-to-r from-red-600 via-red-500 to-red-600 shadow-lg shadow-red-500/20 hover:shadow-red-500/40",
-        secondary: "bg-[--card-color] border border-[--border-color] text-white hover:border-red-500/50 hover:shadow-lg hover:shadow-red-900/20"
-    };
+  const sizes = {
+    sm: 'px-4 py-2 text-[10px]',
+    md: 'px-6 py-3 text-xs',
+    lg: 'px-8 py-4 text-sm',
+  };
 
-    const gradientStyle = variant === 'primary' ? {
-        backgroundSize: '200% 100%',
-        backgroundImage: 'linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%)'
-    } : {};
-
-    return (
-        <button
-            className={`${baseStyles} ${variants[variant]} ${className}`}
-            style={gradientStyle}
-            {...props}
-        >
-            {/* Shimmer Effect for Primary Variant */}
-            {variant === 'primary' && (
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-white/20 to-red-600/0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500"
-                    style={{
-                        animation: 'shimmer 2s infinite linear'
-                    }}
-                />
-            )}
-
-            {/* Content */}
-            <span className="relative z-10 flex items-center justify-center gap-2">
-                {children}
-                {icon && (
-                    <span className="transition-transform duration-300 group-hover/btn:translate-x-1">
-                        {icon}
-                    </span>
-                )}
-            </span>
-        </button>
-    );
+  return (
+    <button
+      className={`
+        ${baseStyles}
+        ${variants[variant]}
+        ${sizes[size]}
+        ${fullWidth ? 'w-full' : ''}
+        ${className}
+      `}
+      disabled={disabled || isLoading}
+      {...props}
+    >
+      {isLoading ? (
+        <span className="flex items-center gap-2">
+          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          PROCESSING...
+        </span>
+      ) : (
+        <>
+          {leftIcon && <span className="mr-2">{leftIcon}</span>}
+          {children}
+          {rightIcon && <span className="ml-2">{rightIcon}</span>}
+        </>
+      )}
+    </button>
+  );
 };
 
-export default React.memo(PremiumButton);
+export default PremiumButton;
