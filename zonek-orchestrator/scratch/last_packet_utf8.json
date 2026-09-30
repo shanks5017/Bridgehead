@@ -1,0 +1,358 @@
+﻿{
+  "query": {
+    "businessType": "Gym",
+    "location": "Coimbatore",
+    "budget_inr": 1000000,
+    "space_req_sqft": "500-1000",
+    "businessFormat": "Brick & Mortar",
+    "generatedAt": "2026-04-25T10:34:39.206Z"
+  },
+  "web_intelligence": {
+    "status": "unavailable",
+    "confidence": "UNAVAILABLE",
+    "groups": {}
+  },
+  "rentals": {
+    "status": "ok",
+    "confidence": "HIGH_CONFIDENCE",
+    "total": 159,
+    "avg_rent_inr": 180306,
+    "min_rent_inr": 2,
+    "max_rent_inr": 97300000,
+    "budget_analysis": {
+      "annual_rent_inr": 2163672,
+      "budget_consumed_pct": 216
+    },
+    "platforms": {
+      "OLX": {
+        "status": "ok",
+        "count": 25,
+        "elapsed_s": 1.04,
+        "error": null
+      },
+      "MagicBricks": {
+        "status": "empty",
+        "count": 0,
+        "elapsed_s": 1.45,
+        "error": null
+      },
+      "99acres": {
+        "status": "empty",
+        "count": 0,
+        "elapsed_s": 2.39,
+        "error": null
+      },
+      "NoBroker": {
+        "status": "ok",
+        "count": 1,
+        "elapsed_s": 1.19,
+        "error": null
+      },
+      "Housing.com": {
+        "status": "empty",
+        "count": 0,
+        "elapsed_s": 1.59,
+        "error": null
+      },
+      "PropTiger": {
+        "status": "empty",
+        "count": 0,
+        "elapsed_s": 1.2,
+        "error": null
+      },
+      "Makaan.com": {
+        "status": "empty",
+        "count": 0,
+        "elapsed_s": 4.96,
+        "error": null
+      },
+      "QuikrHomes": {
+        "status": "ok",
+        "count": 145,
+        "elapsed_s": 23.21,
+        "error": null
+      }
+    },
+    "listings": [
+      {
+        "title": "5500 Sq. ft Complex for rent in Garudachar Palya, Bangalore",
+        "rent_per_month": 2,
+        "sqft": 5500,
+        "listing_url": "https://www.quikr.com/homes/complex-of-5500sqft-for-rent-in-not-part-of-a-project-bangalore/p/375233191?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.515557"
+      },
+      {
+        "title": "20000 Sq. ft Shop for rent in Ramohalli, Bangalore",
+        "rent_per_month": 2,
+        "sqft": 20000,
+        "listing_url": "https://www.quikr.com/homes/shop-of-20000sqft-for-rent-in-20000sqft-dc-converted-vacant-land-available-for-rent-bangalore/p/375042116?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.519077"
+      },
+      {
+        "title": "20000 Sq. ft Complex for rent in Bettahalasur, Bangalore",
+        "rent_per_month": 2,
+        "sqft": 20000,
+        "listing_url": "https://www.quikr.com/homes/office-of-20000sqft-for-rent-in-bangalore/p/373143528?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.521281"
+      },
+      {
+        "title": "3850 Sq. ft Office for rent in Whitefield Road, Bangalore",
+        "rent_per_month": 4,
+        "sqft": 3850,
+        "listing_url": "https://www.quikr.com/homes/office-of-3850sqft-for-rent-in-not-part-of-a-project-bangalore/p/374988878?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.525909"
+      },
+      {
+        "title": "5000 Sq. ft Complex for rent in Rajaji Nagar 1st Stage, Bangalore",
+        "rent_per_month": 5,
+        "sqft": 5000,
+        "listing_url": "https://www.quikr.com/homes/office-of-5000sqft-for-rent-in-bangalore/p/375085586?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.528921"
+      },
+      {
+        "title": "1000 Sq. ft Office for rent in Hennur, Bangalore",
+        "rent_per_month": 5,
+        "sqft": 1000,
+        "listing_url": "https://www.quikr.com/homes/office-of-1000sqft-for-rent-in-not-part-of-a-project-bangalore/p/374635146?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.532779"
+      },
+      {
+        "title": "100 Sq. ft Office for rent in Rajaji Nagar, Bangalore",
+        "rent_per_month": 12,
+        "sqft": 100,
+        "listing_url": "https://www.quikr.com/homes/office-of-100sqft-for-rent-in-s-m-constutions-bangalore/p/374941290?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.538514"
+      },
+      {
+        "title": "1200000 sq. ft. for Rent in Bommasandra Jigani Link Road, Bangalore",
+        "rent_per_month": 12,
+        "sqft": 1200000,
+        "listing_url": "https://www.quikr.com/homes/office-of-1200000sqft-for-rent-in-bangalore/p/374694446?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.544072"
+      },
+      {
+        "title": "13000 Sq. ft Office for rent in Rajaji Nagar, Bangalore",
+        "rent_per_month": 12,
+        "sqft": 13000,
+        "listing_url": "https://www.quikr.com/homes/office-of-13000sqft-for-rent-in-bangalore/p/374694876?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.550211"
+      },
+      {
+        "title": "20000 Sq. ft Office for rent in Infantry Road, Bangalore",
+        "rent_per_month": 23,
+        "sqft": 20000,
+        "listing_url": "https://www.quikr.com/homes/office-of-20000sqft-for-rent-in-embassy-icon-bangalore/p/374647423/135493?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.554812"
+      },
+      {
+        "title": "Imported hair clips for lowest prices",
+        "rent_per_month": 150,
+        "sqft": null,
+        "listing_url": "https://www.olx.in/item/1840827673",
+        "source": "OLX",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.558829"
+      },
+      {
+        "title": "3 Sq. ft Office for rent in Commercial Street, Bangalore",
+        "rent_per_month": 2000,
+        "sqft": 3,
+        "listing_url": "https://www.quikr.com/homes/office-of-3sqft-for-rent-in-coworking-space-in-bangalore-bangalore/p/375311972?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.564464"
+      },
+      {
+        "title": "200 Sq. ft Shop for rent in Mahadevapura, Bangalore",
+        "rent_per_month": 3000,
+        "sqft": 200,
+        "listing_url": "https://www.quikr.com/homes/office-of-200sqft-for-rent-in-bangalore/p/374898912?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.569383"
+      },
+      {
+        "title": "90 Sq. ft Office for rent in Hagadur Main Road, Bangalore",
+        "rent_per_month": 3500,
+        "sqft": 90,
+        "listing_url": "https://www.quikr.com/homes/office-of-90sqft-for-rent-in-achintya-naturenest-bangalore/p/374956302?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.574150"
+      },
+      {
+        "title": "60 Sq. ft Shop for rent in T Dasarahalli, Bangalore",
+        "rent_per_month": 3999,
+        "sqft": 60,
+        "listing_url": "https://www.quikr.com/homes/office-of-60sqft-for-rent-in-bangalore/p/374707647?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.580791"
+      },
+      {
+        "title": "3000 Sq. ft Office for rent in BTM Layout 1st Stage, Bangalore",
+        "rent_per_month": 5000,
+        "sqft": 3000,
+        "listing_url": "https://www.quikr.com/homes/office-of-3000sqft-for-rent-in-pebble-playworks-bangalore/p/375325772?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.587535"
+      },
+      {
+        "title": "2100 Sq. ft Office for rent in Yelahanka New Town, Bangalore",
+        "rent_per_month": 5000,
+        "sqft": 2100,
+        "listing_url": "https://www.quikr.com/homes/office-of-2100sqft-for-rent-in-north-bangalore-coworking-space-bangalore/p/375282382?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.592094"
+      },
+      {
+        "title": "4500 Sq. ft Office for rent in Electronic City Phase II, Bangalore",
+        "rent_per_month": 5000,
+        "sqft": 4500,
+        "listing_url": "https://www.quikr.com/homes/office-of-4500sqft-for-rent-in-rudhra-coworks-bangalore/p/375199101?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.596066"
+      },
+      {
+        "title": "120 Sq. ft Office for rent in Sanjay Nagar, Bangalore",
+        "rent_per_month": 6000,
+        "sqft": 120,
+        "listing_url": "https://www.quikr.com/homes/office-of-120sqft-for-rent-in-not-part-of-a-project-bangalore/p/374701959?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.600617"
+      },
+      {
+        "title": "130 Sq. ft Office for rent in Sanjay Nagar, Bangalore",
+        "rent_per_month": 6000,
+        "sqft": 130,
+        "listing_url": "https://www.quikr.com/homes/office-of-130sqft-for-rent-in-not-part-of-a-project-bangalore/p/374696678?source=qh",
+        "source": "QuikrHomes",
+        "location_verified": true,
+        "scraped_at": "2026-04-25T10:33:02.603275"
+      }
+    ]
+  },
+  "competitors": {
+    "status": "partial",
+    "confidence": "LOW_CONFIDENCE",
+    "count": 0,
+    "saturation": "NONE",
+    "source": "justdial",
+    "source_url": "https://www.justdial.com/Coimbatore/gyms",
+    "scraped_at": "2026-04-25T10:34:39.206Z",
+    "note": null,
+    "competitors": []
+  },
+  "gov_data": {
+    "status": "ok",
+    "weather": {
+      "rainfall_mm": null,
+      "temperature_c": 34,
+      "season": null,
+      "source": "Open-Meteo",
+      "scraped_at": "2026-04-25T09:31:04.069Z"
+    },
+    "jjm": {
+      "water_coverage_pct": 97.7,
+      "district": "Tamil Nadu (State Total)",
+      "source": "jaljeevanmission.gov.in"
+    },
+    "pmay": {
+      "sanctioned": 1134000,
+      "district": "Tamil Nadu (State Total)",
+      "source": "pmayg.nic.in"
+    },
+    "schools": {
+      "count": 3,
+      "district": "Coimbatore",
+      "source": "UDISE+"
+    },
+    "budget": {
+      "state": null,
+      "district_allocation": null,
+      "allocation_crore": null,
+      "infrastructure_focus": null,
+      "source": "State Finance Department",
+      "year": "2025-26"
+    },
+    "crop_prices": {
+      "status": "unavailable"
+    },
+    "infrastructure_news": {
+      "recent": [
+        {
+          "title": "Leaders at REConnect Coimbatore 2025 Urge Stronger Infrastructure for Tamil NaduΓÇÖs Solar Growth - Energetica India Magazine",
+          "date": null
+        },
+        {
+          "title": "Centre returns Tamil NaduΓÇÖs metro rail proposals for Coimbatore and Madurai - The Times of India",
+          "date": null
+        },
+        {
+          "title": "Centre cites 5 reasons for rejection of Tamil NaduΓÇÖs Coimbatore and Madurai metro rail plans - The Indian Express",
+          "date": null
+        }
+      ],
+      "source": "RSS / State Govt"
+    },
+    "schemes": {
+      "relevant_count": 3,
+      "schemes": [
+        {
+          "name": "Mudra Loan (Shishu, Kishore, Tarun)",
+          "benefit": {
+            "type": "loan",
+            "amount": 1000000,
+            "description": "Collateral free loans up to 10 Lakhs."
+          },
+          "eligibility": null,
+          "source": "myscheme.gov.in"
+        },
+        {
+          "name": "Stand Up India",
+          "benefit": {
+            "type": "loan",
+            "amount": 10000000,
+            "description": "Bank loans between 10 Lakhs and 1 Crore."
+          },
+          "eligibility": null,
+          "source": "myscheme.gov.in"
+        },
+        {
+          "name": "NEEDs - New Entrepreneur cum Enterprise Development Scheme",
+          "benefit": {
+            "type": "subsidy",
+            "amount": 3000000,
+            "description": "25% Capital Subsidy up to 30 Lakhs."
+          },
+          "eligibility": null,
+          "source": "myscheme.gov.in"
+        }
+      ]
+    }
+  }
+}

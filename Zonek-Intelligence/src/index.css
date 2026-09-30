@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Oswald", sans-serif;
+  --font-serif: "Oswald", sans-serif;
+}
+
+* {
+  font-optical-sizing: auto;
+}

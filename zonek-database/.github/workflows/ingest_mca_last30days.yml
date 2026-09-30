@@ -1,0 +1,32 @@
+name: Ingest MCA Last 30 Days
+
+on:
+  schedule:
+    - cron: "0 4 2 * *"   # monthly on the 2nd
+  workflow_dispatch: {}    # allow manual trigger
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: 'pip'
+          
+      - run: pip install -r requirements.txt
+      
+      # Since mca_last30days uses playwright, we must install browsers
+      - name: Install Playwright Browsers
+        run: playwright install --with-deps chromium
+        
+      - name: Run MCA Last 30 Days Ingestion
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python -m pipeline.run --source mca_last30days
+        
+      - name: Alert on failure
+        if: failure()
+        run: echo "Ingestion failed — wire this to a real alert (email/Slack) before Phase 1 ships"

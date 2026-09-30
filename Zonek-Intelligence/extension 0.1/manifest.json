@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Bridgehead Intelligent Extractor",
+  "version": "1.0.0",
+  "description": "Production-grade web data extraction tool with intelligent DOM analysis and auto-scrolling.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "sidePanel",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "Open Bridgehead Side Panel"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

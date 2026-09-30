@@ -1,0 +1,101 @@
+import { Router } from 'express';
+import { body } from 'express-validator';
+import {
+  register,
+  login,
+  getCurrentUser,
+  forgotPassword,
+  resetPassword,
+  updateProfile // Added
+} from '../controllers/authController';
+import { checkUsernameAvailability, checkEmailAvailability } from '../controllers/validationController';
+import { auth } from '../middleware/auth';
+import { validationRateLimiter } from '../middleware/rateLimiter';
+import { upload, uploadRateLimiter } from '../middleware/uploadMiddleware';
+
+const router = Router();
+
+// @route   POST /api/auth/register
+// @desc    Register a new user
+// @access  Public
+router.post(
+  '/register',
+  [
+    body('fullName', 'Name is required').not().isEmpty(),
+    body('email', 'Please include a valid email').isEmail(),
+    body('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+  ],
+  register
+);
+
+// @route   POST /api/auth/login
+// @desc    Authenticate user & get token (supports email OR username)
+// @access  Public
+router.post(
+  '/login',
+  [
+    body('identifier', 'Please enter your email or username').notEmpty().trim().escape(),
+    body('password', 'Password is required').exists()
+  ],
+  login
+);
+
+// @route   GET /api/auth/me
+// @desc    Get current user
+// @access  Private
+router.get('/me', auth, getCurrentUser);
+
+// @route   PUT /api/auth/profile
+// @desc    Update user profile (with optional image upload)
+// @access  Private
+router.put(
+  '/profile',
+  auth,
+  uploadRateLimiter,
+  upload.fields([
+    { name: 'profilePicture', maxCount: 1 },
+    { name: 'originalProfilePicture', maxCount: 1 }
+  ]),
+  updateProfile
+);
+
+// @route   POST /api/auth/forgot-password
+// @desc    Forgot password
+// @access  Public
+router.post(
+  '/forgot-password',
+  [body('email', 'Please include a valid email').isEmail()],
+  forgotPassword
+);
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password
+// @access  Public
+router.post(
+  '/reset-password',
+  [
+    body('token', 'Token is required').exists(),
+    body('newPassword', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+  ],
+  resetPassword
+);
+
+// @route   POST /api/auth/check-username
+// @desc    Check if username is available
+// @access  Public (rate limited)
+router.post(
+  '/check-username',
+  validationRateLimiter(5, 1), // Max 5 attempts per minute
+  checkUsernameAvailability
+);
+
+// @route   POST /api/auth/check-email
+// @desc    Check if email is available
+// @access  Public (rate limited)
+router.post(
+  '/check-email',
+  validationRateLimiter(5, 1), // Max 5 attempts per minute
+  checkEmailAvailability
+);
+
+export default router;

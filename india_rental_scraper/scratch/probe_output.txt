@@ -1,0 +1,275 @@
+﻿[QuikrHomes] Status: 200
+  <div class='addg'> text=''
+  <div class='addb'> text=''
+  <div class='quikr-header fixed-header-hp'> text='QuikrBangaloreType Your City NameAll IndiaInterCit'
+  <div class='quikr-quick-links hidden-xs hidden-sm'> text=''
+  <ul class='quick-links pull-left'> text=''
+  <ul class='quick-links'> text=''
+  <div class='container'> text='QuikrBangaloreType Your City NameAll IndiaInterCit'
+  <div class='quikr-header-child vert-headers'> text='QuikrBangaloreType Your City NameAll IndiaInterCit'
+  <div class='hamburger-logo'> text='Quikr'
+  <div class='select-city'> text='BangaloreType Your City NameAll IndiaInterCity Doo'
+  <div class='drop-layers'> text='Type Your City NameAll IndiaInterCity DoorstepTop '
+  <div class='search-city'> text='Type Your City Name'
+  <div class='header-custom-controls'> text='Type Your City Name'
+  <div class='spl-cities'> text='All India'
+  <div class='city-state-scroll'> text='Top CitiesAhmedabadBangaloreChandigarhChennaiCoimb'
+  <div class='spl-cities top-city'> text='Top Cities'
+  <div class='quikr-search'> text='RentAll CategoriesBuyRentProjectsCommercialPG'
+  <div class='search-inner'> text='RentAll CategoriesBuyRentProjectsCommercialPG'
+  <div class='select-category'> text='RentAll CategoriesBuyRentProjectsCommercialPG'
+  <div class='drop-layers cate-layer'> text='All CategoriesBuyRentProjectsCommercialPG'
+  <div class='search-field'> text=''
+  <div class='search-layer'> text=''
+  <div class='search-layer recent-search'> text=''
+  <div class='header-right'> text='Login/RegisterMy AccountChatsAlertsMy AdsGet Insta'
+  <li class='login-link'> text='Login/RegisterMy AccountChatsAlertsMy AdsGet Insta'
+  <div class='drop-layers my-account-layer'> text='My AccountChatsAlertsMy AdsGet Instant LeadsLog Ou'
+  <li class='postad-quick_link fixed-postAd-btn'> text='Sell/ Rent Property FreePost Free Ad'
+  <div class='drop-layers hdr-chat-nofification hidden-sm hidden-xs clearfix'> text='My Chats0My Offers0'
+  <div class='simple-overlay'> text=''
+  <div class='newLoginModal'> text=''
+  <div class='tmpl-snb'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <section class='container-fluid pdltrgnone gridtype'> text=''
+  <div class='container-custom'> text=''
+  <div class='snb-lisiting-type'> text=''
+  <div class='subfilter clearfix'> text=''
+  <section class='container-custom ht100'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <div class='listingbox'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <section class='snb-listings gridhgt listviewtile'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <div class='row'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <div class='col-xs-12 col-sm-12 col-md-12'> text='QuikrHomesProperties For Rent In Bangalore144 Comm'
+  <div class='snb-breadcrumbs'> text='QuikrHomesProperties For Rent In Bangalore'
+  <div class='filterwraper'> text=''
+  <section class='snb-filters-wrap mfilterhide'> text=''
+  <div class='contentwraper'> text='144 Commercial Properties for Rent in BangaloreLis'
+  <div class='col-xs-12 col-sm-7'> text='144 Commercial Properties for Rent in Bangalore'
+  <div class='col-xs-12 col-sm-5'> text='ListGridHere is the list of commercial properties '
+  <div class='btfixed'> text=''
+  <div class='sortline'> text=''
+  <div class='view-type-form'> text='ListGrid'
+  <div class='seo_links_m'> text='Here is the list of commercial properties for rent'
+  <div class='seofeatured hide HeaderSeofeatured'> text='Here is the list of commercial properties for rent'
+  <div class='tph'> text='Here is the list of commercial properties for rent'
+  <div class='clearfix hidem'> text=''
+  <div class='navbarsnb clearfix'> text='We feel this is what is most relevant for youOffic'
+  <div class='clearfix'> text=''
+  <div class='snb-listings-wrap listshow'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='snb-listings-left-panel'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class=''> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='module-listing-tiles'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='listing-tile-wrap ad-imprsn-js new-property'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='listview'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='tophe'> text='3350 Sq. ft Office for rent in Electronic City Pha'
+  <div class='listprice clearfix'> text='1.80 Lakh'
+  <div class='liprice'> text='1.80 Lakh'
+  <div class='prsg'> text='1.80 Lakh'
+  <div class='listingviewtiles'> text='PLATINUMBuilt-Up Area3350 sq.ft.(311.23 Sq.M)Avail'
+  <div class='imgbox_t'> text=''
+  <div class='notclickb shortlist tilespos'> text=''
+  <div class='premiumflag'> text='PLATINUM'
+  <div class='listdetails'> text='Built-Up Area3350 sq.ft.(311.23 Sq.M)AvailabilityR'
+  <div class='topcontent'> text='Built-Up Area3350 sq.ft.(311.23 Sq.M)AvailabilityR'
+  <ul class='project_d clearfix'> text='Built-Up Area3350 sq.ft.(311.23 Sq.M)AvailabilityR'
+  <div class='listspecs ellipsis'> text='Amenities:SecurityMaintenance StaffElectricity Ful'
+  <div class='listinfo clearfix'> text='Commercial office for rent in Electronic City Phas'
+  <div class='listDescription'> text='Commercial office for rent in Electronic City Phas'
+  <div class='author-detail-wrap clearfix'> text='salesIndividualNo BrokerageContact'
+  <div class='author_name_cal clearfix'> text='salesIndividual'
+  <div class='author-name'> text='sales'
+  <div class='nameclature'> text='Individual'
+  <div class='author-type'> text='Individual'
+  <div class='offerlin'> text=''
+  <div class='certification'> text=''
+  <div class='rplychatbtn'> text='No BrokerageContact'
+  <div class='no_brokerage'> text='No Brokerage'
+  <div class='listspecsnodata clearfix'> text=''
+  <div class='dfpad'> text=''
+  <div class='scroll-page'> text=''
+  <div class='loader infinite-scroll hide'> text=''
+  <div class='paginationTabs clearfix'> text='See more Properties:12345NextLast'
+  <ul class='paginated'> text='12345NextLast'
+  <li class='active'> text='1'
+  <div class='seofeatured'> text='Here is the list of commercial properties for rent'
+  <div class='snb-listings-right-panel mapright'> text='You are few steps away from getting leadsQuikrHome'
+  <div class='stickybox'> text='You are few steps away from getting leadsQuikrHome'
+  <div class='activity-item hide'> text='You are few steps away from getting leadsQuikrHome'
+  <div class='item-details without-img'> text='You are few steps away from getting leadsQuikrHome'
+  <div class='with-progress'> text='You are few steps away from getting leads'
+  <div class='progress-line'> text='QuikrHomes40%'
+  <div class='green-fill resume-ad'> text=''
+  <div class='title'> text='QuikrHomes'
+  <div class='butonad'> text='Resume Post Ad'
+  <div class='atvs'> text=''
+  <div class='atvs fixed_div'> text=''
+  <div class='hidden'> text=''
+  <div class='spinner-outer'> text=''
+  <div class='ql'> text=''
+  <div class='modal fade qh-assured'> text='What is Quikr Assured Property?Quikr Assured Prope'
+  <div class='modal-dialog'> text='What is Quikr Assured Property?Quikr Assured Prope'
+  <div class='modal-content'> text='What is Quikr Assured Property?Quikr Assured Prope'
+  <div class='modalheader'> text='What is Quikr Assured Property?'
+  <div class='modal-title'> text='What is Quikr Assured Property?'
+  <div class='modal-body'> text='Quikr Assured Properties are verified properties. '
+  <div class='tnc'> text='*áStandard Brokerage Applies'
+  <div class='modal fade autopopup'> text=''
+  <div class='modal fade covid19-popup'> text=''
+  <div class='modal-dialog modal-dialog-centered'> text=''
+  <div class='footer_link'> text='Popular Searches for rent in BangaloreOffices for '
+  <div class='footer_link_ul'> text='Offices for rent in Top Localities of BangaloreOff'
+  <div class='ul_link'> text='Offices for rent in Top Localities of BangaloreOff'
+  <div class='col_box'> text='Offices for rent in Top Localities of BangaloreOff'
+  <div class='container-fluid module-footer'> text='About UsContact UsCareersQuikr
+                   '
+  <div class='col-lg-8 col-md-8 hidden-xs hidden-sm'> text='About UsContact UsCareersQuikr
+                   '
+  <ul class='footer-menu'> text='About UsContact UsCareersQuikr
+                   '
+  <div class='footer-seo active'> text='QuikrHomes is here to make your journey to a new h'
+  <div class='footerd'> text='The information sources used here include onsite i'
+  <div class='col-lg-4 col-md-4 col-xs-12 col-sm-12'> text='AhmedabadBangaloreChandigarhChennaiCoimbatoreDelhi'
+  <div class='footer-app'> text=''
+  <div class='footer-menu-cities clearfix hidden-xs hidden-sm'> text='AhmedabadBangaloreChandigarhChennaiCoimbatoreDelhi'
+  <div class='col-xs-12'> text='About UsContact UsBlogListing PolicyTerms of UsePr'
+  <li class='dahide'> text='About Us'
+  <div class='row mrtp10'> text='Other Brands:CommonfloorHireeZefoIndiaPropertyCopy'
+  <div class='col-xs-12 col-lg-8'> text='Other Brands:CommonfloorHireeZefoIndiaProperty'
+  <div class='footer-brands clearfix'> text='Other Brands:CommonfloorHireeZefoIndiaProperty'
+  <div class='col-xs-12 col-lg-4 footer-policy'> text='Copyright ⌐ 2008 - 2026 Quikr India Private Limite'
+  <div class='mapviewwrapper'> text='iOk'
+  <div class='mapcanvas'> text='iOk'
+  <div class='map-canvas'> text=''
+  <div class='alert alert-dismissable alert-info'> text='iOk'
+  <div class='banner_add'> text=''
+  <div class='modal fade brokerpopup'> text=''
+  <div class='modal-dialog modal-md'> text=''
+  <div class='modal fade reply-modal'> text=''
+  <div class='newmodal'> text=''
+  <div class='modal fade commonpopup reply-modal'> text=''
+  <div class='modal fade lightbox-modal bdline'> text=''
+  <div class='lightbox-topnav'> text=''
+  <ul class='lgtlist'> text=''
+  <div class='lightbox-nav'> text=''
+  <div class='btn-group hide-anchor'> text=''
+  <div class='lightbox-image-container'> text=''
+  <div class='img-label'> text=''
+  <div class='lightBoxDfp'> text=''
+
+
+All <a href> containing property or homes:
+  <a class='logo' href='//www.quikr.com/homes'>
+  <a class='post-ad-btn' href='//www.quikr.com/homes/postad'>
+  <a class='' href='https://www.quikr.com/homes'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-for-rent-in-bangalore-cid_23'>
+  <a class='' href='/homes/property/residential-for-rent-in-bangalore-cid_23'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-3350sqft-for-rent-in-hio-workspace-bangalore/p/375295465?sourc'>
+  <a class='notclickb' href='/homes/locality/electronic-city-phase-i-bangalore/7082'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-3350sqft-for-rent-in-hio-workspace-bangalore/p/375295465?sourc'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-600sqft-for-rent-in-hio-workspace-bangalore/p/375304555?source'>
+  <a class='notclickb' href='/homes/locality/electronic-city-phase-i-bangalore/7082'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-600sqft-for-rent-in-hio-workspace-bangalore/p/375304555?source'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-not-part-of-a-project-bangalore/p/3751572'>
+  <a class='notclickb' href='/homes/locality/new-thippasandra-bangalore/6643'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-not-part-of-a-project-bangalore/p/3751572'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-not-part-of-a-project-bangalore/p/3751748'>
+  <a class='notclickb' href='/homes/locality/new-thippasandra-bangalore/6643'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-not-part-of-a-project-bangalore/p/3751748'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-commercial-bangalore/p/375111256?source=q'>
+  <a class='notclickb' href='/homes/locality/new-thippasandra-bangalore/6643'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1960sqft-for-rent-in-commercial-bangalore/p/375111256?source=q'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-500sqft-for-rent-in-bangalore/p/375256309?source=qh'>
+  <a class='notclickb' href='/homes/locality/nagarabhavi-main-road-bangalore/48885'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-500sqft-for-rent-in-bangalore/p/375256309?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-500sqft-for-rent-in-bangalore/p/375255187?source=qh'>
+  <a class='notclickb' href='/homes/locality/nagarabhavi-bangalore/6636'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-500sqft-for-rent-in-bangalore/p/375255187?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/complex-of-5500sqft-for-rent-in-not-part-of-a-project-bangalore/p/375233'>
+  <a class='notclickb' href='/homes/locality/garudachar-palya-bangalore/23393'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/complex-of-5500sqft-for-rent-in-not-part-of-a-project-bangalore/p/375233'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1800sqft-for-rent-in-office-space-bangalore/p/375312360?source'>
+  <a class='notclickb' href='/homes/locality/abbigere-bangalore/10040'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1800sqft-for-rent-in-office-space-bangalore/p/375312360?source'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-3000sqft-for-rent-in-pebble-playworks-bangalore/p/375325772?so'>
+  <a class='notclickb' href='/homes/locality/btm-layout-1st-stage-bangalore/34058'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-3000sqft-for-rent-in-pebble-playworks-bangalore/p/375325772?so'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-3sqft-for-rent-in-coworking-space-in-bangalore-bangalore/p/375'>
+  <a class='notclickb' href='/homes/locality/commercial-street-bangalore/13928'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-3sqft-for-rent-in-coworking-space-in-bangalore-bangalore/p/375'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1600sqft-for-rent-in-not-part-of-a-project-bangalore/p/3752983'>
+  <a class='notclickb' href='/homes/locality/bellahalli-bangalore/45844'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1600sqft-for-rent-in-not-part-of-a-project-bangalore/p/3752983'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-750sqft-for-rent-in-bangalore/p/374522372?source=qh'>
+  <a class='notclickb' href='/homes/locality/mahalakshmi-layout-bangalore/13419'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-750sqft-for-rent-in-bangalore/p/374522372?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1100sqft-for-rent-in-bangalore/p/375218869?source=qh'>
+  <a class='notclickb' href='/homes/locality/sahakara-nagar-bangalore/3966'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1100sqft-for-rent-in-bangalore/p/375218869?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1500sqft-for-rent-in-not-part-of-a-project-bangalore/p/3752904'>
+  <a class='notclickb' href='/homes/locality/jayanagar-2nd-block-bangalore/36470'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1500sqft-for-rent-in-not-part-of-a-project-bangalore/p/3752904'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-2100sqft-for-rent-in-north-bangalore-coworking-space-bangalore'>
+  <a class='notclickb' href='/homes/locality/yelahanka-new-town-bangalore/7098'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-2100sqft-for-rent-in-north-bangalore-coworking-space-bangalore'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-612sqft-for-rent-in-bangalore/p/375273870?source=qh'>
+  <a class='notclickb' href='/homes/locality/chamrajpet-bangalore/907'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-612sqft-for-rent-in-bangalore/p/375273870?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1289sqft-for-rent-in-chourasia-hights-bangalore/p/375264538?so'>
+  <a class='notclickb' href='/homes/locality/marathahalli-bangalore/842'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1289sqft-for-rent-in-chourasia-hights-bangalore/p/375264538?so'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/shop-of-1200sqft-for-rent-in-not-part-of-a-project-bangalore/p/374892869'>
+  <a class='notclickb' href='/homes/locality/vidyanagar-bangalore/40795'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/shop-of-1200sqft-for-rent-in-not-part-of-a-project-bangalore/p/374892869'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-200sqft-for-rent-in-bangalore/p/374691226?source=qh'>
+  <a class='notclickb' href='/homes/locality/banashankari-2nd-stage-bangalore/27662'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-200sqft-for-rent-in-bangalore/p/374691226?source=qh'>
+  <a class='listtitle notclickb' href='https://www.quikr.com/homes/office-of-1800sqft-for-rent-in-capital-comforts-bangalore/p/375207169?so'>
+  <a class='notclickb' href='/homes/locality/jp-nagar-bangalore/15513'>
+  <a class='img-anchor notclickb' href='https://www.quikr.com/homes/office-of-1800sqft-for-rent-in-capital-comforts-bangalore/p/375207169?so'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=2'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=3'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=4'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=5'>
+  <a class='next' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=2'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-property-for-rent-in-rs-puram-coimbatore?page=7'>
+  <a class='button button-secondary' href='//www.quikr.com/homes/postad'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-offices-for-rent-in-whitefield-bangalore-cid_23-lid_'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-offices-for-rent-in-sarjapur_road-bangalore-cid_23-l'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-offices-for-rent-in-devanahalli-bangalore-cid_23-lid'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-offices-for-rent-in-yelahanka-bangalore-cid_23-lid_2'>
+  <a class='' href='https://www.quikr.com/homes/property/commercial-offices-for-rent-in-kanakapura_road-bangalore-cid_23'>
+  <a class='' href='//www.quikr.com/homes/blog'>
+  <a class='' href='/homes/all-builders/developers-in-Bangalore/c-23'>
+  <a class='' href='https://www.quikr.com/homes/sitemap.html'>
+  <a class='' href='https://twitter.com/quikrhomes'>
+  <a class='' href='https://www.linkedin.com/showcase/quikrhomes'>
+  <a class='' href='https://www.quikr.com/homes/city/ahmedabad'>
+  <a class='' href='https://www.quikr.com/homes/city/bangalore'>
+  <a class='' href='https://www.quikr.com/homes/city/chandigarh'>
+  <a class='' href='https://www.quikr.com/homes/city/chennai'>
+  <a class='' href='https://www.quikr.com/homes/city/coimbatore'>
+  <a class='' href='https://www.quikr.com/homes/city/delhi'>
+  <a class='' href='https://www.quikr.com/homes/city/gurgaon'>
+  <a class='' href='https://www.quikr.com/homes/city/hyderabad'>
+  <a class='' href='https://www.quikr.com/homes/city/jaipur'>
+  <a class='' href='https://www.quikr.com/homes/city/kochi'>
+  <a class='' href='https://www.quikr.com/homes/city/kolkata'>
+  <a class='' href='https://www.quikr.com/homes/city/lucknow'>
+  <a class='' href='https://www.quikr.com/homes/city/mumbai'>
+  <a class='' href='https://www.quikr.com/homes/city/pune'>
+  <a class='' href='https://www.quikr.com/homes'>
+  <a class='' href='//www.quikr.com/homes/blog'>
+  <a class='' href='https://www.indiaproperty.com'>
+
+
+[Housing.com] Status: 406
+  Body: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Security Alert</title>
+<link rel="icon" href="https://assets-0.housingcdn.com/static/favicon1.png">
+<style>
+:root{--p:#5a189a;--l:#9d4edd;--s:#ffd60a}
+*{margin:0;

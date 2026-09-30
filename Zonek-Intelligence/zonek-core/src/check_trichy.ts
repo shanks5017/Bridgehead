@@ -1,0 +1,52 @@
+import mongoose from 'mongoose';
+import { getListingModel, ScrapingStatus } from './database/schema.js';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+
+const envPath = new URL('../.env', import.meta.url);
+dotenv.config({ path: envPath.pathname.substring(process.platform === 'win32' ? 1 : 0) });
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/zonek';
+
+async function checkTrichy() {
+  try {
+    await mongoose.connect(MONGODB_URI);
+    const cityName = 'Trichy';
+    const ListingModel = getListingModel(cityName);
+
+    const configPath = new URL(`./trichy.json`, import.meta.url);
+    const configData = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const categories = Object.keys(
+      configData.atomicUnits.reduce((acc: any, unit: any) => {
+        unit.categories.forEach((cat: string) => acc[cat] = true);
+        return acc;
+      }, {})
+    );
+
+    console.log(`\n📊 City: ${cityName}`);
+    console.log(`📂 Categories count: ${categories.length}`);
+
+    let pendingCount = 0;
+    let completedCount = 0;
+    let inProgressCount = 0;
+
+    for (const category of categories) {
+      const statusRecord = await ScrapingStatus.findOne({ cityName, type: 'list', category });
+      const status = statusRecord ? statusRecord.status : 'pending';
+      if (status === 'completed') completedCount++;
+      else if (status === 'in_progress') inProgressCount++;
+      else pendingCount++;
+    }
+
+    console.log(`✅ Completed categories: ${completedCount}`);
+    console.log(`⏳ In Progress categories: ${inProgressCount}`);
+    console.log(`🚀 Pending categories: ${pendingCount}`);
+
+    await mongoose.disconnect();
+  } catch (error) {
+    console.error("🚨 Debug Error:", error);
+  }
+}
+
+checkTrichy();

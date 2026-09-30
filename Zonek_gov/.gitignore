@@ -1,0 +1,19 @@
+# Zonek Gov Data Engine — .gitignore
+
+# Environment secrets
+.env
+
+# Downloaded data files (can be 50-200MB)
+data/*.csv
+data/*.json
+data/*.xlsx
+
+# Logs
+logs/*.log
+
+# Node modules
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,182 @@
+{
+  "rs puram, coimbatore": {
+    "olx": "4064",
+    "acres99": "62",
+    "nobroker": {
+      "city_slug": "coimbatore",
+      "locality_slug": "rs-puram",
+      "city_id": 14
+    },
+    "magicbricks": "rs-puram-coimbatore",
+    "housing": "rs-puram-coimbatore",
+    "proptiger": "rs-puram-coimbatore"
+  },
+  "koramangala, bangalore": {
+    "olx": "4062",
+    "acres99": "9",
+    "nobroker": {
+      "city_slug": "bangalore",
+      "locality_slug": "koramangala",
+      "city_id": 6
+    },
+    "magicbricks": "koramangala-bangalore",
+    "housing": "koramangala-bangalore",
+    "proptiger": "koramangala-bangalore"
+  },
+  "indiranagar, bangalore": {
+    "olx": "4062",
+    "acres99": "9",
+    "nobroker": {
+      "city_slug": "bangalore",
+      "locality_slug": "indiranagar",
+      "city_id": 6
+    },
+    "magicbricks": "indiranagar-bangalore",
+    "housing": "indiranagar-bangalore",
+    "proptiger": "indiranagar-bangalore"
+  },
+  ", bangalore": {
+    "olx": "4062",
+    "acres99": "9",
+    "nobroker": {
+      "city_slug": "bangalore",
+      "locality_slug": "",
+      "city_id": 6
+    },
+    "magicbricks": "bangalore",
+    "housing": "bangalore",
+    "proptiger": "bangalore"
+  },
+  "bangalore, bangalore": {
+    "olx": "4062",
+    "acres99": "9",
+    "nobroker": {
+      "city_slug": "bangalore",
+      "locality_slug": "bangalore",
+      "city_id": 6
+    },
+    "magicbricks": "bangalore-bangalore",
+    "housing": "bangalore-bangalore",
+    "proptiger": "bangalore-bangalore"
+  },
+  "belgaum, belgaum": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "belagavi",
+      "locality_slug": "belgaum",
+      "city_id": null
+    },
+    "magicbricks": "belgaum-belagavi",
+    "housing": "belgaum-belagavi",
+    "proptiger": "belgaum-belagavi"
+  },
+  "belagavi, belagavi": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "belagavi",
+      "locality_slug": "belagavi",
+      "city_id": null
+    },
+    "magicbricks": "belagavi-belagavi",
+    "housing": "belagavi-belagavi",
+    "proptiger": "belagavi-belagavi"
+  },
+  "belgaum fort, belgaum": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "belagavi",
+      "locality_slug": "belgaum-fort",
+      "city_id": null
+    },
+    "magicbricks": "belgaum-fort-belagavi",
+    "housing": "belgaum-fort-belagavi",
+    "proptiger": "belgaum-fort-belagavi"
+  },
+  "hydrabad, hydrabad": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "hydrabad",
+      "locality_slug": "hydrabad",
+      "city_id": null
+    },
+    "magicbricks": "hydrabad-hydrabad",
+    "housing": "hydrabad-hydrabad",
+    "proptiger": "hydrabad-hydrabad"
+  },
+  ", belgaum": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "belagavi",
+      "locality_slug": "",
+      "city_id": null
+    },
+    "magicbricks": "belagavi",
+    "housing": "belagavi",
+    "proptiger": "belagavi"
+  },
+  "hyderabad, hyderabad": {
+    "olx": "4063",
+    "acres99": "15",
+    "nobroker": {
+      "city_slug": "hyderabad",
+      "locality_slug": "hyderabad",
+      "city_id": 10
+    },
+    "magicbricks": "hyderabad-hyderabad",
+    "housing": "hyderabad-hyderabad",
+    "proptiger": "hyderabad-hyderabad"
+  },
+  "bhopal, bhopal": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "bhopal",
+      "locality_slug": "bhopal",
+      "city_id": null
+    },
+    "magicbricks": "bhopal-bhopal",
+    "housing": "bhopal-bhopal",
+    "proptiger": "bhopal-bhopal"
+  },
+  ", bhopal": {
+    "olx": null,
+    "acres99": null,
+    "nobroker": {
+      "city_slug": "bhopal",
+      "locality_slug": "",
+      "city_id": null
+    },
+    "magicbricks": "bhopal",
+    "housing": "bhopal",
+    "proptiger": "bhopal"
+  },
+  ", chennai": {
+    "olx": "4061",
+    "acres99": "3",
+    "nobroker": {
+      "city_slug": "chennai",
+      "locality_slug": "",
+      "city_id": 11
+    },
+    "magicbricks": "chennai",
+    "housing": "chennai",
+    "proptiger": "chennai"
+  },
+  ", coimbatore": {
+    "olx": "4064",
+    "acres99": "62",
+    "nobroker": {
+      "city_slug": "coimbatore",
+      "locality_slug": "",
+      "city_id": 14
+    },
+    "magicbricks": "coimbatore",
+    "housing": "coimbatore",
+    "proptiger": "coimbatore"
+  }
+}

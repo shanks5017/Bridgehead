@@ -1,0 +1,11 @@
+Data directory — stores locally cached CSVs downloaded by the engine.
+
+Files downloaded here by the fetchers:
+  - census_2011_districts.csv   → Population fetcher (datameet/india-census)
+  - ncrb_crime_2023.csv         → Crime fetcher (data.opencity.in)
+  - udise_2024_25.csv           → Schools fetcher (dataful.in)
+
+If any download fails, a DOWNLOAD_*.txt file will be created with manual instructions.
+
+IMPORTANT: Do NOT commit actual CSVs to git (they can be 50MB+).
+Add to .gitignore: data/*.csv

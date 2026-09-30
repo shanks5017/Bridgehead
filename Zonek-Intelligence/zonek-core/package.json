@@ -1,0 +1,28 @@
+{
+  "name": "zonek-core",
+  "version": "1.0.0",
+  "description": "Standalone Data Acquisition & Intelligence (DAI) service for Zonek",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "stage2": "tsx src/stage2.ts",
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "dotenv": "^16.4.7",
+    "got-scraping": "^4.2.1",
+    "groq-sdk": "^0.15.0",
+    "mongoose": "^8.12.1",
+    "puppeteer": "^24.4.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "tsx": "^4.19.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.5",
+    "typescript": "^5.8.2"
+  }
+}

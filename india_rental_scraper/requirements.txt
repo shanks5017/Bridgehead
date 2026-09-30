@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+supabase
+playwright
+nest-asyncio
+beautifulsoup4

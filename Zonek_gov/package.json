@@ -1,0 +1,45 @@
+{
+  "name": "zonek-gov-data-engine",
+  "version": "1.0.0",
+  "description": "Industry-grade government data ETL engine for Zonek/Bridgehead AI model training",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "pipeline": "node src/pipeline.js",
+    "pipeline:force": "node src/pipeline.js --force",
+    "daemon": "node src/pipeline.js --daemon",
+    "seed:population": "node src/pipeline.js --module=population --force",
+    "seed:schemes": "node src/pipeline.js --module=schemes --force",
+    "seed:crime": "node src/pipeline.js --module=crime --force",
+    "seed:budget": "node src/pipeline.js --module=budget --force",
+    "fetch:crop": "node src/pipeline.js --module=cropPrices --force",
+    "fetch:weather": "node src/pipeline.js --module=weather --force",
+    "fetch:infrastructure": "node src/pipeline.js --module=infrastructure --force",
+    "fetch:elections": "node src/pipeline.js --module=elections --force",
+    "run:all": "node src/pipeline.js --force"
+  },
+  "keywords": [
+    "government-data",
+    "india",
+    "entrepreneurship",
+    "ai-training",
+    "etl"
+  ],
+  "author": "Zonek Engineering",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.23.0",
+    "rss-parser": "^3.13.0",
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5",
+    "zod": "^3.24.1"
+  }
+}

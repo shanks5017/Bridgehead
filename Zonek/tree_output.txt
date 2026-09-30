@@ -1,0 +1,3000 @@
+﻿Folder PATH listing for volume New Volume
+Volume serial number is B656-D290
+D:.
+|   .env
+|   .env.local
+|   .gitignore
+|   App.tsx
+|   check-images.ts
+|   full_structure.json
+|   index.html
+|   index.tsx
+|   metadata.json
+|   package-lock.json
+|   package.json
+|   README.md
+|   server.js
+|   test-connection.js
+|   tree_output.txt
+|   tsconfig.json
+|   types.ts
+|   vite.config.ts
+|   
++---app
+|   +---api
+|   |   +---auth
+|   |   |   +---signin
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---signup
+|   |   |           route.ts
+|   |   |           
+|   |   +---demands
+|   |   |       route.ts
+|   |   |       
+|   |   +---newsletter
+|   |   |   \---subscribe
+|   |   |           route.ts
+|   |   |           
+|   |   \---rentals
+|   |           route.ts
+|   |           
+|   \---components
++---backend
+|   |   .env
+|   |   cleanIndexes.js
+|   |   fixIndex.js
+|   |   package-lock.json
+|   |   package.json
+|   |   server.js
+|   |   server.ts
+|   |   test-demand-api.js
+|   |   tsconfig.json
+|   |   untitled.tsx
+|   |   
+|   +---config
+|   |       db.ts
+|   |       
+|   +---controllers
+|   |       authController.ts
+|   |       postController.ts
+|   |       statsController.ts
+|   |       
+|   +---dist
+|   |   |   server.js
+|   |   |   
+|   |   +---config
+|   |   |       db.js
+|   |   |       
+|   |   +---controllers
+|   |   |       authController.js
+|   |   |       postController.js
+|   |   |       
+|   |   +---lib
+|   |   |   |   auth.js
+|   |   |   |   mongodb.js
+|   |   |   |   
+|   |   |   \---models
+|   |   |           Message.js
+|   |   |           Newsletter.js
+|   |   |           Rental.js
+|   |   |           User.js
+|   |   |           
+|   |   +---middleware
+|   |   |       auth.js
+|   |   |       gridfs-native.js
+|   |   |       gridfs-upload.js
+|   |   |       parseFormData.js
+|   |   |       upload.js
+|   |   |       validation.js
+|   |   |       
+|   |   +---models
+|   |   |       DemandPost.js
+|   |   |       ensureModels.js
+|   |   |       index.js
+|   |   |       RentalPost.js
+|   |   |       User.js
+|   |   |       
+|   |   +---routes
+|   |   |       auth.js
+|   |   |       demands.js
+|   |   |       images.js
+|   |   |       posts.js
+|   |   |       rentals.js
+|   |   |       
+|   |   \---utils
+|   |           email.js
+|   |           
+|   +---lib
+|   |   |   auth.ts
+|   |   |   mongodb.ts
+|   |   |   
+|   |   \---models
+|   |           Message.ts
+|   |           Newsletter.ts
+|   |           Rental.ts
+|   |           User.ts
+|   |           
+|   +---middleware
+|   |       auth.ts
+|   |       gridfs-native.ts
+|   |       gridfs-upload.ts
+|   |       parseFormData.ts
+|   |       upload.ts
+|   |       validation.ts
+|   |       
+|   +---models
+|   |       DemandPost.ts
+|   |       ensureModels.ts
+|   |       index.ts
+|   |       RentalPost.ts
+|   |       User.ts
+|   |       
+|   +---node_modules
+|   |   |   .package-lock.json
+|   |   |   
+|   |   +---.bin
+|   |   |       acorn
+|   |   |       acorn.cmd
+|   |   |       acorn.ps1
+|   |   |       baseline-browser-mapping
+|   |   |       baseline-browser-mapping.cmd
+|   |   |       baseline-browser-mapping.ps1
+|   |   |       bcrypt
+|   |   |       bcrypt.cmd
+|   |   |       bcrypt.ps1
+|   |   |       browserslist
+|   |   |       browserslist.cmd
+|   |   |       browserslist.ps1
+|   |   |       create-jest
+|   |   |       create-jest.cmd
+|   |   |       create-jest.ps1
+|   |   |       eslint
+|   |   |       eslint-config-prettier
+|   |   |       eslint-config-prettier.cmd
+|   |   |       eslint-config-prettier.ps1
+|   |   |       eslint.cmd
+|   |   |       eslint.ps1
+|   |   |       esparse
+|   |   |       esparse.cmd
+|   |   |       esparse.ps1
+|   |   |       esvalidate
+|   |   |       esvalidate.cmd
+|   |   |       esvalidate.ps1
+|   |   |       fxparser
+|   |   |       fxparser.cmd
+|   |   |       fxparser.ps1
+|   |   |       handlebars
+|   |   |       handlebars.cmd
+|   |   |       handlebars.ps1
+|   |   |       import-local-fixture
+|   |   |       import-local-fixture.cmd
+|   |   |       import-local-fixture.ps1
+|   |   |       jest
+|   |   |       jest.cmd
+|   |   |       jest.ps1
+|   |   |       js-yaml
+|   |   |       js-yaml.cmd
+|   |   |       js-yaml.ps1
+|   |   |       jsesc
+|   |   |       jsesc.cmd
+|   |   |       jsesc.ps1
+|   |   |       json5
+|   |   |       json5.cmd
+|   |   |       json5.ps1
+|   |   |       mime
+|   |   |       mime.cmd
+|   |   |       mime.ps1
+|   |   |       mkdirp
+|   |   |       mkdirp.cmd
+|   |   |       mkdirp.ps1
+|   |   |       nanoid
+|   |   |       nanoid.cmd
+|   |   |       nanoid.ps1
+|   |   |       next
+|   |   |       next.cmd
+|   |   |       next.ps1
+|   |   |       node-which
+|   |   |       node-which.cmd
+|   |   |       node-which.ps1
+|   |   |       nodemon
+|   |   |       nodemon.cmd
+|   |   |       nodemon.ps1
+|   |   |       nodetouch
+|   |   |       nodetouch.cmd
+|   |   |       nodetouch.ps1
+|   |   |       parser
+|   |   |       parser.cmd
+|   |   |       parser.ps1
+|   |   |       prettier
+|   |   |       prettier.cmd
+|   |   |       prettier.ps1
+|   |   |       proto-loader-gen-types
+|   |   |       proto-loader-gen-types.cmd
+|   |   |       proto-loader-gen-types.ps1
+|   |   |       resolve
+|   |   |       resolve.cmd
+|   |   |       resolve.ps1
+|   |   |       rimraf
+|   |   |       rimraf.cmd
+|   |   |       rimraf.ps1
+|   |   |       semver
+|   |   |       semver.cmd
+|   |   |       semver.ps1
+|   |   |       tree-kill
+|   |   |       tree-kill.cmd
+|   |   |       tree-kill.ps1
+|   |   |       ts-jest
+|   |   |       ts-jest.cmd
+|   |   |       ts-jest.ps1
+|   |   |       ts-node
+|   |   |       ts-node-cwd
+|   |   |       ts-node-cwd.cmd
+|   |   |       ts-node-cwd.ps1
+|   |   |       ts-node-dev
+|   |   |       ts-node-dev.cmd
+|   |   |       ts-node-dev.ps1
+|   |   |       ts-node-esm
+|   |   |       ts-node-esm.cmd
+|   |   |       ts-node-esm.ps1
+|   |   |       ts-node-script
+|   |   |       ts-node-script.cmd
+|   |   |       ts-node-script.ps1
+|   |   |       ts-node-transpile-only
+|   |   |       ts-node-transpile-only.cmd
+|   |   |       ts-node-transpile-only.ps1
+|   |   |       ts-node.cmd
+|   |   |       ts-node.ps1
+|   |   |       ts-script
+|   |   |       ts-script.cmd
+|   |   |       ts-script.ps1
+|   |   |       tsc
+|   |   |       tsc.cmd
+|   |   |       tsc.ps1
+|   |   |       tsnd
+|   |   |       tsnd.cmd
+|   |   |       tsnd.ps1
+|   |   |       tsserver
+|   |   |       tsserver.cmd
+|   |   |       tsserver.ps1
+|   |   |       uglifyjs
+|   |   |       uglifyjs.cmd
+|   |   |       uglifyjs.ps1
+|   |   |       update-browserslist-db
+|   |   |       update-browserslist-db.cmd
+|   |   |       update-browserslist-db.ps1
+|   |   |       uuid
+|   |   |       uuid.cmd
+|   |   |       uuid.ps1
+|   |   |       
+|   |   +---@aws
+|   |   |   \---lambda-invoke-store
+|   |   |       |   LICENSE
+|   |   |       |   package.json
+|   |   |       |   README.md
+|   |   |       |   
+|   |   |       +---dist-cjs
+|   |   |       |       invoke-store.js
+|   |   |       |       
+|   |   |       +---dist-es
+|   |   |       |       invoke-store.js
+|   |   |       |       
+|   |   |       \---dist-types
+|   |   |               invoke-store.benchmark.d.ts
+|   |   |               invoke-store.d.ts
+|   |   |               
+|   |   +---@aws-crypto
+|   |   |   +---sha256-browser
+|   |   |   |   |   CHANGELOG.md
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   tsconfig.json
+|   |   |   |   |   tsconfig.module.json
+|   |   |   |   |   
+|   |   |   |   +---build
+|   |   |   |   |   +---main
+|   |   |   |   |   |       constants.d.ts
+|   |   |   |   |   |       constants.js
+|   |   |   |   |   |       constants.js.map
+|   |   |   |   |   |       crossPlatformSha256.d.ts
+|   |   |   |   |   |       crossPlatformSha256.js
+|   |   |   |   |   |       crossPlatformSha256.js.map
+|   |   |   |   |   |       index.d.ts
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       index.js.map
+|   |   |   |   |   |       isEmptyData.d.ts
+|   |   |   |   |   |       isEmptyData.js
+|   |   |   |   |   |       isEmptyData.js.map
+|   |   |   |   |   |       webCryptoSha256.d.ts
+|   |   |   |   |   |       webCryptoSha256.js
+|   |   |   |   |   |       webCryptoSha256.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   \---module
+|   |   |   |   |           constants.d.ts
+|   |   |   |   |           constants.js
+|   |   |   |   |           constants.js.map
+|   |   |   |   |           crossPlatformSha256.d.ts
+|   |   |   |   |           crossPlatformSha256.js
+|   |   |   |   |           crossPlatformSha256.js.map
+|   |   |   |   |           index.d.ts
+|   |   |   |   |           index.js
+|   |   |   |   |           index.js.map
+|   |   |   |   |           isEmptyData.d.ts
+|   |   |   |   |           isEmptyData.js
+|   |   |   |   |           isEmptyData.js.map
+|   |   |   |   |           webCryptoSha256.d.ts
+|   |   |   |   |           webCryptoSha256.js
+|   |   |   |   |           webCryptoSha256.js.map
+|   |   |   |   |           
+|   |   |   |   +---node_modules
+|   |   |   |   |   \---@smithy
+|   |   |   |   |       +---is-array-buffer
+|   |   |   |   |       |   |   LICENSE
+|   |   |   |   |       |   |   package.json
+|   |   |   |   |       |   |   README.md
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---dist-cjs
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---dist-es
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---dist-types
+|   |   |   |   |       |       |   index.d.ts
+|   |   |   |   |       |       |   
+|   |   |   |   |       |       \---ts3.4
+|   |   |   |   |       |               index.d.ts
+|   |   |   |   |       |               
+|   |   |   |   |       +---util-buffer-from
+|   |   |   |   |       |   |   LICENSE
+|   |   |   |   |       |   |   package.json
+|   |   |   |   |       |   |   README.md
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---dist-cjs
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---dist-es
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---dist-types
+|   |   |   |   |       |       |   index.d.ts
+|   |   |   |   |       |       |   
+|   |   |   |   |       |       \---ts3.4
+|   |   |   |   |       |               index.d.ts
+|   |   |   |   |       |               
+|   |   |   |   |       \---util-utf8
+|   |   |   |   |           |   LICENSE
+|   |   |   |   |           |   package.json
+|   |   |   |   |           |   README.md
+|   |   |   |   |           |   
+|   |   |   |   |           +---dist-cjs
+|   |   |   |   |           |       fromUtf8.browser.js
+|   |   |   |   |           |       fromUtf8.js
+|   |   |   |   |           |       index.js
+|   |   |   |   |           |       toUint8Array.js
+|   |   |   |   |           |       toUtf8.browser.js
+|   |   |   |   |           |       toUtf8.js
+|   |   |   |   |           |       
+|   |   |   |   |           +---dist-es
+|   |   |   |   |           |       fromUtf8.browser.js
+|   |   |   |   |           |       fromUtf8.js
+|   |   |   |   |           |       index.js
+|   |   |   |   |           |       toUint8Array.js
+|   |   |   |   |           |       toUtf8.browser.js
+|   |   |   |   |           |       toUtf8.js
+|   |   |   |   |           |       
+|   |   |   |   |           \---dist-types
+|   |   |   |   |               |   fromUtf8.browser.d.ts
+|   |   |   |   |               |   fromUtf8.d.ts
+|   |   |   |   |               |   index.d.ts
+|   |   |   |   |               |   toUint8Array.d.ts
+|   |   |   |   |               |   toUtf8.browser.d.ts
+|   |   |   |   |               |   toUtf8.d.ts
+|   |   |   |   |               |   
+|   |   |   |   |               \---ts3.4
+|   |   |   |   |                       fromUtf8.browser.d.ts
+|   |   |   |   |                       fromUtf8.d.ts
+|   |   |   |   |                       index.d.ts
+|   |   |   |   |                       toUint8Array.d.ts
+|   |   |   |   |                       toUtf8.browser.d.ts
+|   |   |   |   |                       toUtf8.d.ts
+|   |   |   |   |                       
+|   |   |   |   \---src
+|   |   |   |           constants.ts
+|   |   |   |           crossPlatformSha256.ts
+|   |   |   |           index.ts
+|   |   |   |           isEmptyData.ts
+|   |   |   |           webCryptoSha256.ts
+|   |   |   |           
+|   |   |   +---sha256-js
+|   |   |   |   |   CHANGELOG.md
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   tsconfig.json
+|   |   |   |   |   tsconfig.module.json
+|   |   |   |   |   
+|   |   |   |   +---build
+|   |   |   |   |   +---main
+|   |   |   |   |   |       constants.d.ts
+|   |   |   |   |   |       constants.js
+|   |   |   |   |   |       constants.js.map
+|   |   |   |   |   |       index.d.ts
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       index.js.map
+|   |   |   |   |   |       jsSha256.d.ts
+|   |   |   |   |   |       jsSha256.js
+|   |   |   |   |   |       jsSha256.js.map
+|   |   |   |   |   |       knownHashes.fixture.d.ts
+|   |   |   |   |   |       knownHashes.fixture.js
+|   |   |   |   |   |       knownHashes.fixture.js.map
+|   |   |   |   |   |       RawSha256.d.ts
+|   |   |   |   |   |       RawSha256.js
+|   |   |   |   |   |       RawSha256.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   \---module
+|   |   |   |   |           constants.d.ts
+|   |   |   |   |           constants.js
+|   |   |   |   |           constants.js.map
+|   |   |   |   |           index.d.ts
+|   |   |   |   |           index.js
+|   |   |   |   |           index.js.map
+|   |   |   |   |           jsSha256.d.ts
+|   |   |   |   |           jsSha256.js
+|   |   |   |   |           jsSha256.js.map
+|   |   |   |   |           knownHashes.fixture.d.ts
+|   |   |   |   |           knownHashes.fixture.js
+|   |   |   |   |           knownHashes.fixture.js.map
+|   |   |   |   |           RawSha256.d.ts
+|   |   |   |   |           RawSha256.js
+|   |   |   |   |           RawSha256.js.map
+|   |   |   |   |           
+|   |   |   |   \---src
+|   |   |   |           constants.ts
+|   |   |   |           index.ts
+|   |   |   |           jsSha256.ts
+|   |   |   |           knownHashes.fixture.ts
+|   |   |   |           RawSha256.ts
+|   |   |   |           
+|   |   |   +---supports-web-crypto
+|   |   |   |   |   CHANGELOG.md
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   tsconfig.json
+|   |   |   |   |   tsconfig.module.json
+|   |   |   |   |   
+|   |   |   |   +---build
+|   |   |   |   |   +---main
+|   |   |   |   |   |       index.d.ts
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       index.js.map
+|   |   |   |   |   |       supportsWebCrypto.d.ts
+|   |   |   |   |   |       supportsWebCrypto.js
+|   |   |   |   |   |       supportsWebCrypto.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   \---module
+|   |   |   |   |           index.d.ts
+|   |   |   |   |           index.js
+|   |   |   |   |           index.js.map
+|   |   |   |   |           supportsWebCrypto.d.ts
+|   |   |   |   |           supportsWebCrypto.js
+|   |   |   |   |           supportsWebCrypto.js.map
+|   |   |   |   |           
+|   |   |   |   \---src
+|   |   |   |           index.ts
+|   |   |   |           supportsWebCrypto.ts
+|   |   |   |           
+|   |   |   \---util
+|   |   |       |   CHANGELOG.md
+|   |   |       |   LICENSE
+|   |   |       |   package.json
+|   |   |       |   README.md
+|   |   |       |   tsconfig.json
+|   |   |       |   tsconfig.module.json
+|   |   |       |   
+|   |   |       +---build
+|   |   |       |   +---main
+|   |   |       |   |       convertToBuffer.d.ts
+|   |   |       |   |       convertToBuffer.js
+|   |   |       |   |       convertToBuffer.js.map
+|   |   |       |   |       index.d.ts
+|   |   |       |   |       index.js
+|   |   |       |   |       index.js.map
+|   |   |       |   |       isEmptyData.d.ts
+|   |   |       |   |       isEmptyData.js
+|   |   |       |   |       isEmptyData.js.map
+|   |   |       |   |       numToUint8.d.ts
+|   |   |       |   |       numToUint8.js
+|   |   |       |   |       numToUint8.js.map
+|   |   |       |   |       uint32ArrayFrom.d.ts
+|   |   |       |   |       uint32ArrayFrom.js
+|   |   |       |   |       uint32ArrayFrom.js.map
+|   |   |       |   |       
+|   |   |       |   \---module
+|   |   |       |           convertToBuffer.d.ts
+|   |   |       |           convertToBuffer.js
+|   |   |       |           convertToBuffer.js.map
+|   |   |       |           index.d.ts
+|   |   |       |           index.js
+|   |   |       |           index.js.map
+|   |   |       |           isEmptyData.d.ts
+|   |   |       |           isEmptyData.js
+|   |   |       |           isEmptyData.js.map
+|   |   |       |           numToUint8.d.ts
+|   |   |       |           numToUint8.js
+|   |   |       |           numToUint8.js.map
+|   |   |       |           uint32ArrayFrom.d.ts
+|   |   |       |           uint32ArrayFrom.js
+|   |   |       |           uint32ArrayFrom.js.map
+|   |   |       |           
+|   |   |       +---node_modules
+|   |   |       |   \---@smithy
+|   |   |       |       +---is-array-buffer
+|   |   |       |       |   |   LICENSE
+|   |   |       |       |   |   package.json
+|   |   |       |       |   |   README.md
+|   |   |       |       |   |   
+|   |   |       |       |   +---dist-cjs
+|   |   |       |       |   |       index.js
+|   |   |       |       |   |       
+|   |   |       |       |   +---dist-es
+|   |   |       |       |   |       index.js
+|   |   |       |       |   |       
+|   |   |       |       |   \---dist-types
+|   |   |       |       |       |   index.d.ts
+|   |   |       |       |       |   
+|   |   |       |       |       \---ts3.4
+|   |   |       |       |               index.d.ts
+|   |   |       |       |               
+|   |   |       |       +---util-buffer-from
+|   |   |       |       |   |   LICENSE
+|   |   |       |       |   |   package.json
+|   |   |       |       |   |   README.md
+|   |   |       |       |   |   
+|   |   |       |       |   +---dist-cjs
+|   |   |       |       |   |       index.js
+|   |   |       |       |   |       
+|   |   |       |       |   +---dist-es
+|   |   |       |       |   |       index.js
+|   |   |       |       |   |       
+|   |   |       |       |   \---dist-types
+|   |   |       |       |       |   index.d.ts
+|   |   |       |       |       |   
+|   |   |       |       |       \---ts3.4
+|   |   |       |       |               index.d.ts
+|   |   |       |       |               
+|   |   |       |       \---util-utf8
+|   |   |       |           |   LICENSE
+|   |   |       |           |   package.json
+|   |   |       |           |   README.md
+|   |   |       |           |   
+|   |   |       |           +---dist-cjs
+|   |   |       |           |       fromUtf8.browser.js
+|   |   |       |           |       fromUtf8.js
+|   |   |       |           |       index.js
+|   |   |       |           |       toUint8Array.js
+|   |   |       |           |       toUtf8.browser.js
+|   |   |       |           |       toUtf8.js
+|   |   |       |           |       
+|   |   |       |           +---dist-es
+|   |   |       |           |       fromUtf8.browser.js
+|   |   |       |           |       fromUtf8.js
+|   |   |       |           |       index.js
+|   |   |       |           |       toUint8Array.js
+|   |   |       |           |       toUtf8.browser.js
+|   |   |       |           |       toUtf8.js
+|   |   |       |           |       
+|   |   |       |           \---dist-types
+|   |   |       |               |   fromUtf8.browser.d.ts
+|   |   |       |               |   fromUtf8.d.ts
+|   |   |       |               |   index.d.ts
+|   |   |       |               |   toUint8Array.d.ts
+|   |   |       |               |   toUtf8.browser.d.ts
+|   |   |       |               |   toUtf8.d.ts
+|   |   |       |               |   
+|   |   |       |               \---ts3.4
+|   |   |       |                       fromUtf8.browser.d.ts
+|   |   |       |                       fromUtf8.d.ts
+|   |   |       |                       index.d.ts
+|   |   |       |                       toUint8Array.d.ts
+|   |   |       |                       toUtf8.browser.d.ts
+|   |   |       |                       toUtf8.d.ts
+|   |   |       |                       
+|   |   |       \---src
+|   |   |               convertToBuffer.ts
+|   |   |               index.ts
+|   |   |               isEmptyData.ts
+|   |   |               numToUint8.ts
+|   |   |               uint32ArrayFrom.ts
+|   |   |               
+|   |   +---@aws-sdk
+|   |   |   +---client-sesv2
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   runtimeConfig.browser.js
+|   |   |   |   |   |   runtimeConfig.js
+|   |   |   |   |   |   runtimeConfig.native.js
+|   |   |   |   |   |   runtimeConfig.shared.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---auth
+|   |   |   |   |   |       httpAuthSchemeProvider.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---endpoint
+|   |   |   |   |           endpointResolver.js
+|   |   |   |   |           ruleset.js
+|   |   |   |   |           
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   extensionConfiguration.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   runtimeConfig.browser.js
+|   |   |   |   |   |   runtimeConfig.js
+|   |   |   |   |   |   runtimeConfig.native.js
+|   |   |   |   |   |   runtimeConfig.shared.js
+|   |   |   |   |   |   runtimeExtensions.js
+|   |   |   |   |   |   SESv2.js
+|   |   |   |   |   |   SESv2Client.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---auth
+|   |   |   |   |   |       httpAuthExtensionConfiguration.js
+|   |   |   |   |   |       httpAuthSchemeProvider.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---commands
+|   |   |   |   |   |       BatchGetMetricDataCommand.js
+|   |   |   |   |   |       CancelExportJobCommand.js
+|   |   |   |   |   |       CreateConfigurationSetCommand.js
+|   |   |   |   |   |       CreateConfigurationSetEventDestinationCommand.js
+|   |   |   |   |   |       CreateContactCommand.js
+|   |   |   |   |   |       CreateContactListCommand.js
+|   |   |   |   |   |       CreateCustomVerificationEmailTemplateCommand.js
+|   |   |   |   |   |       CreateDedicatedIpPoolCommand.js
+|   |   |   |   |   |       CreateDeliverabilityTestReportCommand.js
+|   |   |   |   |   |       CreateEmailIdentityCommand.js
+|   |   |   |   |   |       CreateEmailIdentityPolicyCommand.js
+|   |   |   |   |   |       CreateEmailTemplateCommand.js
+|   |   |   |   |   |       CreateExportJobCommand.js
+|   |   |   |   |   |       CreateImportJobCommand.js
+|   |   |   |   |   |       CreateMultiRegionEndpointCommand.js
+|   |   |   |   |   |       CreateTenantCommand.js
+|   |   |   |   |   |       CreateTenantResourceAssociationCommand.js
+|   |   |   |   |   |       DeleteConfigurationSetCommand.js
+|   |   |   |   |   |       DeleteConfigurationSetEventDestinationCommand.js
+|   |   |   |   |   |       DeleteContactCommand.js
+|   |   |   |   |   |       DeleteContactListCommand.js
+|   |   |   |   |   |       DeleteCustomVerificationEmailTemplateCommand.js
+|   |   |   |   |   |       DeleteDedicatedIpPoolCommand.js
+|   |   |   |   |   |       DeleteEmailIdentityCommand.js
+|   |   |   |   |   |       DeleteEmailIdentityPolicyCommand.js
+|   |   |   |   |   |       DeleteEmailTemplateCommand.js
+|   |   |   |   |   |       DeleteMultiRegionEndpointCommand.js
+|   |   |   |   |   |       DeleteSuppressedDestinationCommand.js
+|   |   |   |   |   |       DeleteTenantCommand.js
+|   |   |   |   |   |       DeleteTenantResourceAssociationCommand.js
+|   |   |   |   |   |       GetAccountCommand.js
+|   |   |   |   |   |       GetBlacklistReportsCommand.js
+|   |   |   |   |   |       GetConfigurationSetCommand.js
+|   |   |   |   |   |       GetConfigurationSetEventDestinationsCommand.js
+|   |   |   |   |   |       GetContactCommand.js
+|   |   |   |   |   |       GetContactListCommand.js
+|   |   |   |   |   |       GetCustomVerificationEmailTemplateCommand.js
+|   |   |   |   |   |       GetDedicatedIpCommand.js
+|   |   |   |   |   |       GetDedicatedIpPoolCommand.js
+|   |   |   |   |   |       GetDedicatedIpsCommand.js
+|   |   |   |   |   |       GetDeliverabilityDashboardOptionsCommand.js
+|   |   |   |   |   |       GetDeliverabilityTestReportCommand.js
+|   |   |   |   |   |       GetDomainDeliverabilityCampaignCommand.js
+|   |   |   |   |   |       GetDomainStatisticsReportCommand.js
+|   |   |   |   |   |       GetEmailIdentityCommand.js
+|   |   |   |   |   |       GetEmailIdentityPoliciesCommand.js
+|   |   |   |   |   |       GetEmailTemplateCommand.js
+|   |   |   |   |   |       GetExportJobCommand.js
+|   |   |   |   |   |       GetImportJobCommand.js
+|   |   |   |   |   |       GetMessageInsightsCommand.js
+|   |   |   |   |   |       GetMultiRegionEndpointCommand.js
+|   |   |   |   |   |       GetReputationEntityCommand.js
+|   |   |   |   |   |       GetSuppressedDestinationCommand.js
+|   |   |   |   |   |       GetTenantCommand.js
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       ListConfigurationSetsCommand.js
+|   |   |   |   |   |       ListContactListsCommand.js
+|   |   |   |   |   |       ListContactsCommand.js
+|   |   |   |   |   |       ListCustomVerificationEmailTemplatesCommand.js
+|   |   |   |   |   |       ListDedicatedIpPoolsCommand.js
+|   |   |   |   |   |       ListDeliverabilityTestReportsCommand.js
+|   |   |   |   |   |       ListDomainDeliverabilityCampaignsCommand.js
+|   |   |   |   |   |       ListEmailIdentitiesCommand.js
+|   |   |   |   |   |       ListEmailTemplatesCommand.js
+|   |   |   |   |   |       ListExportJobsCommand.js
+|   |   |   |   |   |       ListImportJobsCommand.js
+|   |   |   |   |   |       ListMultiRegionEndpointsCommand.js
+|   |   |   |   |   |       ListRecommendationsCommand.js
+|   |   |   |   |   |       ListReputationEntitiesCommand.js
+|   |   |   |   |   |       ListResourceTenantsCommand.js
+|   |   |   |   |   |       ListSuppressedDestinationsCommand.js
+|   |   |   |   |   |       ListTagsForResourceCommand.js
+|   |   |   |   |   |       ListTenantResourcesCommand.js
+|   |   |   |   |   |       ListTenantsCommand.js
+|   |   |   |   |   |       PutAccountDedicatedIpWarmupAttributesCommand.js
+|   |   |   |   |   |       PutAccountDetailsCommand.js
+|   |   |   |   |   |       PutAccountSendingAttributesCommand.js
+|   |   |   |   |   |       PutAccountSuppressionAttributesCommand.js
+|   |   |   |   |   |       PutAccountVdmAttributesCommand.js
+|   |   |   |   |   |       PutConfigurationSetArchivingOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetDeliveryOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetReputationOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetSendingOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetSuppressionOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetTrackingOptionsCommand.js
+|   |   |   |   |   |       PutConfigurationSetVdmOptionsCommand.js
+|   |   |   |   |   |       PutDedicatedIpInPoolCommand.js
+|   |   |   |   |   |       PutDedicatedIpPoolScalingAttributesCommand.js
+|   |   |   |   |   |       PutDedicatedIpWarmupAttributesCommand.js
+|   |   |   |   |   |       PutDeliverabilityDashboardOptionCommand.js
+|   |   |   |   |   |       PutEmailIdentityConfigurationSetAttributesCommand.js
+|   |   |   |   |   |       PutEmailIdentityDkimAttributesCommand.js
+|   |   |   |   |   |       PutEmailIdentityDkimSigningAttributesCommand.js
+|   |   |   |   |   |       PutEmailIdentityFeedbackAttributesCommand.js
+|   |   |   |   |   |       PutEmailIdentityMailFromAttributesCommand.js
+|   |   |   |   |   |       PutSuppressedDestinationCommand.js
+|   |   |   |   |   |       SendBulkEmailCommand.js
+|   |   |   |   |   |       SendCustomVerificationEmailCommand.js
+|   |   |   |   |   |       SendEmailCommand.js
+|   |   |   |   |   |       TagResourceCommand.js
+|   |   |   |   |   |       TestRenderEmailTemplateCommand.js
+|   |   |   |   |   |       UntagResourceCommand.js
+|   |   |   |   |   |       UpdateConfigurationSetEventDestinationCommand.js
+|   |   |   |   |   |       UpdateContactCommand.js
+|   |   |   |   |   |       UpdateContactListCommand.js
+|   |   |   |   |   |       UpdateCustomVerificationEmailTemplateCommand.js
+|   |   |   |   |   |       UpdateEmailIdentityPolicyCommand.js
+|   |   |   |   |   |       UpdateEmailTemplateCommand.js
+|   |   |   |   |   |       UpdateReputationEntityCustomerManagedStatusCommand.js
+|   |   |   |   |   |       UpdateReputationEntityPolicyCommand.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---endpoint
+|   |   |   |   |   |       EndpointParameters.js
+|   |   |   |   |   |       endpointResolver.js
+|   |   |   |   |   |       ruleset.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---models
+|   |   |   |   |   |       enums.js
+|   |   |   |   |   |       errors.js
+|   |   |   |   |   |       models_0.js
+|   |   |   |   |   |       models_1.js
+|   |   |   |   |   |       SESv2ServiceException.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---pagination
+|   |   |   |   |   |       GetDedicatedIpsPaginator.js
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       Interfaces.js
+|   |   |   |   |   |       ListConfigurationSetsPaginator.js
+|   |   |   |   |   |       ListContactListsPaginator.js
+|   |   |   |   |   |       ListContactsPaginator.js
+|   |   |   |   |   |       ListCustomVerificationEmailTemplatesPaginator.js
+|   |   |   |   |   |       ListDedicatedIpPoolsPaginator.js
+|   |   |   |   |   |       ListDeliverabilityTestReportsPaginator.js
+|   |   |   |   |   |       ListDomainDeliverabilityCampaignsPaginator.js
+|   |   |   |   |   |       ListEmailIdentitiesPaginator.js
+|   |   |   |   |   |       ListEmailTemplatesPaginator.js
+|   |   |   |   |   |       ListExportJobsPaginator.js
+|   |   |   |   |   |       ListImportJobsPaginator.js
+|   |   |   |   |   |       ListMultiRegionEndpointsPaginator.js
+|   |   |   |   |   |       ListRecommendationsPaginator.js
+|   |   |   |   |   |       ListReputationEntitiesPaginator.js
+|   |   |   |   |   |       ListResourceTenantsPaginator.js
+|   |   |   |   |   |       ListSuppressedDestinationsPaginator.js
+|   |   |   |   |   |       ListTenantResourcesPaginator.js
+|   |   |   |   |   |       ListTenantsPaginator.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---schemas
+|   |   |   |   |           schemas_0.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   extensionConfiguration.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   runtimeConfig.browser.d.ts
+|   |   |   |       |   runtimeConfig.d.ts
+|   |   |   |       |   runtimeConfig.native.d.ts
+|   |   |   |       |   runtimeConfig.shared.d.ts
+|   |   |   |       |   runtimeExtensions.d.ts
+|   |   |   |       |   SESv2.d.ts
+|   |   |   |       |   SESv2Client.d.ts
+|   |   |   |       |   
+|   |   |   |       +---auth
+|   |   |   |       |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |       |       httpAuthSchemeProvider.d.ts
+|   |   |   |       |       
+|   |   |   |       +---commands
+|   |   |   |       |       BatchGetMetricDataCommand.d.ts
+|   |   |   |       |       CancelExportJobCommand.d.ts
+|   |   |   |       |       CreateConfigurationSetCommand.d.ts
+|   |   |   |       |       CreateConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |       |       CreateContactCommand.d.ts
+|   |   |   |       |       CreateContactListCommand.d.ts
+|   |   |   |       |       CreateCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |       |       CreateDedicatedIpPoolCommand.d.ts
+|   |   |   |       |       CreateDeliverabilityTestReportCommand.d.ts
+|   |   |   |       |       CreateEmailIdentityCommand.d.ts
+|   |   |   |       |       CreateEmailIdentityPolicyCommand.d.ts
+|   |   |   |       |       CreateEmailTemplateCommand.d.ts
+|   |   |   |       |       CreateExportJobCommand.d.ts
+|   |   |   |       |       CreateImportJobCommand.d.ts
+|   |   |   |       |       CreateMultiRegionEndpointCommand.d.ts
+|   |   |   |       |       CreateTenantCommand.d.ts
+|   |   |   |       |       CreateTenantResourceAssociationCommand.d.ts
+|   |   |   |       |       DeleteConfigurationSetCommand.d.ts
+|   |   |   |       |       DeleteConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |       |       DeleteContactCommand.d.ts
+|   |   |   |       |       DeleteContactListCommand.d.ts
+|   |   |   |       |       DeleteCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |       |       DeleteDedicatedIpPoolCommand.d.ts
+|   |   |   |       |       DeleteEmailIdentityCommand.d.ts
+|   |   |   |       |       DeleteEmailIdentityPolicyCommand.d.ts
+|   |   |   |       |       DeleteEmailTemplateCommand.d.ts
+|   |   |   |       |       DeleteMultiRegionEndpointCommand.d.ts
+|   |   |   |       |       DeleteSuppressedDestinationCommand.d.ts
+|   |   |   |       |       DeleteTenantCommand.d.ts
+|   |   |   |       |       DeleteTenantResourceAssociationCommand.d.ts
+|   |   |   |       |       GetAccountCommand.d.ts
+|   |   |   |       |       GetBlacklistReportsCommand.d.ts
+|   |   |   |       |       GetConfigurationSetCommand.d.ts
+|   |   |   |       |       GetConfigurationSetEventDestinationsCommand.d.ts
+|   |   |   |       |       GetContactCommand.d.ts
+|   |   |   |       |       GetContactListCommand.d.ts
+|   |   |   |       |       GetCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |       |       GetDedicatedIpCommand.d.ts
+|   |   |   |       |       GetDedicatedIpPoolCommand.d.ts
+|   |   |   |       |       GetDedicatedIpsCommand.d.ts
+|   |   |   |       |       GetDeliverabilityDashboardOptionsCommand.d.ts
+|   |   |   |       |       GetDeliverabilityTestReportCommand.d.ts
+|   |   |   |       |       GetDomainDeliverabilityCampaignCommand.d.ts
+|   |   |   |       |       GetDomainStatisticsReportCommand.d.ts
+|   |   |   |       |       GetEmailIdentityCommand.d.ts
+|   |   |   |       |       GetEmailIdentityPoliciesCommand.d.ts
+|   |   |   |       |       GetEmailTemplateCommand.d.ts
+|   |   |   |       |       GetExportJobCommand.d.ts
+|   |   |   |       |       GetImportJobCommand.d.ts
+|   |   |   |       |       GetMessageInsightsCommand.d.ts
+|   |   |   |       |       GetMultiRegionEndpointCommand.d.ts
+|   |   |   |       |       GetReputationEntityCommand.d.ts
+|   |   |   |       |       GetSuppressedDestinationCommand.d.ts
+|   |   |   |       |       GetTenantCommand.d.ts
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       ListConfigurationSetsCommand.d.ts
+|   |   |   |       |       ListContactListsCommand.d.ts
+|   |   |   |       |       ListContactsCommand.d.ts
+|   |   |   |       |       ListCustomVerificationEmailTemplatesCommand.d.ts
+|   |   |   |       |       ListDedicatedIpPoolsCommand.d.ts
+|   |   |   |       |       ListDeliverabilityTestReportsCommand.d.ts
+|   |   |   |       |       ListDomainDeliverabilityCampaignsCommand.d.ts
+|   |   |   |       |       ListEmailIdentitiesCommand.d.ts
+|   |   |   |       |       ListEmailTemplatesCommand.d.ts
+|   |   |   |       |       ListExportJobsCommand.d.ts
+|   |   |   |       |       ListImportJobsCommand.d.ts
+|   |   |   |       |       ListMultiRegionEndpointsCommand.d.ts
+|   |   |   |       |       ListRecommendationsCommand.d.ts
+|   |   |   |       |       ListReputationEntitiesCommand.d.ts
+|   |   |   |       |       ListResourceTenantsCommand.d.ts
+|   |   |   |       |       ListSuppressedDestinationsCommand.d.ts
+|   |   |   |       |       ListTagsForResourceCommand.d.ts
+|   |   |   |       |       ListTenantResourcesCommand.d.ts
+|   |   |   |       |       ListTenantsCommand.d.ts
+|   |   |   |       |       PutAccountDedicatedIpWarmupAttributesCommand.d.ts
+|   |   |   |       |       PutAccountDetailsCommand.d.ts
+|   |   |   |       |       PutAccountSendingAttributesCommand.d.ts
+|   |   |   |       |       PutAccountSuppressionAttributesCommand.d.ts
+|   |   |   |       |       PutAccountVdmAttributesCommand.d.ts
+|   |   |   |       |       PutConfigurationSetArchivingOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetDeliveryOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetReputationOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetSendingOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetSuppressionOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetTrackingOptionsCommand.d.ts
+|   |   |   |       |       PutConfigurationSetVdmOptionsCommand.d.ts
+|   |   |   |       |       PutDedicatedIpInPoolCommand.d.ts
+|   |   |   |       |       PutDedicatedIpPoolScalingAttributesCommand.d.ts
+|   |   |   |       |       PutDedicatedIpWarmupAttributesCommand.d.ts
+|   |   |   |       |       PutDeliverabilityDashboardOptionCommand.d.ts
+|   |   |   |       |       PutEmailIdentityConfigurationSetAttributesCommand.d.ts
+|   |   |   |       |       PutEmailIdentityDkimAttributesCommand.d.ts
+|   |   |   |       |       PutEmailIdentityDkimSigningAttributesCommand.d.ts
+|   |   |   |       |       PutEmailIdentityFeedbackAttributesCommand.d.ts
+|   |   |   |       |       PutEmailIdentityMailFromAttributesCommand.d.ts
+|   |   |   |       |       PutSuppressedDestinationCommand.d.ts
+|   |   |   |       |       SendBulkEmailCommand.d.ts
+|   |   |   |       |       SendCustomVerificationEmailCommand.d.ts
+|   |   |   |       |       SendEmailCommand.d.ts
+|   |   |   |       |       TagResourceCommand.d.ts
+|   |   |   |       |       TestRenderEmailTemplateCommand.d.ts
+|   |   |   |       |       UntagResourceCommand.d.ts
+|   |   |   |       |       UpdateConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |       |       UpdateContactCommand.d.ts
+|   |   |   |       |       UpdateContactListCommand.d.ts
+|   |   |   |       |       UpdateCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |       |       UpdateEmailIdentityPolicyCommand.d.ts
+|   |   |   |       |       UpdateEmailTemplateCommand.d.ts
+|   |   |   |       |       UpdateReputationEntityCustomerManagedStatusCommand.d.ts
+|   |   |   |       |       UpdateReputationEntityPolicyCommand.d.ts
+|   |   |   |       |       
+|   |   |   |       +---endpoint
+|   |   |   |       |       EndpointParameters.d.ts
+|   |   |   |       |       endpointResolver.d.ts
+|   |   |   |       |       ruleset.d.ts
+|   |   |   |       |       
+|   |   |   |       +---models
+|   |   |   |       |       enums.d.ts
+|   |   |   |       |       errors.d.ts
+|   |   |   |       |       models_0.d.ts
+|   |   |   |       |       models_1.d.ts
+|   |   |   |       |       SESv2ServiceException.d.ts
+|   |   |   |       |       
+|   |   |   |       +---pagination
+|   |   |   |       |       GetDedicatedIpsPaginator.d.ts
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       Interfaces.d.ts
+|   |   |   |       |       ListConfigurationSetsPaginator.d.ts
+|   |   |   |       |       ListContactListsPaginator.d.ts
+|   |   |   |       |       ListContactsPaginator.d.ts
+|   |   |   |       |       ListCustomVerificationEmailTemplatesPaginator.d.ts
+|   |   |   |       |       ListDedicatedIpPoolsPaginator.d.ts
+|   |   |   |       |       ListDeliverabilityTestReportsPaginator.d.ts
+|   |   |   |       |       ListDomainDeliverabilityCampaignsPaginator.d.ts
+|   |   |   |       |       ListEmailIdentitiesPaginator.d.ts
+|   |   |   |       |       ListEmailTemplatesPaginator.d.ts
+|   |   |   |       |       ListExportJobsPaginator.d.ts
+|   |   |   |       |       ListImportJobsPaginator.d.ts
+|   |   |   |       |       ListMultiRegionEndpointsPaginator.d.ts
+|   |   |   |       |       ListRecommendationsPaginator.d.ts
+|   |   |   |       |       ListReputationEntitiesPaginator.d.ts
+|   |   |   |       |       ListResourceTenantsPaginator.d.ts
+|   |   |   |       |       ListSuppressedDestinationsPaginator.d.ts
+|   |   |   |       |       ListTenantResourcesPaginator.d.ts
+|   |   |   |       |       ListTenantsPaginator.d.ts
+|   |   |   |       |       
+|   |   |   |       +---schemas
+|   |   |   |       |       schemas_0.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   extensionConfiguration.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   runtimeConfig.browser.d.ts
+|   |   |   |           |   runtimeConfig.d.ts
+|   |   |   |           |   runtimeConfig.native.d.ts
+|   |   |   |           |   runtimeConfig.shared.d.ts
+|   |   |   |           |   runtimeExtensions.d.ts
+|   |   |   |           |   SESv2.d.ts
+|   |   |   |           |   SESv2Client.d.ts
+|   |   |   |           |   
+|   |   |   |           +---auth
+|   |   |   |           |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |           |       httpAuthSchemeProvider.d.ts
+|   |   |   |           |       
+|   |   |   |           +---commands
+|   |   |   |           |       BatchGetMetricDataCommand.d.ts
+|   |   |   |           |       CancelExportJobCommand.d.ts
+|   |   |   |           |       CreateConfigurationSetCommand.d.ts
+|   |   |   |           |       CreateConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |           |       CreateContactCommand.d.ts
+|   |   |   |           |       CreateContactListCommand.d.ts
+|   |   |   |           |       CreateCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |           |       CreateDedicatedIpPoolCommand.d.ts
+|   |   |   |           |       CreateDeliverabilityTestReportCommand.d.ts
+|   |   |   |           |       CreateEmailIdentityCommand.d.ts
+|   |   |   |           |       CreateEmailIdentityPolicyCommand.d.ts
+|   |   |   |           |       CreateEmailTemplateCommand.d.ts
+|   |   |   |           |       CreateExportJobCommand.d.ts
+|   |   |   |           |       CreateImportJobCommand.d.ts
+|   |   |   |           |       CreateMultiRegionEndpointCommand.d.ts
+|   |   |   |           |       CreateTenantCommand.d.ts
+|   |   |   |           |       CreateTenantResourceAssociationCommand.d.ts
+|   |   |   |           |       DeleteConfigurationSetCommand.d.ts
+|   |   |   |           |       DeleteConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |           |       DeleteContactCommand.d.ts
+|   |   |   |           |       DeleteContactListCommand.d.ts
+|   |   |   |           |       DeleteCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |           |       DeleteDedicatedIpPoolCommand.d.ts
+|   |   |   |           |       DeleteEmailIdentityCommand.d.ts
+|   |   |   |           |       DeleteEmailIdentityPolicyCommand.d.ts
+|   |   |   |           |       DeleteEmailTemplateCommand.d.ts
+|   |   |   |           |       DeleteMultiRegionEndpointCommand.d.ts
+|   |   |   |           |       DeleteSuppressedDestinationCommand.d.ts
+|   |   |   |           |       DeleteTenantCommand.d.ts
+|   |   |   |           |       DeleteTenantResourceAssociationCommand.d.ts
+|   |   |   |           |       GetAccountCommand.d.ts
+|   |   |   |           |       GetBlacklistReportsCommand.d.ts
+|   |   |   |           |       GetConfigurationSetCommand.d.ts
+|   |   |   |           |       GetConfigurationSetEventDestinationsCommand.d.ts
+|   |   |   |           |       GetContactCommand.d.ts
+|   |   |   |           |       GetContactListCommand.d.ts
+|   |   |   |           |       GetCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |           |       GetDedicatedIpCommand.d.ts
+|   |   |   |           |       GetDedicatedIpPoolCommand.d.ts
+|   |   |   |           |       GetDedicatedIpsCommand.d.ts
+|   |   |   |           |       GetDeliverabilityDashboardOptionsCommand.d.ts
+|   |   |   |           |       GetDeliverabilityTestReportCommand.d.ts
+|   |   |   |           |       GetDomainDeliverabilityCampaignCommand.d.ts
+|   |   |   |           |       GetDomainStatisticsReportCommand.d.ts
+|   |   |   |           |       GetEmailIdentityCommand.d.ts
+|   |   |   |           |       GetEmailIdentityPoliciesCommand.d.ts
+|   |   |   |           |       GetEmailTemplateCommand.d.ts
+|   |   |   |           |       GetExportJobCommand.d.ts
+|   |   |   |           |       GetImportJobCommand.d.ts
+|   |   |   |           |       GetMessageInsightsCommand.d.ts
+|   |   |   |           |       GetMultiRegionEndpointCommand.d.ts
+|   |   |   |           |       GetReputationEntityCommand.d.ts
+|   |   |   |           |       GetSuppressedDestinationCommand.d.ts
+|   |   |   |           |       GetTenantCommand.d.ts
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       ListConfigurationSetsCommand.d.ts
+|   |   |   |           |       ListContactListsCommand.d.ts
+|   |   |   |           |       ListContactsCommand.d.ts
+|   |   |   |           |       ListCustomVerificationEmailTemplatesCommand.d.ts
+|   |   |   |           |       ListDedicatedIpPoolsCommand.d.ts
+|   |   |   |           |       ListDeliverabilityTestReportsCommand.d.ts
+|   |   |   |           |       ListDomainDeliverabilityCampaignsCommand.d.ts
+|   |   |   |           |       ListEmailIdentitiesCommand.d.ts
+|   |   |   |           |       ListEmailTemplatesCommand.d.ts
+|   |   |   |           |       ListExportJobsCommand.d.ts
+|   |   |   |           |       ListImportJobsCommand.d.ts
+|   |   |   |           |       ListMultiRegionEndpointsCommand.d.ts
+|   |   |   |           |       ListRecommendationsCommand.d.ts
+|   |   |   |           |       ListReputationEntitiesCommand.d.ts
+|   |   |   |           |       ListResourceTenantsCommand.d.ts
+|   |   |   |           |       ListSuppressedDestinationsCommand.d.ts
+|   |   |   |           |       ListTagsForResourceCommand.d.ts
+|   |   |   |           |       ListTenantResourcesCommand.d.ts
+|   |   |   |           |       ListTenantsCommand.d.ts
+|   |   |   |           |       PutAccountDedicatedIpWarmupAttributesCommand.d.ts
+|   |   |   |           |       PutAccountDetailsCommand.d.ts
+|   |   |   |           |       PutAccountSendingAttributesCommand.d.ts
+|   |   |   |           |       PutAccountSuppressionAttributesCommand.d.ts
+|   |   |   |           |       PutAccountVdmAttributesCommand.d.ts
+|   |   |   |           |       PutConfigurationSetArchivingOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetDeliveryOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetReputationOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetSendingOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetSuppressionOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetTrackingOptionsCommand.d.ts
+|   |   |   |           |       PutConfigurationSetVdmOptionsCommand.d.ts
+|   |   |   |           |       PutDedicatedIpInPoolCommand.d.ts
+|   |   |   |           |       PutDedicatedIpPoolScalingAttributesCommand.d.ts
+|   |   |   |           |       PutDedicatedIpWarmupAttributesCommand.d.ts
+|   |   |   |           |       PutDeliverabilityDashboardOptionCommand.d.ts
+|   |   |   |           |       PutEmailIdentityConfigurationSetAttributesCommand.d.ts
+|   |   |   |           |       PutEmailIdentityDkimAttributesCommand.d.ts
+|   |   |   |           |       PutEmailIdentityDkimSigningAttributesCommand.d.ts
+|   |   |   |           |       PutEmailIdentityFeedbackAttributesCommand.d.ts
+|   |   |   |           |       PutEmailIdentityMailFromAttributesCommand.d.ts
+|   |   |   |           |       PutSuppressedDestinationCommand.d.ts
+|   |   |   |           |       SendBulkEmailCommand.d.ts
+|   |   |   |           |       SendCustomVerificationEmailCommand.d.ts
+|   |   |   |           |       SendEmailCommand.d.ts
+|   |   |   |           |       TagResourceCommand.d.ts
+|   |   |   |           |       TestRenderEmailTemplateCommand.d.ts
+|   |   |   |           |       UntagResourceCommand.d.ts
+|   |   |   |           |       UpdateConfigurationSetEventDestinationCommand.d.ts
+|   |   |   |           |       UpdateContactCommand.d.ts
+|   |   |   |           |       UpdateContactListCommand.d.ts
+|   |   |   |           |       UpdateCustomVerificationEmailTemplateCommand.d.ts
+|   |   |   |           |       UpdateEmailIdentityPolicyCommand.d.ts
+|   |   |   |           |       UpdateEmailTemplateCommand.d.ts
+|   |   |   |           |       UpdateReputationEntityCustomerManagedStatusCommand.d.ts
+|   |   |   |           |       UpdateReputationEntityPolicyCommand.d.ts
+|   |   |   |           |       
+|   |   |   |           +---endpoint
+|   |   |   |           |       EndpointParameters.d.ts
+|   |   |   |           |       endpointResolver.d.ts
+|   |   |   |           |       ruleset.d.ts
+|   |   |   |           |       
+|   |   |   |           +---models
+|   |   |   |           |       enums.d.ts
+|   |   |   |           |       errors.d.ts
+|   |   |   |           |       models_0.d.ts
+|   |   |   |           |       models_1.d.ts
+|   |   |   |           |       SESv2ServiceException.d.ts
+|   |   |   |           |       
+|   |   |   |           +---pagination
+|   |   |   |           |       GetDedicatedIpsPaginator.d.ts
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       Interfaces.d.ts
+|   |   |   |           |       ListConfigurationSetsPaginator.d.ts
+|   |   |   |           |       ListContactListsPaginator.d.ts
+|   |   |   |           |       ListContactsPaginator.d.ts
+|   |   |   |           |       ListCustomVerificationEmailTemplatesPaginator.d.ts
+|   |   |   |           |       ListDedicatedIpPoolsPaginator.d.ts
+|   |   |   |           |       ListDeliverabilityTestReportsPaginator.d.ts
+|   |   |   |           |       ListDomainDeliverabilityCampaignsPaginator.d.ts
+|   |   |   |           |       ListEmailIdentitiesPaginator.d.ts
+|   |   |   |           |       ListEmailTemplatesPaginator.d.ts
+|   |   |   |           |       ListExportJobsPaginator.d.ts
+|   |   |   |           |       ListImportJobsPaginator.d.ts
+|   |   |   |           |       ListMultiRegionEndpointsPaginator.d.ts
+|   |   |   |           |       ListRecommendationsPaginator.d.ts
+|   |   |   |           |       ListReputationEntitiesPaginator.d.ts
+|   |   |   |           |       ListResourceTenantsPaginator.d.ts
+|   |   |   |           |       ListSuppressedDestinationsPaginator.d.ts
+|   |   |   |           |       ListTenantResourcesPaginator.d.ts
+|   |   |   |           |       ListTenantsPaginator.d.ts
+|   |   |   |           |       
+|   |   |   |           \---schemas
+|   |   |   |                   schemas_0.d.ts
+|   |   |   |                   
+|   |   |   +---client-sso
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   runtimeConfig.browser.js
+|   |   |   |   |   |   runtimeConfig.js
+|   |   |   |   |   |   runtimeConfig.native.js
+|   |   |   |   |   |   runtimeConfig.shared.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---auth
+|   |   |   |   |   |       httpAuthSchemeProvider.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---endpoint
+|   |   |   |   |           endpointResolver.js
+|   |   |   |   |           ruleset.js
+|   |   |   |   |           
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   extensionConfiguration.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   runtimeConfig.browser.js
+|   |   |   |   |   |   runtimeConfig.js
+|   |   |   |   |   |   runtimeConfig.native.js
+|   |   |   |   |   |   runtimeConfig.shared.js
+|   |   |   |   |   |   runtimeExtensions.js
+|   |   |   |   |   |   SSO.js
+|   |   |   |   |   |   SSOClient.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---auth
+|   |   |   |   |   |       httpAuthExtensionConfiguration.js
+|   |   |   |   |   |       httpAuthSchemeProvider.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---commands
+|   |   |   |   |   |       GetRoleCredentialsCommand.js
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       ListAccountRolesCommand.js
+|   |   |   |   |   |       ListAccountsCommand.js
+|   |   |   |   |   |       LogoutCommand.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---endpoint
+|   |   |   |   |   |       EndpointParameters.js
+|   |   |   |   |   |       endpointResolver.js
+|   |   |   |   |   |       ruleset.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---models
+|   |   |   |   |   |       errors.js
+|   |   |   |   |   |       models_0.js
+|   |   |   |   |   |       SSOServiceException.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---pagination
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       Interfaces.js
+|   |   |   |   |   |       ListAccountRolesPaginator.js
+|   |   |   |   |   |       ListAccountsPaginator.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---schemas
+|   |   |   |   |           schemas_0.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   extensionConfiguration.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   runtimeConfig.browser.d.ts
+|   |   |   |       |   runtimeConfig.d.ts
+|   |   |   |       |   runtimeConfig.native.d.ts
+|   |   |   |       |   runtimeConfig.shared.d.ts
+|   |   |   |       |   runtimeExtensions.d.ts
+|   |   |   |       |   SSO.d.ts
+|   |   |   |       |   SSOClient.d.ts
+|   |   |   |       |   
+|   |   |   |       +---auth
+|   |   |   |       |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |       |       httpAuthSchemeProvider.d.ts
+|   |   |   |       |       
+|   |   |   |       +---commands
+|   |   |   |       |       GetRoleCredentialsCommand.d.ts
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       ListAccountRolesCommand.d.ts
+|   |   |   |       |       ListAccountsCommand.d.ts
+|   |   |   |       |       LogoutCommand.d.ts
+|   |   |   |       |       
+|   |   |   |       +---endpoint
+|   |   |   |       |       EndpointParameters.d.ts
+|   |   |   |       |       endpointResolver.d.ts
+|   |   |   |       |       ruleset.d.ts
+|   |   |   |       |       
+|   |   |   |       +---models
+|   |   |   |       |       errors.d.ts
+|   |   |   |       |       models_0.d.ts
+|   |   |   |       |       SSOServiceException.d.ts
+|   |   |   |       |       
+|   |   |   |       +---pagination
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       Interfaces.d.ts
+|   |   |   |       |       ListAccountRolesPaginator.d.ts
+|   |   |   |       |       ListAccountsPaginator.d.ts
+|   |   |   |       |       
+|   |   |   |       +---schemas
+|   |   |   |       |       schemas_0.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   extensionConfiguration.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   runtimeConfig.browser.d.ts
+|   |   |   |           |   runtimeConfig.d.ts
+|   |   |   |           |   runtimeConfig.native.d.ts
+|   |   |   |           |   runtimeConfig.shared.d.ts
+|   |   |   |           |   runtimeExtensions.d.ts
+|   |   |   |           |   SSO.d.ts
+|   |   |   |           |   SSOClient.d.ts
+|   |   |   |           |   
+|   |   |   |           +---auth
+|   |   |   |           |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |           |       httpAuthSchemeProvider.d.ts
+|   |   |   |           |       
+|   |   |   |           +---commands
+|   |   |   |           |       GetRoleCredentialsCommand.d.ts
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       ListAccountRolesCommand.d.ts
+|   |   |   |           |       ListAccountsCommand.d.ts
+|   |   |   |           |       LogoutCommand.d.ts
+|   |   |   |           |       
+|   |   |   |           +---endpoint
+|   |   |   |           |       EndpointParameters.d.ts
+|   |   |   |           |       endpointResolver.d.ts
+|   |   |   |           |       ruleset.d.ts
+|   |   |   |           |       
+|   |   |   |           +---models
+|   |   |   |           |       errors.d.ts
+|   |   |   |           |       models_0.d.ts
+|   |   |   |           |       SSOServiceException.d.ts
+|   |   |   |           |       
+|   |   |   |           +---pagination
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       Interfaces.d.ts
+|   |   |   |           |       ListAccountRolesPaginator.d.ts
+|   |   |   |           |       ListAccountsPaginator.d.ts
+|   |   |   |           |       
+|   |   |   |           \---schemas
+|   |   |   |                   schemas_0.d.ts
+|   |   |   |                   
+|   |   |   +---core
+|   |   |   |   |   account-id-endpoint.d.ts
+|   |   |   |   |   account-id-endpoint.js
+|   |   |   |   |   client.d.ts
+|   |   |   |   |   client.js
+|   |   |   |   |   httpAuthSchemes.d.ts
+|   |   |   |   |   httpAuthSchemes.js
+|   |   |   |   |   package.json
+|   |   |   |   |   protocols.d.ts
+|   |   |   |   |   protocols.js
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---submodules
+|   |   |   |   |       +---account-id-endpoint
+|   |   |   |   |       |       index.js
+|   |   |   |   |       |       
+|   |   |   |   |       +---client
+|   |   |   |   |       |       index.js
+|   |   |   |   |       |       
+|   |   |   |   |       +---httpAuthSchemes
+|   |   |   |   |       |       index.js
+|   |   |   |   |       |       
+|   |   |   |   |       \---protocols
+|   |   |   |   |               index.js
+|   |   |   |   |               
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---submodules
+|   |   |   |   |       +---account-id-endpoint
+|   |   |   |   |       |       AccountIdEndpointModeConfigResolver.js
+|   |   |   |   |       |       AccountIdEndpointModeConstants.js
+|   |   |   |   |       |       index.js
+|   |   |   |   |       |       NodeAccountIdEndpointModeConfigOptions.js
+|   |   |   |   |       |       
+|   |   |   |   |       +---client
+|   |   |   |   |       |       emitWarningIfUnsupportedVersion.js
+|   |   |   |   |       |       index.js
+|   |   |   |   |       |       setCredentialFeature.js
+|   |   |   |   |       |       setFeature.js
+|   |   |   |   |       |       setTokenFeature.js
+|   |   |   |   |       |       
+|   |   |   |   |       +---httpAuthSchemes
+|   |   |   |   |       |   |   index.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---aws_sdk
+|   |   |   |   |       |   |       AwsSdkSigV4ASigner.js
+|   |   |   |   |       |   |       AwsSdkSigV4Signer.js
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.js
+|   |   |   |   |       |   |       resolveAwsSdkSigV4AConfig.js
+|   |   |   |   |       |   |       resolveAwsSdkSigV4Config.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---utils
+|   |   |   |   |       |           getArrayForCommaSeparatedString.js
+|   |   |   |   |       |           getBearerTokenEnvKey.js
+|   |   |   |   |       |           getDateHeader.js
+|   |   |   |   |       |           getSkewCorrectedDate.js
+|   |   |   |   |       |           getUpdatedSystemClockOffset.js
+|   |   |   |   |       |           index.js
+|   |   |   |   |       |           isClockSkewed.js
+|   |   |   |   |       |           
+|   |   |   |   |       \---protocols
+|   |   |   |   |           |   coercing-serializers.js
+|   |   |   |   |           |   common.js
+|   |   |   |   |           |   ConfigurableSerdeContext.js
+|   |   |   |   |           |   index.js
+|   |   |   |   |           |   ProtocolLib.js
+|   |   |   |   |           |   structIterator.js
+|   |   |   |   |           |   
+|   |   |   |   |           +---cbor
+|   |   |   |   |           |       AwsSmithyRpcV2CborProtocol.js
+|   |   |   |   |           |       
+|   |   |   |   |           +---json
+|   |   |   |   |           |   |   awsExpectUnion.js
+|   |   |   |   |           |   |   AwsJson1_0Protocol.js
+|   |   |   |   |           |   |   AwsJson1_1Protocol.js
+|   |   |   |   |           |   |   AwsJsonRpcProtocol.js
+|   |   |   |   |           |   |   AwsRestJsonProtocol.js
+|   |   |   |   |           |   |   JsonCodec.js
+|   |   |   |   |           |   |   jsonReplacer.js
+|   |   |   |   |           |   |   jsonReviver.js
+|   |   |   |   |           |   |   JsonShapeDeserializer.js
+|   |   |   |   |           |   |   JsonShapeSerializer.js
+|   |   |   |   |           |   |   parseJsonBody.js
+|   |   |   |   |           |   |   
+|   |   |   |   |           |   \---experimental
+|   |   |   |   |           |           SinglePassJsonShapeSerializer.js
+|   |   |   |   |           |           
+|   |   |   |   |           +---query
+|   |   |   |   |           |       AwsEc2QueryProtocol.js
+|   |   |   |   |           |       AwsQueryProtocol.js
+|   |   |   |   |           |       QuerySerializerSettings.js
+|   |   |   |   |           |       QueryShapeSerializer.js
+|   |   |   |   |           |       
+|   |   |   |   |           \---xml
+|   |   |   |   |                   AwsRestXmlProtocol.js
+|   |   |   |   |                   parseXmlBody.js
+|   |   |   |   |                   simpleFormatXml.js
+|   |   |   |   |                   XmlCodec.js
+|   |   |   |   |                   XmlShapeDeserializer.js
+|   |   |   |   |                   XmlShapeSerializer.js
+|   |   |   |   |                   
+|   |   |   |   \---dist-types
+|   |   |   |       |   api-extractor-type-index.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       +---submodules
+|   |   |   |       |   +---account-id-endpoint
+|   |   |   |       |   |       AccountIdEndpointModeConfigResolver.d.ts
+|   |   |   |       |   |       AccountIdEndpointModeConstants.d.ts
+|   |   |   |       |   |       index.d.ts
+|   |   |   |       |   |       NodeAccountIdEndpointModeConfigOptions.d.ts
+|   |   |   |       |   |       
+|   |   |   |       |   +---client
+|   |   |   |       |   |       emitWarningIfUnsupportedVersion.d.ts
+|   |   |   |       |   |       index.d.ts
+|   |   |   |       |   |       setCredentialFeature.d.ts
+|   |   |   |       |   |       setFeature.d.ts
+|   |   |   |       |   |       setTokenFeature.d.ts
+|   |   |   |       |   |       
+|   |   |   |       |   +---httpAuthSchemes
+|   |   |   |       |   |   |   index.d.ts
+|   |   |   |       |   |   |   
+|   |   |   |       |   |   +---aws_sdk
+|   |   |   |       |   |   |       AwsSdkSigV4ASigner.d.ts
+|   |   |   |       |   |   |       AwsSdkSigV4Signer.d.ts
+|   |   |   |       |   |   |       index.d.ts
+|   |   |   |       |   |   |       NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.d.ts
+|   |   |   |       |   |   |       resolveAwsSdkSigV4AConfig.d.ts
+|   |   |   |       |   |   |       resolveAwsSdkSigV4Config.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   \---utils
+|   |   |   |       |   |           getArrayForCommaSeparatedString.d.ts
+|   |   |   |       |   |           getBearerTokenEnvKey.d.ts
+|   |   |   |       |   |           getDateHeader.d.ts
+|   |   |   |       |   |           getSkewCorrectedDate.d.ts
+|   |   |   |       |   |           getUpdatedSystemClockOffset.d.ts
+|   |   |   |       |   |           index.d.ts
+|   |   |   |       |   |           isClockSkewed.d.ts
+|   |   |   |       |   |           
+|   |   |   |       |   \---protocols
+|   |   |   |       |       |   coercing-serializers.d.ts
+|   |   |   |       |       |   common.d.ts
+|   |   |   |       |       |   ConfigurableSerdeContext.d.ts
+|   |   |   |       |       |   index.d.ts
+|   |   |   |       |       |   ProtocolLib.d.ts
+|   |   |   |       |       |   structIterator.d.ts
+|   |   |   |       |       |   
+|   |   |   |       |       +---cbor
+|   |   |   |       |       |       AwsSmithyRpcV2CborProtocol.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       +---json
+|   |   |   |       |       |   |   awsExpectUnion.d.ts
+|   |   |   |       |       |   |   AwsJson1_0Protocol.d.ts
+|   |   |   |       |       |   |   AwsJson1_1Protocol.d.ts
+|   |   |   |       |       |   |   AwsJsonRpcProtocol.d.ts
+|   |   |   |       |       |   |   AwsRestJsonProtocol.d.ts
+|   |   |   |       |       |   |   JsonCodec.d.ts
+|   |   |   |       |       |   |   jsonReplacer.d.ts
+|   |   |   |       |       |   |   jsonReviver.d.ts
+|   |   |   |       |       |   |   JsonShapeDeserializer.d.ts
+|   |   |   |       |       |   |   JsonShapeSerializer.d.ts
+|   |   |   |       |       |   |   parseJsonBody.d.ts
+|   |   |   |       |       |   |   
+|   |   |   |       |       |   \---experimental
+|   |   |   |       |       |           SinglePassJsonShapeSerializer.d.ts
+|   |   |   |       |       |           
+|   |   |   |       |       +---query
+|   |   |   |       |       |       AwsEc2QueryProtocol.d.ts
+|   |   |   |       |       |       AwsQueryProtocol.d.ts
+|   |   |   |       |       |       QuerySerializerSettings.d.ts
+|   |   |   |       |       |       QueryShapeSerializer.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       \---xml
+|   |   |   |       |               AwsRestXmlProtocol.d.ts
+|   |   |   |       |               parseXmlBody.d.ts
+|   |   |   |       |               simpleFormatXml.d.ts
+|   |   |   |       |               XmlCodec.d.ts
+|   |   |   |       |               XmlShapeDeserializer.d.ts
+|   |   |   |       |               XmlShapeSerializer.d.ts
+|   |   |   |       |               
+|   |   |   |       \---ts3.4
+|   |   |   |           |   api-extractor-type-index.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   
+|   |   |   |           \---submodules
+|   |   |   |               +---account-id-endpoint
+|   |   |   |               |       AccountIdEndpointModeConfigResolver.d.ts
+|   |   |   |               |       AccountIdEndpointModeConstants.d.ts
+|   |   |   |               |       index.d.ts
+|   |   |   |               |       NodeAccountIdEndpointModeConfigOptions.d.ts
+|   |   |   |               |       
+|   |   |   |               +---client
+|   |   |   |               |       emitWarningIfUnsupportedVersion.d.ts
+|   |   |   |               |       index.d.ts
+|   |   |   |               |       setCredentialFeature.d.ts
+|   |   |   |               |       setFeature.d.ts
+|   |   |   |               |       setTokenFeature.d.ts
+|   |   |   |               |       
+|   |   |   |               +---httpAuthSchemes
+|   |   |   |               |   |   index.d.ts
+|   |   |   |               |   |   
+|   |   |   |               |   +---aws_sdk
+|   |   |   |               |   |       AwsSdkSigV4ASigner.d.ts
+|   |   |   |               |   |       AwsSdkSigV4Signer.d.ts
+|   |   |   |               |   |       index.d.ts
+|   |   |   |               |   |       NODE_AUTH_SCHEME_PREFERENCE_OPTIONS.d.ts
+|   |   |   |               |   |       resolveAwsSdkSigV4AConfig.d.ts
+|   |   |   |               |   |       resolveAwsSdkSigV4Config.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   \---utils
+|   |   |   |               |           getArrayForCommaSeparatedString.d.ts
+|   |   |   |               |           getBearerTokenEnvKey.d.ts
+|   |   |   |               |           getDateHeader.d.ts
+|   |   |   |               |           getSkewCorrectedDate.d.ts
+|   |   |   |               |           getUpdatedSystemClockOffset.d.ts
+|   |   |   |               |           index.d.ts
+|   |   |   |               |           isClockSkewed.d.ts
+|   |   |   |               |           
+|   |   |   |               \---protocols
+|   |   |   |                   |   coercing-serializers.d.ts
+|   |   |   |                   |   common.d.ts
+|   |   |   |                   |   ConfigurableSerdeContext.d.ts
+|   |   |   |                   |   index.d.ts
+|   |   |   |                   |   ProtocolLib.d.ts
+|   |   |   |                   |   structIterator.d.ts
+|   |   |   |                   |   
+|   |   |   |                   +---cbor
+|   |   |   |                   |       AwsSmithyRpcV2CborProtocol.d.ts
+|   |   |   |                   |       
+|   |   |   |                   +---json
+|   |   |   |                   |   |   awsExpectUnion.d.ts
+|   |   |   |                   |   |   AwsJson1_0Protocol.d.ts
+|   |   |   |                   |   |   AwsJson1_1Protocol.d.ts
+|   |   |   |                   |   |   AwsJsonRpcProtocol.d.ts
+|   |   |   |                   |   |   AwsRestJsonProtocol.d.ts
+|   |   |   |                   |   |   JsonCodec.d.ts
+|   |   |   |                   |   |   jsonReplacer.d.ts
+|   |   |   |                   |   |   jsonReviver.d.ts
+|   |   |   |                   |   |   JsonShapeDeserializer.d.ts
+|   |   |   |                   |   |   JsonShapeSerializer.d.ts
+|   |   |   |                   |   |   parseJsonBody.d.ts
+|   |   |   |                   |   |   
+|   |   |   |                   |   \---experimental
+|   |   |   |                   |           SinglePassJsonShapeSerializer.d.ts
+|   |   |   |                   |           
+|   |   |   |                   +---query
+|   |   |   |                   |       AwsEc2QueryProtocol.d.ts
+|   |   |   |                   |       AwsQueryProtocol.d.ts
+|   |   |   |                   |       QuerySerializerSettings.d.ts
+|   |   |   |                   |       QueryShapeSerializer.d.ts
+|   |   |   |                   |       
+|   |   |   |                   \---xml
+|   |   |   |                           AwsRestXmlProtocol.d.ts
+|   |   |   |                           parseXmlBody.d.ts
+|   |   |   |                           simpleFormatXml.d.ts
+|   |   |   |                           XmlCodec.d.ts
+|   |   |   |                           XmlShapeDeserializer.d.ts
+|   |   |   |                           XmlShapeSerializer.d.ts
+|   |   |   |                           
+|   |   |   +---credential-provider-env
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromEnv.js
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromEnv.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromEnv.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               
+|   |   |   +---credential-provider-http
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.browser.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---fromHttp
+|   |   |   |   |           checkUrl.js
+|   |   |   |   |           fromHttp.browser.js
+|   |   |   |   |           fromHttp.js
+|   |   |   |   |           fromHttpTypes.js
+|   |   |   |   |           requestHelpers.js
+|   |   |   |   |           retry-wrapper.js
+|   |   |   |   |           
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   index.browser.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---fromHttp
+|   |   |   |   |           checkUrl.js
+|   |   |   |   |           fromHttp.browser.js
+|   |   |   |   |           fromHttp.js
+|   |   |   |   |           fromHttpTypes.js
+|   |   |   |   |           requestHelpers.js
+|   |   |   |   |           retry-wrapper.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.browser.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       +---fromHttp
+|   |   |   |       |       checkUrl.d.ts
+|   |   |   |       |       fromHttp.browser.d.ts
+|   |   |   |       |       fromHttp.d.ts
+|   |   |   |       |       fromHttpTypes.d.ts
+|   |   |   |       |       requestHelpers.d.ts
+|   |   |   |       |       retry-wrapper.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   index.browser.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   
+|   |   |   |           \---fromHttp
+|   |   |   |                   checkUrl.d.ts
+|   |   |   |                   fromHttp.browser.d.ts
+|   |   |   |                   fromHttp.d.ts
+|   |   |   |                   fromHttpTypes.d.ts
+|   |   |   |                   requestHelpers.d.ts
+|   |   |   |                   retry-wrapper.d.ts
+|   |   |   |                   
+|   |   |   +---credential-provider-ini
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromIni.js
+|   |   |   |   |       index.js
+|   |   |   |   |       resolveAssumeRoleCredentials.js
+|   |   |   |   |       resolveCredentialSource.js
+|   |   |   |   |       resolveLoginCredentials.js
+|   |   |   |   |       resolveProcessCredentials.js
+|   |   |   |   |       resolveProfileData.js
+|   |   |   |   |       resolveSsoCredentials.js
+|   |   |   |   |       resolveStaticCredentials.js
+|   |   |   |   |       resolveWebIdentityCredentials.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromIni.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   resolveAssumeRoleCredentials.d.ts
+|   |   |   |       |   resolveCredentialSource.d.ts
+|   |   |   |       |   resolveLoginCredentials.d.ts
+|   |   |   |       |   resolveProcessCredentials.d.ts
+|   |   |   |       |   resolveProfileData.d.ts
+|   |   |   |       |   resolveSsoCredentials.d.ts
+|   |   |   |       |   resolveStaticCredentials.d.ts
+|   |   |   |       |   resolveWebIdentityCredentials.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromIni.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               resolveAssumeRoleCredentials.d.ts
+|   |   |   |               resolveCredentialSource.d.ts
+|   |   |   |               resolveLoginCredentials.d.ts
+|   |   |   |               resolveProcessCredentials.d.ts
+|   |   |   |               resolveProfileData.d.ts
+|   |   |   |               resolveSsoCredentials.d.ts
+|   |   |   |               resolveStaticCredentials.d.ts
+|   |   |   |               resolveWebIdentityCredentials.d.ts
+|   |   |   |               
+|   |   |   +---credential-provider-login
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromLoginCredentials.js
+|   |   |   |   |       index.js
+|   |   |   |   |       LoginCredentialsFetcher.js
+|   |   |   |   |       types.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromLoginCredentials.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   LoginCredentialsFetcher.d.ts
+|   |   |   |       |   types.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromLoginCredentials.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               LoginCredentialsFetcher.d.ts
+|   |   |   |               types.d.ts
+|   |   |   |               
+|   |   |   +---credential-provider-node
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   defaultProvider.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   remoteProvider.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---runtime
+|   |   |   |   |           memoize-chain.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   defaultProvider.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   remoteProvider.d.ts
+|   |   |   |       |   
+|   |   |   |       +---runtime
+|   |   |   |       |       memoize-chain.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   defaultProvider.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   remoteProvider.d.ts
+|   |   |   |           |   
+|   |   |   |           \---runtime
+|   |   |   |                   memoize-chain.d.ts
+|   |   |   |                   
+|   |   |   +---credential-provider-process
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromProcess.js
+|   |   |   |   |       getValidatedProcessCredentials.js
+|   |   |   |   |       index.js
+|   |   |   |   |       ProcessCredentials.js
+|   |   |   |   |       resolveProcessCredentials.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromProcess.d.ts
+|   |   |   |       |   getValidatedProcessCredentials.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   ProcessCredentials.d.ts
+|   |   |   |       |   resolveProcessCredentials.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromProcess.d.ts
+|   |   |   |               getValidatedProcessCredentials.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               ProcessCredentials.d.ts
+|   |   |   |               resolveProcessCredentials.d.ts
+|   |   |   |               
+|   |   |   +---credential-provider-sso
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       loadSso-CVy8iqsZ.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromSSO.js
+|   |   |   |   |       index.js
+|   |   |   |   |       isSsoProfile.js
+|   |   |   |   |       loadSso.js
+|   |   |   |   |       resolveSSOCredentials.js
+|   |   |   |   |       types.js
+|   |   |   |   |       validateSsoProfile.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromSSO.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   isSsoProfile.d.ts
+|   |   |   |       |   loadSso.d.ts
+|   |   |   |       |   resolveSSOCredentials.d.ts
+|   |   |   |       |   types.d.ts
+|   |   |   |       |   validateSsoProfile.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromSSO.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               isSsoProfile.d.ts
+|   |   |   |               loadSso.d.ts
+|   |   |   |               resolveSSOCredentials.d.ts
+|   |   |   |               types.d.ts
+|   |   |   |               validateSsoProfile.d.ts
+|   |   |   |               
+|   |   |   +---credential-provider-web-identity
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       fromTokenFile.js
+|   |   |   |   |       fromWebToken.js
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       fromTokenFile.js
+|   |   |   |   |       fromWebToken.js
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   fromTokenFile.d.ts
+|   |   |   |       |   fromWebToken.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               fromTokenFile.d.ts
+|   |   |   |               fromWebToken.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               
+|   |   |   +---middleware-host-header
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               index.d.ts
+|   |   |   |               
+|   |   |   +---middleware-logger
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       index.js
+|   |   |   |   |       loggerMiddleware.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   loggerMiddleware.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               index.d.ts
+|   |   |   |               loggerMiddleware.d.ts
+|   |   |   |               
+|   |   |   +---middleware-recursion-detection
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       recursionDetectionMiddleware.js
+|   |   |   |   |       recursionDetectionMiddleware.native.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       configuration.js
+|   |   |   |   |       getRecursionDetectionPlugin.js
+|   |   |   |   |       index.js
+|   |   |   |   |       recursionDetectionMiddleware.browser.js
+|   |   |   |   |       recursionDetectionMiddleware.js
+|   |   |   |   |       recursionDetectionMiddleware.native.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   configuration.d.ts
+|   |   |   |       |   getRecursionDetectionPlugin.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   recursionDetectionMiddleware.browser.d.ts
+|   |   |   |       |   recursionDetectionMiddleware.d.ts
+|   |   |   |       |   recursionDetectionMiddleware.native.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               configuration.d.ts
+|   |   |   |               getRecursionDetectionPlugin.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               recursionDetectionMiddleware.browser.d.ts
+|   |   |   |               recursionDetectionMiddleware.d.ts
+|   |   |   |               recursionDetectionMiddleware.native.d.ts
+|   |   |   |               
+|   |   |   +---middleware-sdk-s3
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   bucket-endpoint-middleware.js
+|   |   |   |   |   |   check-content-length-header.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   region-redirect-endpoint-middleware.js
+|   |   |   |   |   |   region-redirect-middleware.js
+|   |   |   |   |   |   s3-expires-middleware.js
+|   |   |   |   |   |   s3Configuration.js
+|   |   |   |   |   |   throw-200-exceptions.js
+|   |   |   |   |   |   validate-bucket-name.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---s3-express
+|   |   |   |   |       |   constants.js
+|   |   |   |   |       |   index.js
+|   |   |   |   |       |   
+|   |   |   |   |       +---classes
+|   |   |   |   |       |       S3ExpressIdentityCache.js
+|   |   |   |   |       |       S3ExpressIdentityCacheEntry.js
+|   |   |   |   |       |       S3ExpressIdentityProviderImpl.js
+|   |   |   |   |       |       SignatureV4S3Express.js
+|   |   |   |   |       |       
+|   |   |   |   |       +---functions
+|   |   |   |   |       |       s3ExpressHttpSigningMiddleware.js
+|   |   |   |   |       |       s3ExpressMiddleware.js
+|   |   |   |   |       |       signS3Express.js
+|   |   |   |   |       |       
+|   |   |   |   |       \---interfaces
+|   |   |   |   |               S3ExpressIdentity.js
+|   |   |   |   |               S3ExpressIdentityProvider.js
+|   |   |   |   |               
+|   |   |   |   \---dist-types
+|   |   |   |       |   bucket-endpoint-middleware.d.ts
+|   |   |   |       |   check-content-length-header.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   region-redirect-endpoint-middleware.d.ts
+|   |   |   |       |   region-redirect-middleware.d.ts
+|   |   |   |       |   s3-expires-middleware.d.ts
+|   |   |   |       |   s3Configuration.d.ts
+|   |   |   |       |   throw-200-exceptions.d.ts
+|   |   |   |       |   validate-bucket-name.d.ts
+|   |   |   |       |   
+|   |   |   |       +---s3-express
+|   |   |   |       |   |   constants.d.ts
+|   |   |   |       |   |   index.d.ts
+|   |   |   |       |   |   
+|   |   |   |       |   +---classes
+|   |   |   |       |   |       S3ExpressIdentityCache.d.ts
+|   |   |   |       |   |       S3ExpressIdentityCacheEntry.d.ts
+|   |   |   |       |   |       S3ExpressIdentityProviderImpl.d.ts
+|   |   |   |       |   |       SignatureV4S3Express.d.ts
+|   |   |   |       |   |       
+|   |   |   |       |   +---functions
+|   |   |   |       |   |       s3ExpressHttpSigningMiddleware.d.ts
+|   |   |   |       |   |       s3ExpressMiddleware.d.ts
+|   |   |   |       |   |       signS3Express.d.ts
+|   |   |   |       |   |       
+|   |   |   |       |   \---interfaces
+|   |   |   |       |           S3ExpressIdentity.d.ts
+|   |   |   |       |           S3ExpressIdentityProvider.d.ts
+|   |   |   |       |           
+|   |   |   |       \---ts3.4
+|   |   |   |           |   bucket-endpoint-middleware.d.ts
+|   |   |   |           |   check-content-length-header.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   region-redirect-endpoint-middleware.d.ts
+|   |   |   |           |   region-redirect-middleware.d.ts
+|   |   |   |           |   s3-expires-middleware.d.ts
+|   |   |   |           |   s3Configuration.d.ts
+|   |   |   |           |   throw-200-exceptions.d.ts
+|   |   |   |           |   validate-bucket-name.d.ts
+|   |   |   |           |   
+|   |   |   |           \---s3-express
+|   |   |   |               |   constants.d.ts
+|   |   |   |               |   index.d.ts
+|   |   |   |               |   
+|   |   |   |               +---classes
+|   |   |   |               |       S3ExpressIdentityCache.d.ts
+|   |   |   |               |       S3ExpressIdentityCacheEntry.d.ts
+|   |   |   |               |       S3ExpressIdentityProviderImpl.d.ts
+|   |   |   |               |       SignatureV4S3Express.d.ts
+|   |   |   |               |       
+|   |   |   |               +---functions
+|   |   |   |               |       s3ExpressHttpSigningMiddleware.d.ts
+|   |   |   |               |       s3ExpressMiddleware.d.ts
+|   |   |   |               |       signS3Express.d.ts
+|   |   |   |               |       
+|   |   |   |               \---interfaces
+|   |   |   |                       S3ExpressIdentity.d.ts
+|   |   |   |                       S3ExpressIdentityProvider.d.ts
+|   |   |   |                       
+|   |   |   +---middleware-user-agent
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       check-features.js
+|   |   |   |   |       configurations.js
+|   |   |   |   |       constants.js
+|   |   |   |   |       encode-features.js
+|   |   |   |   |       index.js
+|   |   |   |   |       user-agent-middleware.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   check-features.d.ts
+|   |   |   |       |   configurations.d.ts
+|   |   |   |       |   constants.d.ts
+|   |   |   |       |   encode-features.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   user-agent-middleware.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               check-features.d.ts
+|   |   |   |               configurations.d.ts
+|   |   |   |               constants.d.ts
+|   |   |   |               encode-features.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               user-agent-middleware.d.ts
+|   |   |   |               
+|   |   |   +---nested-clients
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   signin.d.ts
+|   |   |   |   |   signin.js
+|   |   |   |   |   sso-oidc.d.ts
+|   |   |   |   |   sso-oidc.js
+|   |   |   |   |   sts.d.ts
+|   |   |   |   |   sts.js
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---submodules
+|   |   |   |   |       +---signin
+|   |   |   |   |       |   |   index.js
+|   |   |   |   |       |   |   runtimeConfig.browser.js
+|   |   |   |   |       |   |   runtimeConfig.js
+|   |   |   |   |       |   |   runtimeConfig.native.js
+|   |   |   |   |       |   |   runtimeConfig.shared.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---auth
+|   |   |   |   |       |   |       httpAuthSchemeProvider.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---endpoint
+|   |   |   |   |       |           endpointResolver.js
+|   |   |   |   |       |           ruleset.js
+|   |   |   |   |       |           
+|   |   |   |   |       +---sso-oidc
+|   |   |   |   |       |   |   index.js
+|   |   |   |   |       |   |   runtimeConfig.browser.js
+|   |   |   |   |       |   |   runtimeConfig.js
+|   |   |   |   |       |   |   runtimeConfig.native.js
+|   |   |   |   |       |   |   runtimeConfig.shared.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---auth
+|   |   |   |   |       |   |       httpAuthSchemeProvider.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---endpoint
+|   |   |   |   |       |           endpointResolver.js
+|   |   |   |   |       |           ruleset.js
+|   |   |   |   |       |           
+|   |   |   |   |       \---sts
+|   |   |   |   |           |   index.js
+|   |   |   |   |           |   runtimeConfig.browser.js
+|   |   |   |   |           |   runtimeConfig.js
+|   |   |   |   |           |   runtimeConfig.native.js
+|   |   |   |   |           |   runtimeConfig.shared.js
+|   |   |   |   |           |   runtimeExtensions.js
+|   |   |   |   |           |   STSClient.js
+|   |   |   |   |           |   
+|   |   |   |   |           +---auth
+|   |   |   |   |           |       httpAuthExtensionConfiguration.js
+|   |   |   |   |           |       httpAuthSchemeProvider.js
+|   |   |   |   |           |       
+|   |   |   |   |           \---endpoint
+|   |   |   |   |                   EndpointParameters.js
+|   |   |   |   |                   endpointResolver.js
+|   |   |   |   |                   ruleset.js
+|   |   |   |   |                   
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---submodules
+|   |   |   |   |       +---signin
+|   |   |   |   |       |   |   extensionConfiguration.js
+|   |   |   |   |       |   |   index.js
+|   |   |   |   |       |   |   runtimeConfig.browser.js
+|   |   |   |   |       |   |   runtimeConfig.js
+|   |   |   |   |       |   |   runtimeConfig.native.js
+|   |   |   |   |       |   |   runtimeConfig.shared.js
+|   |   |   |   |       |   |   runtimeExtensions.js
+|   |   |   |   |       |   |   Signin.js
+|   |   |   |   |       |   |   SigninClient.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---auth
+|   |   |   |   |       |   |       httpAuthExtensionConfiguration.js
+|   |   |   |   |       |   |       httpAuthSchemeProvider.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---commands
+|   |   |   |   |       |   |       CreateOAuth2TokenCommand.js
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---endpoint
+|   |   |   |   |       |   |       EndpointParameters.js
+|   |   |   |   |       |   |       endpointResolver.js
+|   |   |   |   |       |   |       ruleset.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---models
+|   |   |   |   |       |   |       enums.js
+|   |   |   |   |       |   |       errors.js
+|   |   |   |   |       |   |       models_0.js
+|   |   |   |   |       |   |       SigninServiceException.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---schemas
+|   |   |   |   |       |           schemas_0.js
+|   |   |   |   |       |           
+|   |   |   |   |       +---sso-oidc
+|   |   |   |   |       |   |   extensionConfiguration.js
+|   |   |   |   |       |   |   index.js
+|   |   |   |   |       |   |   runtimeConfig.browser.js
+|   |   |   |   |       |   |   runtimeConfig.js
+|   |   |   |   |       |   |   runtimeConfig.native.js
+|   |   |   |   |       |   |   runtimeConfig.shared.js
+|   |   |   |   |       |   |   runtimeExtensions.js
+|   |   |   |   |       |   |   SSOOIDC.js
+|   |   |   |   |       |   |   SSOOIDCClient.js
+|   |   |   |   |       |   |   
+|   |   |   |   |       |   +---auth
+|   |   |   |   |       |   |       httpAuthExtensionConfiguration.js
+|   |   |   |   |       |   |       httpAuthSchemeProvider.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---commands
+|   |   |   |   |       |   |       CreateTokenCommand.js
+|   |   |   |   |       |   |       index.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---endpoint
+|   |   |   |   |       |   |       EndpointParameters.js
+|   |   |   |   |       |   |       endpointResolver.js
+|   |   |   |   |       |   |       ruleset.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   +---models
+|   |   |   |   |       |   |       enums.js
+|   |   |   |   |       |   |       errors.js
+|   |   |   |   |       |   |       models_0.js
+|   |   |   |   |       |   |       SSOOIDCServiceException.js
+|   |   |   |   |       |   |       
+|   |   |   |   |       |   \---schemas
+|   |   |   |   |       |           schemas_0.js
+|   |   |   |   |       |           
+|   |   |   |   |       \---sts
+|   |   |   |   |           |   defaultRoleAssumers.js
+|   |   |   |   |           |   defaultStsRoleAssumers.js
+|   |   |   |   |           |   extensionConfiguration.js
+|   |   |   |   |           |   index.js
+|   |   |   |   |           |   runtimeConfig.browser.js
+|   |   |   |   |           |   runtimeConfig.js
+|   |   |   |   |           |   runtimeConfig.native.js
+|   |   |   |   |           |   runtimeConfig.shared.js
+|   |   |   |   |           |   runtimeExtensions.js
+|   |   |   |   |           |   STS.js
+|   |   |   |   |           |   STSClient.js
+|   |   |   |   |           |   
+|   |   |   |   |           +---auth
+|   |   |   |   |           |       httpAuthExtensionConfiguration.js
+|   |   |   |   |           |       httpAuthSchemeProvider.js
+|   |   |   |   |           |       
+|   |   |   |   |           +---commands
+|   |   |   |   |           |       AssumeRoleCommand.js
+|   |   |   |   |           |       AssumeRoleWithWebIdentityCommand.js
+|   |   |   |   |           |       index.js
+|   |   |   |   |           |       
+|   |   |   |   |           +---endpoint
+|   |   |   |   |           |       EndpointParameters.js
+|   |   |   |   |           |       endpointResolver.js
+|   |   |   |   |           |       ruleset.js
+|   |   |   |   |           |       
+|   |   |   |   |           +---models
+|   |   |   |   |           |       errors.js
+|   |   |   |   |           |       models_0.js
+|   |   |   |   |           |       STSServiceException.js
+|   |   |   |   |           |       
+|   |   |   |   |           \---schemas
+|   |   |   |   |                   schemas_0.js
+|   |   |   |   |                   
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       +---submodules
+|   |   |   |       |   +---signin
+|   |   |   |       |   |   |   extensionConfiguration.d.ts
+|   |   |   |       |   |   |   index.d.ts
+|   |   |   |       |   |   |   runtimeConfig.browser.d.ts
+|   |   |   |       |   |   |   runtimeConfig.d.ts
+|   |   |   |       |   |   |   runtimeConfig.native.d.ts
+|   |   |   |       |   |   |   runtimeConfig.shared.d.ts
+|   |   |   |       |   |   |   runtimeExtensions.d.ts
+|   |   |   |       |   |   |   Signin.d.ts
+|   |   |   |       |   |   |   SigninClient.d.ts
+|   |   |   |       |   |   |   
+|   |   |   |       |   |   +---auth
+|   |   |   |       |   |   |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |       |   |   |       httpAuthSchemeProvider.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---commands
+|   |   |   |       |   |   |       CreateOAuth2TokenCommand.d.ts
+|   |   |   |       |   |   |       index.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---endpoint
+|   |   |   |       |   |   |       EndpointParameters.d.ts
+|   |   |   |       |   |   |       endpointResolver.d.ts
+|   |   |   |       |   |   |       ruleset.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---models
+|   |   |   |       |   |   |       enums.d.ts
+|   |   |   |       |   |   |       errors.d.ts
+|   |   |   |       |   |   |       models_0.d.ts
+|   |   |   |       |   |   |       SigninServiceException.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   \---schemas
+|   |   |   |       |   |           schemas_0.d.ts
+|   |   |   |       |   |           
+|   |   |   |       |   +---sso-oidc
+|   |   |   |       |   |   |   extensionConfiguration.d.ts
+|   |   |   |       |   |   |   index.d.ts
+|   |   |   |       |   |   |   runtimeConfig.browser.d.ts
+|   |   |   |       |   |   |   runtimeConfig.d.ts
+|   |   |   |       |   |   |   runtimeConfig.native.d.ts
+|   |   |   |       |   |   |   runtimeConfig.shared.d.ts
+|   |   |   |       |   |   |   runtimeExtensions.d.ts
+|   |   |   |       |   |   |   SSOOIDC.d.ts
+|   |   |   |       |   |   |   SSOOIDCClient.d.ts
+|   |   |   |       |   |   |   
+|   |   |   |       |   |   +---auth
+|   |   |   |       |   |   |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |       |   |   |       httpAuthSchemeProvider.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---commands
+|   |   |   |       |   |   |       CreateTokenCommand.d.ts
+|   |   |   |       |   |   |       index.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---endpoint
+|   |   |   |       |   |   |       EndpointParameters.d.ts
+|   |   |   |       |   |   |       endpointResolver.d.ts
+|   |   |   |       |   |   |       ruleset.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   +---models
+|   |   |   |       |   |   |       enums.d.ts
+|   |   |   |       |   |   |       errors.d.ts
+|   |   |   |       |   |   |       models_0.d.ts
+|   |   |   |       |   |   |       SSOOIDCServiceException.d.ts
+|   |   |   |       |   |   |       
+|   |   |   |       |   |   \---schemas
+|   |   |   |       |   |           schemas_0.d.ts
+|   |   |   |       |   |           
+|   |   |   |       |   \---sts
+|   |   |   |       |       |   defaultRoleAssumers.d.ts
+|   |   |   |       |       |   defaultStsRoleAssumers.d.ts
+|   |   |   |       |       |   extensionConfiguration.d.ts
+|   |   |   |       |       |   index.d.ts
+|   |   |   |       |       |   runtimeConfig.browser.d.ts
+|   |   |   |       |       |   runtimeConfig.d.ts
+|   |   |   |       |       |   runtimeConfig.native.d.ts
+|   |   |   |       |       |   runtimeConfig.shared.d.ts
+|   |   |   |       |       |   runtimeExtensions.d.ts
+|   |   |   |       |       |   STS.d.ts
+|   |   |   |       |       |   STSClient.d.ts
+|   |   |   |       |       |   
+|   |   |   |       |       +---auth
+|   |   |   |       |       |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |       |       |       httpAuthSchemeProvider.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       +---commands
+|   |   |   |       |       |       AssumeRoleCommand.d.ts
+|   |   |   |       |       |       AssumeRoleWithWebIdentityCommand.d.ts
+|   |   |   |       |       |       index.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       +---endpoint
+|   |   |   |       |       |       EndpointParameters.d.ts
+|   |   |   |       |       |       endpointResolver.d.ts
+|   |   |   |       |       |       ruleset.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       +---models
+|   |   |   |       |       |       errors.d.ts
+|   |   |   |       |       |       models_0.d.ts
+|   |   |   |       |       |       STSServiceException.d.ts
+|   |   |   |       |       |       
+|   |   |   |       |       \---schemas
+|   |   |   |       |               schemas_0.d.ts
+|   |   |   |       |               
+|   |   |   |       \---ts3.4
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   
+|   |   |   |           \---submodules
+|   |   |   |               +---signin
+|   |   |   |               |   |   extensionConfiguration.d.ts
+|   |   |   |               |   |   index.d.ts
+|   |   |   |               |   |   runtimeConfig.browser.d.ts
+|   |   |   |               |   |   runtimeConfig.d.ts
+|   |   |   |               |   |   runtimeConfig.native.d.ts
+|   |   |   |               |   |   runtimeConfig.shared.d.ts
+|   |   |   |               |   |   runtimeExtensions.d.ts
+|   |   |   |               |   |   Signin.d.ts
+|   |   |   |               |   |   SigninClient.d.ts
+|   |   |   |               |   |   
+|   |   |   |               |   +---auth
+|   |   |   |               |   |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |               |   |       httpAuthSchemeProvider.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---commands
+|   |   |   |               |   |       CreateOAuth2TokenCommand.d.ts
+|   |   |   |               |   |       index.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---endpoint
+|   |   |   |               |   |       EndpointParameters.d.ts
+|   |   |   |               |   |       endpointResolver.d.ts
+|   |   |   |               |   |       ruleset.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---models
+|   |   |   |               |   |       enums.d.ts
+|   |   |   |               |   |       errors.d.ts
+|   |   |   |               |   |       models_0.d.ts
+|   |   |   |               |   |       SigninServiceException.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   \---schemas
+|   |   |   |               |           schemas_0.d.ts
+|   |   |   |               |           
+|   |   |   |               +---sso-oidc
+|   |   |   |               |   |   extensionConfiguration.d.ts
+|   |   |   |               |   |   index.d.ts
+|   |   |   |               |   |   runtimeConfig.browser.d.ts
+|   |   |   |               |   |   runtimeConfig.d.ts
+|   |   |   |               |   |   runtimeConfig.native.d.ts
+|   |   |   |               |   |   runtimeConfig.shared.d.ts
+|   |   |   |               |   |   runtimeExtensions.d.ts
+|   |   |   |               |   |   SSOOIDC.d.ts
+|   |   |   |               |   |   SSOOIDCClient.d.ts
+|   |   |   |               |   |   
+|   |   |   |               |   +---auth
+|   |   |   |               |   |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |               |   |       httpAuthSchemeProvider.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---commands
+|   |   |   |               |   |       CreateTokenCommand.d.ts
+|   |   |   |               |   |       index.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---endpoint
+|   |   |   |               |   |       EndpointParameters.d.ts
+|   |   |   |               |   |       endpointResolver.d.ts
+|   |   |   |               |   |       ruleset.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   +---models
+|   |   |   |               |   |       enums.d.ts
+|   |   |   |               |   |       errors.d.ts
+|   |   |   |               |   |       models_0.d.ts
+|   |   |   |               |   |       SSOOIDCServiceException.d.ts
+|   |   |   |               |   |       
+|   |   |   |               |   \---schemas
+|   |   |   |               |           schemas_0.d.ts
+|   |   |   |               |           
+|   |   |   |               \---sts
+|   |   |   |                   |   defaultRoleAssumers.d.ts
+|   |   |   |                   |   defaultStsRoleAssumers.d.ts
+|   |   |   |                   |   extensionConfiguration.d.ts
+|   |   |   |                   |   index.d.ts
+|   |   |   |                   |   runtimeConfig.browser.d.ts
+|   |   |   |                   |   runtimeConfig.d.ts
+|   |   |   |                   |   runtimeConfig.native.d.ts
+|   |   |   |                   |   runtimeConfig.shared.d.ts
+|   |   |   |                   |   runtimeExtensions.d.ts
+|   |   |   |                   |   STS.d.ts
+|   |   |   |                   |   STSClient.d.ts
+|   |   |   |                   |   
+|   |   |   |                   +---auth
+|   |   |   |                   |       httpAuthExtensionConfiguration.d.ts
+|   |   |   |                   |       httpAuthSchemeProvider.d.ts
+|   |   |   |                   |       
+|   |   |   |                   +---commands
+|   |   |   |                   |       AssumeRoleCommand.d.ts
+|   |   |   |                   |       AssumeRoleWithWebIdentityCommand.d.ts
+|   |   |   |                   |       index.d.ts
+|   |   |   |                   |       
+|   |   |   |                   +---endpoint
+|   |   |   |                   |       EndpointParameters.d.ts
+|   |   |   |                   |       endpointResolver.d.ts
+|   |   |   |                   |       ruleset.d.ts
+|   |   |   |                   |       
+|   |   |   |                   +---models
+|   |   |   |                   |       errors.d.ts
+|   |   |   |                   |       models_0.d.ts
+|   |   |   |                   |       STSServiceException.d.ts
+|   |   |   |                   |       
+|   |   |   |                   \---schemas
+|   |   |   |                           schemas_0.d.ts
+|   |   |   |                           
+|   |   |   +---region-config-resolver
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---regionConfig
+|   |   |   |   |           stsRegionDefaultResolver.js
+|   |   |   |   |           stsRegionDefaultResolver.native.js
+|   |   |   |   |           
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---extensions
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---regionConfig
+|   |   |   |   |           awsRegionConfig.js
+|   |   |   |   |           stsRegionDefaultResolver.browser.js
+|   |   |   |   |           stsRegionDefaultResolver.js
+|   |   |   |   |           stsRegionDefaultResolver.native.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       +---extensions
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       
+|   |   |   |       +---regionConfig
+|   |   |   |       |       awsRegionConfig.d.ts
+|   |   |   |       |       stsRegionDefaultResolver.browser.d.ts
+|   |   |   |       |       stsRegionDefaultResolver.d.ts
+|   |   |   |       |       stsRegionDefaultResolver.native.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   
+|   |   |   |           +---extensions
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       
+|   |   |   |           \---regionConfig
+|   |   |   |                   awsRegionConfig.d.ts
+|   |   |   |                   stsRegionDefaultResolver.browser.d.ts
+|   |   |   |                   stsRegionDefaultResolver.d.ts
+|   |   |   |                   stsRegionDefaultResolver.native.d.ts
+|   |   |   |                   
+|   |   |   +---signature-v4-multi-region
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       index.js
+|   |   |   |   |       signature-v4-crt-container.js
+|   |   |   |   |       SignatureV4MultiRegion.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   signature-v4-crt-container.d.ts
+|   |   |   |       |   SignatureV4MultiRegion.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               index.d.ts
+|   |   |   |               signature-v4-crt-container.d.ts
+|   |   |   |               SignatureV4MultiRegion.d.ts
+|   |   |   |               
+|   |   |   +---token-providers
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       constants.js
+|   |   |   |   |       fromEnvSigningName.js
+|   |   |   |   |       fromSso.js
+|   |   |   |   |       fromStatic.js
+|   |   |   |   |       getNewSsoOidcToken.js
+|   |   |   |   |       getSsoOidcClient.js
+|   |   |   |   |       index.js
+|   |   |   |   |       nodeProvider.js
+|   |   |   |   |       validateTokenExpiry.js
+|   |   |   |   |       validateTokenKey.js
+|   |   |   |   |       writeSSOTokenToFile.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   constants.d.ts
+|   |   |   |       |   fromEnvSigningName.d.ts
+|   |   |   |       |   fromSso.d.ts
+|   |   |   |       |   fromStatic.d.ts
+|   |   |   |       |   getNewSsoOidcToken.d.ts
+|   |   |   |       |   getSsoOidcClient.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   nodeProvider.d.ts
+|   |   |   |       |   validateTokenExpiry.d.ts
+|   |   |   |       |   validateTokenKey.d.ts
+|   |   |   |       |   writeSSOTokenToFile.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               constants.d.ts
+|   |   |   |               fromEnvSigningName.d.ts
+|   |   |   |               fromSso.d.ts
+|   |   |   |               fromStatic.d.ts
+|   |   |   |               getNewSsoOidcToken.d.ts
+|   |   |   |               getSsoOidcClient.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               nodeProvider.d.ts
+|   |   |   |               validateTokenExpiry.d.ts
+|   |   |   |               validateTokenKey.d.ts
+|   |   |   |               writeSSOTokenToFile.d.ts
+|   |   |   |               
+|   |   |   +---types
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   abort.js
+|   |   |   |   |   |   auth.js
+|   |   |   |   |   |   checksum.js
+|   |   |   |   |   |   client.js
+|   |   |   |   |   |   command.js
+|   |   |   |   |   |   connection.js
+|   |   |   |   |   |   credentials.js
+|   |   |   |   |   |   crypto.js
+|   |   |   |   |   |   dns.js
+|   |   |   |   |   |   encode.js
+|   |   |   |   |   |   endpoint.js
+|   |   |   |   |   |   eventStream.js
+|   |   |   |   |   |   feature-ids.js
+|   |   |   |   |   |   function.js
+|   |   |   |   |   |   http.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   logger.js
+|   |   |   |   |   |   middleware.js
+|   |   |   |   |   |   pagination.js
+|   |   |   |   |   |   profile.js
+|   |   |   |   |   |   request.js
+|   |   |   |   |   |   response.js
+|   |   |   |   |   |   retry.js
+|   |   |   |   |   |   serde.js
+|   |   |   |   |   |   shapes.js
+|   |   |   |   |   |   signature.js
+|   |   |   |   |   |   stream.js
+|   |   |   |   |   |   token.js
+|   |   |   |   |   |   transfer.js
+|   |   |   |   |   |   uri.js
+|   |   |   |   |   |   util.js
+|   |   |   |   |   |   waiter.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---blob
+|   |   |   |   |   |       blob-types.js
+|   |   |   |   |   |       
+|   |   |   |   |   +---extensions
+|   |   |   |   |   |       index.js
+|   |   |   |   |   |       
+|   |   |   |   |   \---identity
+|   |   |   |   |           AnonymousIdentity.js
+|   |   |   |   |           AwsCredentialIdentity.js
+|   |   |   |   |           Identity.js
+|   |   |   |   |           index.js
+|   |   |   |   |           LoginIdentity.js
+|   |   |   |   |           TokenIdentity.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   abort.d.ts
+|   |   |   |       |   auth.d.ts
+|   |   |   |       |   checksum.d.ts
+|   |   |   |       |   client.d.ts
+|   |   |   |       |   command.d.ts
+|   |   |   |       |   connection.d.ts
+|   |   |   |       |   credentials.d.ts
+|   |   |   |       |   crypto.d.ts
+|   |   |   |       |   dns.d.ts
+|   |   |   |       |   encode.d.ts
+|   |   |   |       |   endpoint.d.ts
+|   |   |   |       |   eventStream.d.ts
+|   |   |   |       |   feature-ids.d.ts
+|   |   |   |       |   function.d.ts
+|   |   |   |       |   http.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   logger.d.ts
+|   |   |   |       |   middleware.d.ts
+|   |   |   |       |   pagination.d.ts
+|   |   |   |       |   profile.d.ts
+|   |   |   |       |   request.d.ts
+|   |   |   |       |   response.d.ts
+|   |   |   |       |   retry.d.ts
+|   |   |   |       |   serde.d.ts
+|   |   |   |       |   shapes.d.ts
+|   |   |   |       |   signature.d.ts
+|   |   |   |       |   stream.d.ts
+|   |   |   |       |   token.d.ts
+|   |   |   |       |   transfer.d.ts
+|   |   |   |       |   uri.d.ts
+|   |   |   |       |   util.d.ts
+|   |   |   |       |   waiter.d.ts
+|   |   |   |       |   
+|   |   |   |       +---blob
+|   |   |   |       |       blob-types.d.ts
+|   |   |   |       |       
+|   |   |   |       +---extensions
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       
+|   |   |   |       +---identity
+|   |   |   |       |       AnonymousIdentity.d.ts
+|   |   |   |       |       AwsCredentialIdentity.d.ts
+|   |   |   |       |       Identity.d.ts
+|   |   |   |       |       index.d.ts
+|   |   |   |       |       LoginIdentity.d.ts
+|   |   |   |       |       TokenIdentity.d.ts
+|   |   |   |       |       
+|   |   |   |       \---ts3.4
+|   |   |   |           |   abort.d.ts
+|   |   |   |           |   auth.d.ts
+|   |   |   |           |   checksum.d.ts
+|   |   |   |           |   client.d.ts
+|   |   |   |           |   command.d.ts
+|   |   |   |           |   connection.d.ts
+|   |   |   |           |   credentials.d.ts
+|   |   |   |           |   crypto.d.ts
+|   |   |   |           |   dns.d.ts
+|   |   |   |           |   encode.d.ts
+|   |   |   |           |   endpoint.d.ts
+|   |   |   |           |   eventStream.d.ts
+|   |   |   |           |   feature-ids.d.ts
+|   |   |   |           |   function.d.ts
+|   |   |   |           |   http.d.ts
+|   |   |   |           |   index.d.ts
+|   |   |   |           |   logger.d.ts
+|   |   |   |           |   middleware.d.ts
+|   |   |   |           |   pagination.d.ts
+|   |   |   |           |   profile.d.ts
+|   |   |   |           |   request.d.ts
+|   |   |   |           |   response.d.ts
+|   |   |   |           |   retry.d.ts
+|   |   |   |           |   serde.d.ts
+|   |   |   |           |   shapes.d.ts
+|   |   |   |           |   signature.d.ts
+|   |   |   |           |   stream.d.ts
+|   |   |   |           |   token.d.ts
+|   |   |   |           |   transfer.d.ts
+|   |   |   |           |   uri.d.ts
+|   |   |   |           |   util.d.ts
+|   |   |   |           |   waiter.d.ts
+|   |   |   |           |   
+|   |   |   |           +---blob
+|   |   |   |           |       blob-types.d.ts
+|   |   |   |           |       
+|   |   |   |           +---extensions
+|   |   |   |           |       index.d.ts
+|   |   |   |           |       
+|   |   |   |           \---identity
+|   |   |   |                   AnonymousIdentity.d.ts
+|   |   |   |                   AwsCredentialIdentity.d.ts
+|   |   |   |                   Identity.d.ts
+|   |   |   |                   index.d.ts
+|   |   |   |                   LoginIdentity.d.ts
+|   |   |   |                   TokenIdentity.d.ts
+|   |   |   |                   
+|   |   |   +---util-arn-parser
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               index.d.ts
+|   |   |   |               
+|   |   |   +---util-endpoints
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   
+|   |   |   |   |   \---lib
+|   |   |   |   |       \---aws
+|   |   |   |   |               partitions.json
+|   |   |   |   |               
+|   |   |   |   +---dist-es
+|   |   |   |   |   |   aws.js
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   resolveDefaultAwsRegionalEndpointsConfig.js
+|   |   |   |   |   |   resolveEndpoint.js
+|   |   |   |   |   |   
+|   |   |   |   |   +---lib
+|   |   |   |   |   |   |   isIpAddress.js
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---aws
+|   |   |   |   |   |           index.js
+|   |   |   |   |   |           isVirtualHostableS3Bucket.js
+|   |   |   |   |   |           parseArn.js
+|   |   |   |   |   |           partition.js
+|   |   |   |   |   |           partitions.json
+|   |   |   |   |   |           
+|   |   |   |   |   \---types
+|   |   |   |   |           EndpointError.js
+|   |   |   |   |           EndpointRuleObject.js
+|   |   |   |   |           ErrorRuleObject.js
+|   |   |   |   |           index.js
+|   |   |   |   |           RuleSetObject.js
+|   |   |   |   |           shared.js
+|   |   |   |   |           TreeRuleObject.js
+|   |   |   |   |           
+|   |   |   |   \---dist-types
+|   |   |   |       |   aws.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   resolveDefaultAwsRegionalEndpointsConfig.d.ts
+|   |   |   |       |   resolveEndpoint.d.ts
+|   |   |   |       |   
+|   |   |   |       +---lib
+|   |   |   |       |   |   isIpAddress.d.ts
+|   |   |   |       |   |   
+|   |   |   |       |   \---aws
+|   |   |   |       |           index.d.ts
+|   |   |   |       |           isVirtualHostableS3Bucket.d.ts
+|   |   |   |       |           parseArn.d.ts
+|   |   |   |       |           partition.d.ts
+|   |   |   |       |           
+|   |   |   |       +---ts3.4
+|   |   |   |       |   |   aws.d.ts
+|   |   |   |       |   |   index.d.ts
+|   |   |   |       |   |   resolveDefaultAwsRegionalEndpointsConfig.d.ts
+|   |   |   |       |   |   resolveEndpoint.d.ts
+|   |   |   |       |   |   
+|   |   |   |       |   +---lib
+|   |   |   |       |   |   |   isIpAddress.d.ts
+|   |   |   |       |   |   |   
+|   |   |   |       |   |   \---aws
+|   |   |   |       |   |           index.d.ts
+|   |   |   |       |   |           isVirtualHostableS3Bucket.d.ts
+|   |   |   |       |   |           parseArn.d.ts
+|   |   |   |       |   |           partition.d.ts
+|   |   |   |       |   |           
+|   |   |   |       |   \---types
+|   |   |   |       |           EndpointError.d.ts
+|   |   |   |       |           EndpointRuleObject.d.ts
+|   |   |   |       |           ErrorRuleObject.d.ts
+|   |   |   |       |           index.d.ts
+|   |   |   |       |           RuleSetObject.d.ts
+|   |   |   |       |           shared.d.ts
+|   |   |   |       |           TreeRuleObject.d.ts
+|   |   |   |       |           
+|   |   |   |       \---types
+|   |   |   |               EndpointError.d.ts
+|   |   |   |               EndpointRuleObject.d.ts
+|   |   |   |               ErrorRuleObject.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               RuleSetObject.d.ts
+|   |   |   |               shared.d.ts
+|   |   |   |               TreeRuleObject.d.ts
+|   |   |   |               
+|   |   |   +---util-locate-window
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               index.d.ts
+|   |   |   |               
+|   |   |   +---util-user-agent-browser
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       configurations.js
+|   |   |   |   |       createUserAgentStringParsingProvider.js
+|   |   |   |   |       index.js
+|   |   |   |   |       index.native.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       configurations.js
+|   |   |   |   |       createUserAgentStringParsingProvider.js
+|   |   |   |   |       index.js
+|   |   |   |   |       index.native.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   configurations.d.ts
+|   |   |   |       |   createUserAgentStringParsingProvider.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   index.native.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               configurations.d.ts
+|   |   |   |               createUserAgentStringParsingProvider.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               index.native.d.ts
+|   |   |   |               
+|   |   |   +---util-user-agent-node
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---dist-cjs
+|   |   |   |   |       index.js
+|   |   |   |   |       
+|   |   |   |   +---dist-es
+|   |   |   |   |       crt-availability.js
+|   |   |   |   |       defaultUserAgent.js
+|   |   |   |   |       index.js
+|   |   |   |   |       is-crt-available.js
+|   |   |   |   |       nodeAppIdConfigOptions.js
+|   |   |   |   |       
+|   |   |   |   \---dist-types
+|   |   |   |       |   crt-availability.d.ts
+|   |   |   |       |   defaultUserAgent.d.ts
+|   |   |   |       |   index.d.ts
+|   |   |   |       |   is-crt-available.d.ts
+|   |   |   |       |   nodeAppIdConfigOptions.d.ts
+|   |   |   |       |   
+|   |   |   |       \---ts3.4
+|   |   |   |               crt-availability.d.ts
+|   |   |   |               defaultUserAgent.d.ts
+|   |   |   |               index.d.ts
+|   |   |   |               is-crt-available.d.ts
+|   |   |   |               nodeAppIdConfigOptions.d.ts
+|   |   |   |               
+|   |   |   \---xml-builder
+|   |   |       |   LICENSE
+|   |   |       |   package.json
+|   |   |       |   README.md
+|   |   |       |   
+|   |   |       +---dist-cjs
+|   |   |       |       index.js
+|   |   |       |       xml-parser.js
+|   |   |       |       
+|   |   |       +---dist-es
+|   |   |       |       escape-attribute.js
+|   |   |       |       escape-element.js
+|   |   |       |       index.js
+|   |   |       |       stringable.js
+|   |   |       |       xml-parser.browser.js
+|   |   |       |       xml-parser.js
+|   |   |       |       XmlNode.js
+|   |   |       |       XmlText.js
+|   |   |       |       
+|   |   |       \---dist-types
+|   |   |           |   escape-attribute.d.ts
+|   |   |           |   escape-element.d.ts
+|   |   |           |   index.d.ts
+|   |   |           |   stringable.d.ts
+|   |   |           |   xml-parser.browser.d.ts
+|   |   |           |   xml-parser.d.ts
+|   |   |           |   XmlNode.d.ts
+|   |   |           |   XmlText.d.ts
+|   |   |           |   
+|   |   |           \---ts3.4
+|   |   |                   escape-attribute.d.ts
+|   |   |                   escape-element.d.ts
+|   |   |                   index.d.ts
+|   |   |                   stringable.d.ts
+|   |   |                   xml-parser.browser.d.ts
+|   |   |                   xml-parser.d.ts
+|   |   |                   XmlNode.d.ts
+|   |   |                   XmlText.d.ts
+|   |   |                   
+|   |   +---@babel
+|   |   |   +---code-frame
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   \---lib
+|   |   |   |           index.js
+|   |   |   |           index.js.map
+|   |   |   |           
+|   |   |   +---compat-data
+|   |   |   |   |   corejs2-built-ins.js
+|   |   |   |   |   corejs3-shipped-proposals.js
+|   |   |   |   |   LICENSE
+|   |   |   |   |   native-modules.js
+|   |   |   |   |   overlapping-plugins.js
+|   |   |   |   |   package.json
+|   |   |   |   |   plugin-bugfixes.js
+|   |   |   |   |   plugins.js
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   \---data
+|   |   |   |           corejs2-built-ins.json
+|   |   |   |           corejs3-shipped-proposals.json
+|   |   |   |           native-modules.json
+|   |   |   |           overlapping-plugins.json
+|   |   |   |           plugin-bugfixes.json
+|   |   |   |           plugins.json
+|   |   |   |           
+|   |   |   +---core
+|   |   |   |   |   LICENSE
+|   |   |   |   |   package.json
+|   |   |   |   |   README.md
+|   |   |   |   |   
+|   |   |   |   +---lib
+|   |   |   |   |   |   index.js
+|   |   |   |   |   |   index.js.map
+|   |   |   |   |   |   parse.js
+|   |   |   |   |   |   parse.js.map
+|   |   |   |   |   |   transform-ast.js
+|   |   |   |   |   |   transform-ast.js.map
+|   |   |   |   |   |   transform-file-browser.js
+|   |   |   |   |   |   transform-file-browser.js.map
+|   |   |   |   |   |   transform-file.js
+|   |   |   |   |   |   transform-file.js.map
+|   |   |   |   |   |   transform.js
+|   |   |   |   |   |   transform.js.map
+|   |   |   |   |   |   
+|   |   |   |   |   +---config
+|   |   |   |   |   |   |   cache-contexts.js
+|   |   |   |   |   |   |   cache-contexts.js.map
+|   |   |   |   |   |   |   caching.js
+|   |   |   |   |   |   |   caching.js.map
+|   |   |   |   |   |   |   config-chain.js
+|   |   |   |   |   |   |   config-chain.js.map
+|   |   |   |   |   |   |   config-descriptors.js
+|   |   |   |   |   |   |   config-descriptors.js.map
+|   |   |   |   |   |   |   full.js
+|   |   |   |   |   |   |   full.js.map
+|   |   |   |   |   |   |   index.js
+|   |   |   |   |   |   |   index.js.map
+|   |   |   |   |   |   |   item.js
+|   |   |   |   |   |   |   item.js.map
+|   |   |   |   |   |   |   partial.js
+|   |   |   |   |   |   |   partial.js.map
+|   |   |   |   |   |   |   pattern-to-regex.js
+|   |   |   |   |   |   |   pattern-to-regex.js.map
+|   |   |   |   |   |   |   plugin.js
+|   |   |   |   |   |   |   plugin.js.map
+|   |   |   |   |   |   |   printer.js
+|   |   |   |   |   |   |   printer.js.map
+|   |   |   |   |   |   |   resolve-targets-browser.js
+|   |   |   |   |   |   |   resolve-targets-browser.js.map
+|   |   |   |   |   |   |   resolve-targets.js
+|   |   |   |   |   |   |   resolve-targets.js.map
+|   |   |   |   |   |   |   util.js
+|   |   |   |   |   |   |   util.js.map
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   +---files
+|   |   |   |   |   |   |       configuration.js
+|   |   |   |   |   |   |       configuration.js.map
+|   |   |   |   |   |   |       import.cjs
+|   |   |   |   |   |   |       import.cjs.map
+|   |   |   |   |   |   |       index-browser.js
+|   |   |   |   |   |   |       index-browser.js.map
+|   |   |   |   |   |   |       index.js
+|   |   |   |   |   |   |       index.js.map
+|   |   |   |   |   |   |       module-types.js
+|   |   |   |   |   |   |       module-types.js.map
+|   |   |   |   |   |   |       package.js
+|   |   |   |   |   |   |       package.js.map
+|   |   |   |   |   |   |       plugins.js
+|   |   |   |   |   |   |       plugins.js.map
+|   |   |   |   |   |   |       types.js
+|   |   |   |   |   |   |       types.js.map
+|   |   |   |   |   |   |       utils.js
+|   |   |   |   |   |   |       utils.js.map
+|   |   |   |   |   |   |       
+|   |   |   |   |   |   +---helpers
+|   |   |   |   |   |   |       config-api.js
+|   |   |   |   |   |   |       config-api.js.map
+|   |   |   |   |   |   |       deep-array.js
+|   |   |   |   |   |   |       deep-array.js.map
+|   |   |   |   |   |   |       environment.js
+|   |   |   |   |   |   |       environment.js.map
+|   |   |   |   |   |   |       
+|   |   |   |   |   |   \---validation
+|   |   |   |   |   |           option-assertions.js
+|   |   |   |   |   |           option-assertions.js.map
+|   |   |   |   |   |           options.js
+|   |   |   |   |   |           options.js.map
+|   |   |   |   |   |           plugins.js
+|   |   |   |   |   |           plugins.js.map
+|   |   |   |   |   |           removed.js
+|   |   |   |   |   |           removed.js.map
+|   |   |   |   |   |           
+|   |   |   |   |   +---errors
+|   |   |   |   |   |       config-error.js
+|   |   |   |   |   |       config-error.js.map
+|   |   |   |   |   |       rewrite-stack-trace.js
+|   |   |   |   |   |       rewrite-stack-trace.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   +---gensync-utils
+|   |   |   |   |   |       async.js
+|   |   |   |   |   |       async.js.map
+|   |   |   |   |   |       fs.js
+|   |   |   |   |   |       fs.js.map
+|   |   |   |   |   |       functional.js
+|   |   |   |   |   |       functional.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   +---parser
+|   |   |   |   |   |   |   index.js
+|   |   |   |   |   |   |   index.js.map
+|   |   |   |   |   |   |   
+|   |   |   |   |   |   \---util
+|   |   |   |   |   |           missing-plugin-helper.js
+|   |   |   |   |   |           missing-plugin-helper.js.map
+|   |   |   |   |   |           
+|   |   |   |   |   +---tools
+|   |   |   |   |   |       build-external-helpers.js
+|   |   |   |   |   |       build-external-helpers.js.map
+|   |   |   |   |   |       
+|   |   |   |   |   +---transformation

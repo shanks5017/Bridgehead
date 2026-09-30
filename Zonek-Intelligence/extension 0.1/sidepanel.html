@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridgehead</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      background: #e8e7e4;
+      color: #141414;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 14px;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+      flex-shrink: 0;
+    }
+    .hdr-title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+    .hdr-badge { font-size: 9px; background: rgba(0,0,0,.06); padding: 2px 8px; border-radius: 99px; }
+
+    /* Controls */
+    .ctrl {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    button:active { transform: scale(.98); }
+    button:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+    .btn-primary { background: #141414; color: #e8e7e4; }
+    .btn-outline  { background: transparent; border: 1px solid rgba(0,0,0,.2); color: #141414; }
+    .btn-stop     { background: #ef4444; color: #fff; }
+
+    /* Tab bar */
+    .tabbar {
+      display: flex;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+      flex-shrink: 0;
+    }
+    .tab-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: .45;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      background: none;
+      border-radius: 0;
+      width: auto;
+      transition: opacity .15s;
+    }
+    .tab-btn:hover { opacity: .75; }
+    .tab-btn.active { opacity: 1; border-bottom-color: #141414; }
+
+    /* Panels */
+    .panel {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      display: none;
+    }
+    .panel.visible { display: block; }
+
+    /* Preview panel */
+    #panel-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #panel-preview.visible { display: flex; }
+    .empty {
+      flex: 1;
+      padding: 40px 0;
+      text-align: center;
+      opacity: .3;
+      font-size: 12px;
+      pointer-events: none;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      animation: fadeUp 0.25s;
+      display: flex;
+      gap: 12px;
+      position: relative;
+    }
+
+    .card-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      background: #f0f0f0;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .chip {
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 99px;
+      padding: 2px 8px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chip:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .chip-green {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+    }
+
+    /* Export Actions */
+    .export-footer {
+      display: flex;
+      gap: 8px;
+      padding: 8px 0;
+      margin-top: auto;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-export {
+      flex: 1;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      font-size: 11px;
+      padding: 6px;
+      border-radius: 6px;
+      opacity: 0.7;
+    }
+
+    .btn-export:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .card-link { margin-top: 6px; display:inline-block; font-size:10px; font-weight:600; opacity:.5; }
+    .card-link:hover { opacity:1; }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(6px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Terminal panel */
+    #panel-terminal {
+      background: #111;
+      border-radius: 8px;
+      padding: 12px;
+      color: #ccc;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+    #panel-terminal.visible { display: block; }
+    .lg-ts   { color: #555; margin-right: 6px; }
+    .lg-ok   { color: #34d399; }
+    .lg-info { color: #60a5fa; }
+    .lg-warn { color: #fbbf24; }
+    .lg-err  { color: #f87171; }
+
+    /* Status bar */
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .sb-left { display: flex; align-items: center; gap: 5px; }
+    .dot { width:6px; height:6px; border-radius:50%; background:#10b981; }
+    .dot.active { background:#3b82f6; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <span class="hdr-title">Bridgehead</span>
+  <span class="hdr-badge">v1.1 Production</span>
+
+</div>
+
+<div class="ctrl">
+  <button id="btnExtract"    class="btn-primary">⚡ Start Extraction</button>
+  <button id="btnScroll"     class="btn-outline">🔄 Smart Scroll &amp; Extract</button>
+  <button id="btnStop"       class="btn-stop"    style="display:none">⏹ Stop</button>
+  <button id="btnSchema"     class="btn-outline">🧠 Auto-Detect Schema</button>
+</div>
+
+<div class="tabbar">
+  <button class="tab-btn active" data-tab="preview">Live Preview</button>
+  <button class="tab-btn"        data-tab="terminal">Terminal</button>
+</div>
+
+<div id="panel-preview" class="panel visible">
+  <div class="empty" id="emptyMsg">🔍<br>Waiting for extraction...</div>
+</div>
+
+<div id="panel-terminal" class="panel" style="display:none">
+</div>
+
+<div class="export-footer">
+  <button id="btnExportCsv" class="btn-export">📊 Export CSV</button>
+  <button id="btnExportJson" class="btn-export">📄 Export JSON</button>
+  <button id="btnClear" class="btn-export" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2)">🗑️ Clear</button>
+  <button id="btnReset" class="btn-export" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: #ef4444; font-weight: 700;">🔄 Reset All</button>
+</div>
+
+<div class="statusbar">
+  <div class="sb-left">
+    <div class="dot" id="dot"></div>
+    <span id="statusText">Ready</span>
+  </div>
+  <span id="itemCount" style="opacity:.45">0 items</span>
+</div>
+
+<script src="sidepanel.js"></script>
+</body>
+</html>

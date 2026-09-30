@@ -1,0 +1,372 @@
+[2026-04-21 12:12:57] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:12:57] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:12:57] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:12:57] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:12:57] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:12:57] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:12:57] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:12:57] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:12:57] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:13:00] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:13:01] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:13:05] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"{\n  \"The cafe 'intelligence.coffee' is located in RS Puram, Coimbatore.\",\n   \"The cafe is checking its site connection security.\",\n   \"The cafe has a CDN icon with a limit of 8k chars for context window.\"\n}"}}
+[2026-04-21 12:13:07] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"{\n  \"The India coffee market is expected to grow at a CAGR of 7.5% from 2025 to 2032.\",\n   \"The market size of the India coffee market is expected to reach USD 4.3 billion by 2032.\",\n   \"The coffee market in India is expected to be driven by the increasing demand for specialty coffee in urban areas.\"\n}"}}
+[2026-04-21 12:13:09] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"{\n  \"The India coffee market size reached USD 9.53 Billion in 2025.\",\n   \"South India accounts for 49.8% of the market in 2025, backed by strong coffee culture, concentrated domestic production in Karnataka, Kerala, and Tamil Nadu, higher per capita consumption, and traditional preference for filter coffee.\",\n   \"Instant coffee dominates with a 45.2% share in 2025, driven by convenience, affordability, and quick preparation suited to fast-paced urban lifestyles.\"\n}"}}
+[2026-04-21 12:13:19] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"{\n  \"Coimbatore is set to lead the next wave of GCC expansion in South India.\",\n   \"Coimbatore's location in South India is expected to drive growth in the GCC sector.\",\n   \"The expansion of GCC in Coimbatore is likely to have a positive impact on the local economy.\"\n}"}}
+[2026-04-21 12:13:24] warn: [Jina Reader] Failed to read https://www.thehindu.com/news/national/tamil-nadu/global-startup-summit-in-coimbatore-attracted-127-crore-in-investments-says-tn-government/article70178405.ece: timeout of 15000ms exceeded
+[2026-04-21 12:13:37] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.","type":"invalid_request_error","code":"json_validate_failed","failed_generation":"{\n  \"The Yum Sandwich Café requires an investment of around ₹5–10 lakhs.\",\n   \"Chai Sutta Bar has an investment requirement of about ₹7–9 lakhs.\",\n   \"Coffee Day Xpress can be started with an investment of ₹5–8 lakhs.\"\n}"}}
+[2026-04-21 12:14:05] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:14:05] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:14:05] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:14:05] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:14:05] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:14:05] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:14:05] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:14:05] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:14:05] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:14:06] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:14:07] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:14:48] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 3684, Requested 2542. Please try again in 2.26s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:14:55] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5122, Requested 2874. Please try again in 19.96s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:15:13] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5232, Requested 2753. Please try again in 19.849999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:15:27] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 5394, Requested 2132. Please try again in 15.26s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:15:58] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:15:58] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:15:58] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:15:58] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:15:58] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:15:58] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:15:58] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:15:58] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:15:59] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:15:59] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:15:59] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:15:59] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:15:59] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:15:59] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:16:00] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:16:01] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:16:48] warn: [AI Extractor] Rate limited. Retrying in 1411ms...
+[2026-04-21 12:16:52] warn: [AI Extractor] Rate limited. Retrying in 1529ms...
+[2026-04-21 12:17:31] warn: [AI Extractor] Rate limited. Retrying in 1050ms...
+[2026-04-21 12:17:34] warn: [AI Extractor] Rate limited. Retrying in 2401ms...
+[2026-04-21 12:18:20] warn: [AI Extractor] Rate limited. Retrying in 4003ms...
+[2026-04-21 12:18:34] warn: [Jina Reader] Failed to read https://www.youtube.com/watch?v=WHeknGWKiBw: timeout of 15000ms exceeded
+[2026-04-21 12:19:08] warn: [Jina Reader] Failed to read https://www.scribd.com/document/809868549/Implementation-of-ICDP-Scheme-During-the-Remaining-Period-of-Fifteenth-Finance-Commission-Cycle-Up-to-2025-26-Modalities-Guidelines-for-Roasting-and: Request failed with status code 451
+[2026-04-21 12:19:16] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 4958, Requested 2931. Please try again in 18.89s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:19:32] warn: [AI Extractor] Rate limited. Retrying in 1665ms...
+[2026-04-21 12:19:54] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:19:54] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:19:54] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:19:54] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:19:54] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:19:54] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:19:54] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:19:54] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:19:54] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:19:56] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:19:57] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:58] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:59] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:59] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:19:59] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:01] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:01] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:02] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:02] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:02] warn: [Jina Reader] Failed to read https://www.scribd.com/document/809868549/Implementation-of-ICDP-Scheme-During-the-Remaining-Period-of-Fifteenth-Finance-Commission-Cycle-Up-to-2025-26-Modalities-Guidelines-for-Roasting-and: Request failed with status code 429
+[2026-04-21 12:20:03] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:04] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:20:04] info: [Browser DB] Disconnected
+[2026-04-21 12:20:16] warn: [AI Extractor] Rate limited. Retrying in 1962ms...
+[2026-04-21 12:20:37] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:20:37] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:20:37] info: [Browser] ⚡ Cache Hit for Cafe in RS Puram, Coimbatore
+[2026-04-21 12:20:45] error: [Browser] Fatal error: E11000 duplicate key error collection: zonek_browser.browsercaches index: queryHash_1 dup key: { queryHash: "3de7cc8f57fc2db58757914c77e132ce" }
+[2026-04-21 12:20:57] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:20:57] info: [Browser DB] Disconnected
+[2026-04-21 12:21:24] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:21:24] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:21:24] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:21:24] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:21:24] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:21:24] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:21:24] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:21:24] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:21:24] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:21:26] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:21:32] warn: [AI Extractor] Rate limited. Retrying in 1536ms...
+[2026-04-21 12:21:54] warn: [AI Extractor] Rate limited. Retrying in 1926ms...
+[2026-04-21 12:21:56] warn: [AI Extractor] Rate limited. Retrying in 2172ms...
+[2026-04-21 12:22:15] warn: [AI Extractor] Rate limited. Retrying in 2641ms...
+[2026-04-21 12:22:17] warn: [AI Extractor] Rate limited. Retrying in 4007ms...
+[2026-04-21 12:22:35] warn: [AI Extractor] Rate limited. Retrying in 4784ms...
+[2026-04-21 12:22:36] warn: [Jina Reader] Failed to read https://www.scribd.com/document/809868549/Implementation-of-ICDP-Scheme-During-the-Remaining-Period-of-Fifteenth-Finance-Commission-Cycle-Up-to-2025-26-Modalities-Guidelines-for-Roasting-and: Request failed with status code 451
+[2026-04-21 12:22:51] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 10517, Requested 3384. Please try again in 9.505s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:22:52] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:22:52] info: [Browser DB] Disconnected
+[2026-04-21 12:22:56] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:22:56] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:22:56] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:22:56] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:22:56] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:22:56] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:22:56] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:22:56] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:22:56] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:22:58] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:22:59] warn: [AI Extractor] Failed to extract facts: 429 {"error":{"message":"Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k2enktk6evps65t8qfnxhkjf` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 11022, Requested 2921. Please try again in 9.715s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:00] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:01] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:01] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:01] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:02] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:02] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:02] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:03] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:03] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:03] warn: [Jina Reader] Failed to read https://startupflora.com/post/government-grant-up-to-inr5-crore-for-food-business-mofpi-scheme-2025: Request failed with status code 429
+[2026-04-21 12:23:03] warn: [AI Extractor] Failed to extract facts: 400 {"error":{"message":"The model `mixtral-8x7b-32768` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.","type":"invalid_request_error","code":"model_decommissioned"}}
+[2026-04-21 12:23:03] warn: [Jina Reader] Failed to read https://www.scribd.com/document/809868549/Implementation-of-ICDP-Scheme-During-the-Remaining-Period-of-Fifteenth-Finance-Commission-Cycle-Up-to-2025-26-Modalities-Guidelines-for-Roasting-and: Request failed with status code 429
+[2026-04-21 12:23:04] warn: [Jina Reader] Failed to read https://www.myscheme.gov.in/schemes/dsctawa: Request failed with status code 429
+[2026-04-21 12:23:04] info: [Browser DB] Disconnected
+[2026-04-21 12:23:09] error: [Browser] Fatal error: E11000 duplicate key error collection: zonek_browser.browsercaches index: queryHash_1 dup key: { queryHash: "3de7cc8f57fc2db58757914c77e132ce" }
+[2026-04-21 12:24:05] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:24:05] info: [Browser DB] Disconnected
+[2026-04-21 12:24:10] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:24:10] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:24:10] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:24:10] info: [Browser] Starting group: Local Competitor Intelligence
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "best Cafe in RS Puram, Coimbatore review"
+[2026-04-21 12:24:10] info: [Browser] Starting group: Cost & Investment Intelligence
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "Cafe setup cost India 2025 investment required"
+[2026-04-21 12:24:10] info: [Browser] Starting group: Local Economic Signal
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "Coimbatore business growth investment opportunities 2025"
+[2026-04-21 12:24:10] info: [Browser] Starting group: Regulatory & Licensing
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "Cafe license registration requirements India 2025"
+[2026-04-21 12:24:10] info: [Browser] Starting group: Government Scheme Matching
+[2026-04-21 12:24:10] info: [Search] Trying Tavily for: "government scheme Cafe India 2025 subsidy"
+[2026-04-21 12:24:11] info: [Search] Trying Tavily for: "cost to open Cafe India small business"
+[2026-04-21 12:24:11] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:24:11] info: [Search] Trying Tavily for: "Coimbatore new infrastructure development projects 2025"
+[2026-04-21 12:24:11] info: [Search] Trying Tavily for: "top rated Cafe Coimbatore list"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "MSME loan food & beverage India 2025 free"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "FSSAI MSME GST food & beverage business India registration"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "Cafe monthly expenses profit margin India 2025"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "Coimbatore commercial market real estate 2025"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "Cafe near RS Puram, Coimbatore Justdial Zomato"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "startup scheme food & beverage India eligibility apply"
+[2026-04-21 12:24:12] info: [Search] Trying Tavily for: "Cafe permits compliance rules India entrepreneur"
+[2026-04-21 12:25:18] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:25:18] info: [Browser DB] Disconnected
+[2026-04-21 12:25:51] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 12:25:51] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 12:25:51] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 12:25:51] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 12:25:53] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 12:25:54] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-21 16:25:02] info: [Browser] Running test for: Cafe @ RS Puram, Coimbatore
+[2026-04-21 16:25:02] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-21 16:25:02] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-21 16:25:02] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-21 16:25:04] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-21 16:25:06] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-24 13:46:03] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-24 13:46:03] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-24 13:46:03] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-24 13:46:07] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-24 13:46:09] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-24 13:50:09] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-24 14:00:00] info: [Browser DB] ✅ Connected → test
+[2026-04-24 14:00:24] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-24 14:00:24] info: [Search] Trying Tavily for: "Cafy market growth India 2025 statistics"
+[2026-04-24 14:00:28] info: [Search] Trying Tavily for: "Cafy industry revenue India 2025 2026"
+[2026-04-24 14:00:30] info: [Browser DB] ✅ Connected → test
+[2026-04-24 14:00:30] info: [Search] Trying Tavily for: "Cafy demand trends Coimbatore 2025"
+[2026-04-24 14:02:36] info: [Browser DB] ✅ Connected → test
+[2026-04-24 14:04:00] info: [Browser DB] ✅ Connected → test
+[2026-04-24 14:53:27] info: [Browser DB] ✅ Connected → test
+[2026-04-24 14:53:27] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-24 14:53:27] info: [Search] Trying Tavily for: "cafe market growth India 2025 statistics"
+[2026-04-24 14:53:30] info: [Search] Trying Tavily for: "cafe industry revenue India 2025 2026"
+[2026-04-24 14:53:31] info: [Search] Trying Tavily for: "cafe demand trends Coimbatore 2025"
+[2026-04-24 16:33:24] info: [Browser DB] ✅ Connected → test
+[2026-04-24 16:33:24] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-24 16:33:24] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-24 16:33:27] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-24 16:33:28] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-25 14:50:52] info: [Browser DB] ✅ Connected → test
+[2026-04-25 14:51:03] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 14:51:03] info: [Search] Trying Tavily for: "cafe market growth India 2025 statistics"
+[2026-04-25 14:51:06] info: [Search] Trying Tavily for: "cafe industry revenue India 2025 2026"
+[2026-04-25 14:51:07] info: [Search] Trying Tavily for: "cafe demand trends coimbatore 2025"
+[2026-04-25 15:12:20] info: [Browser DB] ✅ Connected → test
+[2026-04-25 15:27:22] info: [Browser DB] ✅ Connected → test
+[2026-04-25 15:27:22] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 15:27:22] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-25 15:27:25] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-25 15:27:26] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-25 15:34:35] info: [Browser DB] ✅ Connected → test
+[2026-04-25 15:34:35] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 15:34:35] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-25 15:34:37] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-25 15:34:37] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-25 15:35:39] info: [Browser DB] ✅ Connected → test
+[2026-04-25 15:35:39] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 15:35:39] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-25 15:35:41] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-25 15:35:41] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-25 15:43:51] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 15:43:51] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 15:43:51] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-04-25 15:43:53] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-04-25 15:43:53] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-04-25 15:58:17] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 15:58:17] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 15:58:17] info: [Search] Trying Tavily for: "Gym market growth India 2025 statistics"
+[2026-04-25 15:58:20] info: [Search] Trying Tavily for: "Gym industry revenue India 2025 2026"
+[2026-04-25 15:58:21] info: [Search] Trying Tavily for: "Gym demand trends Coimbatore 2025"
+[2026-04-25 16:02:39] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:18:39] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:29:15] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:53:09] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:57:23] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:59:49] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-04-25 16:59:49] info: [Browser] Starting group: Market Trend Intelligence
+[2026-04-25 16:59:49] info: [Search] Trying Tavily for: "Gym market growth India 2025 statistics"
+[2026-04-25 16:59:51] info: [Search] Trying Tavily for: "Gym industry revenue India 2025 2026"
+[2026-04-25 16:59:53] info: [Search] Trying Tavily for: "Gym demand trends Coimbatore 2025"
+[2026-04-25 17:19:48] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-05-16 13:32:23] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-05-16 13:32:38] info: [Browser] Starting group: Market Trend Intelligence
+[2026-05-16 13:32:38] info: [Search] Trying Tavily for: "cafy market growth India 2025 statistics"
+[2026-05-16 13:32:40] info: [Search] Trying Tavily for: "cafy industry revenue India 2025 2026"
+[2026-05-16 13:32:42] info: [Search] Trying Tavily for: "cafy demand trends Coimbatore 2025"
+[2026-06-06 11:27:31] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-06-06 11:27:39] info: [Browser] Starting group: Market Trend Intelligence
+[2026-06-06 11:27:39] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-06-06 11:27:42] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-06-06 11:27:43] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-06-06 11:59:27] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-06-06 12:11:27] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-08-17 09:44:07] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-08-17 09:44:20] info: [Browser] Starting group: Market Trend Intelligence
+[2026-08-17 09:44:20] info: [Search] Trying Tavily for: "Cafe market growth India 2025 statistics"
+[2026-08-17 09:44:23] info: [Search] Trying Tavily for: "Cafe industry revenue India 2025 2026"
+[2026-08-17 09:44:25] info: [Search] Trying Tavily for: "Cafe demand trends Coimbatore 2025"
+[2026-09-17 09:22:52] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-09-17 09:23:06] info: [Browser] Starting group: Market Trend Intelligence
+[2026-09-17 09:23:06] info: [Search] Trying Tavily for: "Gym market growth India 2025 statistics"
+[2026-09-17 09:23:09] info: [Search] Trying Tavily for: "Gym industry revenue India 2025 2026"
+[2026-09-17 09:23:11] info: [Search] Trying Tavily for: "Gym demand trends Bangalore 2025"
+[2026-09-21 11:43:51] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-09-21 11:43:55] info: [Browser] Starting group: Market Trend Intelligence
+[2026-09-21 11:43:55] info: [Search] Trying Tavily for: "Gym market growth India 2025 statistics"
+[2026-09-21 11:43:57] info: [Search] Trying Tavily for: "Gym industry revenue India 2025 2026"
+[2026-09-21 11:43:58] info: [Search] Trying Tavily for: "Gym demand trends Coimbatore 2025"
+[2026-09-22 09:00:47] info: [Browser DB] ✅ Connected → zonek_browser
+[2026-09-22 09:00:47] info: [Browser] Starting group: Market Trend Intelligence
+[2026-09-22 09:00:47] info: [Search] Trying Tavily for: "cafe market growth India 2025 statistics"
+[2026-09-22 09:00:49] info: [Search] Trying Tavily for: "cafe industry revenue India 2025 2026"
+[2026-09-22 09:00:50] info: [Search] Trying Tavily for: "cafe demand trends coimbatore 2025"

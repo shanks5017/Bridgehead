@@ -1,0 +1,785 @@
+[2026-04-24 13:42:40] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:42:40] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:42:40] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:45:21] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:45:21] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:45:21] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:46:01] INFO: [Orchestrator] 🚀 New research job: 2a4f90a8-7905-4566-aa9d-e0885780d1f4 — Cafe @ Coimbatore
+[2026-04-24 13:46:01] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-24 13:46:03] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-24 13:46:03] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 13:46:03] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 13:46:04] WARN: [CompetitorScraper] ⚠️ Justdial returned no parseable data (likely JS-rendered or blocked)
+[2026-04-24 13:46:17] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 13:46:17] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 13:46:17] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 13:46:17] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 13:46:18] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 13:46:18] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 13:46:18] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 13:46:19] INFO: [ReportGenerator] ✅ Score: 0, Verdict: NO-GO
+[2026-04-24 13:46:19] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-24 13:46:19] INFO: [Pipeline] ✅ Complete. Score: 0/100 — NO-GO
+[2026-04-24 13:46:19] INFO: [Orchestrator] ✅ Job complete: 2a4f90a8-7905-4566-aa9d-e0885780d1f4
+[2026-04-24 13:50:09] INFO: [Orchestrator] 🚀 New research job: ed6347e5-8938-4413-9e8b-f7610fce5d89 — Cafe @ Coimbatore
+[2026-04-24 13:50:09] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-24 13:50:09] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 13:50:09] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 13:50:11] WARN: [CompetitorScraper] ⚠️ Justdial returned no parseable data (likely JS-rendered or blocked)
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 13:50:24] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 13:50:24] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 13:50:26] INFO: [ReportGenerator] ✅ Score: 50, Verdict: CAUTION
+[2026-04-24 13:50:26] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-24 13:50:26] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-24 13:50:26] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-04-24 13:50:26] INFO: [Orchestrator] ✅ Job complete: ed6347e5-8938-4413-9e8b-f7610fce5d89
+[2026-04-24 13:55:37] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:55:37] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:55:37] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:56:14] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:56:14] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:56:14] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:56:55] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:56:55] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:56:55] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:57:10] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:57:10] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:57:10] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:58:55] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:58:55] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:58:55] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:59:28] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 13:59:28] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 13:59:28] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 13:59:58] INFO: [Orchestrator] 🚀 New research job: 9caef3ab-fb99-40d6-9f78-6c0439219886 — Cafy @ Coimbatore
+[2026-04-24 13:59:58] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-24 13:59:58] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafy @ Coimbatore
+[2026-04-24 14:00:00] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-24 14:00:00] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "gov" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:24] WARN: [Pipeline] Stage "competitors" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:24] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 14:00:24] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 14:00:25] INFO: [ReportGenerator] ✅ Score: 0, Verdict: NO-GO
+[2026-04-24 14:00:25] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-24 14:00:25] INFO: [Pipeline] ✅ Complete. Score: 0/100 — NO-GO
+[2026-04-24 14:00:25] INFO: [Orchestrator] ✅ Job complete and cached: 9caef3ab-fb99-40d6-9f78-6c0439219886
+[2026-04-24 14:00:27] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.justdial.com/Coimbatore/cafys
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafys", waiting until "domcontentloaded"[22m
+
+[2026-04-24 14:00:30] INFO: [Orchestrator] 🚀 New research job: 80548722-e2cd-4ff8-81c2-c3c533084b91 — Cafy @ Coimbatore
+[2026-04-24 14:00:30] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafy @ Coimbatore
+[2026-04-24 14:00:30] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 14:00:30] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 14:00:30] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.justdial.com/Coimbatore/cafys
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafys", waiting until "domcontentloaded"[22m
+
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 14:00:45] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 14:00:45] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 14:00:45] INFO: [ReportGenerator] ✅ Score: 0, Verdict: NO-GO
+[2026-04-24 14:00:45] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-24 14:00:45] INFO: [Pipeline] ✅ Complete. Score: 0/100 — NO-GO
+[2026-04-24 14:00:45] INFO: [Orchestrator] ✅ Job complete and cached: 80548722-e2cd-4ff8-81c2-c3c533084b91
+[2026-04-24 14:02:36] INFO: [Orchestrator] 🚀 New research job: d78ca851-8d5d-4518-b1a4-7adb83b296a0 — gym @ Coimbatore
+[2026-04-24 14:02:36] INFO: [Pipeline] Starting 4-stage parallel pipeline for: gym @ Coimbatore
+[2026-04-24 14:02:36] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 14:02:36] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 14:02:37] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.justdial.com/Coimbatore/gyms
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "domcontentloaded"[22m
+
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 14:02:51] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 14:02:51] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 14:02:52] INFO: [ReportGenerator] ✅ Score: 0, Verdict: NO-GO
+[2026-04-24 14:02:52] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-24 14:02:52] INFO: [Pipeline] ✅ Complete. Score: 0/100 — NO-GO
+[2026-04-24 14:02:52] INFO: [Orchestrator] ✅ Job complete and cached: d78ca851-8d5d-4518-b1a4-7adb83b296a0
+[2026-04-24 14:04:00] INFO: [Orchestrator] 🚀 New research job: 996069e5-17b8-4fb3-9fae-092ecf34a0df — Gym @ Coimbatore
+[2026-04-24 14:04:00] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-24 14:04:00] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 14:04:00] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 14:04:01] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.justdial.com/Coimbatore/gyms
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "domcontentloaded"[22m
+
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 14:04:15] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 14:04:15] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 14:04:16] INFO: [ReportGenerator] ✅ Score: 0, Verdict: NO-GO
+[2026-04-24 14:04:16] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-24 14:04:16] INFO: [Pipeline] ✅ Complete. Score: 0/100 — NO-GO
+[2026-04-24 14:04:16] INFO: [Orchestrator] ✅ Job complete and cached: 996069e5-17b8-4fb3-9fae-092ecf34a0df
+[2026-04-24 14:07:37] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 14:07:37] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 14:07:37] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 14:09:22] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 14:09:22] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 14:09:22] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 14:53:25] INFO: [Orchestrator] 🚀 New research job: e6d3348c-c389-4869-9556-f7a343a71d26 — cafe @ Coimbatore
+[2026-04-24 14:53:25] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-24 14:53:25] INFO: [Pipeline] Starting 4-stage parallel pipeline for: cafe @ Coimbatore
+[2026-04-24 14:53:27] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-24 14:53:27] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-24 14:53:27] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 14:53:30] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://www.justdial.com/Coimbatore/cafes
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "domcontentloaded"[22m
+
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 14:53:42] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 14:53:42] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-24 14:53:42] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 14:53:42] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 14:53:43] INFO: [ReportGenerator] ✅ Score: 50, Verdict: CAUTION
+[2026-04-24 14:53:43] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-24 14:53:43] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-24 14:53:43] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-04-24 14:53:43] INFO: [Orchestrator] ✅ Job complete and cached: e6d3348c-c389-4869-9556-f7a343a71d26
+[2026-04-24 14:56:08] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-24 14:56:08] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-24 14:56:08] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-24 16:33:22] INFO: [Orchestrator] 🚀 New research job: 219325c7-fb0b-4a55-bf00-6fa44f50d20d — Cafe @ Coimbatore
+[2026-04-24 16:33:22] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-24 16:33:22] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-24 16:33:24] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-24 16:33:25] ERROR: [RentalAdapter] ❌ Failed: Request failed with status code 500
+[2026-04-24 16:33:25] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-24 16:33:39] WARN: [Pipeline] Stage "competitors" failed or timed out — report will show data as unavailable
+[2026-04-24 16:33:39] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-24 16:33:39] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-24 16:33:39] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-24 16:33:41] INFO: [ReportGenerator] ✅ Score: 40, Verdict: CAUTION
+[2026-04-24 16:33:41] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-24 16:33:41] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-24 16:33:41] INFO: [Pipeline] ✅ Complete. Score: 40/100 — CAUTION
+[2026-04-24 16:33:41] INFO: [Orchestrator] ✅ Job complete and cached: 219325c7-fb0b-4a55-bf00-6fa44f50d20d
+[2026-04-24 16:33:45] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "domcontentloaded"[22m
+
+[2026-04-25 14:49:19] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 14:49:19] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 14:49:19] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 14:50:49] INFO: [Orchestrator] 🚀 New research job: b994affe-f965-4492-9d2f-47869bdaa1de — cafe @ coimbatore
+[2026-04-25 14:50:49] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 14:50:49] INFO: [Pipeline] Starting 4-stage parallel pipeline for: cafe @ coimbatore
+[2026-04-25 14:50:52] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 14:51:03] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-25 14:51:03] INFO: [GovAdapter] ✅ Loaded gov data for coimbatore — 0 data points
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-25 14:51:07] WARN: [Pipeline] Stage "competitors" failed or timed out — report will show data as unavailable
+[2026-04-25 14:51:07] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-25 14:51:07] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-25 14:51:07] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-25 14:51:08] INFO: [ReportGenerator] ✅ Score: 40, Verdict: CAUTION
+[2026-04-25 14:51:08] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 14:51:08] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-25 14:51:08] INFO: [Pipeline] ✅ Complete. Score: 40/100 — CAUTION
+[2026-04-25 14:51:08] INFO: [Orchestrator] ✅ Job complete and cached: b994affe-f965-4492-9d2f-47869bdaa1de
+[2026-04-25 14:51:23] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/coimbatore/cafes", waiting until "domcontentloaded"[22m
+
+[2026-04-25 15:12:20] INFO: [Orchestrator] 🚀 New research job: 7d1fbd66-6e53-4fb4-bcd2-d41062dad39a — Cafe @ Coimbatore
+[2026-04-25 15:12:20] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-25 15:12:20] ERROR: [RentalAdapter] ❌ Failed: 
+[2026-04-25 15:12:20] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 0 data points
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-25 15:12:35] WARN: [Pipeline] Stage "competitors" failed or timed out — report will show data as unavailable
+[2026-04-25 15:12:35] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-25 15:12:35] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-25 15:12:35] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-25 15:12:36] INFO: [ReportGenerator] ✅ Score: 40, Verdict: CAUTION
+[2026-04-25 15:12:36] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 15:12:36] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-25 15:12:36] INFO: [Pipeline] ✅ Complete. Score: 40/100 — CAUTION
+[2026-04-25 15:12:36] INFO: [Orchestrator] ✅ Job complete and cached: 7d1fbd66-6e53-4fb4-bcd2-d41062dad39a
+[2026-04-25 15:12:40] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "domcontentloaded"[22m
+
+[2026-04-25 15:15:19] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:15:19] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:15:19] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:16:34] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:16:34] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:16:34] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:17:40] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:17:40] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:17:40] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:27:19] INFO: [Orchestrator] 🚀 New research job: a599ec5b-092a-48f1-b4a4-d1f82fa02545 — Cafe @ Coimbatore
+[2026-04-25 15:27:19] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 15:27:19] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-25 15:27:22] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 15:27:22] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 5 data points
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "browser" timed out after 15000ms
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "rentals" timed out after 15000ms
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "gov" timed out after 15000ms
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "competitors" timed out after 15000ms
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-04-25 15:27:37] WARN: [Pipeline] Stage "competitors" failed or timed out — report will show data as unavailable
+[2026-04-25 15:27:37] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-25 15:27:37] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-25 15:27:37] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-25 15:27:38] INFO: [ReportGenerator] ✅ Score: 40, Verdict: NO-GO
+[2026-04-25 15:27:38] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 15:27:38] WARN:   ↳ AI stated rental figures when no rental data exists in packet
+[2026-04-25 15:27:38] INFO: [Pipeline] ✅ Complete. Score: 40/100 — NO-GO
+[2026-04-25 15:27:38] INFO: [Orchestrator] ✅ Job complete and cached: a599ec5b-092a-48f1-b4a4-d1f82fa02545
+[2026-04-25 15:27:42] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 20000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "domcontentloaded"[22m
+
+[2026-04-25 15:28:03] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:28:03] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:28:03] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:31:56] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:31:56] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:31:56] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:33:51] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:33:51] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:33:51] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:35:37] INFO: [Orchestrator] 🚀 New research job: c27bf32c-0dd5-4b63-8df8-b3b2c15c469f — Cafe @ Coimbatore
+[2026-04-25 15:35:37] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 15:35:37] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-25 15:35:39] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 15:35:39] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 15:35:59] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 15:36:24] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-04-25 15:37:39] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 15:37:39] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 15:37:39] INFO: [ReportGenerator] Generating feasibility report...
+[2026-04-25 15:37:39] INFO: [ReportGenerator] 🔒 Routing to local Ollama (Qwen2.5:7b) for Privacy-First Standard Analysis...
+[2026-04-25 15:37:39] WARN: [ReportGenerator] ⚠️ Local Ollama failed (connect ECONNREFUSED 127.0.0.1:11434). Falling back to Groq...
+[2026-04-25 15:37:40] INFO: [ReportGenerator] ✅ Score: 50, Verdict: CAUTION
+[2026-04-25 15:37:40] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 15:37:40] WARN:   ↳ Rental figure mismatch: AI said ₹80, packet says ₹66892
+[2026-04-25 15:37:40] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-04-25 15:37:40] INFO: [Orchestrator] ✅ Job complete and cached: c27bf32c-0dd5-4b63-8df8-b3b2c15c469f
+[2026-04-25 15:42:46] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:42:46] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:42:46] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:43:49] INFO: [Orchestrator] 🚀 New research job: f3eef0cb-d41c-46e8-a655-f8b741cba493 — Cafe @ Coimbatore
+[2026-04-25 15:43:49] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 15:43:49] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-25 15:43:51] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 15:43:51] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 15:44:13] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 15:44:36] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-04-25 15:45:51] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 15:45:51] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 15:45:51] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 15:45:51] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 15:45:51] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 15:45:51] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 15:45:52] INFO: [ReportGenerator] ✅ Score: 58, Verdict: CAUTION
+[2026-04-25 15:45:52] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 15:45:52] WARN:   ↳ Rental figure mismatch: AI said ₹83, packet says ₹69088
+[2026-04-25 15:45:52] INFO: [Pipeline] ✅ Complete. Score: 58/100 — CAUTION
+[2026-04-25 15:45:52] INFO: [Orchestrator] ✅ Job complete and cached: f3eef0cb-d41c-46e8-a655-f8b741cba493
+[2026-04-25 15:57:43] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 15:57:43] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 15:57:43] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 15:58:15] INFO: [Orchestrator] 🚀 New research job: 3ef12fdf-bef0-442a-aa05-8e81ed7cbb72 — Gym @ Coimbatore
+[2026-04-25 15:58:15] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 15:58:15] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 15:58:17] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 15:58:17] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 15:58:44] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 15:59:02] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 16:00:17] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 16:00:17] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 16:00:17] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 16:00:17] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 16:00:17] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 16:00:17] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 16:00:18] INFO: [ReportGenerator] ✅ Score: 44, Verdict: CAUTION
+[2026-04-25 16:00:18] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 16:00:18] WARN:   ↳ Rental figure mismatch: AI said ₹149, packet says ₹124310
+[2026-04-25 16:00:18] INFO: [Pipeline] ✅ Complete. Score: 44/100 — CAUTION
+[2026-04-25 16:00:18] INFO: [Orchestrator] ✅ Job complete and cached: 3ef12fdf-bef0-442a-aa05-8e81ed7cbb72
+[2026-04-25 16:02:39] INFO: [Orchestrator] 🚀 New research job: 4eee47cc-c9c6-4441-96c6-a9ad37de9d67 — Gym @ Coimbatore
+[2026-04-25 16:02:39] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 16:02:39] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 16:03:03] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 16:03:24] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 16:04:39] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 16:04:39] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 16:04:39] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 16:04:39] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 16:04:39] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 16:04:39] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 16:04:40] INFO: [ReportGenerator] ✅ Score: 42, Verdict: CAUTION
+[2026-04-25 16:04:40] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 16:04:40] WARN:   ↳ Rental figure mismatch: AI said ₹216, packet says ₹180306
+[2026-04-25 16:04:40] INFO: [Pipeline] ✅ Complete. Score: 42/100 — CAUTION
+[2026-04-25 16:04:40] INFO: [Orchestrator] ✅ Job complete and cached: 4eee47cc-c9c6-4441-96c6-a9ad37de9d67
+[2026-04-25 16:18:39] INFO: [Orchestrator] 🚀 New research job: ae603dc4-9498-4530-9c41-86bed8a589d3 — Gym @ Coimbatore
+[2026-04-25 16:18:39] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 16:18:39] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 16:19:00] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 16:19:24] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 16:20:39] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 16:20:39] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 16:20:39] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 16:20:39] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 16:20:39] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 16:20:39] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 16:20:40] INFO: [ReportGenerator] ✅ Score: 44, Verdict: CAUTION
+[2026-04-25 16:20:40] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 16:20:40] WARN:   ↳ Rental figure mismatch: AI said ₹216, packet says ₹180306
+[2026-04-25 16:20:40] INFO: [Pipeline] ✅ Complete. Score: 44/100 — CAUTION
+[2026-04-25 16:20:40] INFO: [Orchestrator] ✅ Job complete and cached: ae603dc4-9498-4530-9c41-86bed8a589d3
+[2026-04-25 16:29:15] INFO: [Orchestrator] 🚀 New research job: 72b4bc58-4720-41f0-bbb3-dfc16e70110d — Cafy @ Coimbatore
+[2026-04-25 16:29:15] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafy @ Coimbatore
+[2026-04-25 16:29:15] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 16:29:40] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 16:30:00] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafys", waiting until "load"[22m
+
+[2026-04-25 16:31:15] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 16:31:15] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 16:31:15] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 16:31:15] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 16:31:15] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 16:31:15] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 16:31:16] INFO: [ReportGenerator] ✅ Score: 42, Verdict: CAUTION
+[2026-04-25 16:31:16] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 16:31:16] WARN:   ↳ Rental figure mismatch: AI said ₹216, packet says ₹180306
+[2026-04-25 16:31:16] INFO: [Pipeline] ✅ Complete. Score: 42/100 — CAUTION
+[2026-04-25 16:31:16] INFO: [Orchestrator] ✅ Job complete and cached: 72b4bc58-4720-41f0-bbb3-dfc16e70110d
+[2026-04-25 16:53:09] INFO: [Orchestrator] 🚀 New research job: 76d3738b-cbbf-42c9-b137-b5ae4066a7ce — Cafe @ Coimbatore
+[2026-04-25 16:53:09] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-04-25 16:53:09] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 16:53:46] INFO: [RentalAdapter] ✅ 594 listings found across 8 platforms
+[2026-04-25 16:53:54] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-04-25 16:55:09] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 16:55:09] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 16:55:09] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 16:55:09] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 16:55:09] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 16:55:09] INFO: [ReportGenerator] 🧠 Stage 2: Requesting deep analysis from Groq...
+[2026-04-25 16:55:11] INFO: [ReportGenerator] ✅ Score: 42, Verdict: CAUTION
+[2026-04-25 16:55:11] WARN: [Firewall] ⚠️ 1 violation(s) corrected:
+[2026-04-25 16:55:11] WARN:   ↳ Rental figure mismatch: AI said ₹436565244653004, packet says ₹363804370544170100
+[2026-04-25 16:55:11] INFO: [Pipeline] ✅ Complete. Score: 42/100 — CAUTION
+[2026-04-25 16:55:11] INFO: [Orchestrator] ✅ Job complete and cached: 76d3738b-cbbf-42c9-b137-b5ae4066a7ce
+[2026-04-25 16:57:23] INFO: [Orchestrator] 🚀 New research job: 0d99876f-5d8a-49da-903b-75ec460e026d — Gym @ Coimbatore
+[2026-04-25 16:57:23] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 16:57:23] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 16:57:47] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 16:58:08] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 16:58:27] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 16:58:27] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 16:58:27] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 16:59:03] INFO: [Orchestrator] 🚀 New research job: 5257f0f2-ba41-4a9d-a5fc-bc8e2665c6cd — Gym @ Coimbatore
+[2026-04-25 16:59:03] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 16:59:03] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 16:59:06] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-04-25 16:59:06] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-04-25 16:59:06] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-04-25 16:59:46] INFO: [Orchestrator] 🚀 New research job: 8471c395-cbbe-440a-98d7-fbc551510621 — Gym @ Coimbatore
+[2026-04-25 16:59:46] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-04-25 16:59:46] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 16:59:48] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-04-25 16:59:49] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 17:00:16] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 17:00:34] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 17:01:48] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 17:01:48] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 17:01:48] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 17:01:48] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 17:01:48] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 17:01:52] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-04-25 17:01:52] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-25 17:01:52] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-04-25 17:01:52] INFO: [Orchestrator] ✅ Job complete and cached: 8471c395-cbbe-440a-98d7-fbc551510621
+[2026-04-25 17:19:48] INFO: [Orchestrator] 🚀 New research job: 40514c76-0bfb-4208-b71e-abbddf8f0634 — Gym @ Coimbatore
+[2026-04-25 17:19:48] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-04-25 17:19:48] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 14 data points
+[2026-04-25 17:20:14] INFO: [RentalAdapter] ✅ 171 listings found across 8 platforms
+[2026-04-25 17:20:33] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-04-25 17:21:48] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-04-25 17:21:48] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-04-25 17:21:48] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-04-25 17:21:48] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-04-25 17:21:48] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-04-25 17:21:52] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 42
+[2026-04-25 17:21:52] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-04-25 17:21:52] INFO: [Pipeline] ✅ Complete. Score: 42/100 — CAUTION
+[2026-04-25 17:21:52] INFO: [Orchestrator] ✅ Job complete and cached: 40514c76-0bfb-4208-b71e-abbddf8f0634
+[2026-05-16 13:27:05] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-05-16 13:27:05] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-05-16 13:27:05] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-05-16 13:32:22] INFO: [Orchestrator] 🚀 New research job: a99c45dc-ec06-45b0-ae43-db76dd6a3a20 — cafy @ Coimbatore
+[2026-05-16 13:32:22] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-05-16 13:32:22] INFO: [Pipeline] Starting 4-stage parallel pipeline for: cafy @ Coimbatore
+[2026-05-16 13:32:23] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-05-16 13:32:38] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 13 data points
+[2026-05-16 13:33:23] ERROR: [RentalAdapter] ❌ Failed: timeout of 60000ms exceeded
+[2026-05-16 13:33:23] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafys", waiting until "load"[22m
+
+[2026-05-16 13:34:23] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-05-16 13:34:23] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-05-16 13:34:23] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-05-16 13:34:23] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-05-16 13:34:23] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-05-16 13:34:23] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-05-16 13:34:26] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-05-16 13:34:26] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-05-16 13:34:26] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-05-16 13:34:26] INFO: [Orchestrator] ✅ Job complete and cached: a99c45dc-ec06-45b0-ae43-db76dd6a3a20
+[2026-06-06 11:26:23] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-06-06 11:26:23] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-06-06 11:26:23] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-06-06 11:27:29] INFO: [Orchestrator] 🚀 New research job: 0795fa63-0591-439a-b949-cad4a88ec4fd — Cafe @ Coimbatore
+[2026-06-06 11:27:29] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-06-06 11:27:29] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-06-06 11:27:31] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-06-06 11:27:39] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 9 data points
+[2026-06-06 11:28:24] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-06-06 11:28:31] ERROR: [RentalAdapter] ❌ Failed: timeout of 60000ms exceeded
+[2026-06-06 11:29:31] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-06-06 11:29:31] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-06-06 11:29:31] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-06-06 11:29:31] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-06-06 11:29:31] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-06-06 11:29:31] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-06-06 11:29:35] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-06-06 11:29:35] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-06-06 11:29:35] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-06-06 11:29:35] INFO: [Orchestrator] ✅ Job complete and cached: 0795fa63-0591-439a-b949-cad4a88ec4fd
+[2026-06-06 11:59:27] INFO: [Orchestrator] 🚀 New research job: 573b77ea-3390-411e-92a2-aa0a522345fa — Cafe @ Coimbatore
+[2026-06-06 11:59:27] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-06-06 11:59:27] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 9 data points
+[2026-06-06 12:00:12] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-06-06 12:00:27] ERROR: [RentalAdapter] ❌ Failed: timeout of 60000ms exceeded
+[2026-06-06 12:01:27] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-06-06 12:01:27] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-06-06 12:01:27] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-06-06 12:01:27] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-06-06 12:01:27] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-06-06 12:01:27] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-06-06 12:01:31] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-06-06 12:01:31] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-06-06 12:01:31] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-06-06 12:01:31] INFO: [Orchestrator] ✅ Job complete and cached: 573b77ea-3390-411e-92a2-aa0a522345fa
+[2026-06-06 12:11:27] INFO: [Orchestrator] 🚀 New research job: 42ea334a-72a6-496a-a0c7-420e6de360ba — Cafe @ Coimbatore
+[2026-06-06 12:11:27] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-06-06 12:11:27] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 9 data points
+[2026-06-06 12:11:53] INFO: [RentalAdapter] ✅ 132 listings found across 8 platforms
+[2026-06-06 12:12:13] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-06-06 12:13:27] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-06-06 12:13:27] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-06-06 12:13:27] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-06-06 12:13:27] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-06-06 12:13:27] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-06-06 12:13:31] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-06-06 12:13:31] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-06-06 12:13:31] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-06-06 12:13:31] INFO: [Orchestrator] ✅ Job complete and cached: 42ea334a-72a6-496a-a0c7-420e6de360ba
+[2026-08-17 09:10:45] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-08-17 09:10:45] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-08-17 09:10:45] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-08-17 09:44:06] INFO: [Orchestrator] 🚀 New research job: 52d47f44-dcd7-4195-9b1a-65af903c3228 — Cafe @ Coimbatore
+[2026-08-17 09:44:06] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-08-17 09:44:06] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Cafe @ Coimbatore
+[2026-08-17 09:44:07] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-08-17 09:44:20] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 9 data points
+[2026-08-17 09:44:29] INFO: [RentalAdapter] ✅ 139 listings found across 8 platforms
+[2026-08-17 09:44:45] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_CONNECTION_RESET at https://www.justdial.com/Coimbatore/cafes
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/cafes", waiting until "load"[22m
+
+[2026-08-17 09:46:07] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-08-17 09:46:07] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-08-17 09:46:07] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-08-17 09:46:07] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-08-17 09:46:07] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-08-17 09:46:10] INFO: [ReportGenerator] ✅ Result: CAUTION, Score: 60
+[2026-08-17 09:46:10] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-08-17 09:46:10] INFO: [Pipeline] ✅ Complete. Score: 60/100 — CAUTION
+[2026-08-17 09:46:10] INFO: [Orchestrator] ✅ Job complete and cached: 52d47f44-dcd7-4195-9b1a-65af903c3228
+[2026-09-02 15:30:27] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-02 15:30:27] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-02 15:30:27] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-02 15:56:51] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-02 15:56:51] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-02 15:56:51] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-02 15:57:08] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-02 15:57:08] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-02 15:57:08] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-02 16:07:39] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-02 16:07:39] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-02 16:07:39] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-02 16:11:58] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-02 16:11:58] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-02 16:11:58] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 11:05:29] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 11:05:29] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 11:05:29] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 11:59:39] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 11:59:39] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 11:59:39] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:03:23] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:03:23] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:03:23] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:04:02] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:04:02] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:04:02] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:09:17] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:09:17] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:09:17] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:12:27] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:12:27] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:12:27] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:13:52] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:13:52] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:13:52] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:21:20] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:21:20] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:21:20] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:24:55] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:24:55] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:24:55] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-13 12:32:02] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-13 12:32:02] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-13 12:32:02] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-16 13:36:56] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-16 13:36:56] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-16 13:36:56] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-16 21:22:50] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-16 21:22:50] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-16 21:22:50] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 09:07:15] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 09:07:15] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 09:07:15] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 09:22:51] INFO: [Orchestrator] 🚀 New research job: 2c89c0df-31f2-48bf-902b-28181416534b — Gym @ Bangalore
+[2026-09-17 09:22:51] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-09-17 09:22:51] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Bangalore
+[2026-09-17 09:22:52] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-09-17 09:23:06] INFO: [GovAdapter] ✅ Loaded gov data for Bangalore — 7 data points
+[2026-09-17 09:23:25] INFO: [RentalAdapter] ✅ 136 listings found across 1 platforms
+[2026-09-17 09:23:51] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: Timeout 45000ms exceeded.
+Call log:
+[2m  - navigating to "https://www.justdial.com/Bangalore/gyms", waiting until "load"[22m
+
+[2026-09-17 09:24:52] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-09-17 09:24:52] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-09-17 09:24:52] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-09-17 09:24:52] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-09-17 09:24:52] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-09-17 09:24:52] ERROR: [ReportGenerator] ❌ 404 {"error":{"message":"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.","type":"invalid_request_error","code":"model_not_found"}}
+[2026-09-17 09:24:52] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-09-17 09:24:52] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-09-17 09:24:52] INFO: [Orchestrator] ✅ Job complete and cached: 2c89c0df-31f2-48bf-902b-28181416534b
+[2026-09-17 09:46:24] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 09:46:24] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 09:46:24] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 10:16:06] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 10:16:06] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 10:16:06] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 14:17:14] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 14:17:14] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 14:17:14] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 15:30:12] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 15:30:12] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 15:30:12] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 15:47:07] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 15:47:07] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 15:47:07] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 16:16:25] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 16:16:25] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 16:16:25] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-17 16:23:22] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-17 16:23:22] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-17 16:23:22] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-18 11:56:33] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-18 11:56:33] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-18 11:56:33] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-18 12:04:05] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-18 12:04:05] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-18 12:04:05] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-18 12:10:47] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-18 12:10:47] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-18 12:10:47] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-18 12:14:30] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-18 12:14:30] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-18 12:14:30] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-18 12:16:23] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-18 12:16:23] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-18 12:16:23] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-21 10:49:49] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-21 10:49:49] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-21 10:49:49] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-21 11:43:50] INFO: [Orchestrator] 🚀 New research job: 2276fad1-f44c-4150-b9f4-bf9c507ec05a — Gym @ Coimbatore
+[2026-09-21 11:43:50] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-09-21 11:43:50] INFO: [Pipeline] Starting 4-stage parallel pipeline for: Gym @ Coimbatore
+[2026-09-21 11:43:51] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-09-21 11:43:55] INFO: [GovAdapter] ✅ Loaded gov data for Coimbatore — 9 data points
+[2026-09-21 11:44:19] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_CONNECTION_RESET at https://www.justdial.com/Coimbatore/gyms
+Call log:
+[2m  - navigating to "https://www.justdial.com/Coimbatore/gyms", waiting until "load"[22m
+
+[2026-09-21 11:44:51] ERROR: [RentalAdapter] ❌ Failed: timeout of 60000ms exceeded
+[2026-09-21 11:45:51] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-09-21 11:45:51] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-09-21 11:45:51] WARN: [Pipeline] Stage "rentals" failed or timed out — report will show data as unavailable
+[2026-09-21 11:45:51] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-09-21 11:45:51] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-09-21 11:45:51] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-09-21 11:45:51] ERROR: [ReportGenerator] ❌ 404 {"error":{"message":"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.","type":"invalid_request_error","code":"model_not_found"}}
+[2026-09-21 11:45:51] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-09-21 11:45:51] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-09-21 11:45:51] INFO: [Orchestrator] ✅ Job complete and cached: 2276fad1-f44c-4150-b9f4-bf9c507ec05a
+[2026-09-21 21:00:47] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-21 21:00:47] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-21 21:00:47] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-21 21:05:56] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-21 21:05:56] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-21 21:05:56] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 00:09:12] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 00:09:12] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 00:09:12] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 00:44:23] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 00:44:23] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 00:44:23] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 00:52:15] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 00:52:15] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 00:52:15] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 01:12:30] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 01:12:30] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 01:12:30] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 07:24:52] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 07:24:52] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 07:24:52] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 07:31:20] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 07:31:20] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 07:31:20] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 07:32:11] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 07:32:11] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 07:32:11] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 07:41:33] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 07:41:33] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 07:41:33] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 07:43:37] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 07:43:37] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 07:43:37] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 08:49:33] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-22 08:49:33] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-22 08:49:33] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-22 09:00:46] INFO: [Orchestrator] 🚀 New research job: 1ef1b6f8-f7b9-46b3-bdfb-153c04ca1793 — cafe @ coimbatore
+[2026-09-22 09:00:46] INFO: [DB] Connected to Zonek_browser MongoDB for caching Research Jobs
+[2026-09-22 09:00:46] INFO: [Pipeline] Starting 4-stage parallel pipeline for: cafe @ coimbatore
+[2026-09-22 09:00:47] INFO: [GovAdapter] Connected to Zonek_gov MongoDB
+[2026-09-22 09:00:47] INFO: [GovAdapter] ✅ Loaded gov data for coimbatore — 9 data points
+[2026-09-22 09:01:11] ERROR: [CompetitorScraper] ❌ Playwright failed: page.goto: net::ERR_CONNECTION_RESET at https://www.justdial.com/coimbatore/cafes
+Call log:
+[2m  - navigating to "https://www.justdial.com/coimbatore/cafes", waiting until "load"[22m
+
+[2026-09-22 09:01:41] INFO: [RentalAdapter] ✅ 579 listings found across 2 platforms
+[2026-09-22 09:02:47] WARN: [Pipeline] Stage "browser" timed out after 120000ms
+[2026-09-22 09:02:47] WARN: [Pipeline] Stage "browser" failed or timed out — report will show data as unavailable
+[2026-09-22 09:02:47] INFO: [ReportGenerator] Generating dual-LLM feasibility report...
+[2026-09-22 09:02:47] INFO: [ReportGenerator] 🔒 Stage 1: Requesting concise summary from Ollama...
+[2026-09-22 09:02:47] WARN: [ReportGenerator] ⚠️ Ollama skipped: connect ECONNREFUSED 127.0.0.1:11434
+[2026-09-22 09:02:47] ERROR: [ReportGenerator] ❌ 404 {"error":{"message":"The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.","type":"invalid_request_error","code":"model_not_found"}}
+[2026-09-22 09:02:47] INFO: [Firewall] ✅ All checks passed — no corrections needed
+[2026-09-22 09:02:47] INFO: [Pipeline] ✅ Complete. Score: 50/100 — CAUTION
+[2026-09-22 09:02:47] INFO: [Orchestrator] ✅ Job complete and cached: 1ef1b6f8-f7b9-46b3-bdfb-153c04ca1793
+[2026-09-23 11:41:37] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-23 11:41:37] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-23 11:41:37] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-23 15:12:51] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-23 15:12:51] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-23 15:12:51] INFO:    Research: POST http://localhost:8002/api/v1/research
+[2026-09-23 15:23:21] INFO: 🟢 Zonek Orchestrator running on http://localhost:8002
+[2026-09-23 15:23:21] INFO:    Health: http://localhost:8002/api/v1/health
+[2026-09-23 15:23:21] INFO:    Research: POST http://localhost:8002/api/v1/research

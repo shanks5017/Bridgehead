@@ -1,0 +1,378 @@
+
+<h2 class="sr-only">Zonek Data Integration Reference — 14 modules with API endpoints, fetch methods, and IDE instructions</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1.5rem 0}
+.header{margin-bottom:1.5rem}
+.header h1{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.header p{font-size:13px;color:var(--color-text-secondary);margin-top:4px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.filter-btn{font-size:12px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:20px;background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.filter-btn.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.module{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+.module-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;background:var(--color-background-primary)}
+.module-header:hover{background:var(--color-background-secondary)}
+.mod-num{font-size:11px;font-weight:500;color:var(--color-text-tertiary);min-width:22px}
+.mod-name{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
+.badges{display:flex;gap:6px;align-items:center}
+.badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.badge-api{background:#e6f1fb;color:#185FA5}
+.badge-rss{background:#eaf3de;color:#3B6D11}
+.badge-scrape{background:#faeeda;color:#854F0B}
+.badge-pdf{background:#fbeaf0;color:#993556}
+.badge-dl{background:#eeedfe;color:#534AB7}
+.badge-free{background:#E1F5EE;color:#0F6E56}
+.chevron{font-size:12px;color:var(--color-text-tertiary);transition:transform 0.2s}
+.chevron.open{transform:rotate(180deg)}
+.module-body{display:none;padding:14px;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.module-body.open{display:block}
+.section-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;margin-top:12px}
+.section-label:first-child{margin-top:0}
+.endpoint{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 10px;margin-bottom:6px}
+.endpoint-url{font-family:var(--font-mono);font-size:11px;color:#185FA5;word-break:break-all;display:block;margin-bottom:3px}
+.endpoint-note{font-size:11px;color:var(--color-text-secondary)}
+.steps{list-style:none;counter-reset:step}
+.steps li{font-size:12px;color:var(--color-text-secondary);padding:5px 0 5px 22px;position:relative;counter-increment:step;border-bottom:0.5px solid var(--color-border-tertiary)}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:counter(step);position:absolute;left:0;top:5px;width:16px;height:16px;border-radius:50%;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-align:center;line-height:16px}
+.ide-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-left:2px solid #185FA5;border-radius:var(--border-radius-md);padding:8px 10px;margin-top:6px;font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.ide-box code{font-family:var(--font-mono);font-size:10px;background:var(--color-background-secondary);padding:1px 4px;border-radius:3px;color:var(--color-text-primary)}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:10px;padding:2px 8px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+<div class="header">
+  <h1>Zonek — Data Integration Reference</h1>
+  <p>14 modules · endpoints, fetch method, auth, and IDE prompt for each</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filterModules('all',this)">All (14)</button>
+  <button class="filter-btn" onclick="filterModules('api',this)">Has API</button>
+  <button class="filter-btn" onclick="filterModules('free',this)">Free</button>
+  <button class="filter-btn" onclick="filterModules('scrape',this)">DevTools/Scrape</button>
+</div>
+
+<div id="modules-list"></div>
+</div>
+
+<script>
+const modules = [
+  {
+    num:"01", name:"Crop Prices", tags:["api","free","daily"],
+    source:"data.gov.in / Agmarknet",
+    method:"api",
+    endpoints:[
+      {url:"https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=YOUR_KEY&format=json&filters[state]=Tamil+Nadu", note:"Live mandi prices — filter by state, commodity, date"},
+      {url:"https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=YOUR_KEY&format=json&filters[commodity]=Tomato", note:"Commodity-wise filter"}
+    ],
+    steps:[
+      "Register at data.gov.in → get free API key from My Account",
+      "Hit the endpoint above with your key",
+      "Params: state, district, commodity, market, fromDate, toDate",
+      "Returns: min_price, max_price, modal_price, arrival_date, market_name",
+      "Poll daily via cron job → store in MongoDB"
+    ],
+    ide:"Tell your IDE AI: 'Fetch crop price data from data.gov.in API using key stored in .env as DATA_GOV_KEY. Filter by state=Tamil Nadu, return JSON with fields: commodity, market, modal_price, date. Store in MongoDB collection cropPrices with TTL index of 7 days.'"
+  },
+  {
+    num:"02", name:"Weather", tags:["api","free","hourly"],
+    source:"IMD mausam.imd.gov.in (IP whitelisted) + Open-Meteo fallback",
+    method:"api",
+    endpoints:[
+      {url:"https://mausam.imd.gov.in/api/current_wx_api.php?id=43279", note:"Current weather — Chennai station (ID 43279). Requires IP whitelist from IMD."},
+      {url:"https://city.imd.gov.in/api/cityweather.php?id=42182", note:"7-day city forecast. Requires IP whitelist."},
+      {url:"https://api.open-meteo.com/v1/forecast?latitude=11.0168&longitude=76.9558&hourly=temperature_2m,precipitation&timezone=Asia/Kolkata", note:"Open-Meteo fallback — FREE, no auth, hourly data for Coimbatore"}
+    ],
+    steps:[
+      "Submit IP whitelist request at mausam.imd.gov.in/responsive/apis.php",
+      "While waiting, use Open-Meteo as fallback (zero registration)",
+      "IMD: poll current_wx_api.php every hour per station",
+      "Station IDs: Chennai=43279, Coimbatore=43230, Bangalore=43295, Hyderabad=43128",
+      "Once whitelisted, switch to IMD; keep Open-Meteo as backup"
+    ],
+    ide:"Tell your IDE AI: 'Create a weather service module. Primary: GET https://mausam.imd.gov.in/api/current_wx_api.php?id={stationId} — returns temp, humidity, wind, rainfall. Fallback: Open-Meteo API at api.open-meteo.com/v1/forecast with lat/lon params. Cache results in Redis with 1hr TTL. Export getWeather(cityName) function that maps city to station ID.'"
+  },
+  {
+    num:"03", name:"Rainfall", tags:["api","free","daily"],
+    source:"IMD — same whitelist as Weather",
+    method:"api",
+    endpoints:[
+      {url:"https://mausam.imd.gov.in/api/statewise_rainfall_api.php", note:"State-wise daily rainfall — same IP whitelist as weather API"},
+      {url:"https://mausam.imd.gov.in/api/districtwise_rainfall_api.php", note:"District-wise rainfall"},
+      {url:"https://api.data.gov.in/resource/RAINFALL_DATASET_ID?api-key=YOUR_KEY", note:"data.gov.in rainfall catalog as fallback"}
+    ],
+    steps:[
+      "Covered by same IMD whitelist request as Weather — no separate registration",
+      "statewise_rainfall_api.php → daily state totals",
+      "districtwise_rainfall_api.php → district-level breakdown",
+      "Poll once daily at 9AM IST after IMD updates at 0830 IST",
+      "Fallback: data.gov.in rainfall catalog with existing API key"
+    ],
+    ide:"Tell your IDE AI: 'Add rainfall module to weather service. GET https://mausam.imd.gov.in/api/districtwise_rainfall_api.php — returns district, state, rainfall_mm, date. Schedule daily cron at 09:00 IST. Store in MongoDB collection rainfall. Join with cropPrices collection on district field for market intelligence scoring.'"
+  },
+  {
+    num:"04", name:"Dam Levels", tags:["api","free","daily"],
+    source:"India WRIS / data.gov.in",
+    method:"api",
+    endpoints:[
+      {url:"https://indiawris.gov.in/wris/#/", note:"India WRIS portal — register for API access"},
+      {url:"https://www.data.gov.in/catalog?q=reservoir+storage", note:"CWC weekly reservoir data via existing data.gov.in key"},
+      {url:"https://cwc.gov.in", note:"Central Water Commission — direct downloads"}
+    ],
+    steps:[
+      "Register at indiawris.gov.in for API access",
+      "Immediately usable: search 'reservoir' on data.gov.in with existing key",
+      "Key datasets: Weekly Reservoir Storage Bulletin by CWC",
+      "Filter by state for TN, Karnataka, AP, Telangana, Kerala reservoirs",
+      "Poll weekly — data updates every Thursday from CWC"
+    ],
+    ide:"Tell your IDE AI: 'Fetch reservoir/dam level data from data.gov.in API. Use existing DATA_GOV_KEY. Search catalog for reservoir storage datasets. Fetch weekly, store in MongoDB collection damLevels with fields: dam_name, state, district, current_level, capacity, percentage_full, date. Create utility function getDamsByState(stateName).'"
+  },
+  {
+    num:"05", name:"Schemes", tags:["api","free","weekly"],
+    source:"myScheme.gov.in internal API",
+    method:"api",
+    endpoints:[
+      {url:"https://api.myscheme.gov.in/search/v4/schemes?lang=en&q=agriculture&state=Tamil+Nadu", note:"Public internal API — no auth needed. Filter by query and state."},
+      {url:"https://api.myscheme.gov.in/search/v4/schemes?lang=en&category=Business+%26+Entrepreneurship", note:"Category filter — Business & Entrepreneurship"},
+      {url:"https://api.myscheme.gov.in/search/v4/schemes?lang=en&q=farmer&state=Karnataka", note:"Farmer schemes in Karnataka"}
+    ],
+    steps:[
+      "Test URL directly in browser — should return JSON with no auth",
+      "If auth required, register at apisetu.gov.in as consumer",
+      "Params: lang, q (keyword), state, category",
+      "Returns: scheme name, ministry, eligibility, benefits, apply URL",
+      "Sync weekly via cron — data changes rarely"
+    ],
+    ide:"Tell your IDE AI: 'Fetch government schemes from https://api.myscheme.gov.in/search/v4/schemes. No auth needed. Params: lang=en, state={stateName}, category={category}. Store in MongoDB collection schemes. Create getRelevantSchemes(businessType, state) function that returns schemes matching the business type for Zonek market reports.'"
+  },
+  {
+    num:"06", name:"Elections", tags:["scrape","free","post-election"],
+    source:"results.eci.gov.in + data.gov.in",
+    method:"scrape",
+    endpoints:[
+      {url:"https://results.eci.gov.in", note:"Live results during election — structured HTML with constituency data"},
+      {url:"https://www.data.gov.in/keywords/Election", note:"Historical election data via existing data.gov.in key"},
+      {url:"https://github.com/thecont1/india-votes-data", note:"Pre-scraped ECI data — JSON/CSV, constituency-wise with candidates and votes"}
+    ],
+    steps:[
+      "Clone github.com/thecont1/india-votes-data for historical constituency-wise data",
+      "For real-time: open results.eci.gov.in → F12 → Network → XHR",
+      "Copy internal API endpoints that load constituency results as JSON",
+      "For historical: use data.gov.in electoral statistics with existing key",
+      "Data updates only on election result day — no daily polling needed"
+    ],
+    ide:"Tell your IDE AI: 'Load election data from local JSON files cloned from github.com/thecont1/india-votes-data. Parse constituency-wise results into MongoDB collection elections with fields: state, constituency, winner, party, votes, year. Create getElectionProfile(district) function returning ruling party and vote margin for Zonek political risk scoring.'"
+  },
+  {
+    num:"07", name:"Budget & Revenue", tags:["pdf","free","annual"],
+    source:"data.gov.in / RBI / Ministry of Finance",
+    method:"pdf",
+    endpoints:[
+      {url:"https://www.data.gov.in/catalog?q=state+budget", note:"State budget datasets on data.gov.in — existing key"},
+      {url:"https://rbi.org.in/scripts/PublicationsView.aspx?id=21270", note:"RBI State Finances report — downloadable PDF/Excel"},
+      {url:"https://www.indiabudget.gov.in", note:"Union Budget — Excel statements available"}
+    ],
+    steps:[
+      "data.gov.in: search 'state budget revenue expenditure' — download CSV",
+      "RBI: download State Finances study annually — has district revenue data",
+      "Parse Excel tables with xlsx npm package or python openpyxl",
+      "Load into MongoDB collection budgetData",
+      "Update annually after Union Budget (Feb) and state budgets (March)"
+    ],
+    ide:"Tell your IDE AI: 'Parse state budget Excel files downloaded from RBI State Finances report. Use xlsx npm package. Extract columns: state, year, revenue_receipts, capital_expenditure, fiscal_deficit. Store in MongoDB collection budgetData. Create getBudgetProfile(stateName, year) utility function.'"
+  },
+  {
+    num:"08", name:"Infrastructure", tags:["rss","free","hourly"],
+    source:"Google News RSS + NewsData.io",
+    method:"rss",
+    endpoints:[
+      {url:"https://news.google.com/rss/search?q=infrastructure+Tamil+Nadu&hl=en-IN&gl=IN&ceid=IN:en", note:"Google News RSS — free, no auth, hourly updates"},
+      {url:"https://news.google.com/rss/search?q=roads+metro+construction+South+India&hl=en-IN&gl=IN&ceid=IN:en", note:"Construction news RSS"},
+      {url:"https://newsdata.io/api/1/news?apikey=YOUR_KEY&q=infrastructure&country=in&language=en", note:"NewsData.io — 200 free requests/day, register at newsdata.io"}
+    ],
+    steps:[
+      "Use Google News RSS directly — no registration needed",
+      "Register at newsdata.io for 200 free requests/day as backup",
+      "Install rss-parser npm package in Node.js",
+      "Parse: title, source, published date, link from RSS XML",
+      "Poll every 6 hours, deduplicate by URL, store in MongoDB"
+    ],
+    ide:"Tell your IDE AI: 'Create infrastructure news module. Use rss-parser npm package to fetch https://news.google.com/rss/search?q=infrastructure+{stateName}&hl=en-IN&gl=IN&ceid=IN:en. Parse items: title, link, pubDate, source. Deduplicate by link field. Store in MongoDB collection newsInfrastructure with TTL of 30 days. Schedule cron every 6 hours.'"
+  },
+  {
+    num:"09", name:"Schools", tags:["api","free","annual"],
+    source:"data.gov.in (UDISE+) + kys.udiseplus.gov.in DevTools",
+    method:"api",
+    endpoints:[
+      {url:"https://www.data.gov.in/catalog/unified-district-information-system-education-plus-udise-plus", note:"UDISE+ bulk data — existing data.gov.in key"},
+      {url:"https://kys.udiseplus.gov.in", note:"Know Your School — open DevTools → Network to find internal JSON endpoints"},
+      {url:"https://dataful.in/datasets/20822/", note:"Pre-cleaned UDISE+ CSV 2021-2025 — free download, no auth"}
+    ],
+    steps:[
+      "Download UDISE+ CSV from dataful.in/datasets/20822 — no registration",
+      "Or use data.gov.in UDISE+ catalog with existing key",
+      "For live school lookup: open kys.udiseplus.gov.in → F12 → Network → search school → copy JSON endpoint",
+      "Key fields: total_schools, enrollment, teachers, PTR, infrastructure_score per district",
+      "Update annually — data releases in August each year"
+    ],
+    ide:"Tell your IDE AI: 'Load UDISE+ school data from downloaded CSV file (path: ./data/udise_2024_25.csv). Parse with csv-parse npm package. Fields needed: state, district, total_schools, total_enrollment, teachers, PTR, schools_with_electricity, schools_with_toilet. Store in MongoDB collection schoolData. Create getEducationProfile(districtName) for Zonek district scoring.'"
+  },
+  {
+    num:"10", name:"Jal Jeevan (JJM)", tags:["api","free","daily"],
+    source:"ejalshakti.gov.in/webapi — Official JJM API",
+    method:"api",
+    endpoints:[
+      {url:"https://ejalshakti.gov.in/webapi/Home/Addregistration", note:"Registration page — simple form, no PAN/GST needed"},
+      {url:"https://ejalshakti.gov.in/jjmreport/JJMIndia.aspx", note:"Dashboard — use DevTools to find internal POST endpoints while waiting for API key"},
+      {url:"https://ejalshakti.gov.in/jjmreport/JJMDistrictView.aspx", note:"District-level tap water connection data"}
+    ],
+    steps:[
+      "Register at ejalshakti.gov.in/webapi/Home/Addregistration — simple email form",
+      "Download user manual at ejalshakti.gov.in/webapi/Content/JJM_Web_API.pdf",
+      "While waiting: open JJMDistrictView.aspx → F12 → Network → select state → copy POST endpoint",
+      "Returns: total_households, FHTC_count, coverage_percentage per district/village",
+      "Poll monthly — coverage updates regularly"
+    ],
+    ide:"Tell your IDE AI: 'Fetch Jal Jeevan Mission water connection data from JJM official API at ejalshakti.gov.in/webapi. Store API credentials in .env as JJM_API_KEY. Returns district-wise FHTC coverage: total_households, tap_connected, coverage_pct. Store in MongoDB collection jjmData. Create getWaterProfile(districtName) function for Zonek infrastructure scoring.'"
+  },
+  {
+    num:"11", name:"Housing (PMAY)", tags:["scrape","free","monthly"],
+    source:"rhreporting.nic.in + data.gov.in",
+    method:"scrape",
+    endpoints:[
+      {url:"https://rhreporting.nic.in/netiay/newreport.aspx", note:"PMAY-G reporting portal — ASP.NET POST requests, use DevTools to extract"},
+      {url:"https://www.data.gov.in/catalog?q=pmay", note:"Bulk PMAY data — existing data.gov.in key"},
+      {url:"https://rhreporting.nic.in/netiay/dataanalytics/data-analytics.aspx", note:"Analytics dashboard — HTML table scraping"}
+    ],
+    steps:[
+      "Open rhreporting.nic.in → F12 → Network → Fetch/XHR",
+      "Select State → District → Submit → copy POST request URL + payload",
+      "Payload format: {stateId:'33', districtId:'xxx', schemeCode:'PMAYG'}",
+      "Returns: houses_sanctioned, houses_completed, under_construction per district",
+      "Also available on data.gov.in with existing key — search 'PMAY beneficiary'"
+    ],
+    ide:"Tell your IDE AI: 'Scrape PMAY housing data from rhreporting.nic.in using axios POST requests. Extract stateId and districtId from the site. POST to the report endpoint with form-data payload. Parse HTML response with cheerio npm package. Extract: houses_sanctioned, completed, under_construction. Store in MongoDB collection pmayData. Create getHousingProfile(districtName) function.'"
+  },
+  {
+    num:"12", name:"Courts", tags:["scrape","free","weekly"],
+    source:"njdg.ecourts.gov.in + data.gov.in",
+    method:"scrape",
+    endpoints:[
+      {url:"https://njdg.ecourts.gov.in", note:"NJDG dashboard — React app, use DevTools to find JSON endpoints for pendency data"},
+      {url:"https://www.data.gov.in/catalog?q=court+pendency", note:"Court pendency data via existing data.gov.in key"},
+      {url:"https://njdg.ecourts.gov.in — Information Management tab", note:"Weekly downloadable CSV/Excel reports from Information Management section"}
+    ],
+    steps:[
+      "Open njdg.ecourts.gov.in → F12 → Network → select State+District → copy JSON endpoint",
+      "Alternatively: click Information Management → download weekly Excel",
+      "For bulk: data.gov.in search 'judicial pendency' with existing key",
+      "Key fields: pending_cases, disposed_cases, filing_rate per district court",
+      "Update weekly — reflects business environment and contract enforcement"
+    ],
+    ide:"Tell your IDE AI: 'Fetch court pendency data from NJDG portal. Method 1: download weekly Excel from njdg.ecourts.gov.in Information Management section, parse with xlsx npm package. Method 2: data.gov.in API with key DATA_GOV_KEY. Fields: state, district, court_name, pending_civil, pending_criminal, disposal_rate. Store in MongoDB collection courtData. Create getJudicialProfile(districtName) for Zonek ease-of-business scoring.'"
+  },
+  {
+    num:"13", name:"Police / Crime", tags:["api","free","annual"],
+    source:"data.gov.in (NCRB) + opencity.in",
+    method:"api",
+    endpoints:[
+      {url:"https://www.data.gov.in/catalog/district-wise-crimes-under-various-sections-indian-penal-code-ipc-crimes", note:"District-wise IPC crimes — existing data.gov.in key"},
+      {url:"https://www.data.gov.in/catalog/district-wise-crimes-committed-against-women", note:"Crimes against women — district level"},
+      {url:"https://data.opencity.in/dataset/crime-in-india-2023", note:"Pre-parsed NCRB 2023 — free CSV download, no registration"}
+    ],
+    steps:[
+      "Use existing data.gov.in API key — search NCRB crime datasets",
+      "Download from data.opencity.in for pre-cleaned CSV — fastest option",
+      "Key fields: murder, theft, robbery, fraud, cybercrime per district per lakh population",
+      "Also download direct Excel tables from ncrb.gov.in/crime-in-india-table-content",
+      "Update annually — NCRB publishes each year in October"
+    ],
+    ide:"Tell your IDE AI: 'Load NCRB crime data from data.gov.in API using DATA_GOV_KEY. Catalog: district-wise-crimes-under-various-sections-indian-penal-code-ipc-crimes. Fields: state, district, year, murder, theft, robbery, cheating, total_ipc_crimes, crime_rate_per_lakh. Store in MongoDB collection crimeData. Create getSafetyScore(districtName) function returning normalized 0-100 safety score for Zonek market feasibility reports.'"
+  },
+  {
+    num:"14", name:"Population", tags:["api","free","decennial"],
+    source:"data.gov.in (Census 2011) + NHM projections",
+    method:"api",
+    endpoints:[
+      {url:"https://www.data.gov.in/catalog?q=census+2011+district", note:"Census 2011 district data — existing data.gov.in key"},
+      {url:"https://github.com/datameet/india-census", note:"Pre-cleaned Census GeoJSON + CSV — community maintained, free download"},
+      {url:"https://www.kaggle.com/datasets/danofer/india-census", note:"Clean Kaggle dataset — district-wise population, literacy, workers"},
+      {url:"https://nhm.gov.in", note:"NHM annual projections — fills gap between Census 2011 and present"}
+    ],
+    steps:[
+      "Download from github.com/datameet/india-census — clean CSV, no registration",
+      "Or Kaggle dataset — free download after login",
+      "Key fields: population, male/female, literacy_rate, urban_pct, workers, SC/ST pct",
+      "For current estimates: download NHM population projections from nhm.gov.in",
+      "Census 2021 not yet released — NHM projections are the best current data"
+    ],
+    ide:"Tell your IDE AI: 'Load Census 2011 data from local CSV (./data/census_2011_districts.csv) downloaded from github.com/datameet/india-census. Parse with csv-parse. Fields: state, district, population, male, female, literacy_rate, urban_population, rural_population, workers. Supplement with NHM projections CSV for current estimates. Store in MongoDB collection populationData. Create getDemographicProfile(districtName) returning population density, literacy, urban ratio for Zonek Market Potential Score calculation.'"
+  }
+];
+
+function getBadge(tag){
+  if(tag==='api') return '<span class="badge badge-api">API</span>';
+  if(tag==='rss') return '<span class="badge badge-rss">RSS</span>';
+  if(tag==='scrape') return '<span class="badge badge-scrape">DevTools</span>';
+  if(tag==='pdf') return '<span class="badge badge-pdf">PDF/Excel</span>';
+  if(tag==='free') return '<span class="badge badge-free">free</span>';
+  return '';
+}
+
+function renderModules(list){
+  const container = document.getElementById('modules-list');
+  container.innerHTML = '';
+  list.forEach((m,i)=>{
+    const div = document.createElement('div');
+    div.className = 'module';
+    div.dataset.tags = m.tags.join(',');
+    div.innerHTML = `
+      <div class="module-header" onclick="toggleModule(this)">
+        <span class="mod-num">${m.num}</span>
+        <span class="mod-name">${m.name}</span>
+        <div class="badges">${m.tags.map(getBadge).join('')}</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="module-body">
+        <div class="tag-row"><span class="tag">source: ${m.source}</span></div>
+        <div class="section-label">Endpoints</div>
+        ${m.endpoints.map(e=>`
+          <div class="endpoint">
+            <a class="endpoint-url" href="${e.url}" target="_blank">${e.url.length>80?e.url.slice(0,80)+'...':e.url}</a>
+            <span class="endpoint-note">${e.note}</span>
+          </div>
+        `).join('')}
+        <div class="section-label">Steps to integrate</div>
+        <ol class="steps">${m.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+        <div class="section-label">IDE AI prompt</div>
+        <div class="ide-box">${m.ide}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggleModule(header){
+  const body = header.nextElementSibling;
+  const chev = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function filterModules(type, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = type==='all' ? modules :
+    type==='api' ? modules.filter(m=>m.tags.includes('api')) :
+    type==='free' ? modules.filter(m=>m.tags.includes('free')) :
+    modules.filter(m=>m.tags.includes('scrape'));
+  renderModules(filtered);
+}
+
+renderModules(modules);
+</script>

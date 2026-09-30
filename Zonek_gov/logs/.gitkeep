@@ -1,0 +1,8 @@
+Logs directory — auto-created by Winston logger on first run.
+
+Files generated:
+  - combined.log  → All log levels (info, warn, error)
+  - error.log     → Errors only
+
+Both files use 5MB rotation with 3-5 file retention.
+This file is just a placeholder so the directory is committed to git.
