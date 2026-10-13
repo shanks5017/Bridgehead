@@ -430,3 +430,318 @@ CREATE POLICY "messages_update"  ON messages FOR UPDATE
     SELECT 1 FROM conversations
     WHERE id = conversation_id AND auth.uid() = ANY(participant_ids)
   ));
+
+
+-- ============================================================
+-- ZONEK GOV-DATA (GOVERNMENT DATA ENGINE TABLES)
+-- ============================================================
+
+
+-- ── MERGED FROM: 01_init_supabase.sql ──
+-- 1. Core Geography
+CREATE TABLE IF NOT EXISTS gov_states (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT UNIQUE NOT NULL,
+  lgd_code TEXT,
+  abbr TEXT
+);
+
+CREATE TABLE IF NOT EXISTS gov_districts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  code TEXT,
+  UNIQUE(state_id, name)
+);
+
+-- 2. Budget
+CREATE TABLE IF NOT EXISTS gov_budgets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE CASCADE,
+  fiscal_year TEXT NOT NULL,
+  revenue JSONB,
+  expenditure JSONB,
+  fiscal_deficit NUMERIC,
+  fiscal_deficit_pct_gsdp NUMERIC,
+  gsdp NUMERIC,
+  infra_spend_intensity_pct NUMERIC,
+  document_url TEXT,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(state_id, fiscal_year)
+);
+
+-- 3. Crime
+CREATE TABLE IF NOT EXISTS gov_crimes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  district_id UUID REFERENCES gov_districts(id) ON DELETE CASCADE,
+  year INTEGER NOT NULL,
+  ipc JSONB,
+  safety_score NUMERIC,
+  safety_grade TEXT,
+  crime_rate_per_lakh NUMERIC,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, year)
+);
+
+-- 4. Schemes
+CREATE TABLE IF NOT EXISTS gov_schemes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  scheme_id TEXT UNIQUE NOT NULL,
+  scheme_name TEXT NOT NULL,
+  ministry TEXT,
+  department TEXT,
+  eligibility JSONB,
+  applicable_states TEXT[],
+  is_national BOOLEAN DEFAULT true,
+  category TEXT,
+  tags TEXT[],
+  benefit JSONB,
+  application_url TEXT,
+  description TEXT,
+  source TEXT,
+  last_updated TIMESTAMPTZ,
+  fetched_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. Population
+CREATE TABLE IF NOT EXISTS gov_population (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  district_id UUID REFERENCES gov_districts(id) ON DELETE CASCADE,
+  census_year INTEGER NOT NULL DEFAULT 2011,
+  total_population NUMERIC NOT NULL,
+  male_population NUMERIC,
+  female_population NUMERIC,
+  sex_ratio NUMERIC,
+  literacy_rate_pct NUMERIC,
+  male_literacy_pct NUMERIC,
+  female_literacy_pct NUMERIC,
+  urban_population NUMERIC,
+  rural_population NUMERIC,
+  urban_pct NUMERIC,
+  total_workers NUMERIC,
+  work_participation_rate NUMERIC,
+  sc_population NUMERIC,
+  st_population NUMERIC,
+  sc_pct NUMERIC,
+  st_pct NUMERIC,
+  area_km2 NUMERIC,
+  population_density_per_km2 NUMERIC,
+  nhm_projected_year INTEGER,
+  nhm_projected_population NUMERIC,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, census_year)
+);
+
+-- Row Level Security (RLS) Configuration
+-- Assuming we want to read data anonymously but write securely
+ALTER TABLE gov_states ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gov_districts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gov_budgets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gov_crimes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gov_schemes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gov_population ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public Read Access" ON gov_states FOR SELECT USING (true);
+CREATE POLICY "Public Read Access" ON gov_districts FOR SELECT USING (true);
+CREATE POLICY "Public Read Access" ON gov_budgets FOR SELECT USING (true);
+CREATE POLICY "Public Read Access" ON gov_crimes FOR SELECT USING (true);
+CREATE POLICY "Public Read Access" ON gov_schemes FOR SELECT USING (true);
+CREATE POLICY "Public Read Access" ON gov_population FOR SELECT USING (true);
+
+-- No INSERT/UPDATE/DELETE policies means only service_role can modify data.
+
+
+-- ── MERGED FROM: 02_add_missing_tables.sql ──
+-- 02_add_missing_tables.sql
+-- Add tables for the remaining government data fetchers
+
+-- 1. Weather (6-hourly, district-level)
+CREATE TABLE IF NOT EXISTS gov_weather (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  station_id TEXT NOT NULL,
+  station_name TEXT NOT NULL,
+  temperature_c NUMERIC,
+  humidity_pct NUMERIC,
+  rainfall_mm NUMERIC,
+  wind_speed_kmh NUMERIC,
+  wind_direction TEXT,
+  weather_condition TEXT,
+  forecast_24h JSONB,
+  source TEXT,
+  observed_at TIMESTAMPTZ NOT NULL,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(station_id, observed_at)
+);
+
+-- 2. Crop Prices (daily, district-level)
+CREATE TABLE IF NOT EXISTS gov_crop_prices (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  market_name TEXT NOT NULL,
+  commodity_name TEXT NOT NULL,
+  variety TEXT,
+  grade TEXT,
+  arrival_quantity NUMERIC, -- in quintals
+  min_price NUMERIC, -- INR per quintal
+  max_price NUMERIC,
+  modal_price NUMERIC,
+  price_date DATE,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, market_name, commodity_name, variety, grade, price_date)
+);
+
+-- 3. Infrastructure News (6-hourly, state-level)
+CREATE TABLE IF NOT EXISTS gov_infrastructure_news (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  url TEXT UNIQUE,
+  source TEXT, -- e.g., 'PIB', 'The Hindu'
+  published_at TIMESTAMPTZ,
+  fetched_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Jal Jeevan Mission (Water) (weekly, district-level)
+CREATE TABLE IF NOT EXISTS gov_jjm (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  -- JJM specific fields
+  habitation_name TEXT,
+  total_habitations INTEGER,
+  tap_water_connections INTEGER,
+  tap_water_connections_pct NUMERIC,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, habitation_name, fetched_at)
+);
+
+-- 5. PMAY Housing (monthly, district-level)
+CREATE TABLE IF NOT EXISTS gov_pmay (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  -- PMAY specific fields
+  sanction_year INTEGER,
+  houses_sanctioned INTEGER,
+  houses_completed INTEGER,
+  houses_occupied INTEGER,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, sanction_year, fetched_at)
+);
+
+-- 6. Courts (NJDG) (weekly, district-level)
+CREATE TABLE IF NOT EXISTS gov_courts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  -- Court specific fields
+  case_type TEXT, -- e.g., 'Civil', 'Criminal'
+  cases_filed INTEGER,
+  cases_disposed INTEGER,
+  cases_pending INTEGER,
+  clearance_rate NUMERIC,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, case_type, fetched_at)
+);
+
+-- 7. Schools (UDISE+) (annual, district-level)
+CREATE TABLE IF NOT EXISTS gov_schools (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  -- School specific fields
+  school_name TEXT NOT NULL,
+  school_type TEXT, -- e.g., 'Primary', 'Upper Primary', 'Secondary'
+  management TEXT, -- e.g., 'Department of Education', 'Tribal Welfare'
+  total_enrollment INTEGER,
+  boys_enrollment INTEGER,
+  girls_enrollment INTEGER,
+  teachers_count INTEGER,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(district_id, school_name, fetched_at)
+);
+
+-- 8. Elections (ECI) (quarterly, state-level)
+CREATE TABLE IF NOT EXISTS gov_elections (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  -- Election specific fields
+  constituency_name TEXT NOT NULL,
+  constituency_type TEXT, -- e.g., 'Lok Sabha', 'Vidhan Sabha'
+  total_electors INTEGER,
+  male_electors INTEGER,
+  female_electors INTEGER,
+  voter_turnout_pct NUMERIC,
+  source TEXT,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(state_id, constituency_name, constituency_type, fetched_at)
+);
+
+-- ── MERGED FROM: 03_add_dam_levels.sql ──
+-- 03_add_dam_levels.sql
+-- Add table for Dam Levels (CWC Reservoir Data)
+
+CREATE TABLE IF NOT EXISTS gov_dam_levels (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  state_id UUID REFERENCES gov_states(id) ON DELETE SET NULL,
+  district_id UUID REFERENCES gov_districts(id) ON DELETE SET NULL,
+  dam_name TEXT NOT NULL,
+  basin TEXT,
+  full_capacity_tmc NUMERIC,
+  current_level_tmc NUMERIC,
+  percent_full NUMERIC,
+  inflow_cusecs NUMERIC,
+  outflow_cusecs NUMERIC,
+  source TEXT,
+  observed_at TIMESTAMPTZ NOT NULL,
+  fetched_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(dam_name, observed_at)
+);
+
+-- Optional RLS
+ALTER TABLE gov_dam_levels ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public Read Access" ON gov_dam_levels FOR SELECT USING (true);
+
+
+-- ── MERGED FROM: 04_alter_pmay_add_columns.sql ──
+-- 04_alter_pmay_add_columns.sql
+-- Add missing columns to gov_pmay for monthly progress tracking
+
+ALTER TABLE gov_pmay
+  ADD COLUMN IF NOT EXISTS as_of_date DATE,
+  ADD COLUMN IF NOT EXISTS houses_under_construction INTEGER,
+  ADD COLUMN IF NOT EXISTS completion_pct NUMERIC,
+  ADD COLUMN IF NOT EXISTS construction_activity_index INTEGER;
+
+-- Note: The existing columns are:
+-- sanction_year INTEGER,
+-- houses_sanctioned INTEGER,
+-- houses_completed INTEGER,
+-- houses_occupied INTEGER,
+-- source TEXT,
+-- fetched_at TIMESTAMPTZ DEFAULT NOW(),
+
+-- We also want to adjust the unique constraint to include as_of_date for monthly updates.
+-- Drop old constraint and add new one.
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.table_constraints
+               WHERE table_name = 'gov_pmay' AND constraint_name = 'gov_pmay_district_id_sanction_year_fetched_at_key') THEN
+        ALTER TABLE gov_pmay DROP CONSTRAINT gov_pmay_district_id_sanction_year_fetched_at_key;
+    END IF;
+END $$;
+
+ALTER TABLE gov_pmay
+  ADD CONSTRAINT gov_pmay_district_id_as_of_date_unique UNIQUE (district_id, as_of_date);

@@ -3,3 +3,12 @@
 node_modules/
 *.csv
 .DS_Store
+dist/
+build/
+*.log
+__pycache__/
+*.py[cod]
+*$py.class
+.vscode/
+.idea/
+Thumbs.db
