@@ -14,7 +14,8 @@ import conversationRoutes from './routes/conversations';
 import userRoutes        from './routes/users';
 import communityRoutes   from './routes/community';
 import aiRoutes          from './routes/ai';
-import govRoutes         from './routes/gov';
+import govRoutes               from './routes/gov';
+import businessResearchRoutes  from './routes/businessResearch';
 import { launchEngines } from './utils/engineLauncher';
 
 // Load environment variables
@@ -122,7 +123,8 @@ app.use('/api/users',         userRoutes);
 app.use('/api/community',     communityRoutes);
 app.use('/api/stats',         statsRoutes);
 app.use('/api/ai',            aiRoutes);
-app.use('/api/gov',           govRoutes);
+app.use('/api/gov',               govRoutes);
+app.use('/api/business-research', businessResearchRoutes);
 
 // Health check
 app.get('/', (_req: Request, res: Response) => {

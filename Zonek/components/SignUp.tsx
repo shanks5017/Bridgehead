@@ -5,7 +5,7 @@ import { GoogleIcon, MicrosoftIcon, ArrowRightIcon } from './icons';
 import { config } from '../src/config';
 
 interface SignUpProps {
-  onSignUp: (name: string, email: string, username: string, password: string) => boolean;
+  onSignUp: (name: string, email: string, username: string, password: string) => Promise<boolean>;
   setView: (view: View) => void;
 }
 
@@ -24,7 +24,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
   const [usernameMessage, setUsernameMessage] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     if (password.length < 8) {
@@ -33,10 +33,12 @@ const SignUp: React.FC<SignUpProps> = ({ onSignUp, setView }) => {
     }
     setIsSubmitting(true);
     try {
-        const success = onSignUp(name, email, username, password);
+        const success = await onSignUp(name, email, username, password);
         if (!success) {
           setError('Registration Failure: Signal could not be broadcast');
         }
+    } catch (err: any) {
+        setError(err.message || 'Registration Failure');
     } finally {
         setIsSubmitting(false);
     }

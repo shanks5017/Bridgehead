@@ -118,6 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpe
             <NavItem icon={<SparklesIcon className="w-6 h-6" />} label="Ideas" isActive={currentView === View.AI_SUGGESTIONS} isExpanded={isExpanded} onClick={() => handleNavigation(View.AI_SUGGESTIONS)} />
             <NavItem icon={<ChatBubbleLeftRightIcon className="w-6 h-6" />} label="Network" isActive={currentView === View.COLLABORATION} isExpanded={isExpanded} onClick={() => handleNavigation(View.COLLABORATION)} />
             <NavItem icon={<SearchIcon className="w-6 h-6" />} label="Research" isActive={currentView === View.RESEARCH} isExpanded={isExpanded} onClick={() => handleNavigation(View.RESEARCH)} />
+            <NavItem icon={<SparklesIcon className="w-6 h-6" />} label="Biz Docs" isActive={currentView === View.BUSINESS_RESEARCH} isExpanded={isExpanded} onClick={() => handleNavigation(View.BUSINESS_RESEARCH)} />
             <NavItem icon={<SearchIcon className="w-6 h-6" />} label="Testing" isActive={currentView === View.TESTING} isExpanded={isExpanded} onClick={() => handleNavigation(View.TESTING)} />
           </nav>
         </div>

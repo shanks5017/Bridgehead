@@ -34,6 +34,7 @@ export enum View {
   SIGN_UP,
   PROFILE,
   RESEARCH,
+  BUSINESS_RESEARCH,
   TESTING,
 }
 
@@ -102,6 +103,205 @@ export interface FeasibilityReport {
   };
   _firewall?: { violations_corrected: number };
   _fallback?: boolean;
+}
+
+// ── Business Research Engine Types ───────────────────────────────────────────
+
+export interface BusinessResearchInput {
+  // Core
+  businessName?: string;
+  businessType: string;
+  businessDescription?: string;
+  businessFormat: string; // "Brick & Mortar" | "Online" | "Hybrid" | "SaaS" | "Service"
+  // Location
+  location: string;
+  targetMarket?: string;
+  // Financial
+  totalBudget: number;
+  workingCapital?: number;
+  monthlyBurnTarget?: number;
+  revenueGoal12Months?: number;
+  pricingModel?: string;
+  avgTicketSize?: number;
+  // Model
+  businessModel?: string; // B2C | B2B | B2B2C | Marketplace | SaaS
+  uniqueValueProposition?: string;
+  knownCompetitors?: string[];
+  differentiators?: string[];
+  // Operations
+  spaceRequired?: string;
+  expectedTeamSize?: number;
+  launchTimeline?: string;
+  currentStage?: string;
+  // Founder
+  founderExperience?: string;
+  targetCustomerPersona?: string;
+  primaryChannel?: string;
+  existingLicences?: string[];
+  // Report config
+  reportSections?: string[];
+  includeRoadmap?: boolean;
+  includeFinancials?: boolean;
+  includeMarketing?: boolean;
+  includeCompetitors?: boolean;
+  includeSOPs?: boolean;
+}
+
+export interface FullBusinessReport {
+  _meta: {
+    generated_at: string;
+    input_summary: Record<string, any>;
+    evidence_sources: Record<string, any>;
+    firewall_violations: number;
+  };
+  business_plan?: {
+    executive_summary: {
+      one_liner: string;
+      problem: string;
+      solution: string;
+      market_opportunity: string;
+      competitive_moat: string;
+      verdict: 'GO' | 'CAUTION' | 'STOP';
+      verdict_rationale: string;
+    };
+    jobs_to_be_done: {
+      functional_jobs: string[];
+      social_jobs: string[];
+      emotional_jobs: string[];
+      current_substitutes: string[];
+      desired_outcomes: string[];
+    };
+    offer_design: {
+      core_offer: string;
+      offer_stack: string[];
+      dream_outcome: string;
+      perceived_likelihood: string;
+      time_to_result: string;
+      effort_required: string;
+    };
+    monopoly_analysis: {
+      first_market: string;
+      proprietary_tech_or_data: string;
+      network_effects: string;
+      economies_of_scale: string;
+      brand: string;
+      copycat_barrier_6_months: string;
+    };
+    product_definition: {
+      one_brilliant_thing: string;
+      first_5_minutes_experience: string[];
+      what_to_cut: string[];
+      mvp_scope: string[];
+    };
+  };
+  financials?: {
+    startup_costs: {
+      setup_total: number;
+      breakdown: { item: string; amount: number; source: string }[];
+      budget_gap: number;
+      contingency_recommended: number;
+      data_confidence: string;
+    };
+    unit_economics: {
+      avg_revenue_per_customer: number;
+      cogs_per_unit: number;
+      gross_margin_pct: number;
+      cac_estimate: number;
+      ltv_estimate: number;
+      ltv_to_cac_ratio: number;
+      payback_months: number;
+      notes: string;
+    };
+    monthly_projections_12m: {
+      month: number; customers: number; revenue: number;
+      expenses: number; net: number; cumulative_burn: number;
+    }[];
+    scenarios: {
+      conservative: { monthly_customers: number; break_even_month: number; year1_revenue: number };
+      base: { monthly_customers: number; break_even_month: number; year1_revenue: number };
+      optimistic: { monthly_customers: number; break_even_month: number; year1_revenue: number };
+    };
+    pricing_analysis: {
+      recommended_price_tier: string;
+      price_too_cheap_threshold: number;
+      price_too_expensive_threshold: number;
+      ideal_range_min: number;
+      ideal_range_max: number;
+      pricing_rationale: string;
+    };
+    runway: {
+      months_of_runway: number;
+      critical_milestone: string;
+      fundraise_or_revenue_flag: string;
+    };
+  };
+  competitive_analysis?: {
+    competitor_matrix: {
+      name: string; type: string; strengths: string[];
+      weaknesses: string[]; pricing: string;
+      market_share_estimate: string; threat_level: string;
+    }[];
+    competitive_gaps: { gap: string; opportunity_size: string; how_to_exploit: string }[];
+    blue_ocean_grid: { eliminate: string[]; reduce: string[]; raise: string[]; create: string[] };
+    five_forces: Record<string, string>;
+    positioning_recommendation: {
+      positioning_statement: string;
+      price_positioning: string;
+      differentiation_axes: string[];
+    };
+  };
+  marketing_strategy?: {
+    storybrand_script: {
+      character: string;
+      problem: { external: string; internal: string; philosophical: string };
+      guide: string;
+      plan: string[];
+      call_to_action: { direct: string; transitional: string };
+      failure_avoided: string;
+      success_achieved: string;
+    };
+    landing_page_wireframe: {
+      hero_headline: string;
+      hero_subheadline: string;
+      social_proof_hook: string;
+      primary_cta: string;
+      three_step_simplifier: string[];
+      objection_crushers: { objection: string; response: string }[];
+      secondary_cta: string;
+    };
+    acquisition_channels: {
+      channel: string; cac_estimate: string; time_to_results: string;
+      effort: string; recommended_tactics: string[]; priority: number;
+    }[];
+    content_strategy: {
+      hook_formula: string; content_pillars: string[];
+      first_30_days_plan: string[]; lead_magnet_idea: string;
+    };
+    launch_sequence: { pre_launch: string[]; launch_day: string[]; post_launch: string[] };
+  };
+  roadmap?: {
+    '90_day_roadmap': {
+      month_1: any; month_2: any; month_3: any;
+    };
+    critical_milestones: { milestone: string; target_date: string; success_metric: string; risk_if_missed: string }[];
+    sops: { process_name: string; trigger: string; steps: string[]; owner: string; tools_needed: string[]; quality_check: string }[];
+    risk_register: { risk: string; probability: string; impact: string; mitigation: string; contingency: string }[];
+    licensing_checklist: { licence: string; authority: string; timeline: string; cost_estimate: string; status: string }[];
+    team_structure: { day_1_roles: any[]; month_3_roles: any[]; tools_stack: any[] };
+  };
+}
+
+export interface BusinessResearchSSEEvent {
+  type: 'research_started' | 'progress' | 'section_complete' | 'report_ready' | 'error';
+  stage?: string;
+  section?: string;
+  label?: string;
+  message?: string;
+  pct?: number;
+  report?: FullBusinessReport;
+  evidence_summary?: any;
+  firewall_violations_total?: number;
+  timestamp?: string;
 }
 
 export interface SSEEvent {

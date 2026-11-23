@@ -132,7 +132,7 @@ router.get('/dashboard/:locationName', async (req: Request, res: Response) => {
     const district = districts && districts.length > 0 ? districts[0] : null;
     const districtId = district?.id;
     const districtNameResolved = district?.name || locationName;
-    const stateNameResolved = district?.gov_states?.name || 'Unknown State';
+    const stateNameResolved = (Array.isArray(district?.gov_states) ? (district?.gov_states as any)[0]?.name : (district?.gov_states as any)?.name) || 'Unknown State';
 
     const modules = [
       { id: 'weather', table: 'gov_weather', titleField: 'station_name' },

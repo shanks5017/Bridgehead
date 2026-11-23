@@ -65,11 +65,32 @@ export const register = async (req: Request<{}, {}, RegisterBody>, res: Response
 
     // The handle_new_user() trigger in PostgreSQL auto-creates the profile row.
     // Fetch it to return to the client.
-    const { data: profile } = await supabase
+    let { data: profile } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', newUser.id)
       .single();
+
+    // Fallback: If the trigger did not create the profile row, insert it directly
+    if (!profile) {
+      const { data: createdProfile, error: profileErr } = await supabase
+        .from('profiles')
+        .insert({
+          id: newUser.id,
+          full_name: fullName,
+          username: normalizedUsername,
+          user_type: userType,
+          auth_provider: 'email',
+        })
+        .select('*')
+        .single();
+
+      if (profileErr) {
+        console.error('Direct profile creation error:', profileErr);
+      } else {
+        profile = createdProfile;
+      }
+    }
 
     // Sign in to obtain a session token for the new user
     const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({

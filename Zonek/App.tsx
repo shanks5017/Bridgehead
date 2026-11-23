@@ -25,6 +25,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 import Research from './components/Research';
+import BusinessResearch from './components/BusinessResearch';
 import TestingView from './components/Testing/TestingView';
 import { ArrowLeftIcon, ArrowRightIcon } from './components/icons';
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -110,6 +111,7 @@ const VIEW_TO_PATH: Record<View, string> = {
   [View.SIGN_UP]: '/sign-up',
   [View.PROFILE]: '/profile',
   [View.RESEARCH]: '/research',
+  [View.BUSINESS_RESEARCH]: '/business-research',
   [View.TESTING]: '/testing',
 };
 
@@ -1325,6 +1327,8 @@ const App: React.FC = () => {
         return currentUser ? <Profile user={currentUser} onUpdateUser={handleUpdateUser} setView={handleSetView} demandPosts={myDemandPosts} rentalPosts={myRentalPosts} communityPosts={communityPosts} conversations={conversations} updateDemandPost={updateDemandPost} updateRentalPost={updateRentalPost} deleteDemandPost={deleteDemandPost} deleteRentalPost={deleteRentalPost} markDemandSolved={markDemandSolved} markRentalRented={markRentalRented} /> : <SignIn onSignIn={handleSignIn} setView={handleSetView} />;
       case View.RESEARCH:
         return <Research />;
+      case View.BUSINESS_RESEARCH:
+        return <BusinessResearch />;
       case View.TESTING:
         return <TestingView />;
       case View.HOME:
@@ -1359,7 +1363,7 @@ const App: React.FC = () => {
       >
         {renderView()}
       </main>
-      {view !== View.FEED && view !== View.COMMUNITY_FEED && view !== View.DEMAND_DETAIL && view !== View.AI_MATCHES && view !== View.AI_SUGGESTIONS && view !== View.COLLABORATION && view !== View.RESEARCH && view !== View.TESTING && (
+      {view !== View.FEED && view !== View.COMMUNITY_FEED && view !== View.DEMAND_DETAIL && view !== View.AI_MATCHES && view !== View.AI_SUGGESTIONS && view !== View.COLLABORATION && view !== View.RESEARCH && view !== View.BUSINESS_RESEARCH && view !== View.TESTING && (
         <Footer setView={handleSetView} onNavigateToAIAssistant={handleNavigateToAIAssistant} />
       )}
       {imageViewerState && (

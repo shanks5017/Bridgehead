@@ -295,7 +295,7 @@ CREATE OR REPLACE TRIGGER set_updated_at_messages
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO profiles (id, full_name, username, user_type, auth_provider)
+  INSERT INTO public.profiles (id, full_name, username, user_type, auth_provider)
   VALUES (
     NEW.id,
     COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
@@ -306,7 +306,7 @@ BEGIN
   ON CONFLICT (id) DO NOTHING;
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
@@ -745,3 +745,4 @@ END $$;
 
 ALTER TABLE gov_pmay
   ADD CONSTRAINT gov_pmay_district_id_as_of_date_unique UNIQUE (district_id, as_of_date);
+
