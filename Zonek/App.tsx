@@ -33,6 +33,7 @@ import Footer from './components/Footer';
 import { config } from './src/config';
 import Toast from './components/common/Toast';
 import QuickPostButton from './components/QuickPostButton';
+import OnboardingModal, { OnboardingData } from './components/OnboardingModal';
 
 
 const API_BASE_URL = config.api.baseUrl;
@@ -158,6 +159,21 @@ const App: React.FC = () => {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  const handleOnboardingComplete = (data: OnboardingData) => {
+    if (currentUser) {
+      const updatedUser = {
+        ...currentUser,
+        ...data,
+        onboarding_completed: true,
+      };
+      setCurrentUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+    setShowOnboarding(false);
+    setToast({ message: '✨ Profile setup complete! Welcome to Zonek.', type: 'success' });
+  };
 
   const handleSetView = useCallback((newView: View, skipSave: boolean = false) => {
     // Views that are entirely protected and require a user to be logged in.
@@ -297,6 +313,9 @@ const App: React.FC = () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       setCurrentUser(data.user);
+
+      // Trigger post-signup onboarding
+      setShowOnboarding(true);
 
       // Check if there was a redirect intention
       const redirectView = localStorage.getItem('bridgehead_redirect_after_login');
@@ -1385,6 +1404,14 @@ const App: React.FC = () => {
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
+        />
+      )}
+      {showOnboarding && currentUser && (
+        <OnboardingModal
+          userId={currentUser.id}
+          token={localStorage.getItem('token') || ''}
+          onComplete={handleOnboardingComplete}
+          onSkip={() => setShowOnboarding(false)}
         />
       )}
     </div>

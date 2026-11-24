@@ -14,6 +14,12 @@ export interface User {
   originalProfilePictureFile?: File; // Original file for re-editing (frontend only)
   isEmailVerified?: boolean;
   isPhoneVerified?: boolean;
+  business_stage?: string;
+  primary_city?: string;
+  business_type_interest?: string;
+  total_budget_range?: string;
+  founder_experience?: string;
+  onboarding_completed?: boolean;
 }
 
 export enum View {

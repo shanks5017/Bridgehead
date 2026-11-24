@@ -29,6 +29,12 @@ export interface Profile {
   deals_completed: number;
   is_verified_entrepreneur: boolean;
   auth_provider: AuthProvider;
+  business_stage?: string | null;
+  primary_city?: string | null;
+  business_type_interest?: string | null;
+  total_budget_range?: string | null;
+  founder_experience?: string | null;
+  onboarding_completed?: boolean;
   created_at: string;
   updated_at: string;
 }

@@ -6,7 +6,8 @@ import {
   getCurrentUser,
   forgotPassword,
   resetPassword,
-  updateProfile // Added
+  updateProfile,
+  saveOnboarding // Added
 } from '../controllers/authController';
 import { checkUsernameAvailability, checkEmailAvailability } from '../controllers/validationController';
 import { auth } from '../middleware/auth';
@@ -58,6 +59,11 @@ router.put(
   ]),
   updateProfile
 );
+
+// @route   POST /api/auth/onboarding
+// @desc    Save post-signup onboarding data
+// @access  Private
+router.post('/onboarding', auth, saveOnboarding);
 
 // @route   POST /api/auth/forgot-password
 // @desc    Forgot password

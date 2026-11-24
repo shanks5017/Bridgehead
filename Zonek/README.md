@@ -1,158 +1,118 @@
-# 🌉 Bridgehead - Hyper-Local Market Intelligence & Execution Platform
+# 🌉 Zonek (Bridgehead) — Ground-Truth Feasibility & Execution Engine
 
-> **Version**: 2.2 [Enhanced Analytics]  
-> **Status**: Active Development  
-> **Last Updated**: April 1, 2026
+> **Version**: 3.0 [Enterprise Feasibility & Launch Command Center]  
+> **Status**: Active Build Sprint (Target Beta: Dec 15, 2026 | Launch: Jan 2027)  
+> **Last Updated**: November 24, 2026
 
-Bridgehead is a data-driven market intelligence platform that gives entrepreneurs a **50/100 head start** by aggregating hyper-local community **demands**, commercial **rentals**, and **competitor data** from verified sources like Justdial, Sulekha, and OLX.
-
----
-
-## ✨ Key Features
-
-| Feature | Description |
-|---------|-------------|
-| 📊 **Market Analysis** | Automated 50/100 research using Justdial, Sulekha, and OLX data |
-| 🏠 **Demand Posting** | Community-driven signals for missing local businesses |
-| 🏢 **Rental Listings** | Verified commercial property availability with local price benchmarks |
-| ⚔️ **Competitor Research**| Deep-dive into local competition saturation in specific neighborhoods |
-| 🤖 **AI Feasibility** | Location-aware business feasibility reports using Groq/Gemini AI |
-| 🔗 **Execution Plans** | "How-to" guides matching local demand with available assets |
-| 💬 **Real-time Messaging**| Socket.io negotiations between entrepreneurs and property owners |
-| 👥 **Community Hub** | "The Hive" - Hyper-local discussion forums and leaderboards |
-| 🎨 **Premium UI** | Neo-Brutalist design with high-authority viewport layout |
-| 🔐 **Authentication** | Secure JWT-based access with multi-factor support readiness |
+Zonek is a data-grounded business feasibility and execution platform designed for entrepreneurs, retail operators, and startup founders. It bridges the high-risk gap between *having an idea & budget* and *executing safely on the ground* by combining verified micro-location evidence (commercial rentals, competitor pricing, civic density, government grants) with battle-tested founder frameworks.
 
 ---
 
-## 🛠️ Technology Stack
+## 🏛️ The 8 Core Product Pillars
+
+| # | Pillar | Description |
+|---|---|---|
+| **1** | 🏠 **Founder Command Dashboard** | **Home screen & Retention engine.** Dual-state UI: Launchpad for new ideas, and active 90-day launch command center with daily checkable sprint tasks and budget burn meter for active founders. |
+| **2** | 🔬 **Feasibility Research Engine** | **The Brain.** 5-Tab Sub-Navbar layout: *Executive Feasibility & Timing*, *Micro-Location & Rentals*, *Competitors & Longevity*, *Financial Blueprint*, *Gov Schemes & Compliance* + 1-Click Investor PDF Download. |
+| **3** | 📢 **Demands Marketplace** | **Unmet community business requests.** Locals post needs; founders discover high-demand niches with a **1-click "Analyze This Opportunity"** button that pre-populates research. |
+| **4** | 🏢 **Commercial Rentals** | **Verified spaces marketplace.** Commercial property listings linked dynamically to feasibility research reports as concrete options. |
+| **5** | 🏛️ **Gov Data Portal ("For The People")** | **Civic transparency portal.** Public access to district statistics, weather patterns, agricultural mandi pricing, and government subsidy schemes (Mudra, PMEGP). |
+| **6** | 💡 **AI Idea Generator** | **Demand-backed business generator.** Enter a city/pin code and budget -> AI generates top 3–5 viable business ideas cross-referenced against real neighborhood unmet demands. |
+| **7** | 👥 **Founder Community** | **Lightweight discussion board.** Supabase-backed peer community where founders ask questions, share local vendor reviews, and discuss launch obstacles. |
+| **8** | 💬 **Network Messaging** | **Direct inquiry system.** 1-on-1 direct messaging between founders, commercial landlords, and service providers. |
+
+---
+
+## 🛠️ Modern Technology Stack
 
 | Category | Technology | Purpose |
 |----------|------------|---------|
-| **Frontend** | React 19, TypeScript, Vitest | Component-based UI & type safety |
-| **Styling** | Tailwind CSS | Utility-first styling with custom theming |
-| **Backend** | Node.js, Express, TypeScript | REST API & real-time services |
-| **Database** | MongoDB Atlas (Mongoose) | Cloud document database with GeoJSON support |
-| **Real-time** | Socket.io | Live messaging & notifications |
-| **AI** | Groq SDK (Llama-3) / Gemini | Business ideas, matching, chatbot persona (ARU) |
-| **Build Tool** | Vite | Fast development & HMR |
+| **Frontend** | React 19, TypeScript, Vite | Ultra-fast component-based UI & type safety |
+| **Styling** | Tailwind CSS (Neo-Brutalist design system) | High-contrast, executive aesthetic with responsive viewports |
+| **Backend** | Node.js, Express, TypeScript | REST API, SSE streaming, authentication, and validation |
+| **Database & Auth** | Supabase (PostgreSQL) | Managed relational database, Row Level Security, and JWT auth |
+| **AI / Reasoning Engine** | Groq SDK (`openai/gpt-oss-120b`) | Primary 120B reasoning model (2-5s generation, zero rate limits) |
+| **Export Engine** | Client-side & Server PDF Generation | 1-Click investor-ready, print-styled PDF reports |
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Architecture
 
 ```
-Bridgehead/
-├── backend/                   # Node.js Backend (Express + Socket.io)
-│   ├── server.ts             # Server entry point
-│   ├── controllers/          # API logic (Auth, AI, Posts, etc.)
-│   ├── models/               # MongoDB Schemas (User, Demand, Rental, etc.)
-│   ├── routes/               # API Express routes
-│   └── middleware/           # Auth, validation, rate limiting
+Zonek_Main/
+├── Zonek/
+│   ├── backend/                      # Node.js Express Backend
+│   │   ├── controllers/              # API Controllers
+│   │   │   ├── authController.ts     # Supabase Auth & Profile fallback
+│   │   │   └── businessResearchController.ts # 120B Feasibility Engine
+│   │   ├── routes/                   # Express routes
+│   │   │   ├── auth.ts               # Login / Register
+│   │   │   └── businessResearch.ts   # Full-report streaming & individual tabs
+│   │   ├── lib/supabase.ts           # Supabase service role client
+│   │   └── server.ts                 # Express entry point (Port 5001)
+│   │
+│   ├── components/                   # React Frontend
+│   │   ├── Dashboard.tsx             # Founder Command Center
+│   │   ├── BusinessResearch.tsx      # 5-Step Intake & 5-Tab Sub-Navbar Report
+│   │   ├── Demands.tsx               # Community Demand Signals with 1-Click Research
+│   │   ├── Rentals.tsx               # Commercial Property Listings
+│   │   ├── GovData.tsx               # Civic & Schemes Portal ("For The People")
+│   │   ├── IdeaGenerator.tsx         # AI Idea Generator backed by Demands
+│   │   ├── Community.tsx             # Founder Discussion Forum
+│   │   ├── NetworkChat.tsx           # 1-on-1 Direct Messaging
+│   │   ├── Sidebar.tsx               # Clean 8-Pillar Navigation
+│   │   └── SignUp.tsx / SignIn.tsx   # Authentication Gate
+│   │
+│   ├── types.ts                      # Full TypeScript interfaces
+│   └── package.json
 │
-├── components/                # React Frontend Components (Root-level)
-│   ├── common/               # Reusable UI elements
-│   ├── Feed.tsx              # Main activity feed
-│   └── ...                   # Feature-specific components
-│
-├── docs/                      # Technical Documentation
-│   ├── schema_documentation.md # Detailed DB schemas & Competitor design [NEW]
-│   ├── plans.md              # Development roadmap
-│   └── project_analysis.md    # Codebase analysis report
-│
-├── App.tsx                    # Frontend Main App & Routing
-├── index.tsx                  # Frontend entry point
-├── vite.config.ts             # Vite configuration
-└── package.json               # Root dependencies (Frontend)
+├── checklist.md                      # Master 20-Day Build & Beta Sprint Plan
+└── founders_report.md                # Strategic Founder & Executive Summary
 ```
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
+### 1. Prerequisites
 - Node.js 18+
-- MongoDB Atlas account
-- Groq API key (for AI features)
+- Supabase project credentials (URL & Service Role Key)
+- Groq API Key
 
-### Installation
+### 2. Environment Variables
 
-```bash
-# Clone the repository
-git clone https://github.com/shanks5017/Bridgehead.git
-cd Bridgehead
-
-# Install frontend dependencies (Root)
-npm install
-
-# Install backend dependencies
-cd backend
-npm install
-```
-
-### Environment Variables
-
-**Frontend** (`.env`):
+**Backend (`Zonek/backend/.env`):**
 ```env
-VITE_API_BASE_URL=http://localhost:5001/api
-```
-
-**Backend** (`backend/.env`):
-```env
-MONGODB_URI=mongodb+srv://...
-JWT_SECRET=your-secret-key
-GROQ_API_KEY=your-groq-key
 PORT=5001
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+GROQ_API_KEY=your-groq-api-key
+NODE_ENV=development
 ```
 
-### Running the App
+**Frontend (`Zonek/.env`):**
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+### 3. Running Locally
 
 ```bash
-# Terminal 1: Start backend
-cd backend
+# Terminal 1: Backend Server (Port 5001)
+cd Zonek/backend
 npm run dev
 
-# Terminal 2: Start frontend (Root)
+# Terminal 2: Frontend App (Port 5173)
+cd Zonek
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
-
 ---
 
-## 📚 Documentation
+## 📅 Roadmap to Launch
 
-Detailed documentation is available in the `docs/` folder:
-
-- [📋 Schema Documentation](docs/schema_documentation.md): Detailed look at Rentals, Demands, and the proposed Competitors design.
-- [📊 Project Analysis](docs/project_analysis.md): Comprehensive codebase analysis.
-- [🚀 Deployment Plans](docs/deployment_plans.md): Cloud deployment guide.
-
----
-
-## 🏗️ Architecture
-
-### AI-Driven Market Intelligence
-Bridgehead uses a hybrid AI approach via the **Groq SDK** and **Gemini**:
-- **Market Feasibility Reports**: Using `llama-3.3-70b-versatile` to synthesize scraped data into business execution plans.
-- **ARU Assistant**: Using `llama-3.1-8b-instant` for rapid, supportive entrepreneurial guidance.
-
-### The "50/100" Philosophy
-We believe every entrepreneur should start with 50% of their research already done. By scraping verified directories (Justdial, Sulekha, OLX), we provide instant insight into:
-1. **Demand Density**: What people are actually searching for.
-2. **Competitor Saturation**: Who else is in the 2km radius.
-3. **Rental Feasibility**: Current local benchmarks for commercial spaces.
-
-### Future Vision: The Business Stock Market
-Moving beyond marketplaces, Bridgehead aims to provide dynamic, ticker-like analysis for IT companies and tech startups, allowing new entrants to track market sentiment and competitive moves in real-time.
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details.
-
----
-
-*Built with ❤️ for local entrepreneurs and communities*
+- **Sprint 1 (Weeks 1–2):** 5-Tab Sub-Navbar Research Engine, 1-Click PDF Export, Founder Dashboard.
+- **Sprint 2 (Week 3):** Demands hook, Idea Generator, Gov Data viewer polish, Lightweight Community & Network Chat.
+- **Private Beta (Dec 15–25, 2026):** 50 Free Founders across Bangalore, Mumbai, and Delhi-NCR.
+- **Commercial Public Launch:** Early January 2027.

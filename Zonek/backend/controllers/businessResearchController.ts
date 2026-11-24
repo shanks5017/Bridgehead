@@ -842,6 +842,97 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
   report._meta.firewall_violations += v5;
   send('section_complete', { section: 'roadmap', label: '90-Day Roadmap & SOPs', pct: 98 });
 
+  // ─── Persist to Supabase (non-blocking — user already has the report via SSE) ───
+  const generationEndMs = Date.now();
+
+  // Determine a quick verdict from the business plan feasibility score
+  let verdict: 'GO' | 'CAUTION' | 'STOP' = 'CAUTION';
+  try {
+    const score = report.business_plan?.feasibility_score ?? report.business_plan?.viability_score ?? 0;
+    if (score >= 70) verdict = 'GO';
+    else if (score <= 35) verdict = 'STOP';
+  } catch { /* keep CAUTION */ }
+
+  // Best-effort DB save — do NOT block SSE close
+  setImmediate(async () => {
+    try {
+      // Get user ID from the Authorization header (optional — saves anonymously if no auth)
+      const authHeader = req.headers['authorization'] as string | undefined;
+      let userId: string | null = null;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.replace('Bearer ', '');
+        const { data: { user } } = await supabase.auth.getUser(token);
+        userId = user?.id ?? null;
+      }
+
+      if (userId) {
+        // 1. Save research inputs
+        const { data: inputRow, error: inputErr } = await supabase
+          .from('research_inputs')
+          .insert({
+            user_id: userId,
+            business_name: input.businessName ?? null,
+            business_type: input.businessType,
+            business_format: input.businessFormat,
+            business_description: input.businessDescription ?? null,
+            location: input.location,
+            total_budget: input.totalBudget,
+            pricing_model: input.pricingModel ?? null,
+            avg_ticket_size: input.avgTicketSize ?? null,
+            target_market: input.targetMarket ?? null,
+            launch_timeline: input.launchTimeline ?? null,
+            current_stage: input.currentStage ?? null,
+            expected_team_size: input.expectedTeamSize ?? null,
+            space_required: input.spaceRequired ?? null,
+            business_model: input.businessModel ?? null,
+            unique_value_proposition: input.uniqueValueProposition ?? null,
+            known_competitors: input.knownCompetitors ?? [],
+            differentiators: input.differentiators ?? [],
+            founder_experience: input.founderExperience ?? null,
+            target_customer_persona: input.targetCustomerPersona ?? null,
+            primary_channel: input.primaryChannel ?? null,
+            existing_licences: input.existingLicences ?? [],
+            include_financials: input.includeFinancials ?? true,
+            include_competitors: input.includeCompetitors ?? true,
+            include_marketing: input.includeMarketing ?? true,
+            include_roadmap: input.includeRoadmap ?? true,
+            include_sops: input.includeSOPs ?? true,
+          })
+          .select('id')
+          .single();
+
+        if (inputErr) {
+          console.error('⚠️ Failed to save research_inputs:', inputErr.message);
+        }
+
+        // 2. Save full report
+        const reportTitle = `${input.businessType} Feasibility — ${input.location}`;
+        const { error: reportErr } = await supabase
+          .from('research_reports')
+          .insert({
+            user_id: userId,
+            input_id: inputRow?.id ?? null,
+            report_title: reportTitle,
+            business_type: input.businessType,
+            location: input.location,
+            budget_inr: input.totalBudget,
+            verdict,
+            report_data: report,
+            firewall_violations: report._meta.firewall_violations,
+            generation_time_ms: generationEndMs,
+          });
+
+        if (reportErr) {
+          console.error('⚠️ Failed to save research_reports:', reportErr.message);
+        } else {
+          console.log(`✅ Report saved for user ${userId}: "${reportTitle}" (${verdict})`);
+        }
+      }
+    } catch (dbErr: any) {
+      console.error('⚠️ DB persistence error (non-fatal):', dbErr.message ?? dbErr);
+    }
+  });
+
   // Final Delivery
   send('report_ready', {
     report,

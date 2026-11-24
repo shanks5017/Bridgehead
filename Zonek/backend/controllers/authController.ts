@@ -342,3 +342,52 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ success: false, message: error.message || 'Failed to update profile' });
   }
 };
+
+// ---------------------------------------------------------------------------
+// POST-SIGNUP ONBOARDING
+// ---------------------------------------------------------------------------
+export const saveOnboarding = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const {
+      business_stage,
+      primary_city,
+      business_type_interest,
+      total_budget_range,
+      founder_experience,
+    } = req.body;
+
+    const { data: updatedProfile, error } = await supabase
+      .from('profiles')
+      .update({
+        business_stage: business_stage || null,
+        primary_city: primary_city || null,
+        business_type_interest: business_type_interest || null,
+        total_budget_range: total_budget_range || null,
+        founder_experience: founder_experience || null,
+        onboarding_completed: true,
+      })
+      .eq('id', userId)
+      .select('*')
+      .single();
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.json({
+      success: true,
+      data: updatedProfile,
+      message: 'Onboarding completed successfully',
+    });
+  } catch (error: any) {
+    console.error('Onboarding save error:', error);
+    res.status(500).json({ error: error.message || 'Failed to save onboarding data' });
+  }
+};
