@@ -192,8 +192,25 @@ export default function BusinessResearch() {
       });
       const data = await res.json();
       if (res.ok && data.success && data.data) {
-        setReport(data.data.report_data);
+        const reportObj = data.data.report_data;
+        setReport(reportObj);
         setFirewallViolations(data.data.firewall_violations || 0);
+
+        // Restore evidenceData (commercial rentals, competitors, gov schemes)
+        if (reportObj?.evidence) {
+          setEvidenceData({
+            rentals: reportObj.evidence.rentals || [],
+            competitors: reportObj.evidence.competitors || [],
+            schemes: reportObj.evidence.govSchemes || reportObj.evidence.schemes || [],
+          });
+        } else if (reportObj?.evidence_summary) {
+          setEvidenceData({
+            rentals: reportObj.evidence_summary.rentals || [],
+            competitors: reportObj.evidence_summary.competitors || [],
+            schemes: reportObj.evidence_summary.schemes || [],
+          });
+        }
+
         setInput(prev => ({
           ...prev,
           businessType: data.data.business_type || prev.businessType,
@@ -770,6 +787,7 @@ export default function BusinessResearch() {
         {showExportPdf && (
           <ExportPdfModal
             report={report}
+            evidence={evidenceData}
             businessName={input.businessName}
             businessType={input.businessType}
             location={input.location}

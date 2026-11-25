@@ -21,6 +21,7 @@ import { Request, Response } from 'express';
 import Groq from 'groq-sdk';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import supabase from '../lib/supabase';
 
 dotenv.config();
@@ -847,6 +848,19 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
   report._meta.firewall_violations += v5;
   send('section_complete', { section: 'roadmap', label: '90-Day Roadmap & SOPs', pct: 98 });
 
+  // Attach evidence directly to report object so it persists completely in DB
+  report.evidence = {
+    rentals: evidence.rentals || [],
+    competitors: evidence.competitors || [],
+    govSchemes: evidence.govSchemes || [],
+    demandSignals: evidence.demandSignals || [],
+  };
+  report.evidence_summary = {
+    rentals: evidence.rentals.slice(0, 5),
+    competitors: evidence.competitors.slice(0, 10),
+    schemes: evidence.govSchemes.slice(0, 5),
+  };
+
   // ─── Persist to Supabase (non-blocking — user already has the report via SSE) ───
   const durationMs = Math.min(Math.max(0, Math.round(Date.now() - startTime)), 2147483647);
 
@@ -862,10 +876,19 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
   // Best-effort DB save — do NOT block SSE close
   setImmediate(async () => {
     try {
-      let userId: string | null = null;
-      if (authToken) {
-        const { data: { user } } = await supabase.auth.getUser(authToken);
-        userId = user?.id ?? null;
+      let userId: string | null = (req as any).userId || null;
+      if (!userId && authToken) {
+        try {
+          const { data: { user } } = await supabase.auth.getUser(authToken);
+          userId = user?.id ?? null;
+        } catch { /* ignore */ }
+
+        if (!userId) {
+          try {
+            const decoded: any = jwt.decode(authToken);
+            userId = decoded?.sub || decoded?.userId || null;
+          } catch { /* ignore */ }
+        }
       }
 
       if (userId) {

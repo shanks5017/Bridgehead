@@ -13,13 +13,13 @@ import {
   toggleStarReport,
   deleteReport,
 } from '../controllers/reportHistoryController';
-import { auth } from '../middleware/auth';
+import { auth, optionalAuth } from '../middleware/auth';
 
 const router = express.Router();
 
 // ─── Full comprehensive report (all skills combined) ─────────────────────────
-// No auth required — save is best-effort inside the controller (skipped for guests)
-router.post('/full-report', generateFullBusinessDocumentation);
+// optionalAuth attaches req.userId if user is signed in
+router.post('/full-report', optionalAuth, generateFullBusinessDocumentation);
 
 // ─── Individual skill endpoints (modular) ────────────────────────────────────
 router.post('/business-plan',          generateBusinessPlan);

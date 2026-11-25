@@ -295,6 +295,18 @@ export interface FullBusinessReport {
     licensing_checklist: { licence: string; authority: string; timeline: string; cost_estimate: string; status: string }[];
     team_structure: { day_1_roles: any[]; month_3_roles: any[]; tools_stack: any[] };
   };
+  evidence?: {
+    rentals?: any[];
+    competitors?: any[];
+    govSchemes?: any[];
+    schemes?: any[];
+    demandSignals?: any[];
+  };
+  evidence_summary?: {
+    rentals?: any[];
+    competitors?: any[];
+    schemes?: any[];
+  };
 }
 
 export interface BusinessResearchSSEEvent {
