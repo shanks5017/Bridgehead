@@ -750,7 +750,12 @@ async function callLLM(systemPrompt: string, userContent: string): Promise<any> 
 // ─── CONTROLLER: STREAMING FULL REPORT ─────────────────────────────────────────
 
 export const generateFullBusinessDocumentation = async (req: Request, res: Response) => {
+  const startTime = Date.now();
   const input: BusinessResearchInput = req.body;
+
+  // Capture auth token upfront before response streaming
+  const authHeader = req.headers['authorization'] as string | undefined;
+  const authToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.replace('Bearer ', '') : null;
 
   if (!input.businessType || !input.location || !input.totalBudget) {
     return res.status(400).json({
@@ -843,25 +848,23 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
   send('section_complete', { section: 'roadmap', label: '90-Day Roadmap & SOPs', pct: 98 });
 
   // ─── Persist to Supabase (non-blocking — user already has the report via SSE) ───
-  const generationEndMs = Date.now();
+  const durationMs = Math.min(Math.max(0, Math.round(Date.now() - startTime)), 2147483647);
 
-  // Determine a quick verdict from the business plan feasibility score
+  // Extract verdict accurately from executive summary (default to CAUTION if missing)
   let verdict: 'GO' | 'CAUTION' | 'STOP' = 'CAUTION';
   try {
-    const score = report.business_plan?.feasibility_score ?? report.business_plan?.viability_score ?? 0;
-    if (score >= 70) verdict = 'GO';
-    else if (score <= 35) verdict = 'STOP';
+    const rawVerdict = report.business_plan?.executive_summary?.verdict?.toUpperCase();
+    if (rawVerdict === 'GO' || rawVerdict === 'CAUTION' || rawVerdict === 'STOP') {
+      verdict = rawVerdict;
+    }
   } catch { /* keep CAUTION */ }
 
   // Best-effort DB save — do NOT block SSE close
   setImmediate(async () => {
     try {
-      // Get user ID from the Authorization header (optional — saves anonymously if no auth)
-      const authHeader = req.headers['authorization'] as string | undefined;
       let userId: string | null = null;
-      if (authHeader && authHeader.startsWith('Bearer ')) {
-        const token = authHeader.replace('Bearer ', '');
-        const { data: { user } } = await supabase.auth.getUser(token);
+      if (authToken) {
+        const { data: { user } } = await supabase.auth.getUser(authToken);
         userId = user?.id ?? null;
       }
 
@@ -907,7 +910,7 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
 
         // 2. Save full report
         const reportTitle = `${input.businessType} Feasibility — ${input.location}`;
-        const { error: reportErr } = await supabase
+        const { data: reportRow, error: reportErr } = await supabase
           .from('research_reports')
           .insert({
             user_id: userId,
@@ -918,14 +921,16 @@ export const generateFullBusinessDocumentation = async (req: Request, res: Respo
             budget_inr: input.totalBudget,
             verdict,
             report_data: report,
-            firewall_violations: report._meta.firewall_violations,
-            generation_time_ms: generationEndMs,
-          });
+            firewall_violations: report._meta.firewall_violations || 0,
+            generation_time_ms: durationMs,
+          })
+          .select('id')
+          .single();
 
         if (reportErr) {
           console.error('⚠️ Failed to save research_reports:', reportErr.message);
         } else {
-          console.log(`✅ Report saved for user ${userId}: "${reportTitle}" (${verdict})`);
+          console.log(`✅ Report saved successfully for user ${userId}: "${reportTitle}" (${verdict}) [ID: ${reportRow?.id}]`);
         }
       }
     } catch (dbErr: any) {

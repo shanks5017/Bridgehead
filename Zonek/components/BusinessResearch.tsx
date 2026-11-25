@@ -297,6 +297,7 @@ export default function BusinessResearch() {
                 }
                 setStage('results');
                 setResearchTab('overview');
+                fetchHistory();
               } else {
                 setProgressPct(data.pct || 0);
                 setProgressEvents(prev => [...prev, { type: currentEvent as any, ...data }]);

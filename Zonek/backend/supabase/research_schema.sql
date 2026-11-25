@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS public.research_reports (
   report_data            JSONB NOT NULL,
   -- Quality & delivery
   firewall_violations    INTEGER NOT NULL DEFAULT 0,
-  generation_time_ms     INTEGER,
+  generation_time_ms     BIGINT,
   pdf_url                TEXT,                        -- Supabase Storage URL after PDF export
   is_starred             BOOLEAN NOT NULL DEFAULT FALSE,
 
