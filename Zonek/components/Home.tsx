@@ -166,11 +166,14 @@ const Home: React.FC<HomeProps> = ({ setView }) => {
                     </div>
 
                     <div className="max-w-2xl space-y-8">
-                        <div className="flex flex-col sm:flex-row gap-6">
-                            <button onClick={() => setView(View.DEMAND_FEED)} className="neo-button bg-ink text-white text-xl px-12 py-5 border-2 border-ink hover:bg-white hover:text-ink transition-all">
-                                EXPLORE OPPORTUNITIES
+                        <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
+                            <button onClick={() => setView(View.DASHBOARD)} className="neo-button bg-accent-green text-ink text-lg px-8 py-4 border-2 border-ink flex items-center justify-center gap-2 font-black shadow-[3px_3px_0px_0px_#000]">
+                                ⚡ LAUNCH COMMAND CENTER
                             </button>
-                            <button onClick={() => setView(View.POST_DEMAND)} className="neo-button bg-accent-green text-ink text-xl px-12 py-5 border-2 border-ink">
+                            <button onClick={() => setView(View.DEMAND_FEED)} className="neo-button bg-ink text-white text-lg px-8 py-4 border-2 border-ink hover:bg-white hover:text-ink transition-all">
+                                EXPLORE DEMANDS
+                            </button>
+                            <button onClick={() => setView(View.POST_DEMAND)} className="neo-button bg-white text-ink text-lg px-8 py-4 border-2 border-ink hover:bg-foundation transition-all">
                                 REQUEST A BUSINESS
                             </button>
                         </div>

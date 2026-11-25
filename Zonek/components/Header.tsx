@@ -14,6 +14,8 @@ interface HeaderProps {
 const getViewTitle = (view: View): string => {
     switch (view) {
         case View.HOME: return 'Home';
+        case View.DASHBOARD: return 'Command Center';
+        case View.BUSINESS_RESEARCH: return 'Biz Docs';
         case View.FEED: return 'Activity Feed';
         case View.DEMAND_FEED: return 'Demands';
         case View.POST_DEMAND: return 'Post a Demand';
@@ -65,6 +67,15 @@ const ProfileDropdown: React.FC<{ user: User; onSignOut: () => void; setView: (v
                         <p className="text-[10px] font-mono tracking-widest uppercase opacity-50">Active User</p>
                         <p className="font-bold truncate">{user.name}</p>
                     </div>
+                    <button
+                        onClick={() => {
+                            setView(View.DASHBOARD);
+                            setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-left font-bold hover:bg-ink hover:text-foundation transition-colors uppercase tracking-tight text-accent-green bg-ink/5"
+                    >
+                        ⚡ Command Center
+                    </button>
                     <button
                         onClick={() => {
                             setView(View.PROFILE);

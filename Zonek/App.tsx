@@ -26,6 +26,7 @@ import SignUp from './components/SignUp';
 import Profile from './components/Profile';
 import Research from './components/Research';
 import BusinessResearch from './components/BusinessResearch';
+import Dashboard from './components/Dashboard';
 import TestingView from './components/Testing/TestingView';
 import { ArrowLeftIcon, ArrowRightIcon } from './components/icons';
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -1348,6 +1349,8 @@ const App: React.FC = () => {
         return <Research />;
       case View.BUSINESS_RESEARCH:
         return <BusinessResearch />;
+      case View.DASHBOARD:
+        return <Dashboard setView={handleSetView} currentUser={currentUser} />;
       case View.TESTING:
         return <TestingView />;
       case View.HOME:

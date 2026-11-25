@@ -24,6 +24,7 @@ export interface User {
 
 export enum View {
   HOME,
+  DASHBOARD,
   FEED,
   DEMAND_FEED,
   POST_DEMAND,
@@ -42,6 +43,24 @@ export enum View {
   RESEARCH,
   BUSINESS_RESEARCH,
   TESTING,
+}
+
+// ── Dashboard & Execution Types ──────────────────────────────────────────────
+
+export interface DashboardTask {
+  id: string;
+  title: string;
+  category: 'legal' | 'space' | 'capex' | 'marketing' | 'operations' | 'general';
+  isCompleted: boolean;
+  dueDate?: string;
+  source?: string;
+}
+
+export interface VentureTimelineConfig {
+  timelineDays: number; // e.g. 30, 45, 60, 90, 180, 365, or custom
+  targetLaunchDate: string; // ISO date string
+  startDate: string;
+  label?: string;
 }
 
 // ── Research Engine Types ─────────────────────────────────────────────────────

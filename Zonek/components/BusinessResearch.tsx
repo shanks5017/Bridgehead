@@ -226,6 +226,23 @@ export default function BusinessResearch() {
     }
   };
 
+  useEffect(() => {
+    const selectedReportId = localStorage.getItem('bridgehead_selected_report_id');
+    if (selectedReportId) {
+      localStorage.removeItem('bridgehead_selected_report_id');
+      loadSavedReport(selectedReportId);
+    }
+
+    const prefillStr = localStorage.getItem('bridgehead_research_prefill');
+    if (prefillStr) {
+      try {
+        const prefill = JSON.parse(prefillStr);
+        setInput(prev => ({ ...prev, ...prefill }));
+        localStorage.removeItem('bridgehead_research_prefill');
+      } catch {}
+    }
+  }, []);
+
   const toggleStar = async (reportId: string) => {
     const token = localStorage.getItem('token');
     if (!token) return;

@@ -3,7 +3,7 @@ import { View, User } from '../types';
 import {
   SparklesIcon, BookmarkIcon, LinkIcon, HomeIcon,
   LightBulbIcon, BuildingOfficeIcon, UsersIcon, FeedIcon, ChatBubbleLeftRightIcon,
-  UserCircleIcon, SearchIcon
+  UserCircleIcon, SearchIcon, BriefcaseIcon
 } from './icons';
 
 interface SidebarProps {
@@ -99,6 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, isSidebarOpe
           </div>
           <nav className="flex flex-col w-full">
             <NavItem icon={<HomeIcon className="w-6 h-6" />} label="Home" isActive={currentView === View.HOME} isExpanded={isExpanded} onClick={() => handleNavigation(View.HOME)} />
+            <NavItem icon={<BriefcaseIcon className="w-6 h-6" />} label="Dashboard" isActive={currentView === View.DASHBOARD} isExpanded={isExpanded} onClick={() => handleNavigation(View.DASHBOARD)} />
             <NavItem icon={<FeedIcon className="w-6 h-6" />} label="Activity" isActive={currentView === View.FEED} isExpanded={isExpanded} onClick={() => handleNavigation(View.FEED)} />
             <NavItem icon={<LightBulbIcon className="w-6 h-6" />} label="Demands" isActive={currentView === View.DEMAND_FEED} isExpanded={isExpanded} onClick={() => handleNavigation(View.DEMAND_FEED)} />
             <NavItem icon={<BuildingOfficeIcon className="w-6 h-6" />} label="Assets" isActive={currentView === View.RENTAL_LISTINGS} isExpanded={isExpanded} onClick={() => handleNavigation(View.RENTAL_LISTINGS)} />
